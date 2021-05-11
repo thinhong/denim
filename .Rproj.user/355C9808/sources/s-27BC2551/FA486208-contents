@@ -1,0 +1,31 @@
+# Contact
+locationContact <- new(Contact, "location", c("HCM", "HN"), c("HCM <-> HCM: 0.85", "HCM <-> HN: 0.1", "HN <-> HN: 0.95"))
+locationContact$contactType
+
+# Custom distribution
+wtime <- c(0.300, 0.49, 0.105, 0.105, 0.4, 0.7)
+customDist <- new(CustomDistribution, wtime)
+customDist$waitingTime
+
+for (i in 0:10) {
+  print(customDist$getTransitionProb(i))
+}
+
+# Compartment
+S <- new(Compartment, "S", 1000, customDist)
+S$name
+S$subCompartmentValues
+S$getDistName()
+
+I <- new(Compartment, "I", 1, customDist)
+I$getDistName()
+
+ptr <- CompartmentSharedPtr()
+ptr
+
+# Model
+model <- new(Model, c("HCM"), 1.5)
+model$modelName
+model$addCompsAndConnect2(S, I, 0.2)
+
+S$getLinkedCompartment()
