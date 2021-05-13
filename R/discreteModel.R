@@ -4,7 +4,7 @@
 #'
 #' Imports
 #' @useDynLib discreteModel, .registration = TRUE
-#' @export simulation Contact CustomDistribution DiscreteExponentialDistribution DiscreteGammaDistribution
+#' @export simulate Contact CustomDistribution DiscreteExponentialDistribution DiscreteGammaDistribution
 #' @importFrom Rcpp
 "_PACKAGE"
 
@@ -14,4 +14,4 @@ Rcpp::loadModule(module = "DiscreteExponentialDistribution", TRUE)
 Rcpp::loadModule(module = "DiscreteGammaDistribution", TRUE)
 # Rcpp::loadModule(module = "Compartment", TRUE)
 # Rcpp::loadModule(module = "Model", TRUE)
-Rcpp::loadModule(module = "simulation", TRUE)
+Rcpp::loadModule(module = "simulate", TRUE)

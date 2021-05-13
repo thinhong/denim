@@ -6,7 +6,7 @@
 #include "DiscreteGammaDistribution.h"
 #include "Compartment.h"
 #include "Model.h"
-#include "simulation.h"
+#include "simulate.h"
 
 using namespace Rcpp;
 
@@ -99,7 +99,7 @@ RCPP_MODULE(DiscreteGammaDistribution){
 //   ;
 // }
 
-RCPP_MODULE(simulation) {
-  function("simulation", &simulation)
+RCPP_MODULE(simulate) {
+  function("simulate", &simulate)
   ;
 }

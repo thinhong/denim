@@ -90,12 +90,6 @@ void FullModel::connectModels() {
     // Now begin the connection process
     if (models.size() > 1) {
         for (auto& model: models) {
-
-            for (auto group: model->getModelGroup()) {
-                std::cout << group << " ";
-            }
-            std::cout << "\n";
-
             for (auto& linkedModel: model->getLinkedModels()) {
                 for (size_t i {0}; i < model->getModelGroup().size(); ++i) {
                     std::vector<std::string> classPair;
@@ -105,16 +99,6 @@ void FullModel::connectModels() {
                     model->updateLinkedContactRate(getContactRateByComparingPairs(classPair), k);
                 }
             }
-            for (auto& linkedModel: model->getLinkedModels()) {
-                for (auto linkedGroup: linkedModel.lock()->getModelGroup()) {
-                    std::cout << linkedGroup << " ";
-                }
-            }
-            std::cout << "\n";
-            for (auto linkedcontact: model->getLinkedContactRates()) {
-                std::cout << linkedcontact << " ";
-            }
-            std::cout << "\n";
         }
     }
 }
