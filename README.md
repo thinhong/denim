@@ -1,4 +1,4 @@
-# discreteR
+# discreteModel
 
 This script will simulate a SIR model of 2 locations Ho Chi Minh and Ha Noi
 ```
