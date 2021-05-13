@@ -1,12 +1,15 @@
 Package: discreteModel
 Type: Package
-Title: What the Package Does in One 'Title Case' Line
+Title: Simulate discerete time model
 Version: 1.0
 Date: 2021-05-04
 Author: Your Name
-Maintainer: Your Name <your@email.com>
+Maintainer: Thinh Phuc Ong <ongphucthinh@gmail.com>
 Description: One paragraph description of what the package does as one or more full sentences.
 License: GPL (>= 2)
-Imports: Rcpp (>= 1.0.6)
+Imports: 
+    gtools,
+    jsonlite,
+    Rcpp (>= 1.0.6)
 LinkingTo: Rcpp
 RoxygenNote: 7.1.1
