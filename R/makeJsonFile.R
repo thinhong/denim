@@ -1,3 +1,4 @@
+#' @export
 getCompsFromModelStructure <- function(modelStructure) {
   comps <- c()
   for (i in 1:length(modelStructure)) {
@@ -36,6 +37,7 @@ getCompsFromModelStructure <- function(modelStructure) {
 # M <- read.csv("/home/thinh/Dropbox/oucru/rcpp/testRcpp/age.csv",
 #               header = TRUE, check.names = FALSE, row.names = 1)
 
+#' @export
 getPairContactFromMatrix <- function(contactMatrix) {
   ind <- which(upper.tri(contactMatrix, diag = TRUE), arr.ind = TRUE)
   df <- data.frame(row = dimnames(contactMatrix)[[1]][ind[,1]],

@@ -1,3 +1,4 @@
+#' @export
 makeJsonElement <- function(label, elementList) {
   output <- paste0("\"", label, "\": [\n")
   for (i in 1:length(elementList)) {
