@@ -8,6 +8,7 @@ library(devtools)
 install_github("thinhong/discreteModel")
 ```
 
+## Example
 This script will simulate a SIR model of 2 locations Ho Chi Minh and Ha Noi
 ```
 library(discreteModel)
