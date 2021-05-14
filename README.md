@@ -1,5 +1,12 @@
 # discreteModel
 
+Install `devtools`  and use `install_github()` to install this package
+```
+install.packages("devtools")
+library(devtools)
+install_github("thinhong/discreteModel")
+```
+
 This script will simulate a SIR model of 2 locations Ho Chi Minh and Ha Noi
 ```
 library(discreteModel)
