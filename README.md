@@ -1,5 +1,6 @@
 # discreteModel
 
+## Installation
 Install `devtools`  and use `install_github()` to install this package
 ```
 install.packages("devtools")
