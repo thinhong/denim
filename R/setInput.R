@@ -45,6 +45,20 @@ allCompartments <- function(modelName, transmissionRate, ...) {
   return(a)
 }
 
+#' Full JSON input format
+#' 
+#' Generate a full JSON input format
+#' @param daysFollowUp number of time step to be simulated
+#' @param errorTolerance if the cumulative probability exceed 1 - errorTolerance
+#' it will be rounded to 1.0, default = 0.01
+#' @param timeStep how much the time interval should be binned, default = 1 (not binning); 
+#' adjust this to derive continuous-time model
+#' @param modelStructure define model structure, ex: "S -> I", "I -> R"
+#' @param infectiousComps name of the infectious compartment, ex: "I"
+#' @param contactAssumption to be deprecated soon
+#' @param contacts created by createContact()
+#' @param models vector contains all model objects
+#'
 #' @export
 allModels <- function(daysFollowUp, errorTolerance = 0.01, timeStep = 1, modelStructure, infectiousComps, contactAssumption, contacts, models) {
   contactJson <- makeJsonElement("contacts", contacts)
