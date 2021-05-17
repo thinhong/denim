@@ -16,7 +16,12 @@ library(discreteModel)
 # Model
 ms <- setModelStructure("S->I", "I->R")
 ic <- setInfectiousComps("I")
-contacts <- createContact("location", c("HCM", "HN"), c("HCM <-> HCM: 0.85", "HCM <-> HN: 0.1", "HN <-> HN: 0.95"))
+# contacts <- createContact("location", c("HCM", "HN"), c("HCM <-> HCM: 0.85", "HCM <-> HN: 0.1", "HN <-> HN: 0.95"))
+
+# If you have a contact matrix (can be read from a csv file)
+M <- data.frame(HCM = c(0.85, 0.1), HN = c(0.1, 0.95))
+rownames(M) <- c("HCM", "HN")
+contacts <- getContactMatrix(M, "location")
 
 S_HCM <- createCompartment(name = "S", 
                            distribution = createDistribution("transitionProb", transitionProb = 0.0), 
