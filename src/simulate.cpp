@@ -29,19 +29,11 @@ Rcpp::DataFrame simulate(std::string inputPath) {
 
     // Initialize contactAssumption first because the contact will be generate following this order
     std::vector<std::shared_ptr<Contact>> allContacts;
-    if (!input["contactAssumption"].is_null()) {
-        for (std::string assumption: input["contactAssumption"]) {
-            Contact::contactAssumption.push_back(assumption);
-        }
-        // Vector allContacts contains contacts sorted by contactAssumption
-        for (std::string contactType: Contact::contactAssumption) {
-            for (auto& contactConfig: input["contacts"]) {
-                std::string currentContactType = contactConfig["contactType"];
-                if (currentContactType == contactType) {
-                    auto contact = std::make_shared<Contact>(contactConfig["contactType"], contactConfig["contactClasses"], contactConfig["contactRates"]);
-                    allContacts.push_back(contact);
-                }
-            }
+    if (!input["contacts"].is_null()) {
+        for (auto& contactConfig: input["contacts"]) {
+            Contact::contactAssumption.push_back(contactConfig["contactType"]);
+            auto contact = std::make_shared<Contact>(contactConfig["contactType"], contactConfig["contactClasses"], contactConfig["contactRates"]);
+            allContacts.push_back(contact);
         }
     }
 

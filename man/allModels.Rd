@@ -10,7 +10,6 @@ allModels(
   timeStep = 1,
   modelStructure,
   infectiousComps,
-  contactAssumption,
   contacts,
   models
 )
@@ -27,8 +26,6 @@ adjust this to derive continuous-time model}
 \item{modelStructure}{define model structure, ex: "S -> I", "I -> R"}
 
 \item{infectiousComps}{name of the infectious compartment, ex: "I"}
-
-\item{contactAssumption}{to be deprecated soon}
 
 \item{contacts}{created by createContact()}
 
