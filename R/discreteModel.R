@@ -4,14 +4,8 @@
 #'
 #' Imports
 #' @useDynLib discreteModel, .registration = TRUE
-#' @export simulate Contact CustomDistribution DiscreteExponentialDistribution DiscreteGammaDistribution
+#' @export simcm runSim gamma exponential values print.Distribution
 #' @import Rcpp
 "_PACKAGE"
 
-Rcpp::loadModule(module = "Contact", TRUE)
-Rcpp::loadModule(module = "CustomDistribution", TRUE)
-Rcpp::loadModule(module = "DiscreteExponentialDistribution", TRUE)
-Rcpp::loadModule(module = "DiscreteGammaDistribution", TRUE)
-# Rcpp::loadModule(module = "Compartment", TRUE)
-# Rcpp::loadModule(module = "Model", TRUE)
-Rcpp::loadModule(module = "simulate", TRUE)
+Rcpp::loadModule(module = "simcm", TRUE)

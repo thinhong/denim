@@ -1,6 +1,6 @@
-#include "simulate.h"
+#include "simcm.h"
 
-Rcpp::DataFrame simulate(std::string inputPath) {
+Rcpp::DataFrame simcm(std::string inputPath) {
 
         // ========================== JSON input ==============================
 

@@ -1,11 +1,9 @@
 # discreteModel
 
 ## Installation
-Install `devtools` and use `install_github()` to install this package
+Use `install_github()` to install this package
 ```
-install.packages("devtools")
-library(devtools)
-install_github("thinhong/discreteModel")
+remotes::install_github("thinhong/discreteModel")
 ```
 
 ## Example
@@ -13,40 +11,46 @@ This script will simulate a SIR model of 2 locations: Ho Chi Minh and Ha Noi
 ```
 library(discreteModel)
 
-# Model
-ms <- setModelStructure("S->I", "I->R")
-ic <- setInfectiousComps("I")
-# contacts <- createContact("location", c("HCM", "HN"), c("HCM <-> HCM: 0.85", "HCM <-> HN: 0.1", "HN <-> HN: 0.95"))
+# Make a contact matrix among locations
+M_location <- matrix(c(0.85, 0.1, 0.1, 0.95), nrow = 2, ncol = 2, 
+                     dimnames = list(c("HCM", "HN"), c("HCM", "HN")))
 
-# If you have a contact matrix (can be read from a csv file)
-M <- data.frame(HCM = c(0.85, 0.1), HN = c(0.1, 0.95))
-rownames(M) <- c("HCM", "HN")
-contacts <- getContactMatrix(M, "location")
+contacts <- list(
+  location = M_location
+)
 
-S_HCM <- createCompartment(name = "S", 
-                           distribution = createDistribution("transitionProb", transitionProb = 0.0), 
-                           initialValue = 1000)
-I_HCM <- createCompartment(name = "I", 
-                           distribution = createDistribution("exponential", rate = 0.3), 
-                           initialValue = 1)
-R_HCM <- createCompartment(name = "R", 
-                           distribution = createDistribution("transitionProb", transitionProb = 0.0), 
-                           initialValue = 0)
-S_HN <- createCompartment(name = "S", 
-                          distribution = createDistribution("transitionProb", transitionProb = 0.0), 
-                          initialValue = 699)
-I_HN <- createCompartment(name = "I", 
-                          distribution = createDistribution("gamma", shape = 3, scale = 2), 
-                          initialValue = 1)
-R_HN <- createCompartment(name = "R", 
-                          distribution = createDistribution("transitionProb", transitionProb = 0.0), 
-                          initialValue = 0)
+transitions <- c(
+  "S -> I", 
+  "I -> R"
+)
 
-HCM <- allCompartments(modelName = c("HCM"), transmissionRate = 1.5, S_HCM, I_HCM, R_HCM)
-HN <- allCompartments(modelName = c("HN"), transmissionRate = 1.5, S_HN, I_HN, R_HN)
+# Use list to be consistent with the distributions below
+initialValues <- list(
+  HCM = list(
+    S = 999,
+    I = 1,
+    R = 0),
+  HN = list(
+    S = 699,
+    I = 0,
+    R = 0)
+)
 
-exportJSON <- allModels(daysFollowUp = 50002, timeStep = 0.01, modelStructure = ms,
-              infectiousComps = ic, contacts = contacts, models = c(HCM, HN))
+# Use list because R doesn't allow to create NULL values in a vector
+distributions <- list(
+  HCM = list(
+    S = NULL,
+    I = exponential(rate = 1.5),
+    R = NULL),
+  HN = list(
+    S = NULL,
+    I = gamma(shape = 5, scale = 2),
+    R = NULL
+  )
+)
 
-df <- simulate(exportJSON)
+fmod <- runSim(daysFollowUp = 5000, errorTolerance = 0.01, timeStep = 0.01, 
+               transmissionRate = 1.5, infectiousComps = c("I"), 
+               contacts = contacts, transitions = transitions,
+               initialValues = initialValues, distributions = distributions)
 ```

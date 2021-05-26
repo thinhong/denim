@@ -6,18 +6,10 @@
 using namespace Rcpp;
 
 
-RcppExport SEXP _rcpp_module_boot_Contact();
-RcppExport SEXP _rcpp_module_boot_CustomDistribution();
-RcppExport SEXP _rcpp_module_boot_DiscreteExponentialDistribution();
-RcppExport SEXP _rcpp_module_boot_DiscreteGammaDistribution();
-RcppExport SEXP _rcpp_module_boot_simulate();
+RcppExport SEXP _rcpp_module_boot_simcm();
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_rcpp_module_boot_Contact", (DL_FUNC) &_rcpp_module_boot_Contact, 0},
-    {"_rcpp_module_boot_CustomDistribution", (DL_FUNC) &_rcpp_module_boot_CustomDistribution, 0},
-    {"_rcpp_module_boot_DiscreteExponentialDistribution", (DL_FUNC) &_rcpp_module_boot_DiscreteExponentialDistribution, 0},
-    {"_rcpp_module_boot_DiscreteGammaDistribution", (DL_FUNC) &_rcpp_module_boot_DiscreteGammaDistribution, 0},
-    {"_rcpp_module_boot_simulate", (DL_FUNC) &_rcpp_module_boot_simulate, 0},
+    {"_rcpp_module_boot_simcm", (DL_FUNC) &_rcpp_module_boot_simcm, 0},
     {NULL, NULL, 0}
 };
 

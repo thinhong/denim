@@ -15,6 +15,6 @@
 #include <chrono>
 #include <Rcpp.h>
 
-Rcpp::DataFrame simulate(std::string inputPath);
+Rcpp::DataFrame simcm(std::string inputPath);
 
 
