@@ -34,7 +34,7 @@ distributions <- list(
   R = NULL
 )
 
-fmod <- runSim(daysFollowUp = 5000, errorTolerance = 0.01, timeStep = 0.01, 
+fmod <- runSim(daysFollowUp = 5000, errorTolerance = 0.01, timeStep = 0.001, 
                transmissionRate = 1.5, infectiousComps = c("I"), 
                transitions = transitions,
                initialValues = initialValues, distributions = distributions)
@@ -83,7 +83,7 @@ distributions <- list(
   )
 )
 
-fmod <- runSim(daysFollowUp = 5000, errorTolerance = 0.01, timeStep = 0.01, 
+fmod <- runSim(daysFollowUp = 5000, errorTolerance = 0.01, timeStep = 0.001, 
                transmissionRate = 1.5, infectiousComps = c("I"), 
                contacts = contacts, transitions = transitions,
                initialValues = initialValues, distributions = distributions)
