@@ -2,6 +2,7 @@
 
 export(exponential)
 export(gamma)
+export(newFullModel)
 export(print.Distribution)
 export(runSim)
 export(simcm)

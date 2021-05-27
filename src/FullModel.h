@@ -13,6 +13,10 @@ private:
 public:
     explicit FullModel(std::vector<std::shared_ptr<Contact>> allContacts);
     FullModel() = default;
+    ~FullModel() {
+        // std::cout << "Full model destructor called." << std::endl;
+    }
+    
     void addModel(std::shared_ptr<Model> model);
 
     // Helper functions
@@ -30,6 +34,8 @@ public:
      * @return
      */
     double getContactRateByComparingPairs(std::vector<std::string> modelGroup);
+    
+    std::vector<std::shared_ptr<Contact>> getAllContacts();
 
     void connectModels();
 };

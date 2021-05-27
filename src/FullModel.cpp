@@ -102,3 +102,7 @@ void FullModel::connectModels() {
         }
     }
 }
+
+std::vector<std::shared_ptr<Contact>> FullModel::getAllContacts() {
+    return allContacts;
+}

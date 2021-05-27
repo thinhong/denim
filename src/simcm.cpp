@@ -6,7 +6,8 @@ Rcpp::DataFrame simcm(std::string inputPath) {
 
     // Read a JSON input file to provide parameters
     // std::ifstream inputFile(inputPath);
-    nlohmann::json input = nlohmann::json::parse(inputPath);
+    nlohmann::json input;
+    input = nlohmann::json::parse(inputPath);
     // inputFile >> input;
 
     // Record execution time: https://stackoverflow.com/questions/21856025/getting-an-accurate-execution-time-in-c-micro-seconds
@@ -29,7 +30,6 @@ Rcpp::DataFrame simcm(std::string inputPath) {
     std::vector<std::shared_ptr<Contact>> allContacts;
     if (!input["contacts"].is_null()) {
         for (auto& contactConfig: input["contacts"]) {
-            Contact::contactAssumption.push_back(contactConfig["contactType"]);
             auto contact = std::make_shared<Contact>(contactConfig["contactType"], contactConfig["contactClasses"], contactConfig["contactRates"]);
             allContacts.push_back(contact);
         }
@@ -58,9 +58,6 @@ Rcpp::DataFrame simcm(std::string inputPath) {
         // Check cycle, sort and calculate population size
         myModel->sortComps();
         myModel->calcPopulationSize();
-        if (!allContacts.empty()) {
-            myModel->sortModelGroupByAssumption(allContacts);
-        }
 
         // Finally, add this model to the full model
         allModels.addModel(myModel);
@@ -99,6 +96,7 @@ Rcpp::DataFrame simcm(std::string inputPath) {
     for (auto& model: allModels.getModels()) {
         std::string modelName {""};
         for (size_t i {0}; i < model->getModelGroup().size(); ++i) {
+            std::cout << model->getModelGroup()[i] << " ";
             if (i < (model->getModelGroup().size() - 1)) {
                 modelName += model->getModelGroup()[i] + "_";
             } else if (i == (model->getModelGroup().size() - 1)) {
@@ -109,6 +107,7 @@ Rcpp::DataFrame simcm(std::string inputPath) {
             std::string compName = comp->getName() + "_" + modelName;
             df.push_back(comp->getTotal(), compName);
         }
+        std::cout << std::endl;
     }
     return df;
 }

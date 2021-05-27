@@ -244,20 +244,3 @@ void Model::update(long iter) {
         comp->updateValue(iter, forceInfection);
     }
 }
-
-void Model::sortModelGroupByAssumption(std::vector<std::shared_ptr<Contact>> allContacts) {
-    std::vector<std::string> modelGroupSorted;
-    for (std::string assumptionOrder: Contact::contactAssumption) {
-        for (auto contact: allContacts) {
-            if (contact->getContactType() == assumptionOrder) {
-                std::vector<std::string> contactClasses = contact->getContactClasses();
-                for (std::string group: modelName) {
-                    if (std::find(contactClasses.begin(), contactClasses.end(), group) != contactClasses.end()) {
-                        modelGroupSorted.push_back(group);
-                    }
-                }
-            }
-        }
-    }
-    modelName = modelGroupSorted;
-}

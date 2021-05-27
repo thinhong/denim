@@ -34,11 +34,11 @@ public:
     static inline std::vector<std::string> infectiousComps;
     Model(std::vector<std::string> modelGroup, double transmissionRate);
     ~Model() {
-//        std::string name;
-//        for (auto group: modelName) {
-//            name += group;
-//        }
-//        std::cout << name << " model destructor called." << std::endl;
+       // std::string name;
+       // for (auto group: modelName) {
+       //     name += group;
+       // }
+       // std::cout << name << " model destructor called." << std::endl;
     }
     std::vector<std::string> getModelGroup();
     std::vector<std::shared_ptr<Compartment>> getComps();
@@ -58,12 +58,6 @@ public:
      * @return a weak pointer of that compartment
      */
     std::weak_ptr<Compartment> getAddressFromName(std::string compName);
-
-    /**
-     * Ensure that the order of elements in model group follows instruction from contact assumption
-     * @param allContacts: a vector contains all Contact objects
-     */
-    void sortModelGroupByAssumption(std::vector<std::shared_ptr<Contact>> allContacts);
 
     // Interaction among locations
     void addNewLinkedContactRate(double linkedContactRate);
