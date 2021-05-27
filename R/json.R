@@ -130,7 +130,11 @@ fullModelToJson <- function(fullModel) {
   ts <- newJsonKeyPair("timeStep", fullModel$timeStep)
   ms <- newJsonNestedArray("modelStructure", fullModel$transitions, quotation = TRUE)
   ic <- newJsonNestedArray("infectiousComps", fullModel$infectiousComps, quotation = TRUE)
-  ct <- newJsonNestedArray("contacts", contactsToJson(fullModel$contacts))
+  if (!is.null(fullModel$contacts)) {
+    ct <- newJsonNestedArray("contacts", contactsToJson(fullModel$contacts))
+  } else {
+    ct <- NULL
+  }
   md <- newJsonNestedArray("models", modelsToJson(fullModel$models))
   contents <- paste0(newJsonObject(dfu, et, ts, ms, ic, ct, md))
   return(contents)

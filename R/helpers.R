@@ -80,11 +80,15 @@ inputHelper <- function(transitions, contactGroups = NULL) {
 }
 
 runSim <- function(daysFollowUp, errorTolerance, timeStep, transmissionRate,
-                   infectiousComps, contacts, transitions, 
+                   infectiousComps, contacts = NULL, transitions, 
                    initialValues, distributions) {
   fmod <- newFullModel(daysFollowUp, errorTolerance, timeStep, transmissionRate,
                        infectiousComps, contacts, transitions, 
                        initialValues, distributions)
   fmodJson <- fullModelToJson(fmod)
-  simcm(fmodJson)
+  df <- simcm(fmodJson)
+  if (length(unlist(strsplit(colnames(df)[[2]], "_"))) == 1) {
+    colnames(df)[-1] <- gsub("_", "", colnames(df)[-1])
+  }
+  return(df)
 }

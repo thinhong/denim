@@ -1,5 +1,5 @@
 newFullModel <- function(daysFollowUp, errorTolerance, timeStep, transmissionRate,
-                         infectiousComps, contacts, transitions, 
+                         infectiousComps, contacts = NULL, transitions, 
                          initialValues, distributions) {
   fmod <- list()
   
@@ -7,19 +7,34 @@ newFullModel <- function(daysFollowUp, errorTolerance, timeStep, transmissionRat
   fmod$errorTolerance <- errorTolerance
   fmod$timeStep <- timeStep
   fmod$infectiousComps <- infectiousComps
-  fmod$contacts <- newContact(contacts)
+  if (!is.null(contacts)) {
+    fmod$contacts <- newContact(contacts)
+  }
   fmod$transitions <- transitions
   
   # Is there any compartment missing in initialValues or distributions?
   initValDistrHelper(initialValues, distributions)
   
   mods <- list()
-  for (modelName in names(initialValues)) {
+  if (class(initialValues[[1]]) == "list") {
+    for (modelName in names(initialValues)) {
+      comps <- list()
+      for (compName in names(initialValues[[modelName]])) {
+        comps[[compName]] <- newCompartment(compartmentName = compName, 
+                                            distribution = distributions[[modelName]][[compName]],
+                                            initialValue = initialValues[[modelName]][[compName]])
+      }
+      mods[[modelName]] <- newModel(modelName = modelName, 
+                                    transmissionRate = transmissionRate,
+                                    compartments = comps)
+    }
+  } else {
+    modelName <- ""
     comps <- list()
-    for (compName in names(initialValues[[modelName]])) {
+    for (compName in names(initialValues)) {
       comps[[compName]] <- newCompartment(compartmentName = compName, 
-                                          distribution = distributions[[modelName]][[compName]],
-                                          initialValue = initialValues[[modelName]][[compName]])
+                                          distribution = distributions[[compName]],
+                                          initialValue = initialValues[[compName]])
     }
     mods[[modelName]] <- newModel(modelName = modelName, 
                                   transmissionRate = transmissionRate,
