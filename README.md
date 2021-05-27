@@ -30,7 +30,7 @@ initialValues <- list(
 # Use list because R does not allow to create NULL values in a vector
 distributions <- list(
   S = NULL,
-  I = exponential(rate = 1.5),
+  I = exponential(rate = 0.5),
   R = NULL
 )
 
