@@ -4,7 +4,7 @@
 #'
 #' Imports
 #' @useDynLib discreteModel, .registration = TRUE
-#' @export simcm runSim gamma exponential values print.Distribution
+#' @export simcm runSim gamma weibull exponential values print.Distribution
 #' @import Rcpp
 "_PACKAGE"
 

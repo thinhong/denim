@@ -1,11 +1,23 @@
 # Constructor
 ## Gamma distribution
-gamma <- function(shape, scale) {
+gamma <- function(scale, shape) {
   distr <- list()
   
   distr$name <- "gamma"
-  distr$shape <- shape
   distr$scale <- scale
+  distr$shape <- shape
+  
+  class(distr) <- "Distribution"
+  return(distr)
+}
+
+## Weilbull distribution
+weibull <- function(scale, shape) {
+  distr <- list()
+  
+  distr$name <- "weibull"
+  distr$scale <- scale
+  distr$shape <- shape
   
   class(distr) <- "Distribution"
   return(distr)
@@ -26,7 +38,7 @@ exponential <- function(rate) {
 values <- function(...) {
   distr <- list()
   
-  distr$name <- "values"
+  distr$name <- "custom"
   distr$values <- c(...)
   
   class(distr) <- "Distribution"
@@ -41,12 +53,12 @@ print.Distribution <- function(x) {
   }
   # Print other parameters
   if (x$name == "gamma") {
-    cat("Shape = ", x$shape, ", Scale = ", x$scale, sep = "")
+    cat("Scale = ", x$scale, ", Shape = ", x$shape, sep = "")
     
   } else if (x$name == "exponential") {
     cat("Rate = ", x$rate, sep = "")
     
-  } else if (x$name =="values") {
+  } else if (x$name =="custom") {
     cat("Raw values")
     for (i in head(x$values, 5)) {
       cat(" ", i, sep = "")
