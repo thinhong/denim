@@ -19,9 +19,11 @@ Rcpp::DataFrame simcm(std::string inputPath) {
     if (!input["timeStep"].is_null()) {
         Distribution::timeStep = input["timeStep"];
     }
+    Model::modelStructure.clear();
     for (std::string structure: input["modelStructure"]) {
         Model::modelStructure.push_back(structure);
     }
+    Model::infectiousComps.clear();
     for (std::string infComp: input["infectiousComps"]) {
         Model::infectiousComps.push_back(infComp);
     }
@@ -96,7 +98,6 @@ Rcpp::DataFrame simcm(std::string inputPath) {
     for (auto& model: allModels.getModels()) {
         std::string modelName {""};
         for (size_t i {0}; i < model->getModelGroup().size(); ++i) {
-            std::cout << model->getModelGroup()[i] << " ";
             if (i < (model->getModelGroup().size() - 1)) {
                 modelName += model->getModelGroup()[i] + "_";
             } else if (i == (model->getModelGroup().size() - 1)) {
@@ -107,7 +108,6 @@ Rcpp::DataFrame simcm(std::string inputPath) {
             std::string compName = comp->getName() + "_" + modelName;
             df.push_back(comp->getTotal(), compName);
         }
-        std::cout << std::endl;
     }
     return df;
 }
