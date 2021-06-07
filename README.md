@@ -16,22 +16,20 @@ Here we have to define:
 library(discreteModel)
 
 transitions <- c(
-  "S -> I", 
+  "S -> E",
+  "E -> I",
   "I -> R"
 )
 
-# Use list to be consistent with the distributions below
-initialValues <- list(
+initialValues <- c(
   S = 999,
+  E = 0,
   I = 1,
   R = 0
 )
 
-# Use list because R does not allow to create NULL values in a vector
-distributions <- list(
-  S = NULL,
-  I = exponential(rate = 0.5),
-  R = NULL
+distributions <- c(E = weibull(scale = 2, shape = 5), 
+                   I = exponential(rate = 1.5))
 )
 
 fmod <- runSim(daysFollowUp = 5000, errorTolerance = 0.01, timeStep = 0.001, 
@@ -40,7 +38,7 @@ fmod <- runSim(daysFollowUp = 5000, errorTolerance = 0.01, timeStep = 0.001,
                initialValues = initialValues, distributions = distributions)
 ```
 
-### Contact between locations
+### Contact between locations: not updated yet
 We now add a parameter contacts, which is a list of contact matrices.
 
 `initialValues` and `distributions` will be defined as a list of locations (noted that we have to use list instead of a vector because R does not allow to create NULL values in a vector).

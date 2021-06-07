@@ -12,6 +12,11 @@ CompartmentJSON::CompartmentJSON(nlohmann::json& jsonNode) {
         auto transitionProb = std::make_shared<TransitionProb>(prob);
         comp = std::make_shared<Compartment>(jsonNode["name"], jsonNode["initialValue"], transitionProb);
     }
+    else if (jsonNode["distribution"]["name"] == "none") {
+        double prob = 0.0;
+        auto transitionProb = std::make_shared<TransitionProb>(prob);
+        comp = std::make_shared<Compartment>(jsonNode["name"], jsonNode["initialValue"], transitionProb);
+    }
         // Gamma distribution: parameters are "scale" and "shape"
     else if (jsonNode["distribution"]["name"] == "gamma") {
         double scale = jsonNode["distribution"]["scale"];

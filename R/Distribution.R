@@ -11,7 +11,7 @@ gamma <- function(scale, shape) {
   return(distr)
 }
 
-## Weilbull distribution
+## Weibull distribution
 weibull <- function(scale, shape) {
   distr <- list()
   
@@ -48,16 +48,14 @@ values <- function(...) {
 # Generic print method to print out what we want the users to see
 print.Distribution <- function(x) {
   # Print the name of this distribution
-  if (x$name %in% c("gamma", "exponential")) {
+  if (x$name %in% c("gamma", "exponential", "weibull")) {
     cat("Discretized", x$name, "distribution\n")
   }
   # Print other parameters
-  if (x$name == "gamma") {
+  if (x$name %in% c("gamma", "weibull")) {
     cat("Scale = ", x$scale, ", Shape = ", x$shape, sep = "")
-    
   } else if (x$name == "exponential") {
     cat("Rate = ", x$rate, sep = "")
-    
   } else if (x$name =="custom") {
     cat("Raw values")
     for (i in head(x$values, 5)) {

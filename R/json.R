@@ -36,9 +36,13 @@ newJsonNestedArray <- function(key, array, quotation = FALSE) {
   return(js)
 }
 
-# Nested object is "key": { object }
-newJsonNestedObject <- function(key, object) {
-  js <- paste0("\"", key, "\": {", object, "}")
+# Nested object is "key": { object } with object created by function newJsonObject()
+newJsonNestedObject <- function(key, object, inline = FALSE) {
+  if (inline == TRUE) {
+    object <- gsub("\n", "", object)
+    object <- gsub("  ", "", object)
+  }
+  js <- paste0("\"", key, "\": ", object)
   return(js)
 }
 
@@ -75,25 +79,37 @@ contactsToJson <- function(contacts) {
   return(contents)
 }
 
+
+#' Distribution object to json
+#'
+#' Input is a distribution object of a compartment, not the full vector/list 
+#' of distributions
+#' @param distribution a list with elements $name, $rate / $scale / $shape...
+#'
+#' @return a json object that match format "distribution": {"name": "weibull", "scale": 2, "shape": 5}
+#' @export
+#'
+#' @examples
+distributionToJson <- function(distribution) {
+  contents <- c()
+  for (i in 1:length(distribution)) {
+    key <- names(distribution)[i]
+    val <- distribution[[i]]
+    kp <- newJsonKeyPair(key = key, value = val)
+    contents <- c(contents, kp)
+  }
+  obj <- newJsonObject(contents)
+  distr <- newJsonNestedObject("distribution", obj, inline = TRUE)
+  return(distr)
+}
+
 # Compartments to json
 compartmentsToJson <- function(compartments) {
   contents <- "\n"
   for (i in 1:length(compartments)) {
     compartment <- compartments[[i]]
     cName <- newJsonKeyPair("name", compartment$compartmentName)
-    cDistr <- ""
-    if (is.null(compartment$distribution)) {
-      cDistr <- "\"name\": \"transitionProb\", \"transitionProb\": 0.0"
-    } else {
-      for (j in 1:length(compartment$distribution)) {
-        cDistr <- paste0(cDistr, newJsonKeyPair(names(compartment$distribution)[j], 
-                                                compartment$distribution[[j]]))
-        if (j < length(compartment$distribution)) {
-          cDistr <- paste0(cDistr, ", ")
-        }
-      }
-    }
-    cDistr <- newJsonNestedObject("distribution", cDistr)
+    cDistr <- distributionToJson(compartment$distribution)
     cInitVal <- newJsonKeyPair("initialValue", compartment$initialValue)
     contents <- paste0(contents, newJsonObject(cName, cDistr, cInitVal))
     if (i < length(compartments)) {

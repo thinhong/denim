@@ -21,6 +21,26 @@ initValDistrHelper <- function(initialValues, distributions) {
   }
 }
 
+tidyDistribution <- function(initialValues, distributions) {
+  distr <- list()
+  cnInitVal <- names(initialValues)
+  cnDist <- unique(sapply(names(distributions), function(x) strsplit(x, "\\.")[[1]][[1]]))
+  for (compName in cnInitVal) {
+    if (compName %in% cnDist) {
+      for (i in 1:length(distributions)) {
+        cName <- unlist(strsplit(names(distributions)[i], "\\."))[1]
+        pName <- unlist(strsplit(names(distributions)[i], "\\."))[2]
+        if (cName == compName) {
+          distr[[compName]][[pName]] <- distributions[[i]]
+        }
+      }
+    } else {
+      distr[[compName]][["name"]] <- "none"
+    }
+  }
+  return(distr)
+}
+
 inputHelper <- function(transitions, contactGroups = NULL) {
   # Handle user's need
   contactGrid <- expand.grid(contactGroups, stringsAsFactors = FALSE)
@@ -86,7 +106,13 @@ runSim <- function(daysFollowUp, errorTolerance, timeStep, transmissionRate,
                        infectiousComps, contacts, transitions, 
                        initialValues, distributions)
   fmodJson <- fullModelToJson(fmod)
+  cat(fmodJson)
+  
+  # Parse the json to C++ with function simcm (simulating compartmental model)
   df <- simcm(fmodJson)
+  
+  # When users use simple SIR model without contact, modelName = "" therefore
+  # colnames will be S_, I_, R_, this code is to erase the "_" character
   if (length(unlist(strsplit(colnames(df)[[2]], "_"))) == 1) {
     colnames(df)[-1] <- gsub("_", "", colnames(df)[-1])
   }

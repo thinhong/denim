@@ -12,25 +12,27 @@ newFullModel <- function(daysFollowUp, errorTolerance, timeStep, transmissionRat
   }
   fmod$transitions <- transitions
   
-  # Is there any compartment missing in initialValues or distributions?
-  initValDistrHelper(initialValues, distributions)
-  
   mods <- list()
-  if (class(initialValues[[1]]) == "list") {
+  if (class(distributions[[1]]) == "list") {
     for (modelName in names(initialValues)) {
       comps <- list()
+      # Tidy up the distribution elements of this model
+      distributions[[modelName]] <- tidyDistribution(initialValues[[modelName]], distributions[[modelName]])
       for (compName in names(initialValues[[modelName]])) {
-        comps[[compName]] <- newCompartment(compartmentName = compName, 
+        comps[[compName]] <- newCompartment(compartmentName = compName,
                                             distribution = distributions[[modelName]][[compName]],
                                             initialValue = initialValues[[modelName]][[compName]])
       }
-      mods[[modelName]] <- newModel(modelName = modelName, 
+      mods[[modelName]] <- newModel(modelName = modelName,
                                     transmissionRate = transmissionRate,
                                     compartments = comps)
     }
   } else {
+    # There is only one model in this case
     modelName <- ""
     comps <- list()
+    # Tidy up the distribution of this model
+    distributions <- tidyDistribution(initialValues, distributions)
     for (compName in names(initialValues)) {
       comps[[compName]] <- newCompartment(compartmentName = compName, 
                                           distribution = distributions[[compName]],
