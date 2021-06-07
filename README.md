@@ -30,7 +30,6 @@ initialValues <- c(
 
 distributions <- c(E = weibull(scale = 2, shape = 5), 
                    I = exponential(rate = 1.5))
-)
 
 fmod <- runSim(daysFollowUp = 5000, errorTolerance = 0.01, timeStep = 0.001, 
                transmissionRate = 1.5, infectiousComps = c("I"), 
