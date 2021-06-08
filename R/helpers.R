@@ -106,7 +106,7 @@ runSim <- function(daysFollowUp, errorTolerance, timeStep, transmissionRate,
                        infectiousComps, contacts, transitions, 
                        initialValues, distributions)
   fmodJson <- fullModelToJson(fmod)
-  cat(fmodJson)
+  # cat(fmodJson) # for debug
   
   # Parse the json to C++ with function simcm (simulating compartmental model)
   df <- simcm(fmodJson)
