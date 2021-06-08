@@ -10,7 +10,7 @@ remotes::install_github("thinhong/discreteModel")
 ### Simple SIR model without contact
 Here we have to define:
 * `transitions`: structure of the model or transitions among compartments, for instance S -> I -> R would be defined by `"S -> I"`, `"I -> R"` (note the `""` symbol, this will be read as strings), white space can be ignored here (i.e we can write `"S->I"`)
-* `initialValues`: initial values of compartments
+* `initialValues`: a vector defines initial values of compartments
 * `distributions`: distributions of compartments, currently `exponential(rate)`, `gamma(scale, shape)`, and `weibull(scale, shape)` are available
 ```
 library(discreteModel)
@@ -37,14 +37,11 @@ fmod <- runSim(daysFollowUp = 5000, errorTolerance = 0.01, timeStep = 0.001,
                initialValues = initialValues, distributions = distributions)
 ```
 
-### Contact between locations: not updated yet
-We now add a parameter contacts, which is a list of contact matrices.
-
-`initialValues` and `distributions` will be defined as a list of locations (noted that we have to use list instead of a vector because R does not allow to create NULL values in a vector).
+### Contact between locations:
+We now add another parameter `contacts`: a list of contact matrices. If we have contact between locations, `initialValues` and `distributions` will be lists of locations. The name of elements of `initialValues` and `distributions` need to match the dimension names of the matrices.
 
 This script will simulate a SIR model of 2 locations: Ho Chi Minh and Ha Noi.
 ```
-# Make a contact matrix among locations
 M_location <- matrix(c(0.85, 0.1, 0.1, 0.95), nrow = 2, ncol = 2, 
                      dimnames = list(c("HCM", "HN"), c("HCM", "HN")))
 
@@ -58,30 +55,72 @@ transitions <- c(
 )
 
 initialValues <- list(
-  HCM = list(
+  HCM = c(
     S = 999,
     I = 1,
     R = 0),
-  HN = list(
+  HN = c(
     S = 699,
     I = 0,
     R = 0)
 )
 
 distributions <- list(
-  HCM = list(
-    S = NULL,
-    I = gamma(scale = 2, shape = 5),
-    R = NULL),
-  HN = list(
-    S = NULL,
-    I = weibull(scale = 2, shape = 5),
-    R = NULL
-  )
+  HCM = c(I = gamma(scale = 2, shape = 5)),
+  HN = c(I = weibull(scale = 2, shape = 5))
 )
 
 fmod <- runSim(daysFollowUp = 5000, errorTolerance = 0.01, timeStep = 0.001, 
-               transmissionRate = 1.5, infectiousComps = c("I"), 
+               transmissionRate = 1.5, infectiousComps = "I", 
+               contacts = contacts, transitions = transitions,
+               initialValues = initialValues, distributions = distributions)
+```
+
+If we have more than one type of contact, define the names of elements of `initialValues` and `distributions` with `.`:
+```
+M_location <- matrix(c(0.85, 0.1, 0.1, 0.95), nrow = 2, ncol = 2, 
+                     dimnames = list(c("HCM", "HN"), c("HCM", "HN")))
+M_gender <- matrix(c(0.5, 0.75, 0.75, 0.95), nrow = 2, ncol = 2, 
+                     dimnames = list(c("M", "F"), c("M", "F")))
+
+contacts <- list(
+  location = M_location,
+  gender = M_gender
+)
+
+transitions <- c(
+  "S -> I", 
+  "I -> R"
+)
+
+initialValues <- list(
+  HCM.M = c(
+    S = 999,
+    I = 1,
+    R = 0),
+  HCM.F = c(
+    S = 699,
+    I = 0,
+    R = 0),
+  HN.M = c(
+    S = 999,
+    I = 1,
+    R = 0),
+  HN.F = c(
+    S = 699,
+    I = 0,
+    R = 0)
+)
+
+distributions <- list(
+  HCM.M = c(I = gamma(scale = 2, shape = 5)),
+  HCM.F = c(I = gamma(scale = 2, shape = 5)),
+  HN.M = c(I = weibull(scale = 2, shape = 5)),
+  HN.F = c(I = weibull(scale = 2, shape = 5))
+)
+
+fmod <- runSim(daysFollowUp = 5000, errorTolerance = 0.01, timeStep = 0.001, 
+               transmissionRate = 1.5, infectiousComps = "I", 
                contacts = contacts, transitions = transitions,
                initialValues = initialValues, distributions = distributions)
 ```
