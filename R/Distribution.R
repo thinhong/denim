@@ -1,4 +1,4 @@
-# Constructor
+# Constructors
 ## Gamma distribution
 gamma <- function(scale, shape) {
   distr <- list()
@@ -7,7 +7,7 @@ gamma <- function(scale, shape) {
   distr$scale <- scale
   distr$shape <- shape
   
-  class(distr) <- "Distribution"
+  class(distr) <- c("Distribution", class(distr))
   return(distr)
 }
 
@@ -19,7 +19,7 @@ weibull <- function(scale, shape) {
   distr$scale <- scale
   distr$shape <- shape
   
-  class(distr) <- "Distribution"
+  class(distr) <- c("Distribution", class(distr))
   return(distr)
 }
 
@@ -30,7 +30,7 @@ exponential <- function(rate) {
   distr$name <- "exponential"
   distr$rate <- rate
   
-  class(distr) <- "Distribution"
+  class(distr) <- c("Distribution", class(distr))
   return(distr)
 }
 
@@ -41,11 +41,31 @@ values <- function(...) {
   distr$name <- "custom"
   distr$values <- c(...)
   
-  class(distr) <- "Distribution"
+  class(distr) <- c("Distribution", class(distr))
   return(distr)
 }
 
-# Generic print method to print out what we want the users to see
+# Tidy up distribution by comparing with initialValues
+tidyDistribution <- function(initialValues, distributions) {
+  distr <- list()
+  cnInitVal <- names(initialValues)
+  cnDist <- unique(sapply(names(distributions), function(x) strsplit(x, "\\.")[[1]][[1]]))
+  for (compName in cnInitVal) {
+    if (compName %in% cnDist) {
+      for (i in 1:length(distributions)) {
+        cName <- unlist(strsplit(names(distributions)[i], "\\."))[1]
+        pName <- unlist(strsplit(names(distributions)[i], "\\."))[2]
+        if (cName == compName) {
+          distr[[compName]][[pName]] <- distributions[[i]]
+        }
+      }
+    } else {
+      distr[[compName]][["name"]] <- "none"
+    }
+  }
+  return(distr)
+}
+
 print.Distribution <- function(x) {
   # Print the name of this distribution
   if (x$name %in% c("gamma", "exponential", "weibull")) {
