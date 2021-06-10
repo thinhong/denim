@@ -4,7 +4,7 @@
 #'
 #' Imports
 #' @useDynLib discreteModel, .registration = TRUE
-#' @export simcm runSim gamma weibull exponential values
+#' @export simcm runSim gamma weibull exponential values checkContactMatrices
 #' @import Rcpp
 "_PACKAGE"
 
