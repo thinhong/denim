@@ -45,8 +45,6 @@ This script will simulate a SIR model of 2 locations: Ho Chi Minh and Ha Noi.
 M_location <- matrix(c(0.85, 0.1, 0.1, 0.95), nrow = 2, ncol = 2, 
                      dimnames = list(c("HCM", "HN"), c("HCM", "HN")))
 
-contacts <- M_location
-
 transitions <- c(
   "S -> I", 
   "I -> R"
@@ -70,7 +68,7 @@ distributions <- list(
 
 fmod <- runSim(daysFollowUp = 5000, errorTolerance = 0.01, timeStep = 0.001, 
                transmissionRate = 1.5, infectiousComps = "I", 
-               contacts = contacts, transitions = transitions,
+               contacts = M_location, transitions = transitions,
                initialValues = initialValues, distributions = distributions)
 ```
 
@@ -79,7 +77,10 @@ If we only have one type of contact, we can directly parse the contact matrix in
 M_location <- matrix(c(0.85, 0.1, 0.1, 0.95), nrow = 2, ncol = 2, 
                      dimnames = list(c("HCM", "HN"), c("HCM", "HN")))
 
-contacts <- M_location
+fmod <- runSim(daysFollowUp = 5000, errorTolerance = 0.01, timeStep = 0.001, 
+               transmissionRate = 1.5, infectiousComps = "I", 
+               contacts = M_location, transitions = transitions,
+               initialValues = initialValues, distributions = distributions)
 ```
 
 If we have more than one type of contact:
