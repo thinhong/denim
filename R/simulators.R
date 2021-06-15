@@ -1,6 +1,13 @@
 runSim <- function(daysFollowUp, errorTolerance, timeStep, transmissionRate,
                    infectiousComps, contacts = NULL, transitions, 
                    initialValues, distributions) {
+  
+  # If user only has 1 type of contact and doesn't want to write it as a list
+  # We will turn their contacts input into a list for them
+  if (!is.list(contacts) && !is.null(contacts)) {
+    contacts <- list(contacts)
+  }
+  
   # First, run all validators
   if (!is.null(contacts)) {
     checkContactMatrices(contacts)

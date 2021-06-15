@@ -18,9 +18,11 @@ contactFromMatrix <- function(contactType, contactMatrix) {
 
 # Constructor
 newContact <- function(contacts) {
+  ## If user doesn't define the name of type of contacts, we will also define it for them
   if (is.null(names(contacts))) {
     names(contacts) <- seq(1, length(contacts))
   }
+  
   act <- list()
   for (cname in names(contacts)) {
     act[[cname]] <- contactFromMatrix(contactType = cname, contactMatrix = contacts[[cname]])
