@@ -45,9 +45,7 @@ This script will simulate a SIR model of 2 locations: Ho Chi Minh and Ha Noi.
 M_location <- matrix(c(0.85, 0.1, 0.1, 0.95), nrow = 2, ncol = 2, 
                      dimnames = list(c("HCM", "HN"), c("HCM", "HN")))
 
-contacts <- list(
-  location = M_location
-)
+contacts <- list(M_location)
 
 transitions <- c(
   "S -> I", 
@@ -83,10 +81,7 @@ M_location <- matrix(c(0.85, 0.1, 0.1, 0.95), nrow = 2, ncol = 2,
 M_gender <- matrix(c(0.5, 0.75, 0.75, 0.95), nrow = 2, ncol = 2, 
                      dimnames = list(c("M", "F"), c("M", "F")))
 
-contacts <- list(
-  location = M_location,
-  gender = M_gender
-)
+contacts <- list(M_location, M_gender)
 
 transitions <- c(
   "S -> I", 
@@ -139,10 +134,7 @@ M_location <- matrix(c(0.85, 0.1, 0.1, 0.95), nrow = 2, ncol = 2,
 M_age <- matrix(c(0.5, 0.6, 0.7, 0.6, 0.4, 0.3, 0.7, 0.3, 0.8), nrow = 3, ncol = 3, 
                      dimnames = list(c("young", "middle", "older"), c("young", "middle", "older")))
 
-contacts <- list(
-  location = M_location,
-  age = M_age
-)
+contacts <- list(M_location, M_age)
 
 transitions <- c(
   "S -> E", 
