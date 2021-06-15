@@ -45,7 +45,7 @@ This script will simulate a SIR model of 2 locations: Ho Chi Minh and Ha Noi.
 M_location <- matrix(c(0.85, 0.1, 0.1, 0.95), nrow = 2, ncol = 2, 
                      dimnames = list(c("HCM", "HN"), c("HCM", "HN")))
 
-contacts <- list(M_location)
+contacts <- M_location
 
 transitions <- c(
   "S -> I", 
@@ -74,7 +74,27 @@ fmod <- runSim(daysFollowUp = 5000, errorTolerance = 0.01, timeStep = 0.001,
                initialValues = initialValues, distributions = distributions)
 ```
 
-If we have more than one type of contact, define the names of elements of `initialValues` and `distributions` with `.`:
+If we only have one type of contact, we can directly parse the contact matrix into parameter `contacts` of `runSim()`
+```
+M_location <- matrix(c(0.85, 0.1, 0.1, 0.95), nrow = 2, ncol = 2, 
+                     dimnames = list(c("HCM", "HN"), c("HCM", "HN")))
+
+contacts <- M_location
+```
+
+If we have more than one type of contact:
+* `contacts` must be defined as a list of contact matrices
+```
+M_location <- matrix(c(0.85, 0.1, 0.1, 0.95), nrow = 2, ncol = 2, 
+                     dimnames = list(c("HCM", "HN"), c("HCM", "HN")))
+M_gender <- matrix(c(0.5, 0.75, 0.75, 0.95), nrow = 2, ncol = 2, 
+                     dimnames = list(c("M", "F"), c("M", "F")))
+
+contacts <- list(M_location, M_gender)
+```
+* Use `.` to define the names of elements inside `initialValues` and `distributions`
+
+Full input should be defined as follows
 ```
 M_location <- matrix(c(0.85, 0.1, 0.1, 0.95), nrow = 2, ncol = 2, 
                      dimnames = list(c("HCM", "HN"), c("HCM", "HN")))
