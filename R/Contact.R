@@ -18,6 +18,9 @@ contactFromMatrix <- function(contactType, contactMatrix) {
 
 # Constructor
 newContact <- function(contacts) {
+  if (is.null(names(contacts))) {
+    names(contacts) <- seq(1, length(contacts))
+  }
   act <- list()
   for (cname in names(contacts)) {
     act[[cname]] <- contactFromMatrix(contactType = cname, contactMatrix = contacts[[cname]])
