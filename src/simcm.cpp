@@ -14,7 +14,6 @@ Rcpp::DataFrame simcm(std::string inputPath) {
     auto startTime = std::chrono::high_resolution_clock::now();
 
     // Initialize parameters
-    Compartment::daysFollowUp = input["daysFollowUp"];
     Distribution::errorTolerance = input["errorTolerance"];
     if (!input["timeStep"].is_null()) {
         Distribution::timeStep = input["timeStep"];
@@ -27,6 +26,8 @@ Rcpp::DataFrame simcm(std::string inputPath) {
     for (std::string infComp: input["infectiousComps"]) {
         Model::infectiousComps.push_back(infComp);
     }
+    
+    Compartment::timesFollowUp = static_cast<size_t>(static_cast<double>(input["daysFollowUp"]) / Distribution::timeStep + 1);
 
     // Initialize contactAssumption first because the contact will be generate following this order
     std::vector<std::shared_ptr<Contact>> allContacts;
@@ -78,7 +79,7 @@ Rcpp::DataFrame simcm(std::string inputPath) {
     // update location 1, then location 2, then move on to the next iteration. We never want to update a location
     // from iter 1 to iter 100 then continue to update the next location. So the "iter" for loop comes first, then
     // the "location" for loop
-    for (size_t i {1}; i < Compartment::daysFollowUp; i++) {
+    for (size_t i {1}; i < Compartment::timesFollowUp; i++) {
         for (auto& myModel: allModels.getModels()) {
             myModel->update(i);
         }
@@ -92,9 +93,14 @@ Rcpp::DataFrame simcm(std::string inputPath) {
     // ================== End construct and run model ========================
 
     Rcpp::DataFrame df;
-    std::vector<int> timeStep(Compartment::daysFollowUp);
+    std::vector<int> timeStep(Compartment::timesFollowUp);
     std::iota(std::begin(timeStep), std::end(timeStep), 0);
-    df.push_back(timeStep, "Time");
+    std::vector<double> actualTime;
+    actualTime.clear();
+    for (auto& time: timeStep) {
+        actualTime.push_back(Distribution::timeStep * time);
+    }
+    df.push_back(actualTime, "Time");
     for (auto& model: allModels.getModels()) {
         std::string modelName {""};
         for (size_t i {0}; i < model->getModelGroup().size(); ++i) {

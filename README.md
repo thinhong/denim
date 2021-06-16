@@ -44,7 +44,7 @@ initialValues <- c(
 distributions <- c(E = weibull(scale = 2, shape = 5), 
                    I = exponential(rate = 1.5))
 
-fmod <- runSim(daysFollowUp = 5000, errorTolerance = 0.01, timeStep = 0.001, 
+fmod <- runSim(daysFollowUp = 50, errorTolerance = 0.01, timeStep = 0.01, 
                transmissionRate = 1.5, infectiousComps = "I", 
                transitions = transitions,
                initialValues = initialValues, distributions = distributions)
@@ -79,7 +79,7 @@ distributions <- list(
   HN = c(I = weibull(scale = 2, shape = 5))
 )
 
-fmod <- runSim(daysFollowUp = 5000, errorTolerance = 0.01, timeStep = 0.001, 
+fmod <- runSim(daysFollowUp = 50, errorTolerance = 0.01, timeStep = 0.01, 
                transmissionRate = 1.5, infectiousComps = "I", 
                contacts = M_location, transitions = transitions,
                initialValues = initialValues, distributions = distributions)
@@ -90,7 +90,7 @@ If we only have one type of contact, we can directly parse the contact matrix in
 M_location <- matrix(c(0.85, 0.1, 0.1, 0.95), nrow = 2, ncol = 2, 
                      dimnames = list(c("HCM", "HN"), c("HCM", "HN")))
 
-fmod <- runSim(daysFollowUp = 5000, errorTolerance = 0.01, timeStep = 0.001, 
+fmod <- runSim(daysFollowUp = 50, errorTolerance = 0.01, timeStep = 0.01, 
                transmissionRate = 1.5, infectiousComps = "I", 
                contacts = M_location, transitions = transitions,
                initialValues = initialValues, distributions = distributions)
@@ -148,7 +148,7 @@ distributions <- list(
   HN.F = c(I = weibull(scale = 2, shape = 5))
 )
 
-fmod <- runSim(daysFollowUp = 20000, errorTolerance = 0.01, timeStep = 0.001, 
+fmod <- runSim(daysFollowUp = 20, errorTolerance = 0.01, timeStep = 0.01, 
                transmissionRate = 1.5, infectiousComps = "I", 
                contacts = contacts, transitions = transitions,
                initialValues = initialValues, distributions = distributions)
@@ -213,18 +213,14 @@ fmod <- runSim(daysFollowUp = , errorTolerance = , timeStep = ,
 ```
 
 ### Comparison with deSolve
+Binning timeStep into 0.001 to have the closest results to deSolve. 
 ```
 library(deSolve)
 library(discreteModel)
 library(ggplot2)
 library(tidyr)
 
-days <- 20
-timeStep <- 0.001
-timeStart <- 1 / timeStep + 2
-timeEnd <- days / timeStep + 2
-
-# DeSolve
+# deSolve
 sir_equations <- function(time, variables, parameters) {
   with(as.list(c(variables, parameters)), {
     dS <- -beta * (I1 + I2 + I3 + I4 + I5) * S
@@ -240,7 +236,7 @@ sir_equations <- function(time, variables, parameters) {
 
 parameters_values <- c(beta  = 0.0015, gamma = 0.5)
 initial_values <- c(S = 999, I1 = 1, I2 = 0, I3 = 0, I4 = 0, I5 = 0, R = 0)
-time_values <- seq(0, days)
+time_values <- seq(0, 20)
 
 dsmod <- ode(
   y = initial_values,
@@ -259,18 +255,14 @@ colnames(dsmod)[-1] <- paste0(colnames(dsmod)[-1], "_deSolve")
 transitions <- c("S -> I", "I -> R")
 initialValues <- c(S = 999, I = 1, R = 0)
 distributions <- c(I = gamma(2, 5))
-fmod <- runSim(daysFollowUp = 21000, errorTolerance = 0.01, 
-               timeStep = timeStep, 
+fmod <- runSim(daysFollowUp = 20, errorTolerance = 0.01, 
+               timeStep = 0.001, 
                transmissionRate = 1.5, infectiousComps = "I", 
                transitions = transitions,
                initialValues = initialValues, distributions = distributions)
 
-# To compare, first get the time steps we want
-times <- seq(timeStart, timeEnd, 1 / timeStep)
-fmod <- fmod[c(1, times),]
+# Merge the two results data frame to compare
 colnames(fmod)[-1] <- paste0(colnames(fmod)[-1], "_discrete")
-fmod$Time[-1] <- (fmod$Time[-1] - 1) * timeStep
-
 df2 <- merge(dsmod, fmod, by.x = "time", by.y = "Time")
 
 # We can make comparison by viewing the merged data frame
@@ -291,19 +283,19 @@ The results are as follows
 ```
    time    S_deSolve  I_deSolve    R_deSolve   S_discrete I_discrete   R_discrete
 1     0 9.990000e+02   1.000000 0.000000e+00 9.990000e+02   1.000000 0.000000e+00
-2     1 9.955339e+02   4.465856 2.303639e-04 9.955322e+02   4.467525 2.312548e-04
-3     2 9.802964e+02  19.696340 7.267827e-03 9.803104e+02  19.682319 7.276330e-03
-4     3 9.174280e+02  82.509558 6.244174e-02 9.175604e+02  82.377190 6.243833e-02
-5     4 7.128656e+02 286.788494 3.458764e-01 7.133762e+02 286.278277 3.455348e-01
-6     5 3.570668e+02 641.372446 1.560792e+00 3.576594e+02 640.782383 1.558167e+00
-7     6 1.108652e+02 883.247525 5.887297e+00 1.110565e+02 883.067578 5.875882e+00
-8     7 2.753151e+01 954.609024 1.785947e+01 2.755645e+01 954.616214 1.782733e+01
-9     8 6.560794e+00 950.121748 4.331746e+01 6.559554e+00 950.188046 4.325240e+01
-10    9 1.618453e+00 911.744233 8.663731e+01 1.616308e+00 911.850412 8.653328e+01
-11   10 4.304366e-01 850.902950 1.486666e+02 4.293904e-01 851.044558 1.485261e+02
-12   11 1.270917e-01 773.290746 2.265822e+02 1.266517e-01 773.459110 2.264142e+02
-13   12 4.253584e-02 684.835925 3.151215e+02 4.234933e-02 685.019007 3.149386e+02
-14   13 1.632456e-02 591.799588 4.081841e+02 1.623994e-02 591.985149 4.079986e+02
-15   14 7.202036e-03 499.863552 5.001292e+02 7.159897e-03 500.041355 4.999515e+02
+2     1 9.955339e+02   4.465856 2.303639e-04 9.955389e+02   4.460865 2.301190e-04
+3     2 9.802964e+02  19.696340 7.267827e-03 9.803393e+02  19.653437 7.257803e-03
+4     3 9.174280e+02  82.509558 6.244174e-02 9.176736e+02  82.264069 6.232200e-02
+5     4 7.128656e+02 286.788494 3.458764e-01 7.136823e+02 285.972686 3.449851e-01
+6     5 3.570668e+02 641.372446 1.560792e+00 3.580034e+02 640.440678 1.555952e+00
+7     6 1.108652e+02 883.247525 5.887297e+00 1.112038e+02 882.927489 5.868694e+00
+8     7 2.753151e+01 954.609024 1.785947e+01 2.759597e+01 954.594431 1.780960e+01
+9     8 6.560794e+00 950.121748 4.331746e+01 6.568916e+00 950.212553 4.321853e+01
+10    9 1.618453e+00 911.744233 8.663731e+01 1.618522e+00 911.901014 8.648046e+01
+11   10 4.304366e-01 850.902950 1.486666e+02 4.299393e-01 851.114669 1.484554e+02
+12   11 1.270917e-01 773.290746 2.265822e+02 1.267988e-01 773.543162 2.263300e+02
+13   12 4.253584e-02 684.835925 3.151215e+02 4.239289e-02 685.110767 3.148468e+02
+14   13 1.632456e-02 591.799588 4.081841e+02 1.625438e-02 592.078497 4.079052e+02
+15   14 7.202036e-03 499.863552 5.001292e+02 7.165272e-03 500.131156 4.998617e+02
 ```
 ![Our package vs deSolve](man/figures/ourVsDesolve.png)

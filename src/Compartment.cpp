@@ -4,7 +4,7 @@
 Compartment::Compartment(std::string name, double initVal, std::shared_ptr<Distribution> dist) {
     this->name = name;
     this->dist = dist;
-    total.resize(daysFollowUp);
+    total.resize(timesFollowUp);
     total[0] = initVal;
     // Each total value is binned into many subCompartmentValues, subCompartmentValues[0] is the initVal
     subCompartmentValues.resize(this->dist->getMaxDay(), 0);

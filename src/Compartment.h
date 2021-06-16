@@ -22,11 +22,11 @@ private:
     std::vector<double> subCompartmentValues;
     double outValue {0};
 public:
-    static inline size_t daysFollowUp {200};
+    static inline size_t timesFollowUp {200};
     Compartment(std::string name, double initVal, std::shared_ptr<Distribution> dist);
 
-    Compartment() = default;
-//    Compartment(const Compartment& comp) = delete;
+    Compartment() = delete;
+    // Compartment(const Compartment& comp) = delete;
 
     ~Compartment() {
 //        std::cout << name << " compartment destructor called." << std::endl;
