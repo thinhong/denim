@@ -50,7 +50,7 @@ plot.discretedf <- function(df) {
   if (n_group == 0) {
     df_plot$FullCompartment <- factor(df_plot$FullCompartment)
     p <- ggplot2::ggplot(df_plot, ggplot2::aes(x = Time, y = Value, col = FullCompartment)) + 
-      ggplot2::geom_line(size = 1.1) + ggplot2::theme_light()
+      ggplot2::geom_line(size = 1.1) + ggplot2::theme_light() + labs(color = "Compartment")
   } else if (n_group >= 1) {
     # Erase all strings after the first _ to get compartment name
     df_plot$Compartment <- gsub("_.*", "", df_plot$FullCompartment)
@@ -58,8 +58,9 @@ plot.discretedf <- function(df) {
     df_plot$Group <- sub(".*?_", "", df_plot$FullCompartment)
     df_plot$Compartment <- factor(df_plot$Compartment)
     df_plot$Group <- factor(df_plot$Group)
-    p <- ggplot2::ggplot(df_plot, ggplot2::aes(x = Time, y = Value, col = Compartment)) + 
-      ggplot2::geom_line(size = 1.1) + ggplot2::theme_light() + ggplot2::facet_wrap(~ Group)
+    p <- ggplot2::ggplot(df_plot, ggplot2::aes(x = Time, y = Value, col = Compartment)) +
+      ggplot2::geom_line(size = 1.1) +
+      ggplot2::theme_light() + ggplot2::facet_wrap(~ Group)
   }
   
   return(p)

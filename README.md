@@ -45,7 +45,7 @@ distributions <- c(E = weibull(scale = 2, shape = 5),
                    I = exponential(rate = 1.5))
 
 fmod <- runSim(daysFollowUp = 50, errorTolerance = 0.01, timeStep = 0.01, 
-               transmissionRate = 1.5, infectiousComps = "I", 
+               transmissionRate = 4, infectiousComps = "I", 
                transitions = transitions,
                initialValues = initialValues, distributions = distributions)
 ```
