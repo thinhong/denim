@@ -40,7 +40,7 @@ double angle_cdf ( double x, int n )
 //    Input, int N, the spatial dimension.
 //    N must be at least 2.
 //
-//    Output, real CDF, the total of the CDF.
+//    Output, real CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -52,7 +52,7 @@ double angle_cdf ( double x, int n )
     cerr << "\n";
     cerr << "ANGLE_CDF - Fatal error!\n";
     cerr << "  N must be at least 2.\n";
-    cerr << "  The input total of N = " << n << "\n";
+    cerr << "  The input value of N = " << n << "\n";
     exit ( 1 );
   }
 
@@ -156,7 +156,7 @@ double angle_pdf ( double x, int n )
 //    Input, int N, the spatial dimension.
 //    N must be at least 2.
 //
-//    Output, real PDF, the total of the PDF.
+//    Output, real PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -167,7 +167,7 @@ double angle_pdf ( double x, int n )
     cerr << "\n";
     cerr << "ANGLE_PDF - Fatal error!\n";
     cerr << "  N must be at least 2.\n";
-    cerr << "  The input total of N = " << n << "\n";
+    cerr << "  The input value of N = " << n << "\n";
     exit ( 1 );
   }
 
@@ -210,7 +210,7 @@ double anglit_cdf ( double x )
 //
 //    Input, double X, the argument of the CDF.
 //
-//    Output, double ANGLIT_CDF, the total of the CDF.
+//    Output, double ANGLIT_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -251,7 +251,7 @@ double anglit_cdf_inv ( double cdf )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Output, double ANGLIT_CDF_INV, the corresponding argument.
@@ -323,7 +323,7 @@ double anglit_pdf ( double x )
 //
 //    Input, double X, the argument of the PDF.
 //
-//    Output, double ANGLIT_PDF, the total of the PDF.
+//    Output, double ANGLIT_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -438,7 +438,7 @@ double arcsin_cdf ( double x, double a )
 //    Input, double A, the parameter of the CDF.
 //    A must be positive.
 //
-//    Output, double ARCSIN_CDF, the total of the CDF.
+//    Output, double ARCSIN_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -479,7 +479,7 @@ double arcsin_cdf_inv ( double cdf, double a )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double A, the parameter of the CDF.
@@ -627,7 +627,7 @@ double arcsin_pdf ( double x, double a )
 //    Input, double A, the parameter of the CDF.
 //    A must be positive.
 //
-//    Output, double ARCSIN_PDF, the total of the PDF.
+//    Output, double ARCSIN_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -745,7 +745,7 @@ double benford_cdf ( int x )
 //
 //    Input, int X, the string of significant digits to be 
 //    checked.  If X is 1, then we are asking for the Benford probability that
-//    a total will have first digit 1.  If X is 123, we are asking for
+//    a value will have first digit 1.  If X is 123, we are asking for
 //    the probability that the first three digits will be 123, and so on.
 //
 //    Output, double BENFORD_CDF, the Benford probability that an item taken
@@ -825,7 +825,7 @@ double benford_pdf ( int x )
 //
 //    Input, int X, the string of significant digits to be checked.
 //    If X is 1, then we are asking for the Benford probability that
-//    a total will have first digit 1.  If X is 123, we are asking for
+//    a value will have first digit 1.  If X is 123, we are asking for
 //    the probability that the first three digits will be 123, and so on.
 //
 //    Output, double BENFORD_PDF, the Benford probability that an item taken
@@ -872,7 +872,7 @@ double bernoulli_cdf ( int x, double a )
 //    Input, double A, the probability of success on one trial.
 //    0.0 <= A <= 1.0.
 //
-//    Output, double BERNOULLI_CDF, the total of the CDF.
+//    Output, double BERNOULLI_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -912,7 +912,7 @@ int bernoulli_cdf_inv ( double cdf, double a )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double A, the parameter of the PDF.
@@ -1046,7 +1046,7 @@ double bernoulli_pdf ( int x, double a )
 //    Input, double A, the probability of success on one trial.
 //    0.0 <= A <= 1.0.
 //
-//    Output, double BERNOULLI_PDF, the total of the PDF.
+//    Output, double BERNOULLI_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -1211,7 +1211,7 @@ double bessel_i0 ( double arg )
 //
 //    Input, double ARG, the argument.
 //
-//    Output, double BESSEL_I0, the total of the modified Bessel function
+//    Output, double BESSEL_I0, the value of the modified Bessel function
 //    of the first kind.
 //
 {
@@ -1404,11 +1404,11 @@ void bessel_i0_values ( int &n_data, double &x, double &fx )
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, double &X, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 20
@@ -1550,7 +1550,7 @@ double bessel_i1 ( double arg )
 //
 //    Input, double ARG, the argument.
 //
-//    Output, double BESSEL_I1, the total of the Bessel
+//    Output, double BESSEL_I1, the value of the Bessel
 //    I1 function.
 //
 {
@@ -1747,11 +1747,11 @@ void bessel_i1_values ( int &n_data, double &x, double &fx )
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, double &X, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 20
@@ -1880,13 +1880,13 @@ void bessel_ix_values ( int &n_data, double &nu, double &x, double &fx )
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, double &NU, the order of the function.
 //
 //    Output, double &X, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 28
@@ -2042,7 +2042,7 @@ double beta_binomial_cdf ( int x, double a, double b, int c )
 //    Input, int C, a parameter of the PDF.
 //    0 <= C.
 //
-//    Output, double BETA_BINOMIAL_CDF, the total of the CDF.
+//    Output, double BETA_BINOMIAL_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -2100,7 +2100,7 @@ int beta_binomial_cdf_inv ( double cdf, double a, double b, int c )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //
 //    Input, double A, B, parameters of the PDF.
 //    0.0 < A,
@@ -2280,7 +2280,7 @@ double beta_binomial_pdf ( int x, double a, double b, int c )
 //        MU is the expectation of the underlying Beta distribution;
 //        THETA is a shape parameter.
 //
-//      A THETA total of 0 ( or A+B --> Infinity ) results in the binomial
+//      A THETA value of 0 ( or A+B --> Infinity ) results in the binomial
 //      distribution:
 //
 //        PDF2(X) ( N, MU, 0 ) = C(N,X) * MU^X * ( 1 - MU )^(N-X)
@@ -2322,7 +2322,7 @@ double beta_binomial_pdf ( int x, double a, double b, int c )
 //    Input, int C, a parameter of the PDF.
 //    0 <= C.
 //
-//    Output, double BETA_BINOMIAL_PDF, the total of the PDF.
+//    Output, double BETA_BINOMIAL_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -2463,7 +2463,7 @@ double beta_cdf ( double x, double a, double b )
 //    0.0 < A,
 //    0.0 < B.
 //
-//    Output, double BETA_CDF, the total of the CDF.
+//    Output, double BETA_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -2517,14 +2517,14 @@ double beta_cdf_inv ( double cdf, double p, double q )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the incomplete Beta
+//    Input, double CDF, the value of the incomplete Beta
 //    function.  0 <= CDF <= 1.
 //
 //    Input, double P, Q, the parameters of the incomplete
 //    Beta function.
 //
 //    Output, double BETA_CDF_INV, the argument of the Beta CDF which 
-//    produces the total CDF.
+//    produces the value CDF.
 //
 //  Local Parameters:
 //
@@ -2788,7 +2788,7 @@ double beta_cdf_inv_old ( double cdf, double a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double A, B, the parameters of the PDF.
@@ -3029,13 +3029,13 @@ void beta_cdf_values ( int &n_data, double &a, double &b, double &x,
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, double &A, &B, the parameters of the function.
 //
 //    Output, double &X, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 45
@@ -3262,7 +3262,7 @@ double beta_inc ( double a, double b, double x )
 //
 //  Purpose:
 //
-//    BETA_INC returns the total of the incomplete Beta function.
+//    BETA_INC returns the value of the incomplete Beta function.
 //
 //  Discussion:
 //
@@ -3306,7 +3306,7 @@ double beta_inc ( double a, double b, double x )
 //    Input, double X, the argument of the function.
 //    Normally, 0.0 <= X <= 1.0.
 //
-//    Output, double BETA_INC, the total of the function.
+//    Output, double BETA_INC, the value of the function.
 //
 {
   double cx;
@@ -3516,13 +3516,13 @@ void beta_inc_values ( int &n_data, double &a, double &b, double &x,
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, double &A, &B, the parameters of the function.
 //
 //    Output, double &X, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 45
@@ -3818,7 +3818,7 @@ double beta_pdf ( double x, double a, double b )
 //    0.0 < A,
 //    0.0 < B.
 //
-//    Output, double BETA_PDF, the total of the PDF.
+//    Output, double BETA_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -3969,11 +3969,11 @@ void beta_values ( int &n_data, double &x, double &y, double &fxy )
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, double &X, &Y, the arguments of the function.
 //
-//    Output, double &FXY, the total of the function.
+//    Output, double &FXY, the value of the function.
 //
 {
 # define N_MAX 17
@@ -4137,7 +4137,7 @@ double binomial_cdf ( double x, int a, double b )
 //    Input, double B, the probability of success on one trial.
 //    0.0 <= B <= 1.0.
 //
-//    Output, double CDF, the total of the CDF.
+//    Output, double CDF, the value of the CDF.
 //
 {
   int cnk;
@@ -4203,7 +4203,7 @@ int binomial_cdf_inv ( double cdf, int a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, int A, the number of trials.
@@ -4328,7 +4328,7 @@ double binomial_mean ( int a, double b )
 //    Input, double B, the probability of success on one trial.
 //    0.0 <= B <= 1.0.
 //
-//    Output, double BINOMIAL_MEAN, the expected total of the number of
+//    Output, double BINOMIAL_MEAN, the expected value of the number of
 //    successes in A trials.
 //
 {
@@ -4380,7 +4380,7 @@ double binomial_pdf ( int x, int a, double b )
 //    Input, double B, the probability of success on one trial.
 //    0.0 <= B <= 1.0.
 //
-//    Output, double BINOMIAL_PDF, the total of the PDF.
+//    Output, double BINOMIAL_PDF, the value of the PDF.
 //
 {
   int cnk;
@@ -4820,7 +4820,7 @@ double bradford_cdf ( double x, double a, double b, double c )
 //    A < B,
 //    0.0 < C.
 //
-//    Output, double BRADFORD_CDF, the total of the CDF.
+//    Output, double BRADFORD_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -4864,7 +4864,7 @@ double bradford_cdf_inv ( double cdf, double a, double b, double c )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double A, B, C, the parameters of the PDF.
@@ -5021,7 +5021,7 @@ double bradford_pdf ( double x, double a, double b, double c )
 //    A < B,
 //    0.0 < C.
 //
-//    Output, double BRADFORD_PDF, the total of the PDF.
+//    Output, double BRADFORD_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -5286,7 +5286,7 @@ int buffon_box_sample ( double a, double b, double l, int trial_num )
 //
 //    and therefore, a record of the number of hits for a given number of
 //    trials can be used as a very roundabout way of estimating PI.
-//    (Particularly roundabout, since we actually will use a good total of
+//    (Particularly roundabout, since we actually will use a good value of
 //    PI in order to pick the random angles.)
 //
 //    Since this routine invokes the C++ random number generator,
@@ -5545,7 +5545,7 @@ int buffon_sample ( double a, double l, int trial_num )
     angle = 2.0 * r8_pi * ( double ) rand ( ) / ( double ) RAND_MAX;
 //
 //  Compute the location of the point of the needle.
-//  We only need to know the total of X2, not Y2!
+//  We only need to know the value of X2, not Y2!
 //
     x2 = x1 + l * cos ( angle );
 //
@@ -5588,7 +5588,7 @@ double burr_cdf ( double x, double a, double b, double c, double d )
 //    0 < B,
 //    0 < C.
 //
-//    Output, double BURR_CDF, the total of the CDF.
+//    Output, double BURR_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -5631,7 +5631,7 @@ double burr_cdf_inv ( double cdf, double a, double b, double c, double d )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double A, B, C, D, the parameters of the PDF.
@@ -5790,7 +5790,7 @@ double burr_pdf ( double x, double a, double b, double c, double d )
 //    0 < B,
 //    0 < C.
 //
-//    Output, double BURR_PDF, the total of the PDF.
+//    Output, double BURR_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -5937,7 +5937,7 @@ double cardioid_cdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 <= B <= 0.5.
 //
-//    Output, double CDF, the total of the PDF.
+//    Output, double CDF, the value of the PDF.
 //
 {
   double cdf;
@@ -5982,7 +5982,7 @@ double cardioid_cdf_inv ( double cdf, double a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0 <= CDF <= 1.
 //
 //    Input, double A, B, the parameters.
@@ -6166,7 +6166,7 @@ double cardioid_pdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 <= B <= 0.5.
 //
-//    Output, double CARDIOID_PDF, the total of the PDF.
+//    Output, double CARDIOID_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -6283,7 +6283,7 @@ double cauchy_cdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 < B.
 //
-//    Output, double CDF, the total of the CDF.
+//    Output, double CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -6320,7 +6320,7 @@ double cauchy_cdf_inv ( double cdf, double a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double A, B, the parameters of the PDF.
@@ -6395,7 +6395,7 @@ void cauchy_cdf_values ( int &n_data, double &mu, double &sigma, double &x,
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, double &MU, the mean of the distribution.
 //
@@ -6403,7 +6403,7 @@ void cauchy_cdf_values ( int &n_data, double &mu, double &sigma, double &x,
 //
 //    Output, double &X, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 12
@@ -6582,7 +6582,7 @@ double cauchy_pdf ( double x, double a, double b )
 //
 //    The Cauchy PDF is also known as the Breit-Wigner PDF.  It
 //    has some unusual properties.  In particular, the integrals for the
-//    expected total and higher order moments are "singular", in the
+//    expected value and higher order moments are "singular", in the
 //    sense that the limiting values do not exist.  A result can be
 //    obtained if the upper and lower limits of integration are set
 //    equal to +T and -T, and the limit as T=>INFINITY is taken, but
@@ -6607,7 +6607,7 @@ double cauchy_pdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 < B.
 //
-//    Output, double PDF, the total of the PDF.
+//    Output, double PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -6730,7 +6730,7 @@ double chebyshev1_cdf ( double x )
 //
 //    Input, double X, the argument of the CDF.
 //
-//    Output, double CHEBYSHEV1_CDF, the total of the CDF.
+//    Output, double CHEBYSHEV1_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -6775,7 +6775,7 @@ double chebyshev1_cdf_inv ( double cdf )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Output, double CHEBYSHEV1_CDF_INV, the corresponding argument.
@@ -6855,7 +6855,7 @@ double chebyshev1_pdf ( double x )
 //
 //    Input, double X, the argument of the PDF.
 //
-//    Output, double PDF, the total of the PDF.
+//    Output, double PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -6973,7 +6973,7 @@ double chi_cdf ( double x, double a, double b, double c )
 //    0 < B,
 //    0 < C.
 //
-//    Output, double CDF, the total of the CDF.
+//    Output, double CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -7024,7 +7024,7 @@ double chi_cdf_inv ( double cdf, double a, double b, double c )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //
 //    Input, double A, B, C, the parameters of the PDF.
 //    0 < B,
@@ -7200,7 +7200,7 @@ double chi_mean ( double a, double b, double c )
 //    0 < B,
 //    0 < C.
 //
-//    Output, double MEAN, the mean total.
+//    Output, double MEAN, the mean value.
 //
 {
   double mean;
@@ -7251,7 +7251,7 @@ double chi_pdf ( double x, double a, double b, double c )
 //    0 < B,
 //    0 < C.
 //
-//    Output, double PDF, the total of the PDF.
+//    Output, double PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -7374,12 +7374,12 @@ double chi_square_cdf ( double x, double a )
 //
 //  Parameters:
 //
-//    Input, double X, the total of the random deviate.
+//    Input, double X, the value of the random deviate.
 //
 //    Input, double A, the parameter of the distribution, usually
 //    the number of degrees of freedom.
 //
-//    Output, double CDF, the total of the CDF.
+//    Output, double CDF, the value of the CDF.
 //
 {
   double a2;
@@ -7430,14 +7430,14 @@ double chi_square_cdf_inv ( double cdf, double a )
 //
 //  Parameters:
 //
-//    Input, double CDF, a total of the chi-squared cumulative
+//    Input, double CDF, a value of the chi-squared cumulative
 //    probability density function.
 //    0.000002 <= CDF <= 0.999998.
 //
 //    Input, double A, the parameter of the chi-squared
 //    probability density function.  0 < A.
 //
-//    Output, double CHI_SQUARE_CDF_INV, the total of the chi-squared random deviate
+//    Output, double CHI_SQUARE_CDF_INV, the value of the chi-squared random deviate
 //    with the property that the probability that a chi-squared random
 //    deviate with parameter A is less than or equal to X is CDF.
 //
@@ -7701,13 +7701,13 @@ void chi_square_cdf_values ( int &n_data, int &a, double &x, double &fx )
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, int &A, the parameter of the function.
 //
 //    Output, double &X, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 //
@@ -7858,7 +7858,7 @@ double chi_square_mean ( double a )
 //    Input, double A, the parameter of the distribution.
 //    1 <= A.
 //
-//    Output, double MEAN, the mean total.
+//    Output, double MEAN, the mean value.
 //
 {
   double mean;
@@ -7902,7 +7902,7 @@ double chi_square_pdf ( double x, double a )
 //    Input, double A, the parameter of the PDF.
 //    1 <= A.
 //
-//    Output, double PDF, the total of the PDF.
+//    Output, double PDF, the value of the PDF.
 //
 {
   double b;
@@ -8067,7 +8067,7 @@ void chi_square_noncentral_cdf_values ( int &n_data, int &df, double &lambda,
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, int &DF, the number of degrees of freedom.
 //
@@ -8290,7 +8290,7 @@ double chi_square_noncentral_mean ( double a, double b )
 //    Input, double B, the noncentrality parameter of the PDF.
 //    0.0 <= B.
 //
-//    Output, double MEAN, the mean total.
+//    Output, double MEAN, the mean value.
 //
 {
   double mean;
@@ -8383,7 +8383,7 @@ double chi_square_noncentral_variance ( double a, double b )
 //    Input, double B, the noncentrality parameter of the PDF.
 //    0.0 <= B.
 //
-//    Output, double VARIANCE, the variance total.
+//    Output, double VARIANCE, the variance value.
 //
 {
   double variance;
@@ -8458,7 +8458,7 @@ double circular_normal_01_pdf ( double x[2] )
 //
 //    Input, double X[2], the argument of the PDF.
 //
-//    Output, double CIRCULAR_NORMAL_01_PDF, the total of the PDF.
+//    Output, double CIRCULAR_NORMAL_01_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -8572,7 +8572,7 @@ double *circular_normal_mean ( double a[2], double b )
 //
 //  Parameters:
 //
-//    Input, double A[2], a parameter of the PDF, the mean total.
+//    Input, double A[2], a parameter of the PDF, the mean value.
 //
 //    Input, double B, a parameter of the PDF, the standard deviation.
 //
@@ -8619,11 +8619,11 @@ double circular_normal_pdf ( double x[2], double a[2], double b )
 //
 //    Input, double X[2], the argument of the PDF.
 //
-//    Input, double A[2], a parameter of the PDF, the mean total.
+//    Input, double A[2], a parameter of the PDF, the mean value.
 //
 //    Input, double B, a parameter of the PDF, the standard deviation.
 //
-//    Output, double CIRCULAR_NORMAL_PDF, the total of the PDF.
+//    Output, double CIRCULAR_NORMAL_PDF, the value of the PDF.
 //
 {
   double d;
@@ -8661,7 +8661,7 @@ double *circular_normal_sample ( double a[2], double b, int &seed )
 //
 //  Parameters:
 //
-//    Input, double A[2], a parameter of the PDF, the mean total.
+//    Input, double A[2], a parameter of the PDF, the mean value.
 //
 //    Input, double B, a parameter of the PDF, the standard deviation.
 //
@@ -8712,7 +8712,7 @@ double *circular_normal_variance ( double a[2], double b )
 //
 //  Parameters:
 //
-//    Input, double A[2], a parameter of the PDF, the mean total.
+//    Input, double A[2], a parameter of the PDF, the mean value.
 //
 //    Input, double B, a parameter of the PDF, the standard deviation.
 //
@@ -8757,7 +8757,7 @@ double cosine_cdf ( double x, double a, double b )
 //    Input, double A, B, the parameter of the PDF.
 //    0.0 < B.
 //
-//    Output, double CDF, the total of the CDF.
+//    Output, double CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -8810,7 +8810,7 @@ double cosine_cdf_inv ( double cdf, double a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 < B.
@@ -8995,7 +8995,7 @@ double cosine_pdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 < B.
 //
-//    Output, double PDF, the total of the PDF.
+//    Output, double PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -9143,7 +9143,7 @@ double coupon_complete_pdf ( int type_num, int box_num )
 //    Input, int TYPE_NUM, the number of distinct coupons.
 //    1 <= TYPE_NUM.
 //
-//    Output, double COUPON_COMPLETE_PDF, the total of the PDF.
+//    Output, double COUPON_COMPLETE_PDF, the value of the PDF.
 //
 {
   double factor;
@@ -9293,7 +9293,7 @@ void coupon_sample ( int type_num, int &seed, int coupon[], int *box_num )
 //
 //    As TYPE_NUM increases, the number of coupons necessary to be
 //    collected in order to get a complete set in any simulation
-//    strongly tends to the total TYPE_NUM * LOG ( TYPE_NUM ).
+//    strongly tends to the value TYPE_NUM * LOG ( TYPE_NUM ).
 //
 //    If TYPE_NUM is 1, the simulation ends with a single drawing.
 //
@@ -9472,7 +9472,7 @@ double deranged_cdf ( int x, int a )
 //    Input, int A, the number of items.
 //    1 <= A.
 //
-//    Output, double CDF, the total of the CDF.
+//    Output, double CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -9523,7 +9523,7 @@ int deranged_cdf_inv ( double cdf, int a )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, int A, the number of items.
@@ -9799,7 +9799,7 @@ double deranged_pdf ( int x, int a )
 //    Input, int A, the total number of items.
 //    1 <= A.
 //
-//    Output, double PDF, the total of the PDF.
+//    Output, double PDF, the value of the PDF.
 //
 {
   int cnk;
@@ -9950,7 +9950,7 @@ double digamma ( double x )
 //    Input, double X, the argument of the digamma function.
 //    0 < X.
 //
-//    Output, double DIGAMMA, the total of the digamma function at X.
+//    Output, double DIGAMMA, the value of the digamma function at X.
 //
 {
   double c = 8.5;
@@ -10031,7 +10031,7 @@ double dipole_cdf ( double x, double a, double b )
 //    A is arbitrary, but represents an angle, so only 0 <= A <= 2 * PI
 //    is interesting, and -1.0 <= B <= 1.0.
 //
-//    Output, double DIPOLE_CDF, the total of the CDF.
+//    Output, double DIPOLE_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -10070,7 +10070,7 @@ double dipole_cdf_inv ( double cdf, double a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //
 //    Input, double A, B, the parameters of the PDF.
 //    -1.0 <= B <= 1.0.
@@ -10269,7 +10269,7 @@ double dipole_pdf ( double x, double a, double b )
 //      is interesting,
 //    and -1.0 <= B <= 1.0.
 //
-//    Output, double DIPOLE_PDF, the total of the PDF.
+//    Output, double DIPOLE_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -10556,7 +10556,7 @@ double dirichlet_pdf ( double x[], int n, double a[] )
 //    Input, double A(N), the probabilities for each component.
 //    Each A(I) should be positive.
 //
-//    Output, double PDF, the total of the PDF.
+//    Output, double PDF, the value of the PDF.
 //
 {
   double a_prod;
@@ -10750,8 +10750,8 @@ bool dirichlet_mix_check ( int comp_num, int elem_num, double a[],
 //    for element ELEM_NUM in component COMP_NUM.
 //    Each A[I,J] should be positive.
 //
-//    Input, double COMP_WEIGHT[COMP_NUM], the mixture transitionProb of the densities.
-//    These do not need to be normalized.  The transitionProb of a given component is
+//    Input, double COMP_WEIGHT[COMP_NUM], the mixture weights of the densities.
+//    These do not need to be normalized.  The weight of a given component is
 //    the relative probability that that component will be used to generate
 //    the sample.
 //
@@ -10802,7 +10802,7 @@ bool dirichlet_mix_check ( int comp_num, int elem_num, double a[],
   {
     cerr << " \n";
     cerr << "DIRICHLET_MIX_CHECK - Warning!\n";
-    cerr << "  All component transitionProb are zero.\n";
+    cerr << "  All component weights are zero.\n";
     return false;
   }
 
@@ -10843,8 +10843,8 @@ double *dirichlet_mix_mean ( int comp_num, int elem_num, double a[],
 //    element ELEM_NUM in component COMP_NUM.
 //    Each A[I,J] should be positive.
 //
-//    Input, double COMP_WEIGHT[COMP_NUM], the mixture transitionProb of the densities.
-//    These do not need to be normalized.  The transitionProb of a given component is
+//    Input, double COMP_WEIGHT[COMP_NUM], the mixture weights of the densities.
+//    These do not need to be normalized.  The weight of a given component is
 //    the relative probability that that component will be used to generate
 //    the sample.
 //
@@ -10909,7 +10909,7 @@ double dirichlet_mix_pdf ( double x[], int comp_num, int elem_num, double a[],
 //  Discussion:
 //
 //    The PDF is a weighted sum of Dirichlet PDF's.  Each PDF is a
-//    "component", with an associated transitionProb.
+//    "component", with an associated weight.
 //
 //  Licensing:
 //
@@ -10937,12 +10937,12 @@ double dirichlet_mix_pdf ( double x[], int comp_num, int elem_num, double a[],
 //    element ELEM_NUM in component COMP_NUM.
 //    Each A[I,J] should be positive.
 //
-//    Input, double COMP_WEIGHT[COMP_NUM], the mixture transitionProb of the densities.
-//    These do not need to be normalized.  The transitionProb of a given component is
+//    Input, double COMP_WEIGHT[COMP_NUM], the mixture weights of the densities.
+//    These do not need to be normalized.  The weight of a given component is
 //    the relative probability that that component will be used to generate
 //    the sample.
 //
-//    Output, double DIRICHLET_MIX_PDF, the total of the PDF.
+//    Output, double DIRICHLET_MIX_PDF, the value of the PDF.
 //
 {
   double *a_vec;
@@ -11011,8 +11011,8 @@ double *dirichlet_mix_sample ( int comp_num, int elem_num, double a[],
 //    element ELEM_NUM in component COMP_NUM.
 //    Each A[I,J] should be positive.
 //
-//    Input, double COMP_WEIGHT[COMP_NUM], the mixture transitionProb of the densities.
-//    These do not need to be normalized.  The transitionProb of a given component is
+//    Input, double COMP_WEIGHT[COMP_NUM], the mixture weights of the densities.
+//    These do not need to be normalized.  The weight of a given component is
 //    the relative probability that that component will be used to generate
 //    the sample.
 //
@@ -11098,7 +11098,7 @@ double dirichlet_multinomial_pdf ( int x[], int a, int b, double c[] )
 //    Input, double C[B]; C[I] is the Dirichlet parameter associated
 //    with outcome I.
 //
-//    Output, double DIRICHLET_MULTINOMIAL_PDF, the total of the Dirichlet
+//    Output, double DIRICHLET_MULTINOMIAL_PDF, the value of the Dirichlet
 //     multinomial PDF.
 //
 {
@@ -11153,7 +11153,7 @@ double discrete_cdf ( int x, int a, double b[] )
 //    Input, double B[A], the relative probabilities of outcomes
 //    1 through A.  Each entry must be nonnegative.
 //
-//    Output, double DISCRETE_CDF, the total of the CDF.
+//    Output, double DISCRETE_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -11197,7 +11197,7 @@ int discrete_cdf_inv ( double cdf, int a, double b[] )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, int A, the number of probabilities assigned.
@@ -11383,7 +11383,7 @@ double discrete_pdf ( int x, int a, double b[] )
 //    Input, double B[A], the relative probabilities of
 //    outcomes 1 through A.  Each entry must be nonnegative.
 //
-//    Output, double DISCRETE_PDF, the total of the PDF.
+//    Output, double DISCRETE_PDF, the value of the PDF.
 //
 {
   double b_sum;
@@ -11636,7 +11636,7 @@ double e_constant ( )
 //
 //  Purpose:
 //
-//    E_CONSTANT returns the total of E.
+//    E_CONSTANT returns the value of E.
 //
 //  Discussion:
 //
@@ -11692,13 +11692,13 @@ double empirical_discrete_cdf ( double x, int a, double b[], double c[] )
 //    Input, int A, the number of values.
 //    0 < A.
 //
-//    Input, double B[A], the transitionProb of each total.
-//    0 <= B(1:A) and at least one total is nonzero.
+//    Input, double B[A], the weights of each value.
+//    0 <= B(1:A) and at least one value is nonzero.
 //
 //    Input, double C[A], the values.
 //    The values must be distinct and in ascending order.
 //
-//    Output, double EMPIRICAL_DISCRETE_CDF, the total of the CDF.
+//    Output, double EMPIRICAL_DISCRETE_CDF, the value of the CDF.
 //
 {
   double bsum;
@@ -11744,14 +11744,14 @@ double empirical_discrete_cdf_inv ( double cdf, int a, double b[], double c[] )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, int A, the number of values.
 //    0 < A.
 //
-//    Input, double B(A), the transitionProb of each total.
-//    0 <= B(1:A) and at least one total is nonzero.
+//    Input, double B(A), the weights of each value.
+//    0 <= B(1:A) and at least one value is nonzero.
 //
 //    Input, double C(A), the values.
 //    The values must be distinct and in ascending order.
@@ -11818,8 +11818,8 @@ bool empirical_discrete_check ( int a, double b[], double c[] )
 //    Input, int A, the number of values.
 //    0 < A.
 //
-//    Input, double B[A], the transitionProb of each total.
-//    0 <= B(1:A) and at least one total is nonzero.
+//    Input, double B[A], the weights of each value.
+//    0 <= B(1:A) and at least one value is nonzero.
 //
 //    Input, double C[A], the values.
 //    The values must be distinct and in ascending order.
@@ -11838,7 +11838,7 @@ bool empirical_discrete_check ( int a, double b[], double c[] )
     cerr << "EMPIRICAL_DISCRETE_CHECK - Warning!\n";
     cerr << "  A must be positive.\n";
     cerr << "  Input A = " << a << "\n";
-    cerr << "  A is the number of transitionProb.\n";
+    cerr << "  A is the number of weights.\n";
     return false;
   }
 
@@ -11928,8 +11928,8 @@ double empirical_discrete_mean ( int a, double b[], double c[] )
 //    Input, int A, the number of values.
 //    0 < A.
 //
-//    Input, double B(A), the transitionProb of each total.
-//    0 <= B(1:A) and at least one total is nonzero.
+//    Input, double B(A), the weights of each value.
+//    0 <= B(1:A) and at least one value is nonzero.
 //
 //    Input, double C(A), the values.
 //    The values must be distinct and in ascending order.
@@ -11961,9 +11961,9 @@ double empirical_discrete_pdf ( double x, int a, double b[], double c[] )
 //
 //  Discussion:
 //
-//    A set of A values C(1:A) are assigned nonnegative transitionProb B(1:A),
+//    A set of A values C(1:A) are assigned nonnegative weights B(1:A),
 //    with at least one B nonzero.  The probability of C(I) is the
-//    total of B(I) divided by the sum of the transitionProb.
+//    value of B(I) divided by the sum of the weights.
 //
 //    The C's must be distinct, and given in ascending order.
 //
@@ -11986,13 +11986,13 @@ double empirical_discrete_pdf ( double x, int a, double b[], double c[] )
 //    Input, int A, the number of values.
 //    0 < A.
 //
-//    Input, double B(A), the transitionProb of each total.
-//    0 <= B(1:A) and at least one total is nonzero.
+//    Input, double B(A), the weights of each value.
+//    0 <= B(1:A) and at least one value is nonzero.
 //
 //    Input, double C(A), the values.
 //    The values must be distinct and in ascending order.
 //
-//    Output, double EMPIRICAL_DISCRETE_PDF, the total of the PDF.
+//    Output, double EMPIRICAL_DISCRETE_PDF, the value of the PDF.
 //
 {
   int i;
@@ -12038,8 +12038,8 @@ double empirical_discrete_sample ( int a, double b[], double c[], int &seed )
 //    Input, int A, the number of values.
 //    0 < A.
 //
-//    Input, double B(A), the transitionProb of each total.
-//    0 <= B(1:A) and at least one total is nonzero.
+//    Input, double B(A), the weights of each value.
+//    0 <= B(1:A) and at least one value is nonzero.
 //
 //    Input, double C(A), the values.
 //    The values must be distinct and in ascending order.
@@ -12085,8 +12085,8 @@ double empirical_discrete_variance ( int a, double b[], double c[] )
 //    Input, int A, the number of values.
 //    0 < A.
 //
-//    Input, double B(A), the transitionProb of each total.
-//    0 <= B(1:A) and at least one total is nonzero.
+//    Input, double B(A), the weights of each value.
+//    0 <= B(1:A) and at least one value is nonzero.
 //
 //    Input, double C(A), the values.
 //    The values must be distinct and in ascending order.
@@ -12280,7 +12280,7 @@ double english_letter_pdf ( char c )
 //    Input, char C, the letter whose probability is desired.
 //    'a' <= c <= 'z', but case is ignored.
 //
-//    Output, double ENGLISH_LETTER_PDF, the total of the PDF.
+//    Output, double ENGLISH_LETTER_PDF, the value of the PDF.
 //
 {
   int i;
@@ -12380,7 +12380,7 @@ double english_sentence_length_cdf ( int x )
 //
 //    Input, int X, the sentence length whose CDF is desired.
 //
-//    Output, double ENGLISH_SENTENCE_LENGTH_CDF, the total of the CDF.
+//    Output, double ENGLISH_SENTENCE_LENGTH_CDF, the value of the CDF.
 //
 {
 # define SENTENCE_LENGTH_MAX 79
@@ -12520,7 +12520,7 @@ int english_sentence_length_cdf_inv ( double cdf )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Output, int ENGLISH_SENTENCE_LENGTH_CDF_INV, the corresponding sentence
@@ -12807,7 +12807,7 @@ double english_sentence_length_pdf ( int x )
 //
 //    Input, int X, the sentence length whose probability is desired.
 //
-//    Output, double ENGLISH_SENTENCE_LENGTH_PDF, the total of the PDF.
+//    Output, double ENGLISH_SENTENCE_LENGTH_PDF, the value of the PDF.
 //
 {
 # define SENTENCE_LENGTH_MAX 79
@@ -13123,7 +13123,7 @@ double english_word_length_cdf ( int x )
 //
 //    Input, int X, the word length whose CDF is desired.
 //
-//    Output, double ENGLISH_WORD_LENGTH_CDF, the total of the CDF.
+//    Output, double ENGLISH_WORD_LENGTH_CDF, the value of the CDF.
 //
 {
 # define WORD_LENGTH_MAX 27
@@ -13211,7 +13211,7 @@ int english_word_length_cdf_inv ( double cdf )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Output, int ENGLISH_WORD_LENGTH_CDF_INV, the corresponding word
@@ -13394,7 +13394,7 @@ double english_word_length_pdf ( int x )
 //
 //    Input, int X, the word length whose probability is desired.
 //
-//    Output, double ENGLISH_WORD_LENGTH_PDF, the total of the PDF.
+//    Output, double ENGLISH_WORD_LENGTH_PDF, the value of the PDF.
 //
 {
 # define WORD_LENGTH_MAX 27
@@ -13604,7 +13604,7 @@ double erlang_cdf ( double x, double a, double b, int c )
 //    0.0 < B.
 //    0 < C.
 //
-//    Output, double ERLANG_CDF, the total of the CDF.
+//    Output, double ERLANG_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -13653,7 +13653,7 @@ double erlang_cdf_inv ( double cdf, double a, double b, int c )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //
 //    Input, double A, B, int C, the parameters of the PDF.
 //    0.0 < B.
@@ -13872,7 +13872,7 @@ double erlang_pdf ( double x, double a, double b, int c )
 //    0.0 < B.
 //    0 < C.
 //
-//    Output, double ERLANG_PDF, the total of the PDF.
+//    Output, double ERLANG_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -13987,7 +13987,7 @@ double euler_constant ( )
 //
 //  Purpose:
 //
-//    EULER_CONSTANT returns the total of the Euler-Mascheroni constant.
+//    EULER_CONSTANT returns the value of the Euler-Mascheroni constant.
 //
 //  Discussion:
 //
@@ -14011,7 +14011,7 @@ double euler_constant ( )
 //
 //  Parameters:
 //
-//    Output, double EULER_CONSTANT, the total of the
+//    Output, double EULER_CONSTANT, the value of the
 //    Euler-Mascheroni constant.
 //
 {
@@ -14045,7 +14045,7 @@ double exponential_01_cdf ( double x )
 //
 //    Input, double X, the argument of the PDF.
 //
-//    Output, double EXPONENTIAL_01_CDF, the total of the CDF.
+//    Output, double EXPONENTIAL_01_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -14085,7 +14085,7 @@ double exponential_01_cdf_inv ( double cdf )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Output, double EXPONENTIAL_CDF_INV, the corresponding argument.
@@ -14169,7 +14169,7 @@ double exponential_01_pdf ( double x )
 //    Input, double X, the argument of the PDF.
 //    0.0 <= X
 //
-//    Output, double PDF, the total of the PDF.
+//    Output, double PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -14285,7 +14285,7 @@ double exponential_cdf ( double x, double a, double b )
 //    Input, double A, B, the parameter of the PDF.
 //    0.0 < B.
 //
-//    Output, double EXPONENTIAL_CDF, the total of the CDF.
+//    Output, double EXPONENTIAL_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -14325,7 +14325,7 @@ double exponential_cdf_inv ( double cdf, double a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double A, B, the parameters of the PDF.
@@ -14399,13 +14399,13 @@ void exponential_cdf_values ( int &n_data, double &lambda, double &x,
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, double &LAMBDA, the parameter of the distribution.
 //
 //    Output, double &X, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 9
@@ -14596,7 +14596,7 @@ double exponential_pdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 < B.
 //
-//    Output, double EXPONENTIAL_PDF, the total of the PDF.
+//    Output, double EXPONENTIAL_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -14718,7 +14718,7 @@ double extreme_values_cdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 < B.
 //
-//    Output, double EXTREME_VALUES_CDF, the total of the CDF.
+//    Output, double EXTREME_VALUES_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -14754,7 +14754,7 @@ double extreme_values_cdf_inv ( double cdf, double a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double A, B, the parameters of the PDF.
@@ -14828,7 +14828,7 @@ void extreme_values_cdf_values ( int &n_data, double &alpha, double &beta,
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, double &ALPHA, the first parameter of the distribution.
 //
@@ -14836,7 +14836,7 @@ void extreme_values_cdf_values ( int &n_data, double &alpha, double &beta,
 //
 //    Output, double &X, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 12
@@ -15020,7 +15020,7 @@ double extreme_values_pdf ( double x, double a, double b )
 //    The special case A = 0 and B = 1 is the Gumbel PDF.
 //
 //    The Extreme Values PDF is the limiting distribution for the
-//    smallest or largest total in a large sample drawn from
+//    smallest or largest value in a large sample drawn from
 //    any of a great variety of distributions.
 //
 //  Licensing:
@@ -15048,7 +15048,7 @@ double extreme_values_pdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 < B.
 //
-//    Output, double EXTREME_VALUES_PDF, the total of the PDF.
+//    Output, double EXTREME_VALUES_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -15173,7 +15173,7 @@ double f_cdf ( double x, int m, int n )
 //    1 <= M,
 //    1 <= N.
 //
-//    Output, double F_CDF, the total of the CDF.
+//    Output, double F_CDF, the value of the CDF.
 //
 {
   double arg1;
@@ -15247,13 +15247,13 @@ void f_cdf_values ( int &n_data, int &a, int &b, double &x, double &fx )
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, int &A, int &B, the parameters of the function.
 //
 //    Output, double &X, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 20
@@ -15503,7 +15503,7 @@ double f_pdf ( double x, int m, int n )
 //    1 <= M,
 //    1 <= N.
 //
-//    Output, double F_PDF, the total of the PDF.
+//    Output, double F_PDF, the value of the PDF.
 //
 {
   double a;
@@ -15677,7 +15677,7 @@ void f_noncentral_cdf_values ( int &n_data, int &n1, int &n2, double &lambda,
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, int &N1, int &N2, the numerator and denominator
 //    degrees of freedom.
@@ -15686,7 +15686,7 @@ void f_noncentral_cdf_values ( int &n_data, int &n1, int &n2, double &lambda,
 //
 //    Output, double &X, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 22
@@ -16006,9 +16006,9 @@ double fermi_dirac_sample ( double u, double v, int &seed )
 //  Parameters:
 //
 //    Input, double U, V, the parameters of the distribution.
-//    The total of U represents the halfway point for the distribution.
+//    The value of U represents the halfway point for the distribution.
 //    Half the probability is to the left, and half to the right, of
-//    the total U.  The total of V controls the shape of the distribution.
+//    the value U.  The value of V controls the shape of the distribution.
 //    The ratio U/V determines the relative shape of the distribution.
 //    Values of U/V in excess of 100 will risk overflow.
 //
@@ -16088,7 +16088,7 @@ double fisher_pdf ( double x[3], double kappa, double mu[3] )
 //
 //      I(nu,X) is the Bessel function of order NU and argument X.
 //
-//    For a fixed total of MU, the total of KAPPA determines the
+//    For a fixed value of MU, the value of KAPPA determines the
 //    tendency of sample points to tend to be near MU.  In particular,
 //    KAPPA = 0 corresponds to a uniform distribution of points on the
 //    sphere, but as KAPPA increases, the sample points will tend to
@@ -16130,7 +16130,7 @@ double fisher_pdf ( double x[3], double kappa, double mu[3] )
 //    MU should have unit Euclidean norm, but this routine will
 //    automatically work with a normalized version of MU.
 //
-//    Output, double FISHER_PDF, the total of the PDF.
+//    Output, double FISHER_PDF, the value of the PDF.
 //
 {
 # define NB 1
@@ -16363,7 +16363,7 @@ double fisk_cdf ( double x, double a, double b, double c )
 //    0.0 < B,
 //    0.0 < C.
 //
-//    Output, double FISK_CDF, the total of the CDF.
+//    Output, double FISK_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -16403,7 +16403,7 @@ double fisk_cdf_inv ( double cdf, double a, double b, double c )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double A, B, C, the parameters of the PDF.
@@ -16573,7 +16573,7 @@ double fisk_pdf ( double x, double a, double b, double c )
 //    0.0 < B,
 //    0.0 < C.
 //
-//    Output, double FISK_PDF, the total of the PDF.
+//    Output, double FISK_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -16715,7 +16715,7 @@ double folded_normal_cdf ( double x, double a, double b )
 //    0.0 <= A,
 //    0.0 < B.
 //
-//    Output, double FOLDED_NORMAL_CDF, the total of the CDF.
+//    Output, double FOLDED_NORMAL_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -16763,7 +16763,7 @@ double folded_normal_cdf_inv ( double cdf, double a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 <= A,
@@ -16806,7 +16806,7 @@ double folded_normal_cdf_inv ( double cdf, double a, double b )
     return x;
   }
 //
-//  Find X1, for which the total of CDF will be too small.
+//  Find X1, for which the value of CDF will be too small.
 //
   if ( 0.0 <= a )
   {
@@ -16819,7 +16819,7 @@ double folded_normal_cdf_inv ( double cdf, double a, double b )
   x1 = r8_max ( x1, 0.0 );
   cdf1 = folded_normal_cdf ( x1, a, b );
 //
-//  Find X2, for which the total of CDF will be too big.
+//  Find X2, for which the value of CDF will be too big.
 //
   cdf2 = ( 1.0 - cdf ) / 2.0;
 
@@ -16997,7 +16997,7 @@ double folded_normal_pdf ( double x, double a, double b )
 //    0.0 <= A,
 //    0.0 < B.
 //
-//    Output, double FOLDED_NORMAL_PDF, the total of the PDF.
+//    Output, double FOLDED_NORMAL_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -17126,7 +17126,7 @@ double frechet_cdf ( double x, double alpha )
 //
 //    Input, double X, the argument of the CDF.
 //
-//    Output, double CDF, the total of the CDF.
+//    Output, double CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -17174,7 +17174,7 @@ double frechet_cdf_inv ( double cdf, double alpha )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double ALPHA, the parameter.
@@ -17224,7 +17224,7 @@ double frechet_mean ( double alpha )
 //
 //  Discussion:
 //
-//    The distribution does not have a mean total unless 1 < ALPHA.
+//    The distribution does not have a mean value unless 1 < ALPHA.
 //
 //  Licensing:
 //
@@ -17293,7 +17293,7 @@ double frechet_pdf ( double x, double alpha )
 //    Input, double ALPHA, the parameter.
 //    It is required that 0.0 < ALPHA.
 //
-//    Output, double PDF, the total of the PDF.
+//    Output, double PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -17441,7 +17441,7 @@ double gamma_cdf ( double x, double a, double b, double c )
 //    0.0 < B,
 //    0.0 < C.
 //
-//    Output, double GAMMA_CDF, the total of the CDF.
+//    Output, double GAMMA_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -17506,7 +17506,7 @@ void gamma_cdf_values ( int &n_data, double &mu, double &sigma, double &x,
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, double &MU, the mean of the distribution.
 //
@@ -17514,7 +17514,7 @@ void gamma_cdf_values ( int &n_data, double &mu, double &sigma, double &x,
 //
 //    Output, double &X, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 12
@@ -17730,7 +17730,7 @@ double gamma_pdf ( double x, double a, double b, double c )
 //    B is the "scale" parameter; 0.0 < B, and is often 1.0.
 //    C is the "shape" parameter; 0.0 < C, and is often 1.0.
 //
-//    Output, double GAMMA_PDF, the total of the PDF.
+//    Output, double GAMMA_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -18107,13 +18107,13 @@ void gamma_inc_values ( int &n_data, double &a, double &x, double &fx )
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, double &A, the parameter of the function.
 //
 //    Output, double &X, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 20
@@ -18238,7 +18238,7 @@ double genlogistic_cdf ( double x, double a, double b, double c )
 //    0.0 < B,
 //    0.0 < C.
 //
-//    Output, double CDF, the total of the CDF.
+//    Output, double CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -18274,7 +18274,7 @@ double genlogistic_cdf_inv ( double cdf, double a, double b, double c )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double A, B, C, the parameters of the PDF.
@@ -18431,7 +18431,7 @@ double genlogistic_pdf ( double x, double a, double b, double c )
 //    0.0 < B,
 //    0.0 < C.
 //
-//    Output, double PDF, the total of the PDF.
+//    Output, double PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -18558,7 +18558,7 @@ double geometric_cdf ( int x, double a )
 //    Input, double A, the probability of success on one trial.
 //    0.0 <= A <= 1.0.
 //
-//    Output, double GEOMETRIC_CDF, the total of the CDF.
+//    Output, double GEOMETRIC_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -18606,13 +18606,13 @@ int geometric_cdf_inv ( double cdf, double a )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0
 //
 //    Input, double A, the probability of success on one trial.
 //    0.0 <= A <= 1.0.
 //
-//    Output, int GEOMETRIC_CDF_INV, the corresponding total of X.
+//    Output, int GEOMETRIC_CDF_INV, the corresponding value of X.
 //
 {
   int x;
@@ -18656,7 +18656,7 @@ void geometric_cdf_values ( int &n_data, int &x, double &p, double &cdf )
 //    probability that the first success will happen on the X-th Bernoulli
 //    trial, given that the probability of a success on a single trial is P.
 //
-//    The total of CDF ( X, P ) is the probability that the first success
+//    The value of CDF ( X, P ) is the probability that the first success
 //    will happen on or before the X-th trial.
 //
 //    In Mathematica, the function can be evaluated by:
@@ -18695,7 +18695,7 @@ void geometric_cdf_values ( int &n_data, int &x, double &p, double &cdf )
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, int &X, the number of trials.
 //
@@ -18820,7 +18820,7 @@ double geometric_mean ( double a )
 //
 //  Discussion:
 //
-//    MEAN is the expected total of the number of trials required
+//    MEAN is the expected value of the number of trials required
 //    to obtain a single success.
 //
 //  Licensing:
@@ -18887,7 +18887,7 @@ double geometric_pdf ( int x, double a )
 //    Input, double A, the probability of success on one trial.
 //    0.0 <= A <= 1.0.
 //
-//    Output, double PDF, the total of the PDF.
+//    Output, double PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -19022,7 +19022,7 @@ int get_seed ( )
 //
 //  Parameters:
 //
-//    Output, int GET_SEED, a random seed total.
+//    Output, int GET_SEED, a random seed value.
 //
 {
 # define I_MAX 2147483647
@@ -19034,7 +19034,7 @@ int get_seed ( )
   struct tm *lt;
   time_t tloc;
 //
-//  If the internal seed is 0, generate a total based on the time.
+//  If the internal seed is 0, generate a value based on the time.
 //
   clock = time ( &tloc );
   lt = localtime ( &clock );
@@ -19113,7 +19113,7 @@ double gompertz_cdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    1 < A, 0 < B.
 //
-//    Output, double GOMPERTZ_CDF, the total of the CDF.
+//    Output, double GOMPERTZ_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -19159,7 +19159,7 @@ double gompertz_cdf_inv ( double cdf, double a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //
 //    Input, double A, B, the parameters of the PDF.
 //    1 < A, 0 < B.
@@ -19288,7 +19288,7 @@ double gompertz_pdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    1 < A, 0 < B.
 //
-//    Output, double GOMPERTZ_PDF, the total of the PDF.
+//    Output, double GOMPERTZ_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -19372,7 +19372,7 @@ double gumbel_cdf ( double x )
 //
 //    Input, double X, the argument of the CDF.
 //
-//    Output, double GUMBEL_CDF, the total of the CDF.
+//    Output, double GUMBEL_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -19405,7 +19405,7 @@ double gumbel_cdf_inv ( double cdf )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Output, double GUMBEL_CDF_INV, the corresponding argument of the CDF.
@@ -19496,7 +19496,7 @@ double gumbel_pdf ( double x )
 //
 //    Input, double X, the argument of the PDF.
 //
-//    Output, double GUMBEL_PDF, the total of the PDF.
+//    Output, double GUMBEL_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -19606,7 +19606,7 @@ double half_normal_cdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 < B.
 //
-//    Output, double HALF_NORMAL_CDF, the total of the CDF.
+//    Output, double HALF_NORMAL_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -19648,7 +19648,7 @@ double half_normal_cdf_inv ( double cdf, double a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double A, B, the parameters of the PDF.
@@ -19791,7 +19791,7 @@ double half_normal_pdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 < B.
 //
-//    Output, double HALF_NORMAL_PDF, the total of the PDF.
+//    Output, double HALF_NORMAL_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -19925,7 +19925,7 @@ double hypergeometric_cdf ( int x, int n, int m, int l )
 //    Input, int L, the number of balls to select from.
 //    0 <= L.
 //
-//    Output, double HYPERGEOMETRIC_CDF, the total of the CDF.
+//    Output, double HYPERGEOMETRIC_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -20008,14 +20008,14 @@ void hypergeometric_cdf_values ( int &n_data, int &sam, int &suc, int &pop,
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, int &SAM, int &SUC, int &POP, the sample size,
 //    success size, and population parameters of the function.
 //
 //    Output, int &N, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 16
@@ -20227,7 +20227,7 @@ double hypergeometric_pdf ( int x, int n, int m, int l )
 //  Parameters:
 //
 //    Input, int X, the desired number of white balls.
-//    0 <= X <= N, usually, although any total of X can be given.
+//    0 <= X <= N, usually, although any value of X can be given.
 //
 //    Input, int N, the number of balls selected.
 //    0 <= N <= L.
@@ -20419,7 +20419,7 @@ int i4_choose ( int n, int k )
 //
 //  Discussion:
 //
-//    The total is calculated in such a way as to avoid overflow and
+//    The value is calculated in such a way as to avoid overflow and
 //    roundoff.  The calculation is done in integer arithmetic.
 //
 //    The formula used is:
@@ -20757,7 +20757,7 @@ int i4_uniform_ab ( int a, int b, int &seed )
 //
 //    Input, int A, B, the limits of the interval.
 //
-//    Input/output, int &SEED, the "seed" total, which should NOT be 0.
+//    Input/output, int &SEED, the "seed" value, which should NOT be 0.
 //    On output, SEED has been updated.
 //
 //    Output, int I4_UNIFORM, a number between A and B.
@@ -20773,7 +20773,7 @@ int i4_uniform_ab ( int a, int b, int &seed )
   {
     cerr << "\n";
     cerr << "I4_UNIFORM_AB - Fatal error!\n";
-    cerr << "  Input total of SEED = 0.\n";
+    cerr << "  Input value of SEED = 0.\n";
     exit ( 1 );
   }
 //
@@ -21421,7 +21421,7 @@ int *i4vec_uniform_ab_new ( int n, int a, int b, int &seed )
 //
 //    Input, int A, B, the limits of the interval.
 //
-//    Input/output, int &SEED, the "seed" total, which should NOT be 0.
+//    Input/output, int &SEED, the "seed" value, which should NOT be 0.
 //    On output, SEED has been updated.
 //
 //    Output, int IVEC_UNIFORM_AB_NEW[N], a vector of random values 
@@ -21440,7 +21440,7 @@ int *i4vec_uniform_ab_new ( int n, int a, int b, int &seed )
   {
     cerr << "\n";
     cerr << "I4VEC_UNIFORM_AB_NEW - Fatal error!\n";
-    cerr << "  Input total of SEED = 0.\n";
+    cerr << "  Input value of SEED = 0.\n";
     exit ( 1 );
   }
 //
@@ -21637,7 +21637,7 @@ double inverse_gaussian_cdf ( double x, double a, double b )
 //    0.0 < A,
 //    0.0 < B.
 //
-//    Output, double INVERSE_GAUSSIAN_CDF, the total of the CDF.
+//    Output, double INVERSE_GAUSSIAN_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -21788,7 +21788,7 @@ double inverse_gaussian_pdf ( double x, double a, double b )
 //    0.0 < A,
 //    0.0 < B.
 //
-//    Output, double INVERSE_GAUSSIAN_PDF, the total of the PDF.
+//    Output, double INVERSE_GAUSSIAN_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -21952,7 +21952,7 @@ void laplace_cdf_values ( int &n_data, double &mu, double &beta, double &x,
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, double &MU, the mean of the distribution.
 //
@@ -21960,7 +21960,7 @@ void laplace_cdf_values ( int &n_data, double &mu, double &beta, double &x,
 //
 //    Output, double &X, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 12
@@ -22076,7 +22076,7 @@ double laplace_cdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 < B.
 //
-//    Output, double LAPLACE_CDF, the total of the PDF.
+//    Output, double LAPLACE_CDF, the value of the PDF.
 //
 {
   double cdf;
@@ -22118,7 +22118,7 @@ double laplace_cdf_inv ( double cdf, double a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double A, B, the parameters of the PDF.
@@ -22260,7 +22260,7 @@ double laplace_pdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 < B.
 //
-//    Output, double LAPLACE_PDF, the total of the PDF.
+//    Output, double LAPLACE_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -22456,7 +22456,7 @@ double levy_cdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    0 < B.
 //
-//    Output, double LEVY_CDF, the total of the PDF.
+//    Output, double LEVY_CDF, the value of the PDF.
 //
 {
   double cdf;
@@ -22504,7 +22504,7 @@ double levy_cdf_inv ( double cdf, double a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double A, B, the parameters of the PDF.
@@ -22579,7 +22579,7 @@ double levy_pdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    0 < B.
 //
-//    Output, double LEVY_PDF, the total of the PDF.
+//    Output, double LEVY_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -22677,7 +22677,7 @@ double log_normal_cdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 < B.
 //
-//    Output, double CDF, the total of the CDF.
+//    Output, double CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -22720,7 +22720,7 @@ double log_normal_cdf_inv ( double cdf, double a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double A, B, the parameters of the PDF.
@@ -22797,7 +22797,7 @@ void log_normal_cdf_values ( int &n_data, double &mu, double &sigma,
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, double &MU, the mean of the distribution.
 //
@@ -22805,7 +22805,7 @@ void log_normal_cdf_values ( int &n_data, double &mu, double &sigma,
 //
 //    Output, double &X, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 12
@@ -23011,7 +23011,7 @@ double log_normal_pdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 < B.
 //
-//    Output, double PDF, the total of the PDF.
+//    Output, double PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -23146,7 +23146,7 @@ double log_series_cdf ( double x, double a )
 //    Input, double A, the parameter of the PDF.
 //    0.0 < A < 1.0.
 //
-//    Output, double LOG_SERIES_CDF, the total of the CDF.
+//    Output, double LOG_SERIES_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -23200,7 +23200,7 @@ int log_series_cdf_inv ( double cdf, double a )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //
 //    Input, double A, the parameter of the PDF.
 //    0.0 < A < 1.0.
@@ -23286,13 +23286,13 @@ void log_series_cdf_values ( int &n_data, double &t, int &n, double &fx )
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, double &T, the parameter of the function.
 //
 //    Output, int &N, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 29
@@ -23500,7 +23500,7 @@ double log_series_pdf ( int x, double a )
 //    Input, double A, the parameter of the PDF.
 //    0.0 < A < 1.0.
 //
-//    Output, double LOG_SERIES_PDF, the total of the PDF.
+//    Output, double LOG_SERIES_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -23632,7 +23632,7 @@ double log_uniform_cdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 < B.
 //
-//    Output, double CDF, the total of the CDF.
+//    Output, double CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -23676,7 +23676,7 @@ double log_uniform_cdf_inv ( double cdf, double a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double A, B, the parameters of the PDF.
@@ -23815,7 +23815,7 @@ double log_uniform_pdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    1.0 < A < B.
 //
-//    Output, double PDF, the total of the PDF.
+//    Output, double PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -23947,7 +23947,7 @@ double logistic_cdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 < B.
 //
-//    Output, double LOGISTIC_CDF, the total of the CDF.
+//    Output, double LOGISTIC_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -23980,7 +23980,7 @@ double logistic_cdf_inv ( double cdf, double a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double A, B, the parameters of the PDF.
@@ -24054,7 +24054,7 @@ void logistic_cdf_values ( int &n_data, double &mu, double &beta, double &x,
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, double &MU, the mean of the distribution.
 //
@@ -24062,7 +24062,7 @@ void logistic_cdf_values ( int &n_data, double &mu, double &beta, double &x,
 //
 //    Output, double &X, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 12
@@ -24260,7 +24260,7 @@ double logistic_pdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 < B.
 //
-//    Output, double LOGISTIC_PDF, the total of the PDF.
+//    Output, double LOGISTIC_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -24376,7 +24376,7 @@ double lorentz_cdf ( double x )
 //
 //    Input, double X, the argument of the CDF.
 //
-//    Output, double LORENTZ_CDF, the total of the CDF.
+//    Output, double LORENTZ_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -24410,7 +24410,7 @@ double lorentz_cdf_inv ( double cdf )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Output, double LORENTZ_CDF_INV, the corresponding argument.
@@ -24500,7 +24500,7 @@ double lorentz_pdf ( double x )
 //
 //    Input, double X, the argument of the PDF.
 //
-//    Output, double LORENTZ_PDF, the total of the PDF.
+//    Output, double LORENTZ_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -24618,7 +24618,7 @@ double maxwell_cdf ( double x, double a )
 //    Input, double A, the parameter of the PDF.
 //    0 < A.
 //
-//    Output, double MAXWELL_CDF, the total of the CDF.
+//    Output, double MAXWELL_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -24667,7 +24667,7 @@ double maxwell_cdf_inv ( double cdf, double a )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //
 //    Input, double A, the parameter of the PDF.
 //    0 < A.
@@ -24837,7 +24837,7 @@ double maxwell_mean ( double a )
 //    Input, double A, the parameter of the PDF.
 //    0 < A.
 //
-//    Output, double MAXWELL_MEAN, the mean total.
+//    Output, double MAXWELL_MEAN, the mean value.
 //
 {
   double mean;
@@ -24883,7 +24883,7 @@ double maxwell_pdf ( double x, double a )
 //    Input, double A, the parameter of the PDF.
 //    0 < A.
 //
-//    Output, double MAXWELL_PDF, the total of the PDF.
+//    Output, double MAXWELL_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -25033,7 +25033,7 @@ bool multicoef_check ( int nfactor, int factor[] )
       cout << " \n";
       cout << "MULTICOEF_CHECK - Warning\n";
       cout << "  Factor[" << i << "] = " << factor[i] << "\n";
-      cout << "  But this total must be nonnegative.\n";
+      cout << "  But this value must be nonnegative.\n";
       return false;
     }
 
@@ -25083,7 +25083,7 @@ int multinomial_coef1 ( int nfactor, int factor[] )
 //    Input, int FACTOR(NFACTOR), contains the factors.
 //    0.0 <= FACTOR(I).
 //
-//    Output, int MULTINOMIAL_COEF1, the total of the multinomial coefficient.
+//    Output, int MULTINOMIAL_COEF1, the value of the multinomial coefficient.
 //
 {
   double facn;
@@ -25158,7 +25158,7 @@ int multinomial_coef2 ( int nfactor, int factor[] )
 //    Input, int FACTOR[NFACTOR], contains the factors.
 //    0 <= FACTOR(I).
 //
-//    Output, int MULTINOMIAL_COEF2, the total of the multinomial coefficient.
+//    Output, int MULTINOMIAL_COEF2, the value of the multinomial coefficient.
 //
 {
   int i;
@@ -25354,7 +25354,7 @@ double *multinomial_mean ( int a, int b, double c[] )
 //    0.0 <= C(I) <= 1.0,
 //    SUM ( 1 <= I <= B) C(I) = 1.0.
 //
-//    Output, double MEAN(B), MEAN(I) is the expected total of the
+//    Output, double MEAN(B), MEAN(I) is the expected value of the
 //    number of outcome I in N trials.
 //
 {
@@ -25419,7 +25419,7 @@ double multinomial_pdf ( int x[], int a, int b, double c[] )
 //    Input, double C[B]; C(I) is the probability of outcome I on
 //    any one trial.
 //
-//    Output, double MULTINOMIAL_PDF, the total of the multinomial PDF.
+//    Output, double MULTINOMIAL_PDF, the value of the multinomial PDF.
 //
 {
   int i;
@@ -25742,7 +25742,7 @@ double nakagami_cdf ( double x, double a, double b, double c )
 //    0.0 < B
 //    0.0 < C.
 //
-//    Output, double NAKAGAMI_CDF, the total of the CDF.
+//    Output, double NAKAGAMI_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -25793,7 +25793,7 @@ double nakagami_cdf_inv ( double cdf, double a, double b, double c )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //
 //    Input, double A, B, C, the parameters of the PDF.
 //    0.0 < B.
@@ -26005,7 +26005,7 @@ double nakagami_pdf ( double x, double a, double b, double c )
 //    0.0 < B
 //    0.0 < C.
 //
-//    Output, double NAKAGAMI_PDF, the total of the PDF.
+//    Output, double NAKAGAMI_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -26103,7 +26103,7 @@ double negative_binomial_cdf ( int x, int a, double b )
 //    0 <= A,
 //    0 < B <= 1.
 //
-//    Output, double NEGATIVE_BINOMIAL_CDF, the total of the CDF.
+//    Output, double NEGATIVE_BINOMIAL_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -26152,7 +26152,7 @@ int negative_binomial_cdf_inv ( double cdf, int a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //
 //    Input, int A, double B, parameters of the PDF.
 //    0 <= A,
@@ -26210,7 +26210,7 @@ void negative_binomial_cdf_values ( int &n_data, int &f, int &s, double &p,
 //    Assume that a coin has a probability P of coming up heads on
 //    any one trial.  Suppose that we plan to flip the coin until we
 //    achieve a total of S heads.  If we let F represent the number of
-//    tails that occur in this process, then the total of F satisfies
+//    tails that occur in this process, then the value of F satisfies
 //    a negative binomial PDF:
 //
 //      PDF(F,S,P) = Choose ( F from F+S-1 ) * P^S * (1-P)^F
@@ -26256,7 +26256,7 @@ void negative_binomial_cdf_values ( int &n_data, int &f, int &s, double &p,
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, int &F, the maximum number of failures.
 //
@@ -26509,7 +26509,7 @@ double negative_binomial_pdf ( int x, int a, double b )
 //    Input, double B, the probability of a success on a single trial.
 //    0.0 < B <= 1.0.
 //
-//    Output, double NEGATIVE_BINOMIAL_PDF, the total of the PDF.
+//    Output, double NEGATIVE_BINOMIAL_PDF, the value of the PDF.
 //
 {
   int cnk;
@@ -26664,7 +26664,7 @@ double normal_01_cdf ( double x )
 //
 //    Input, double X, the argument of the CDF.
 //
-//    Output, double CDF, the total of the CDF.
+//    Output, double CDF, the value of the CDF.
 //
 {
   double a1 = 0.398942280444;
@@ -26746,7 +26746,7 @@ double normal_01_cdf_inv ( double p )
 //
 //  Discussion:
 //
-//    The result is threshold to about 1 part in 10**16.
+//    The result is accurate to about 1 part in 10**16.
 //
 //  Licensing:
 //
@@ -26771,13 +26771,13 @@ double normal_01_cdf_inv ( double p )
 //
 //  Parameters:
 //
-//    Input, double P, the total of the cumulative probability
+//    Input, double P, the value of the cumulative probability
 //    densitity function.  0 < P < 1.  If P is outside this range, an
-//    "infinite" total is returned.
+//    "infinite" value is returned.
 //
-//    Output, double NORMAL_01_CDF_INV, the normal deviate total
+//    Output, double NORMAL_01_CDF_INV, the normal deviate value
 //    with the property that the probability of a standard normal deviate being
-//    less than or equal to this total is P.
+//    less than or equal to this value is P.
 //
 {
   double a[8] = {
@@ -26928,11 +26928,11 @@ void normal_01_cdf_values ( int &n_data, double &x, double &fx )
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, double &X, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 17
@@ -27063,7 +27063,7 @@ double normal_01_pdf ( double x )
 //
 //    Input, double X, the argument of the PDF.
 //
-//    Output, double PDF, the total of the PDF.
+//    Output, double PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -27107,7 +27107,7 @@ double normal_01_sample ( int &seed )
 //
 //    Input/output, int &SEED, a seed for the random number generator.
 //
-//    Output, double NORMAL_01_SAMPLE, a normally distributed random total.
+//    Output, double NORMAL_01_SAMPLE, a normally distributed random value.
 //
 {
   const double r8_pi = 3.14159265358979323;
@@ -27265,7 +27265,7 @@ double *normal_01_vector ( int n, int &seed )
 //
 //    Local, int X_LO, X_HI, records the range of entries of
 //    X that we need to compute.  This starts off as 1:N, but is adjusted
-//    if we have a saved total that can be immediately stored in X(1),
+//    if we have a saved value that can be immediately stored in X(1),
 //    and so on.
 //
 {
@@ -27284,7 +27284,7 @@ double *normal_01_vector ( int n, int &seed )
   x_lo = 1;
   x_hi = n;
 //
-//  If we need just one new total, do that here to avoid null arrays.
+//  If we need just one new value, do that here to avoid null arrays.
 //
   if ( x_hi - x_lo + 1 == 1 )
   {
@@ -27367,7 +27367,7 @@ double normal_cdf ( double x, double mu, double sigma )
 //    Input, double MU, SIGMA, the mean and standard deviation.
 //    SIGMA should not be zero.
 //
-//    Output, double CDF, the total of the CDF.
+//    Output, double CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -27409,7 +27409,7 @@ double normal_cdf_inv ( double cdf, double mu, double sigma )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double MU, SIGMA, the mean and standard deviation.
@@ -27486,7 +27486,7 @@ void normal_cdf_values ( int &n_data, double &mu, double &sigma, double &x,
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, double &MU, the mean of the distribution.
 //
@@ -27494,7 +27494,7 @@ void normal_cdf_values ( int &n_data, double &mu, double &sigma, double &x,
 //
 //    Output, double &X, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 12
@@ -27690,7 +27690,7 @@ double normal_pdf ( double x, double mu, double sigma )
 //    Input, double MU, SIGMA, the mean and standard deviation.
 //    SIGMA should not be zero.
 //
-//    Output, double PDF, the total of the PDF.
+//    Output, double PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -27865,7 +27865,7 @@ double *normal_vector ( int n, double mu, double sigma, int &seed )
 //
 //    Input, int N, the number of values desired.  If N is negative,
 //    then the code will flush its internal memory; in particular,
-//    if there is a saved total to be used on the next call, it is
+//    if there is a saved value to be used on the next call, it is
 //    instead discarded.  This is useful if the user has reset the
 //    random number seed, for instance.
 //
@@ -27920,7 +27920,7 @@ double normal_truncated_ab_cdf ( double x, double mu, double s, double a,
 //
 //    Input, double A, B, the lower and upper truncation limits.
 //
-//    Output, double NORMAL_TRUNCATED_AB_CDF, the total of the CDF.
+//    Output, double NORMAL_TRUNCATED_AB_CDF, the value of the CDF.
 //
 {
   double alpha;
@@ -27968,7 +27968,7 @@ double normal_truncated_ab_cdf_inv ( double cdf, double mu, double s, double a,
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double MU, S, the mean and standard deviation of the
@@ -28093,7 +28093,7 @@ double normal_truncated_ab_pdf ( double x, double mu, double s, double a,
 //
 //    Input, double A, B, the lower and upper truncation limits.
 //
-//    Output, double NORMAL_TRUNCATED_AB_PDF, the total of the PDF.
+//    Output, double NORMAL_TRUNCATED_AB_PDF, the value of the PDF.
 //
 {
   double alpha;
@@ -28261,7 +28261,7 @@ double normal_truncated_a_cdf ( double x, double mu, double s, double a )
 //
 //    Input, double A, the lower truncation limit.
 //
-//    Output, double NORMAL_TRUNCATED_A_CDF, the total of the CDF.
+//    Output, double NORMAL_TRUNCATED_A_CDF, the value of the CDF.
 //
 {
   double alpha;
@@ -28304,7 +28304,7 @@ double normal_truncated_a_cdf_inv ( double cdf, double mu, double s, double a )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double MU, S, the mean and standard deviation of the
@@ -28418,7 +28418,7 @@ double normal_truncated_a_pdf ( double x, double mu, double s, double a )
 //
 //    Input, double A, the lower truncation limit.
 //
-//    Output, double NORMAL_TRUNCATED_A_PDF, the total of the PDF.
+//    Output, double NORMAL_TRUNCATED_A_PDF, the value of the PDF.
 //
 {
   double alpha;
@@ -28571,7 +28571,7 @@ double normal_truncated_b_cdf ( double x, double mu, double s, double b )
 //
 //    Input, double B, the upper truncation limit.
 //
-//    Output, double NORMAL_TRUNCATED_B_CDF, the total of the CDF.
+//    Output, double NORMAL_TRUNCATED_B_CDF, the value of the CDF.
 //
 {
   double beta;
@@ -28614,7 +28614,7 @@ double normal_truncated_b_cdf_inv ( double cdf, double mu, double s, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double MU, S, the mean and standard deviation of the
@@ -28728,7 +28728,7 @@ double normal_truncated_b_pdf ( double x, double mu, double s, double b )
 //
 //    Input, double B, the upper truncation limit.
 //
-//    Output, double NORMAL_TRUNCATED_B_PDF, the total of the PDF.
+//    Output, double NORMAL_TRUNCATED_B_PDF, the value of the PDF.
 //
 {
   double beta;
@@ -28906,13 +28906,13 @@ void owen_values ( int &n_data, double &h, double &a, double &t )
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, double &H, a parameter.
 //
 //    Output, double &A, the upper limit of the integral.
 //
-//    Output, double &T, the total of the function.
+//    Output, double &T, the value of the function.
 //
 {
 # define N_MAX 28
@@ -29061,7 +29061,7 @@ double pareto_cdf ( double x, double a, double b )
 //    0.0 < A,
 //    0.0 < B.
 //
-//    Output, double PARETO_CDF, the total of the CDF.
+//    Output, double PARETO_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -29101,7 +29101,7 @@ double pareto_cdf_inv ( double cdf, double a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double A, B, the parameters of the PDF.
@@ -29255,7 +29255,7 @@ double pareto_pdf ( double x, double a, double b )
 //    0.0 < A.
 //    0.0 < B.
 //
-//    Output, double PARETO_PDF, the total of the PDF.
+//    Output, double PARETO_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -29491,7 +29491,7 @@ double pearson_05_pdf ( double x, double a, double b, double c )
 //    Input, double A, B, C, the parameters of the PDF.
 //    0.0 < A, 0.0 < B.
 //
-//    Output, double PDF, the total of the PDF.
+//    Output, double PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -29658,7 +29658,7 @@ double planck_pdf ( double x, double a, double b )
 //
 //      PDF(A,B;X) = A^(B+1) * X^B / ( exp ( A * X ) - 1 ) / K
 //
-//    where K is the normalization constant, and has the total
+//    where K is the normalization constant, and has the value
 //
 //      K = Gamma ( B + 1 ) * Zeta ( B + 1 ).
 //
@@ -29695,7 +29695,7 @@ double planck_pdf ( double x, double a, double b )
 //    0.0 < A,
 //    0.0 < B.
 //
-//    Output, double PLANCK_PDF, the total of the PDF.
+//    Output, double PLANCK_PDF, the value of the PDF.
 //
 {
   double k;
@@ -29822,7 +29822,7 @@ double point_distance_1d_pdf ( double x, int a, double b )
 //
 //    It is assumed that a set of points has been generated in 1D
 //    according to a Poisson process.  The number of points in a region
-//    of size LENGTH is a Poisson variate with mean total B * LENGTH.
+//    of size LENGTH is a Poisson variate with mean value B * LENGTH.
 //
 //    For a point chosen at random, we may now find the nearest
 //    Poisson point, the second nearest and so on.  We are interested
@@ -29856,7 +29856,7 @@ double point_distance_1d_pdf ( double x, int a, double b )
 //
 //    Input, double B, the point density.  0.0 < B.
 //
-//    Output, double PDF, the total of the PDF.
+//    Output, double PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -29902,7 +29902,7 @@ double point_distance_2d_pdf ( double x, int a, double b )
 //
 //    It is assumed that a set of points has been generated in 2D
 //    according to a Poisson process.  The number of points in a region
-//    of size AREA is a Poisson variate with mean total B * AREA.
+//    of size AREA is a Poisson variate with mean value B * AREA.
 //
 //    For a point chosen at random, we may now find the nearest
 //    Poisson point, the second nearest and so on.  We are interested
@@ -29942,7 +29942,7 @@ double point_distance_2d_pdf ( double x, int a, double b )
 //
 //    Input, double B, the point density.  0.0 < B.
 //
-//    Output, double PDF, the total of the PDF.
+//    Output, double PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -29990,7 +29990,7 @@ double point_distance_3d_pdf ( double x, int a, double b )
 //
 //    It is assumed that a set of points has been generated in 3D
 //    according to a Poisson process.  The number of points in a region
-//    of size VOLUME is a Poisson variate with mean total B * VOLUME.
+//    of size VOLUME is a Poisson variate with mean value B * VOLUME.
 //
 //    For a point chosen at random, we may now find the nearest
 //    Poisson point, the second nearest and so on.  We are interested
@@ -30030,7 +30030,7 @@ double point_distance_3d_pdf ( double x, int a, double b )
 //
 //    Input, double B, the Poisson point density.  0.0 < B.
 //
-//    Output, double PDF, the total of the PDF.
+//    Output, double PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -30100,7 +30100,7 @@ double poisson_cdf ( int k, double a )
 //    Input, double A, the parameter of the PDF.
 //    0 < A.
 //
-//    Output, double POISSON_CDF, the total of the CDF.
+//    Output, double POISSON_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -30164,7 +30164,7 @@ int poisson_cdf_inv ( double cdf, double a )
 //
 //  Parameters:
 //
-//    Input, double CDF, a total of the CDF.
+//    Input, double CDF, a value of the CDF.
 //    0 <= CDF < 1.
 //
 //    Input, double A, the parameter of the PDF.
@@ -30189,7 +30189,7 @@ int poisson_cdf_inv ( double cdf, double a )
     exit ( 1 );
   }
 //
-//  Now simply start at X = 0, and find the first total for which
+//  Now simply start at X = 0, and find the first value for which
 //  CDF(X-1) <= CDF <= CDF(X).
 //
   sum2 = 0.0;
@@ -30282,13 +30282,13 @@ void poisson_cdf_values ( int &n_data, double &a, int &x, double &fx )
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, double &A, the parameter of the function.
 //
 //    Output, int *X, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 21
@@ -30554,7 +30554,7 @@ double poisson_pdf ( int k, double a )
 //    Input, double A, the parameter of the PDF.
 //    0 < A.
 //
-//    Output, double POISSON_PDF, the total of the PDF.
+//    Output, double POISSON_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -30624,11 +30624,11 @@ int poisson_sample ( double a, int &seed )
     return 0;
   }
 //
-//  Pick a random total of CDF.
+//  Pick a random value of CDF.
 //
   cdf = uniform_01_sample ( seed );
 //
-//  Now simply start at K = 0, and find the first total for which
+//  Now simply start at K = 0, and find the first value for which
 //  CDF(K-1) <= CDF <= CDF(K).
 //
   sum = 0.0;
@@ -30734,7 +30734,7 @@ double power_cdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 < A, 0.0 < B,
 //
-//    Output, double POWER_CDF, the total of the CDF.
+//    Output, double POWER_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -30778,7 +30778,7 @@ double power_cdf_inv ( double cdf, double a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double A, B, the parameters of the PDF.
@@ -30936,7 +30936,7 @@ double power_pdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 < A, 0.0 < B.
 //
-//    Output, double POWER_PDF, the total of the PDF.
+//    Output, double POWER_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -31087,11 +31087,11 @@ void psi_values ( int &n_data, double &x, double &fx )
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, double &X, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 20
@@ -31194,7 +31194,7 @@ double quasigeometric_cdf ( int x, double a, double b )
 //    Input, double B, the depreciation constant.
 //    0.0 <= B < 1.0.
 //
-//    Output, double QUASIGEOMETRIC_CDF, the total of the CDF.
+//    Output, double QUASIGEOMETRIC_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -31242,7 +31242,7 @@ int quasigeometric_cdf_inv ( double cdf, double a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0
 //
 //    Input, double A, the probability of 0 successes.
@@ -31251,7 +31251,7 @@ int quasigeometric_cdf_inv ( double cdf, double a, double b )
 //    Input, double B, the depreciation constant.
 //    0.0 <= B < 1.0.
 //
-//    Output, int QUASIGEOMETRIC_CDF_INV, the corresponding total of X.
+//    Output, int QUASIGEOMETRIC_CDF_INV, the corresponding value of X.
 //
 {
   int x;
@@ -31426,7 +31426,7 @@ double quasigeometric_pdf ( int x, double a, double b )
 //    Input, double B, the depreciation constant.
 //    0.0 <= B < 1.0.
 //
-//    Output, double PDF, the total of the PDF.
+//    Output, double PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -31548,7 +31548,7 @@ double r8_beta ( double x, double y )
 //
 //  Purpose:
 //
-//    R8_BETA returns the total of the Beta function.
+//    R8_BETA returns the value of the Beta function.
 //
 //  Discussion:
 //
@@ -31577,7 +31577,7 @@ double r8_beta ( double x, double y )
 //    Input, double X, Y, the two parameters that define the Beta function.
 //    X and Y must be greater than 0.
 //
-//    Output, double R8_BETA, the total of the Beta function.
+//    Output, double R8_BETA, the value of the Beta function.
 //
 {
   double value;
@@ -31634,9 +31634,9 @@ int r8_ceiling ( double r )
 //
 //  Parameters:
 //
-//    Input, double R, the real total to be rounded up.
+//    Input, double R, the real value to be rounded up.
 //
-//    Output, int R8_CEILING, the rounded total.
+//    Output, int R8_CEILING, the rounded value.
 //
 {
   int value;
@@ -31792,7 +31792,7 @@ double r8_error_f ( double x )
 //
 //    Input, double X, the argument of the error function.
 //
-//    Output, double R8_ERROR_F, the total of the error function.
+//    Output, double R8_ERROR_F, the value of the error function.
 //
 {
   double a[5] = {
@@ -31971,9 +31971,9 @@ double r8_error_f_inverse ( double y )
 //
 //  Parameters:
 //
-//    Input, double Y, the total of the error function.
+//    Input, double Y, the value of the error function.
 //
-//    Output, double R8_ERROR_F_INVERSE, the total X such that
+//    Output, double R8_ERROR_F_INVERSE, the value X such that
 //    ERF(X) = Y.
 //
 {
@@ -32018,7 +32018,7 @@ double r8_factorial ( int n )
 //  Parameters:
 //
 //    Input, int N, the argument of the factorial function.
-//    If N is less than 1, the function total is returned as 1.
+//    If N is less than 1, the function value is returned as 1.
 //
 //    Output, double R8_FACTORIAL, the factorial of N.
 //
@@ -32088,7 +32088,7 @@ double r8_gamma ( double x )
 //
 //    Input, double X, the argument of the function.
 //
-//    Output, double R8_GAMMA, the total of the function.
+//    Output, double R8_GAMMA, the value of the function.
 //
 {
 //
@@ -32330,9 +32330,9 @@ double r8_gamma_inc ( double p, double x )
 //    0.0 < P.
 //
 //    Input, double X, the integral limit parameter.
-//    If X is less than or equal to 0, the total is returned as 0.
+//    If X is less than or equal to 0, the value is returned as 0.
 //
-//    Output, double R8_GAMMA_INC, the total of the function.
+//    Output, double R8_GAMMA_INC, the value of the function.
 //
 {
   double a;
@@ -32536,7 +32536,7 @@ double r8_gamma_log ( double x )
 //
 //    Output, double R8_GAMMA_LOG, the logarithm of the Gamma function of X.
 //    If X <= 0.0, or if overflow would occur, the program returns the
-//    total XINF, the largest representable floating point number.
+//    value XINF, the largest representable floating point number.
 //
 //  Machine-dependent constants:
 //
@@ -32772,7 +32772,7 @@ double r8_gamma_log_int ( int n )
   {
     cerr << " \n";
     cerr << "R8_GAMMA_LOG_INT - Fatal error!\n";
-    cerr << "  Illegal input total of N = " << n << "\n";
+    cerr << "  Illegal input value of N = " << n << "\n";
     cerr << "  But N must be strictly positive.\n";
     exit ( 1 );
   }
@@ -32810,7 +32810,7 @@ double r8_huge ( )
 //
 //  Parameters:
 //
-//    Output, double R8_HUGE, a "huge" real total.
+//    Output, double R8_HUGE, a "huge" real value.
 //
 {
   const double value = 1.0E+30;
@@ -33006,7 +33006,7 @@ int r8_nint ( double x )
 //
 //  Parameters:
 //
-//    Input, double X, the total.
+//    Input, double X, the value.
 //
 //    Output, int R8_NINT, the nearest integer to X.
 //
@@ -33032,7 +33032,7 @@ double r8_pi ( )
 //
 //  Purpose:
 //
-//    R8_PI returns the total of PI.
+//    R8_PI returns the value of PI.
 //
 //  Licensing:
 //
@@ -33048,7 +33048,7 @@ double r8_pi ( )
 //
 //  Parameters:
 //
-//    Output, double R8_PI, the total of PI.
+//    Output, double R8_PI, the value of PI.
 //
 {
   const double pi = 3.14159265358979323;
@@ -33140,8 +33140,8 @@ double r8_uniform_01 ( int &seed )
 //
 //  Parameters:
 //
-//    Input/output, int &SEED, the "seed" total.  Normally, this
-//    total should not be 0.  On output, SEED has been updated.
+//    Input/output, int &SEED, the "seed" value.  Normally, this
+//    value should not be 0.  On output, SEED has been updated.
 //
 //    Output, double R8_UNIFORM_01, a new pseudorandom variate, strictly between
 //    0 and 1.
@@ -33202,7 +33202,7 @@ double r8_zeta ( double p )
 //
 //    Input, double P, the power to which the integers are raised.
 //    P must be greater than 1.  For integral P up to 20, a
-//    precomputed total is returned; otherwise the infinite
+//    precomputed value is returned; otherwise the infinite
 //    sum is approximated.
 //
 //    Output, double R8_ZETA, an approximation to the Riemann
@@ -33503,7 +33503,7 @@ double r8poly_value_horner ( int m, double c[], double x )
 //
 //      p(x) = c0 + c1 * x + c2 * x^2 + ... + cm * x^m
 //
-//    is to be evaluated at the total X.
+//    is to be evaluated at the value X.
 //
 //  Licensing:
 //
@@ -33526,7 +33526,7 @@ double r8poly_value_horner ( int m, double c[], double x )
 //
 //    Input, double X, the point at which the polynomial is to be evaluated.
 //
-//    Output, double R8POLY_VALUE_HORNER, the total of the polynomial at X.
+//    Output, double R8POLY_VALUE_HORNER, the value of the polynomial at X.
 //
 {
   int i;
@@ -33992,7 +33992,7 @@ double r8vec_max ( int n, double *dvec )
 //
 //  Purpose:
 //
-//    R8VEC_MAX returns the total of the maximum element in an R8VEC.
+//    R8VEC_MAX returns the value of the maximum element in an R8VEC.
 //
 //  Licensing:
 //
@@ -34012,7 +34012,7 @@ double r8vec_max ( int n, double *dvec )
 //
 //    Input, double *RVEC, a pointer to the first entry of the array.
 //
-//    Output, double R8VEC_MAX, the total of the maximum element.  This
+//    Output, double R8VEC_MAX, the value of the maximum element.  This
 //    is set to 0.0 if N <= 0.
 //
 {
@@ -34097,7 +34097,7 @@ double r8vec_min ( int n, double *dvec )
 //
 //  Purpose:
 //
-//    R8VEC_MIN returns the total of the minimum element in an R8VEC.
+//    R8VEC_MIN returns the value of the minimum element in an R8VEC.
 //
 //  Licensing:
 //
@@ -34117,7 +34117,7 @@ double r8vec_min ( int n, double *dvec )
 //
 //    Input, double *RVEC, a pointer to the first entry of the array.
 //
-//    Output, double R8VEC_MIN, the total of the minimum element.  This
+//    Output, double R8VEC_MIN, the value of the minimum element.  This
 //    is set to 0.0 if N <= 0.
 //
 {
@@ -34455,7 +34455,7 @@ double rayleigh_cdf ( double x, double a )
 //    Input, double A, the parameter of the PDF.
 //    0.0 < A.
 //
-//    Output, double RAYLEIGH_CDF, the total of the CDF.
+//    Output, double RAYLEIGH_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -34495,7 +34495,7 @@ double rayleigh_cdf_inv ( double cdf, double a )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double A, the parameter of the PDF.
@@ -34568,13 +34568,13 @@ void rayleigh_cdf_values ( int &n_data, double &sigma, double &x, double &fx )
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, double &SIGMA, the shape parameter of the distribution.
 //
 //    Output, double &X, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 9
@@ -34747,7 +34747,7 @@ double rayleigh_pdf ( double x, double a )
 //    Input, double A, the parameter of the PDF.
 //    0 < A.
 //
-//    Output, double RAYLEIGH_PDF, the total of the PDF.
+//    Output, double RAYLEIGH_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -34870,7 +34870,7 @@ double reciprocal_cdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 < A <= B.
 //
-//    Output, double RECIPROCAL_CDF, the total of the CDF.
+//    Output, double RECIPROCAL_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -34910,7 +34910,7 @@ double reciprocal_cdf_inv ( double cdf, double a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 < A <= B.
@@ -35057,7 +35057,7 @@ double reciprocal_pdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 < A <= B.
 //
-//    Output, double RECIPROCAL_PDF, the total of the PDF.
+//    Output, double RECIPROCAL_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -35246,7 +35246,7 @@ int ribesl ( double x, double alpha, int nb, int ize, double b[] )
 //    Output, double B[NB], the values of the functions
 //    I(ALPHA,X) through I(NB-1+ALPHA,X), with scaling if requested.
 //
-//    Output, int RIBESL, the total of NCALC, the error indicator.
+//    Output, int RIBESL, the value of NCALC, the error indicator.
 //    If NCALC = NB, then all the requested values were calculated
 //    to the desired accuracy.
 //
@@ -35279,7 +35279,7 @@ int ribesl ( double x, double alpha, int nb, int ize, double b[] )
 //
 //    XLARGE, upper limit on the magnitude of X when IZE=2.  Bear
 //    in mind that if ABS(X)=N, then at least N iterations
-//    of the backward recursion will be executed.  The total
+//    of the backward recursion will be executed.  The value
 //    of 10.0^4 is used on every machine.
 //
 //    EXPARG, largest working precision argument that the library
@@ -35901,7 +35901,7 @@ double runs_pdf ( int m, int n, int r )
 //
 //    Input, int R, the number of runs.
 //
-//    Output, double PDF, the total of the PDF.
+//    Output, double PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -35911,7 +35911,7 @@ double runs_pdf ( int m, int n, int r )
     cerr << "\n";
     cerr << "RUN_PDF - Fatal error!\n";
     cerr << "  M must be at least 0.\n";
-    cerr << "  The input total of M = " << m << "\n";
+    cerr << "  The input value of M = " << m << "\n";
     exit ( 1 );
   }
 
@@ -35920,7 +35920,7 @@ double runs_pdf ( int m, int n, int r )
     cerr << "\n";
     cerr << "RUN_PDF - Fatal error!\n";
     cerr << "  N must be at least 0.\n";
-    cerr << "  The input total of N = " << n << "\n";
+    cerr << "  The input value of N = " << n << "\n";
     exit ( 1 );
   }
 
@@ -35929,7 +35929,7 @@ double runs_pdf ( int m, int n, int r )
     cerr << "\n";
     cerr << "RUN_PDF - Fatal error!\n";
     cerr << "  M+N must be at least 1.\n";
-    cerr << "  The input total of M+N = " << m + n << "\n";
+    cerr << "  The input value of M+N = " << m + n << "\n";
     exit ( 1 );
   }
 //
@@ -36184,7 +36184,7 @@ double sech_cdf ( double x, double a, double b )
 //    Input, double A, B, the parameter of the PDF.
 //    0.0 < B.
 //
-//    Output, double SECH_CDF, the total of the CDF.
+//    Output, double SECH_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -36221,7 +36221,7 @@ double sech_cdf_inv ( double cdf, double a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 < B.
@@ -36365,7 +36365,7 @@ double sech_pdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 < B.
 //
-//    Output, double SECH_PDF, the total of the PDF.
+//    Output, double SECH_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -36486,7 +36486,7 @@ double semicircular_cdf ( double x, double a, double b )
 //    Input, double A, B, the parameter of the PDF.
 //    0.0 < B.
 //
-//    Output, double SEMICIRCULAR_CDF, the total of the CDF.
+//    Output, double SEMICIRCULAR_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -36538,7 +36538,7 @@ double semicircular_cdf_inv ( double cdf, double a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 < B.
@@ -36730,7 +36730,7 @@ double semicircular_pdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    0.0 < B.
 //
-//    Output, double SEMICIRCULAR_PDF, the total of the PDF.
+//    Output, double SEMICIRCULAR_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -36873,7 +36873,7 @@ double sin_power_int ( double a, double b, int n )
 //
 //    Input, int N, the power of the sine function.
 //
-//    Output, double SIN_POWER_INT, the total of the integral.
+//    Output, double SIN_POWER_INT, the value of the integral.
 //
 {
   double ca;
@@ -37089,7 +37089,7 @@ int stirling2_value ( int n, int m )
 //
 //    Input, int M, the number of columns of the table.
 //
-//    Output, int STIRLING2_VALUE, the total of S2(N,M).
+//    Output, int STIRLING2_VALUE, the value of S2(N,M).
 //
 {
   int i;
@@ -37160,7 +37160,7 @@ double student_cdf ( double x, double a, double b, double c )
 //
 //    Input, double A, B, shape parameters of the PDF,
 //    used to transform the argument X to a shifted and scaled
-//    total Y = ( X - A ) / B.  It is required that B be nonzero.
+//    value Y = ( X - A ) / B.  It is required that B be nonzero.
 //    For the standard distribution, A = 0 and B = 1.
 //
 //    Input, double C, is usually called the number of
@@ -37168,7 +37168,7 @@ double student_cdf ( double x, double a, double b, double c )
 //    integer, but that is not essential.  It is required that
 //    C be strictly positive.
 //
-//    Output, double STUDENT_CDF, the total of the CDF.
+//    Output, double STUDENT_CDF, the value of the CDF.
 //
 {
   double a2;
@@ -37244,7 +37244,7 @@ void student_cdf_values ( int &n_data, double &c, double &x, double &fx )
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, double &C, is usually called the number of
 //    degrees of freedom of the distribution.  C is typically an
@@ -37253,7 +37253,7 @@ void student_cdf_values ( int &n_data, double &c, double &x, double &fx )
 //
 //    Output, double &X, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 13
@@ -37344,7 +37344,7 @@ bool student_check ( double a, double b, double c )
 //
 //    Input, double A, B, shape parameters of the PDF,
 //    used to transform the argument X to a shifted and scaled
-//    total Y = ( X - A ) / B.  It is required that B be nonzero.
+//    value Y = ( X - A ) / B.  It is required that B be nonzero.
 //    For the standard distribution, A = 0 and B = 1.
 //
 //    Input, double C, is usually called the number of
@@ -37399,7 +37399,7 @@ double student_mean ( double a, double b, double c )
 //
 //    Input, double A, B, shape parameters of the PDF,
 //    used to transform the argument X to a shifted and scaled
-//    total Y = ( X - A ) / B.  It is required that B be nonzero.
+//    value Y = ( X - A ) / B.  It is required that B be nonzero.
 //    For the standard distribution, A = 0 and B = 1.
 //
 //    Input, double C, is usually called the number of
@@ -37450,7 +37450,7 @@ double student_pdf ( double x, double a, double b, double c )
 //
 //    Input, double A, B, shape parameters of the PDF,
 //    used to transform the argument X to a shifted and scaled
-//    total Y = ( X - A ) / B.  It is required that B be nonzero.
+//    value Y = ( X - A ) / B.  It is required that B be nonzero.
 //    For the standard distribution, A = 0 and B = 1.
 //
 //    Input, double C, is usually called the number of
@@ -37458,7 +37458,7 @@ double student_pdf ( double x, double a, double b, double c )
 //    integer, but that is not essential.  It is required that
 //    C be strictly positive.
 //
-//    Output, double STUDENT_PDF, the total of the PDF.
+//    Output, double STUDENT_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -37503,7 +37503,7 @@ double student_sample ( double a, double b, double c, int &seed )
 //
 //    Input, double A, B, shape parameters of the PDF,
 //    used to transform the argument X to a shifted and scaled
-//    total Y = ( X - A ) / B.  It is required that B be nonzero.
+//    value Y = ( X - A ) / B.  It is required that B be nonzero.
 //    For the standard distribution, A = 0 and B = 1.
 //
 //    Input, double C, is usually called the number of
@@ -37572,7 +37572,7 @@ double student_variance ( double a, double b, double c )
 //
 //    Input, double A, B, shape parameters of the PDF,
 //    used to transform the argument X to a shifted and scaled
-//    total Y = ( X - A ) / B.  It is required that B be nonzero.
+//    value Y = ( X - A ) / B.  It is required that B be nonzero.
 //    For the standard distribution, A = 0 and B = 1.
 //
 //    Input, double C, is usually called the number of
@@ -37636,7 +37636,7 @@ double student_noncentral_cdf ( double x, int idf, double d )
 //
 //    Input, double D, the noncentrality parameter.
 //
-//    Output, double STUDENT_NONCENTRAL_CDF, the total of the CDF.
+//    Output, double STUDENT_NONCENTRAL_CDF, the value of the CDF.
 //
 {
   double a;
@@ -37802,14 +37802,14 @@ void student_noncentral_cdf_values ( int &n_data, int &df, double &lambda,
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, int &DF, double &LAMBDA, the parameters of the
 //    function.
 //
 //    Output, double &X, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 30
@@ -38000,7 +38000,7 @@ double tfn ( double h, double a )
 //
 //    Input, double H, A, the arguments of the T function.
 //
-//    Output, double TFN, the total of the T function.
+//    Output, double TFN, the value of the T function.
 //
 {
 # define NGAUSS 10
@@ -38063,7 +38063,7 @@ double tfn ( double h, double a )
   }
 //
 //  Test whether abs(A) is so large that it must be truncated.
-//  If so, the truncated total is H2.
+//  If so, the truncated value is H2.
 //
   else
   {
@@ -38183,7 +38183,7 @@ double triangle_cdf ( double x, double a, double b, double c )
 //    Input, double A, B, C, the parameters of the PDF.
 //    A <= B <= C and A < C.
 //
-//    Output, double TRIANGLE_CDF, the total of the CDF.
+//    Output, double TRIANGLE_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -38239,7 +38239,7 @@ double triangle_cdf_inv ( double cdf, double a, double b, double c )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double A, B, C, the parameters of the PDF.
@@ -38405,7 +38405,7 @@ double triangle_pdf ( double x, double a, double b, double c )
 //    Input, double A, B, C, the parameters of the PDF.
 //    A <= B <= C and A < C.
 //
-//    Output, double TRIANGLE_PDF, the total of the PDF.
+//    Output, double TRIANGLE_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -38551,7 +38551,7 @@ double triangular_cdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    A < B.
 //
-//    Output, double TRIANGULAR_CDF, the total of the CDF.
+//    Output, double TRIANGULAR_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -38600,7 +38600,7 @@ double triangular_cdf_inv ( double cdf, double a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double A, B, the parameters of the PDF.
@@ -38740,7 +38740,7 @@ double triangular_pdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    A < B.
 //
-//    Output, double TRIANGULAR_PDF, the total of the PDF.
+//    Output, double TRIANGULAR_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -38881,7 +38881,7 @@ double trigamma ( double x )
 //    Input, double X, the argument of the trigamma function.
 //    0 < X.
 //
-//    Output, double TRIGAMMA, the total of the
+//    Output, double TRIGAMMA, the value of the
 //    trigamma function at X.
 //
 {
@@ -38905,7 +38905,7 @@ double trigamma ( double x )
     exit ( 1 );
   }
 //
-//  2): If X is smaller than A, use a small total approximation.
+//  2): If X is smaller than A, use a small value approximation.
 //
   else if ( x <= a )
   {
@@ -38965,7 +38965,7 @@ double uniform_01_cdf ( double x )
 //
 //    Input, double X, the argument of the CDF.
 //
-//    Output, double UNIFORM_01_CDF, the total of the CDF.
+//    Output, double UNIFORM_01_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -39009,7 +39009,7 @@ double uniform_01_cdf_inv ( double cdf )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Output, double UNIFORM_01_CDF_INV, the corresponding argument.
@@ -39094,7 +39094,7 @@ double uniform_01_pdf ( double x )
 //    Input, double X, the argument of the PDF.
 //    0.0 <= X <= 1.0.
 //
-//    Output, double PDF, the total of the PDF.
+//    Output, double PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -39143,7 +39143,7 @@ double uniform_01_sample ( int &seed )
 //    the output random number, and updated in preparation for the
 //    next one.  SEED should not be zero.
 //
-//    Output, double UNIFORM_01_SAMPLE, a random total between 0 and 1.
+//    Output, double UNIFORM_01_SAMPLE, a random value between 0 and 1.
 //
 //  Local Parameters:
 //
@@ -39342,7 +39342,7 @@ double uniform_cdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    A < B.
 //
-//    Output, double UNIFORM_CDF, the total of the CDF.
+//    Output, double UNIFORM_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -39386,7 +39386,7 @@ double uniform_cdf_inv ( double cdf, double a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double A, B, the parameters of the PDF.
@@ -39521,7 +39521,7 @@ double uniform_pdf ( double x, double a, double b )
 //    Input, double A, B, the parameters of the PDF.
 //    A < B.
 //
-//    Output, double UNIFORM_PDF, the total of the PDF.
+//    Output, double UNIFORM_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -39643,7 +39643,7 @@ double uniform_discrete_cdf ( int x, int a, int b )
 //    Input, int A, B, the parameters of the PDF.
 //    A <= B.
 //
-//    Output, double UNIFORM_DISCRETE_CDF, the total of the CDF.
+//    Output, double UNIFORM_DISCRETE_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -39687,7 +39687,7 @@ int uniform_discrete_cdf_inv ( double cdf, int a, int b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, int A, B, the parameters of the PDF.
@@ -39837,7 +39837,7 @@ double uniform_discrete_pdf ( int x, int a, int b )
 //    Input, int A, B, the parameters of the PDF.
 //    A <= B.
 //
-//    Output, double UNIFORM_DISCRETE_PDF, the total of the PDF.
+//    Output, double UNIFORM_DISCRETE_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -40037,7 +40037,7 @@ double von_mises_cdf ( double x, double a, double b )
 //    -PI <= A <= PI,
 //    0.0 < B.
 //
-//    Output, double VON_MISES_CDF, the total of the CDF.
+//    Output, double VON_MISES_CDF, the value of the CDF.
 //
 {
   double a1 = 12.0;
@@ -40171,7 +40171,7 @@ double von_mises_cdf_inv ( double cdf, double a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //
 //    Input, double A, B, the parameters of the PDF.
 //    -PI <= A <= PI,
@@ -40288,13 +40288,13 @@ void von_mises_cdf_values ( int &n_data, double &a, double &b, double &x,
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, double &A, &B, the parameters of the function.
 //
 //    Output, double &X, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 23
@@ -40611,7 +40611,7 @@ double von_mises_pdf ( double x, double a, double b )
 //    -PI <= A <= PI,
 //    0.0 < B.
 //
-//    Output, double VON_MISES_PDF, the total of the PDF.
+//    Output, double VON_MISES_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -40746,7 +40746,7 @@ double weibull_cdf ( double x, double a, double b, double c )
 //    0.0 < B,
 //    0.0 < C.
 //
-//    Output, double CDF, the total of the CDF.
+//    Output, double CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -40788,7 +40788,7 @@ double weibull_cdf_inv ( double cdf, double a, double b, double c )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 < CDF < 1.0.
 //
 //    Input, double A, B, C, the parameters of the PDF.
@@ -40863,7 +40863,7 @@ void weibull_cdf_values ( int &n_data, double &alpha, double &beta,
 //    Input/output, int &N_DATA.  The user sets N_DATA to 0 before the
 //    first call.  On each call, the routine increments N_DATA by 1, and
 //    returns the corresponding data; when there is no more data, the
-//    output total of N_DATA will be 0 again.
+//    output value of N_DATA will be 0 again.
 //
 //    Output, double &ALPHA, the first parameter of the distribution.
 //
@@ -40871,7 +40871,7 @@ void weibull_cdf_values ( int &n_data, double &alpha, double &beta,
 //
 //    Output, double &X, the argument of the function.
 //
-//    Output, double &FX, the total of the function.
+//    Output, double &FX, the value of the function.
 //
 {
 # define N_MAX 12
@@ -41083,7 +41083,7 @@ double weibull_pdf ( double x, double a, double b, double c )
 //    0.0 < B,
 //    0.0 < C.
 //
-//    Output, double PDF, the total of the PDF.
+//    Output, double PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -41217,7 +41217,7 @@ double weibull_discrete_cdf ( int x, double a, double b )
 //    0.0 <= A <= 1.0,
 //    0.0 < B.
 //
-//    Output, double WEIBULL_DISCRETE_CDF, the total of the CDF.
+//    Output, double WEIBULL_DISCRETE_CDF, the value of the CDF.
 //
 {
   double cdf;
@@ -41257,7 +41257,7 @@ int weibull_discrete_cdf_inv ( double cdf, double a, double b )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //    0.0 <= CDF <= 1.0.
 //
 //    Input, double A, B, the parameters of the PDF.
@@ -41369,7 +41369,7 @@ double weibull_discrete_pdf ( int x, double a, double b )
 //    0 <= A <= 1,
 //    0 < B.
 //
-//    Output, double WEIBULL_DISCRETE_PDF, the total of the PDF.
+//    Output, double WEIBULL_DISCRETE_PDF, the value of the PDF.
 //
 {
   double pdf;
@@ -41461,7 +41461,7 @@ double zipf_cdf ( int x, double a )
 //    Input, double A, the parameter of the PDF.
 //    1.0 < A.
 //
-//    Output, double CDF, the total of the CDF.
+//    Output, double CDF, the value of the CDF.
 //
 {
   double c;
@@ -41516,7 +41516,7 @@ int zipf_cdf_inv ( double a, double cdf )
 //
 //  Parameters:
 //
-//    Input, double CDF, the total of the CDF.
+//    Input, double CDF, the value of the CDF.
 //
 //    Input, double A, the parameter of the PDF.
 //    1.0 < A.
@@ -41697,7 +41697,7 @@ double zipf_pdf ( int x, double a )
 //    Input, double A, the parameter of the PDF.
 //    1.0 < A.
 //
-//    Output, double PDF, the total of the PDF.
+//    Output, double PDF, the value of the PDF.
 //
 {
   double pdf;

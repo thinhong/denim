@@ -1,7 +1,9 @@
 # Key pair is "key": value
 newJsonKeyPair <- function(key, value) {
   # Check if character is string then automatically add ""
-  if (is.character(value)) value <- paste0("\"", value, "\"")
+  if (is.character(value) && !grepl("\\[", value)) {
+    value <- paste0("\"", value, "\"")
+  }
   js <- paste0("\"", key, "\": ", value)
   return(js)
 }
@@ -12,12 +14,37 @@ newJsonArray <- function(...) {
   js <- "["
   for (content in contents) {
     if (content != contents[length(contents)]) {
-      js <- paste0(js, "  ", content, ",\n")
+      js <- paste0(js, content, ", ")
     } else {
-      js <- paste0(js, "  ", content, "\n")
+      js <- paste0(js, content, "]")
     }
   }
-  js <- paste0(js, "]")
+  return(js)
+}
+
+# Json object is { content_1, content_2 }
+newJsonObject <- function(..., inline = FALSE) {
+  contents <- c(...)
+  if (inline == FALSE) {
+    js <- "{\n"
+    for (content in contents) {
+      if (content != contents[length(contents)]) {
+        js <- paste0(js, "  ", content, ",\n")
+      } else {
+        js <- paste0(js, "  ", content, "\n")
+      }
+    }
+  } else {
+    js <- "{"
+    for (content in contents) {
+      if (content != contents[length(contents)]) {
+        js <- paste0(js, content, ", ")
+      } else {
+        js <- paste0(js, content, "")
+      }
+    }
+  }
+  js <- paste0(js, "}")
   return(js)
 }
 
@@ -44,114 +71,4 @@ newJsonNestedObject <- function(key, object, inline = FALSE) {
   }
   js <- paste0("\"", key, "\": ", object)
   return(js)
-}
-
-# Json object is { content_1, content_2 }
-newJsonObject <- function(...) {
-  contents <- c(...)
-  js <- "{\n"
-  for (content in contents) {
-    if (content != contents[length(contents)]) {
-      js <- paste0(js, "  ", content, ",\n")
-    } else {
-      js <- paste0(js, "  ", content, "\n")
-    }
-  }
-  js <- paste0(js, "}")
-  return(js)
-}
-
-# Contacts to json
-contactsToJson <- function(contacts) {
-  contents <- "\n"
-  for (i in 1:length(contacts)) {
-    contact <- contacts[[i]]
-    ctType <- newJsonKeyPair("contactType", contact$contactType)
-    ctClasses <- newJsonNestedArray("contactClasses", contact$contactClasses, quotation = TRUE)
-    ctRates <- newJsonNestedArray("contactRates", contact$contactRates, quotation = TRUE)
-    contents <- paste0(contents, newJsonObject(ctType, ctClasses, ctRates))
-    if (i < length(contacts)) {
-      contents <- paste0(contents, ",\n")
-    } else {
-      contents <- paste0(contents, "\n")
-    }
-  }
-  return(contents)
-}
-
-
-#' Distribution object to json
-#'
-#' Input is a distribution object of a compartment, not the full vector/list 
-#' of distributions
-#' @param distribution a list with elements $name, $rate / $scale / $shape...
-#'
-#' @return a json object that match format "distribution": {"name": "weibull", "scale": 2, "shape": 5}
-#' @export
-#'
-#' @examples
-distributionToJson <- function(distribution) {
-  contents <- c()
-  for (i in 1:length(distribution)) {
-    key <- names(distribution)[i]
-    val <- distribution[[i]]
-    kp <- newJsonKeyPair(key = key, value = val)
-    contents <- c(contents, kp)
-  }
-  obj <- newJsonObject(contents)
-  distr <- newJsonNestedObject("distribution", obj, inline = TRUE)
-  return(distr)
-}
-
-# Compartments to json
-compartmentsToJson <- function(compartments) {
-  contents <- "\n"
-  for (i in 1:length(compartments)) {
-    compartment <- compartments[[i]]
-    cName <- newJsonKeyPair("name", compartment$compartmentName)
-    cDistr <- distributionToJson(compartment$distribution)
-    cInitVal <- newJsonKeyPair("initialValue", compartment$initialValue)
-    contents <- paste0(contents, newJsonObject(cName, cDistr, cInitVal))
-    if (i < length(compartments)) {
-      contents <- paste0(contents, ",\n")
-    } else {
-      contents <- paste0(contents, "\n")
-    }
-  }
-  return(contents)
-}
-
-# Models to json
-modelsToJson <- function(models) {
-  contents <- "\n"
-  for (i in 1:length(models)) {
-    model <- models[[i]]
-    mdName <- newJsonNestedArray("modelName", model$modelName, quotation = TRUE)
-    mdTR <- newJsonKeyPair("transmissionRate", model$transmissionRate)
-    mdComps <- newJsonNestedArray("compartments", compartmentsToJson(model$compartments))
-    contents <- paste0(contents, newJsonObject(mdName, mdTR, mdComps))
-    if (i < length(models)) {
-      contents <- paste0(contents, ",\n")
-    } else {
-      contents <- paste0(contents, "\n")
-    }
-  }
-  return(contents)
-}
-
-# Full model to json
-fullModelToJson <- function(fullModel) {
-  dfu <- newJsonKeyPair("daysFollowUp", fullModel$daysFollowUp)
-  et <- newJsonKeyPair("errorTolerance", fullModel$errorTolerance)
-  ts <- newJsonKeyPair("timeStep", fullModel$timeStep)
-  ms <- newJsonNestedArray("modelStructure", fullModel$transitions, quotation = TRUE)
-  ic <- newJsonNestedArray("infectiousComps", fullModel$infectiousComps, quotation = TRUE)
-  if (!is.null(fullModel$contacts)) {
-    ct <- newJsonNestedArray("contacts", contactsToJson(fullModel$contacts))
-  } else {
-    ct <- NULL
-  }
-  md <- newJsonNestedArray("models", modelsToJson(fullModel$models))
-  contents <- paste0(newJsonObject(dfu, et, ts, ms, ic, ct, md))
-  return(contents)
 }

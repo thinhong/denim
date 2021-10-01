@@ -15163,7 +15163,7 @@ inline void grisu2_round(char* buf, int len, std::uint64_t dist, std::uint64_t d
     JSON_ASSERT(ten_k > 0);
 
     //               <--------------------------- delta ---->
-    //                                  <---- dist --------->
+    //                                  <---- distribution --------->
     // --------------[------------------+-------------------]--------------
     //               M-                 w                   M+
     //
@@ -15206,7 +15206,7 @@ inline void grisu2_digit_gen(char* buffer, int& length, int& decimal_exponent,
     // w, M- and M+ share the same exponent e, which satisfies alpha <= e <= gamma.
     //
     //               <--------------------------- delta ---->
-    //                                  <---- dist --------->
+    //                                  <---- distribution --------->
     // --------------[------------------+-------------------]--------------
     //               M-                 w                   M+
     //
@@ -15407,7 +15407,7 @@ inline void grisu2_digit_gen(char* buffer, int& length, int& decimal_exponent,
     decimal_exponent -= m;
 
     // 1 ulp in the decimal representation is now 10^-m.
-    // Since delta and dist are now scaled by 10^m, we need to do the
+    // Since delta and distribution are now scaled by 10^m, we need to do the
     // same with ulp in order to keep the units in sync.
     //
     //      10^m * 10^-m = 1 = 2^-e * 2^e = ten_m * 2^e

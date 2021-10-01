@@ -9,16 +9,15 @@
 #include <vector>
 #include "Distribution.h"
 
-class CustomDistribution: public Distribution {
+class ValuesDistribution: public Distribution {
 private:
-    std::string distName {"custom"};
+    std::string distName {"values"};
     std::vector<double> waitingTime;
-    size_t maxDay {0};
+    size_t maxDay;
     std::vector<double> transitionProb;
     void calcTransitionProb();
 public:
-    explicit CustomDistribution(std::vector<double> waitingTime);
-    CustomDistribution() = default;
+    explicit ValuesDistribution(std::vector<double> waitingTime);
     double getTransitionProb(size_t index) override;
     std::string getDistName() override;
     size_t getMaxDay() override;

@@ -3,7 +3,7 @@
 gamma <- function(scale, shape) {
   distr <- list()
   
-  distr$name <- "gamma"
+  distr$distribution <- "gamma"
   distr$scale <- scale
   distr$shape <- shape
   
@@ -15,7 +15,7 @@ gamma <- function(scale, shape) {
 weibull <- function(scale, shape) {
   distr <- list()
   
-  distr$name <- "weibull"
+  distr$distribution <- "weibull"
   distr$scale <- scale
   distr$shape <- shape
   
@@ -27,8 +27,40 @@ weibull <- function(scale, shape) {
 exponential <- function(rate) {
   distr <- list()
   
-  distr$name <- "exponential"
+  distr$distribution <- "exponential"
   distr$rate <- rate
+  
+  class(distr) <- c("Distribution", class(distr))
+  return(distr)
+}
+
+## Math expression
+mathExpression <- function(expression) {
+  distr <- list()
+  
+  distr$distribution <- "mathExpression"
+  distr$expression <- deparse(substitute(expression))
+  distr$expression <- gsub("\\\"", "", distr$expression)
+  
+  class(distr) <- c("Distribution", class(distr))
+  return(distr)
+}
+
+frequency <- function(x) {
+  distr <- list()
+  
+  distr$distribution <- "frequency"
+  distr$frequency <- x
+  
+  class(distr) <- c("Distribution", class(distr))
+  return(distr)
+}
+
+transitionProb <- function(x) {
+  distr <- list()
+  
+  distr$distribution <- "transitionProb"
+  distr$transitionProb <- x
   
   class(distr) <- c("Distribution", class(distr))
   return(distr)
@@ -38,51 +70,67 @@ exponential <- function(rate) {
 values <- function(...) {
   distr <- list()
   
-  distr$name <- "custom"
-  distr$values <- c(...)
+  distr$distribution <- "values"
+  distr$waitingTime <- c(...)
   
   class(distr) <- c("Distribution", class(distr))
   return(distr)
 }
 
-# Tidy up distribution by comparing with initialValues
-tidyDistribution <- function(initialValues, distributions) {
-  distr <- list()
-  cnInitVal <- names(initialValues)
-  cnDist <- unique(sapply(names(distributions), function(x) strsplit(x, "\\.")[[1]][[1]]))
-  for (compName in cnInitVal) {
-    if (compName %in% cnDist) {
-      for (i in 1:length(distributions)) {
-        cName <- unlist(strsplit(names(distributions)[i], "\\."))[1]
-        pName <- unlist(strsplit(names(distributions)[i], "\\."))[2]
-        if (cName == compName) {
-          distr[[compName]][[pName]] <- distributions[[i]]
-        }
-      }
-    } else {
-      distr[[compName]][["name"]] <- "none"
-    }
-  }
-  return(distr)
-}
-
 print.Distribution <- function(x) {
   # Print the name of this distribution
-  if (x$name %in% c("gamma", "exponential", "weibull")) {
-    cat("Discretized", x$name, "distribution\n")
-  }
-  # Print other parameters
-  if (x$name %in% c("gamma", "weibull")) {
-    cat("Scale = ", x$scale, ", Shape = ", x$shape, sep = "")
-  } else if (x$name == "exponential") {
-    cat("Rate = ", x$rate, sep = "")
-  } else if (x$name =="custom") {
-    cat("Raw values")
-    for (i in head(x$values, 5)) {
-      cat(" ", i, sep = "")
+  if (x$distribution %in% c("gamma", "weibull", "exponential")) {
+    cat("Discretized", x$distribution, "distribution\n")
+    if (x$distribution %in% c("gamma", "weibull")) {
+      cat("Scale = ", x$scale, ", Shape = ", x$shape, sep = "")
+    } else if (x$distribution == "exponential") {
+      cat("Rate = ", x$rate, sep = "")
     }
-    if (length(x$values) > 5) cat("...")
+  } else if (x$distribution == "mathExpression") {
+    cat("Math expression: ")
+    cat(x$expression, sep = "")
+  } else if (x$distribution == "frequency") {
+    cat("Frequency: ")
+    cat(x$frequency, sep = "")
+  } else if (x$distribution == "transitionProb") {
+    cat("Transition probability: ")
+    cat(x$transitionProb, sep = "")
+  } else if (x$distribution == "values") {
+    cat("Raw values: ")
+    wt <- head(x$waitingTime, 5)
+    wt <- paste0(wt, collapse = ", ")
+    cat(wt, sep = "")
+    if (length(x$waitingTime) > 5) cat("...")
   }
   cat("\n")
   invisible(x)
 }
+
+#' Distribution object to json
+#'
+#' Input is a distribution object of a compartment, not the full vector/list 
+#' of distributions
+#' @param distribution a list with elements $name, $rate / $scale / $shape...
+#'
+#' @return a json object that match format {"distribution": "weibull", "scale": 2, "shape": 5}
+#' @export
+#'
+#' @examples
+distributionToJson <- function(distribution) {
+  contents <- c()
+  if (distribution$distribution == "values") {
+    dn <- newJsonKeyPair(key = "distribution", value = "values")
+    wt <- newJsonKeyPair(key = "waitingTime", value = newJsonArray(distribution$waitingTime))
+    contents <- c(dn, wt)
+  } else {
+    for (i in 1:length(distribution)) {
+      key <- names(distribution)[i]
+      val <- distribution[[i]]
+      kp <- newJsonKeyPair(key = key, value = val)
+      contents <- c(contents, kp)
+    }
+  }
+  obj <- newJsonObject(contents, inline = TRUE)
+  return(obj)
+}
+

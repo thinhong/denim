@@ -5,18 +5,21 @@
 #include <memory>
 #include <stack>
 #include "Compartment.h"
-#include "Contact.h"
+#include "muParser.h"
 
 class Model {
 private:
-    std::vector<std::string> modelName;
-    double transmissionRate {0};
-    // Population size is computed after sortComps in main()
-    double populationSize {0};
     /**
      * Contains all compartments of this model
      */
     std::vector<std::shared_ptr<Compartment>> comps;
+
+    std::vector<std::string> paramNames;
+    std::vector<double> paramValues;
+
+    // Extract these values from comps vector
+    std::vector<std::string> allCompNames;
+    std::vector<double> allCompValues;
 
     /**
      * Contains weak pointers to all models, including itself, with corresponding contact probability stored at the
@@ -30,26 +33,12 @@ private:
     std::vector<double> linkedContactRates;
 public:
     // Model structure and infectious compartment are the same for all models for a disease
-    static inline std::vector<std::string> modelStructure;
-    static inline std::vector<std::string> infectiousComps;
-    Model(std::vector<std::string> modelGroup, double transmissionRate);
+    std::vector<std::string> transitions;
+    Model(std::vector<std::string>& paramNames, std::vector<double>& paramValues);
     ~Model() {
-       // std::string name;
-       // for (auto group: modelName) {
-       //     name += group;
-       // }
-       // std::cout << name << " model destructor called." << std::endl;
+//        std::cout << "Model destructor called." << std::endl;
     }
-    std::vector<std::string> getModelGroup();
     std::vector<std::shared_ptr<Compartment>> getComps();
-    double getTransmissionRate() {return transmissionRate;};
-    void calcPopulationSize();
-    double getPopulationSize();
-
-    std::vector<double> getLinkedContactRates() {return linkedContactRates;};
-
-
-    std::vector<std::weak_ptr<Model>> getLinkedModels();
 
     /**
      * Compartments of a Model object are stored as pointer in vector <b>comps</b>, but we normally identify compartment
@@ -59,16 +48,8 @@ public:
      */
     std::weak_ptr<Compartment> getAddressFromName(std::string compName);
 
-    // Interaction among locations
-    void addNewLinkedContactRate(double linkedContactRate);
-    void updateLinkedContactRate(double linkedContactRateToUpdate, size_t index);
-    void addLinkedModels(std::vector<std::weak_ptr<Model>> allModels);
-
     // Add compartment to model using JSON config file
     void addCompsFromConfig(std::vector<std::shared_ptr<Compartment>>& comps);
-    void connectComp();
-    void addCompsAndConnect(std::shared_ptr<Compartment>& A, std::shared_ptr<Compartment>& B, double weight);
-    void addCompsAndConnect2(Compartment& A, Compartment& B, double weight);
 
     /**
      * Return the index of a compartment in vector <b>comps</b>
@@ -76,8 +57,6 @@ public:
      * @return the index of that compartment
      */
     int getIndex(std::shared_ptr<Compartment> comp);
-
-    int getIndexLinkedModel(std::vector<std::string> modelGroup);
 
     // Functions to check cycle and sort compartments to the correct order
     // Use depth-first-search algorithm to detect cycle https://www.geeksforgeeks.org/detect-cycle-in-a-graph/
@@ -93,19 +72,20 @@ public:
     void sortComps();
 
     /**
-     * Re-calculation force of infection after each iteration
-     * @param iter: the iteration (or time) to be calculated
-     * @return
-     */
-    double calcForceInfection(size_t iter);
-
-    /**
-     * Update subCompartmentValues and total for each compartments in the model
+     * Update subCompartments and total for each compartments in the model
      * @param iter
      */
     void update(long iter);
 
+    /**
+     * Get all compartment names from the comps vector and also initial values of allCompValues
+     */
+    void initAllComps();
 
+    /**
+     * Helper function to update allCompValues after each iteration
+     */
+    void updateAllCompValues(size_t iter);
 };
 
 
