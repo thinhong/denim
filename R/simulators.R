@@ -1,7 +1,38 @@
+checkInitsTransitions <- function(initialValues, transitions) {
+  # Compartment name in initialValues
+  initNames <- names(initialValues)
+  # Compartment name in transitions
+  transNames <- c()
+  for (transName in names(transitions)) {
+    # # Remove white space " ", any number, "*" symbol
+    transName <- gsub(" ", "", transName)
+    tempNames <- unlist(strsplit(transName, "->|\\*")[[1]])
+    if (length(tempNames) == 3) {
+      tempNames <- tempNames[-2]
+    }
+    transNames <- append(transNames, tempNames)
+  }
+  transNames <- unique(transNames)
+  
+  i_t <- setdiff(initNames, transNames)
+  if (length(i_t)) {
+    mestext <- paste0("Compartment(s) ", paste0(i_t, collapse = ", "), " not existed in your transitions list")
+    stop(mestext, call. = FALSE)
+  }
+  t_i <- setdiff(transNames, initNames)
+  if (length(t_i)) {
+    mestext <- paste0("Compartment(s) ", paste0(t_i, collapse = ", "), " not initialized")
+    stop(mestext, call. = FALSE)
+  }
+}
+
 runSim <- function(daysFollowUp, errorTolerance, initialValues, 
                    parameters, transitions, timeStep = 1) {
   
-  # Generate full model object
+  # First check their inputs
+  checkInitsTransitions(initialValues, transitions)
+  
+  # Generate model object
   mod <- newModel(daysFollowUp, errorTolerance, initialValues, parameters, transitions, timeStep)
   modJson <- modelToJson(mod)
   # cat(fmodJson) # for debug

@@ -1,18 +1,6 @@
 # discreteModel
 An R package for simulating discrete-time non-Markovian compartmental model.
 
-Table of Contents
-=================
-
-   * [Installation](#installation)
-   * [Example](#example)
-      * [Simple SIR model without contact](#simple-sir-model-without-contact)
-      * [Contact between locations](#contact-between-locations)
-      * [Visualization](#visualization)
-      * [Helper function](#helper-function)
-      * [Comparison with deSolve](#comparison-with-desolve)
-
-
 ## Installation
 Use `install_github()` to install this package
 ```
@@ -20,197 +8,64 @@ remotes::install_github("thinhong/discreteModel")
 ```
 
 ## Example
-### Simple SIR model without contact
+### Simple SIR model
 Here we have to define:
-* `transitions`: structure of the model or transitions among compartments, for instance S -> I -> R would be defined by `"S -> I"`, `"I -> R"` (note the `""` symbol, this will be read as strings), white space can be ignored here (i.e we can write `"S->I"`)
+* `daysFollowUp`: how many days (or any unit of time) to simulate
+* `errorTolerance`: a decimal number, when a probability reach (1 - `errorTolerance`) it will be rounded to 1.0, e.g if we set `errorTolerance <- 0.01` then when a probability is 0.99 it will be rounded to 1.0
+* `timeStep`: how much a day will be binned, if we want to bin a day into 100 time bins, a time step will be 0.01 day, define here `timeStep <- 0.01`
 * `initialValues`: a vector defines initial values of compartments
-* `distributions`: distributions of compartments, currently `exponential(rate)`, `gamma(scale, shape)`, and `weibull(scale, shape)` are available
+* `parameters`: if we define a compartment transition using math expression, list all parameters (except the compartment names) inside the math expression here
+* `transitions`: a list with format `"transition" = distribution()`
+  * `"transition"`: structure of the model, e.g a simple SIR model S -> I -> R would be defined by `"S -> I"`, `"I -> R"` (note the `""` symbol, this will be read as strings), white space can be ignored here i.e we can write `"S->I"`
+    * `"S -> I"`, `"S -> V"`: compartment S transitions to I first, then the rest of S transitions to V
+    * `"S -> 0.3 * I"`, `"S -> 0.7 * V"`: S transitions to I and V concurrently, of which 30% transitions to I and 70% transitions to V
+* `distributions`: distributions of compartments, currently the followings are available:
+  * `exponential(rate)`
+  * `gamma(scale, shape)`
+  * `weibull(scale, shape)`
+  * `mathExpression(expression)`: user-defined math expression, the expression can be put inside `""` or not, e.g `mathExpression(beta * S * I / N)` or `mathExpression("beta * S * I / N)"` are both acceptable
+  * `frequency(frequency)`: a fixed number of individuals per time step
+  * `transitionProb(transitionProb)`: define a transition probability instead of waiting time distribution, this is the conventional dR/dt = gamma * I which we input by `"I -> R" = transitionProb(gamma)`
+  * `values(waitingTimes...)`: a vector of values, could be numbers, percentages, density based on real data distribution
+
 ```
 library(discreteModel)
 
-transitions <- c(
-  "S -> E",
-  "E -> I",
-  "I -> R"
-)
+daysFollowUp <- 30
+errorTolerance <- 0.01
+timeStep <- 0.01
 
 initialValues <- c(
   S = 999,
-  E = 0,
-  I = 1,
-  R = 0
+  I1 = 1,
+  R = 0,
+  V = 0,
+  I2 = 0
 )
 
-distributions <- c(E = weibull(scale = 2, shape = 5), 
-                   I = exponential(rate = 1.5))
-
-fmod <- runSim(daysFollowUp = 50, errorTolerance = 0.01, timeStep = 0.01, 
-               transmissionRate = 4, infectiousComps = "I", 
-               transitions = transitions,
-               initialValues = initialValues, distributions = distributions)
-```
-
-### Contact between locations
-We now add another parameter `contacts`: a list of contact matrices. If we have contact between locations, `initialValues` and `distributions` will be lists of locations. The name of elements of `initialValues` and `distributions` need to match the dimension names of the matrices.
-
-This script will simulate a SIR model of 2 locations: Ho Chi Minh and Ha Noi.
-```
-M_location <- matrix(c(0.85, 0.1, 0.1, 0.95), nrow = 2, ncol = 2, 
-                     dimnames = list(c("HCM", "HN"), c("HCM", "HN")))
-
-transitions <- c(
-  "S -> I", 
-  "I -> R"
+parameters <- c(
+  beta = 0.012,
+  N = 1000
 )
 
-initialValues <- list(
-  HCM = c(
-    S = 999,
-    I = 1,
-    R = 0),
-  HN = c(
-    S = 699,
-    I = 0,
-    R = 0)
+transitions <- list(
+  "S -> I1" = mathExpression(beta * S * (I1 + I2) / N),
+  "S -> V" = frequency(0.5),
+  "I1 -> R" = weibull(3, 4),
+  "V -> I2" = mathExpression(beta * V * (I1 + I2) / N),
+  "I2 -> R" = gamma(2, 3)
 )
 
-distributions <- list(
-  HCM = c(I = gamma(scale = 2, shape = 5)),
-  HN = c(I = weibull(scale = 2, shape = 5))
-)
-
-fmod <- runSim(daysFollowUp = 50, errorTolerance = 0.01, timeStep = 0.01, 
-               transmissionRate = 1.5, infectiousComps = "I", 
-               contacts = M_location, transitions = transitions,
-               initialValues = initialValues, distributions = distributions)
-```
-
-If we only have one type of contact, we can directly parse the contact matrix into parameter `contacts` of `runSim()`
-```
-M_location <- matrix(c(0.85, 0.1, 0.1, 0.95), nrow = 2, ncol = 2, 
-                     dimnames = list(c("HCM", "HN"), c("HCM", "HN")))
-
-fmod <- runSim(daysFollowUp = 50, errorTolerance = 0.01, timeStep = 0.01, 
-               transmissionRate = 1.5, infectiousComps = "I", 
-               contacts = M_location, transitions = transitions,
-               initialValues = initialValues, distributions = distributions)
-```
-
-If we have more than one type of contact:
-* `contacts` must be defined as a list of contact matrices
-```
-M_location <- matrix(c(0.85, 0.1, 0.1, 0.95), nrow = 2, ncol = 2, 
-                     dimnames = list(c("HCM", "HN"), c("HCM", "HN")))
-M_gender <- matrix(c(0.5, 0.75, 0.75, 0.95), nrow = 2, ncol = 2, 
-                     dimnames = list(c("M", "F"), c("M", "F")))
-
-contacts <- list(M_location, M_gender)
-```
-* Use `.` to define the names of elements inside `initialValues` and `distributions`
-
-Full input should be defined as follows
-```
-M_location <- matrix(c(0.85, 0.1, 0.1, 0.95), nrow = 2, ncol = 2, 
-                     dimnames = list(c("HCM", "HN"), c("HCM", "HN")))
-M_gender <- matrix(c(0.5, 0.75, 0.75, 0.95), nrow = 2, ncol = 2, 
-                     dimnames = list(c("M", "F"), c("M", "F")))
-
-contacts <- list(M_location, M_gender)
-
-transitions <- c(
-  "S -> I", 
-  "I -> R"
-)
-
-initialValues <- list(
-  HCM.M = c(
-    S = 999,
-    I = 1,
-    R = 0),
-  HCM.F = c(
-    S = 699,
-    I = 0,
-    R = 0),
-  HN.M = c(
-    S = 999,
-    I = 1,
-    R = 0),
-  HN.F = c(
-    S = 699,
-    I = 0,
-    R = 0)
-)
-
-distributions <- list(
-  HCM.M = c(I = gamma(scale = 2, shape = 5)),
-  HCM.F = c(I = gamma(scale = 2, shape = 5)),
-  HN.M = c(I = weibull(scale = 2, shape = 5)),
-  HN.F = c(I = weibull(scale = 2, shape = 5))
-)
-
-fmod <- runSim(daysFollowUp = 20, errorTolerance = 0.01, timeStep = 0.01, 
-               transmissionRate = 1.5, infectiousComps = "I", 
-               contacts = contacts, transitions = transitions,
-               initialValues = initialValues, distributions = distributions)
+mod <- runSim(daysFollowUp, errorTolerance, initialValues, 
+              parameters, transitions, timeStep)
 ```
 
 ### Visualization
-We can plot the data frame generated by `runSim()` function with `plot()`. The `plot()` function use ggplot2 to visualize. If we have groups that contact with others, it automatically plots multi-panel using `facet_wrap()`.
+We can plot the data frame generated by `runSim()` function with `plot()`. The `plot()` function use ggplot2 to visualize.
 ```
-plot(fmod)
+plot(mod)
 ```
-![Our package vs deSolve](man/figures/plotFunction.png)
-
-### Helper function
-When there are many compartments, or many contacts, use this `inputHelper()` to assist the definition of initialValues and distributions
-```
-M_location <- matrix(c(0.85, 0.1, 0.1, 0.95), nrow = 2, ncol = 2, 
-                     dimnames = list(c("HCM", "HN"), c("HCM", "HN")))
-M_age <- matrix(c(0.5, 0.6, 0.7, 0.6, 0.4, 0.3, 0.7, 0.3, 0.8), nrow = 3, ncol = 3, 
-                     dimnames = list(c("young", "middle", "older"), c("young", "middle", "older")))
-
-contacts <- list(M_location, M_age)
-
-transitions <- c(
-  "S -> E", 
-  "E -> A",
-  "A -> I",
-  "I -> D",
-  "I -> R"
-)
-
-inputHelper(contacts = contacts, transitions = transitions)
-```
-
-Results
-```
-# Place these codes under the transitions and contacts you have written
-# Set up the initial values for all compartments
-initialValues <- list(
-  HCM.middle = c(S = , E = , A = , I = , D = , R = ),
-  HCM.older = c(S = , E = , A = , I = , D = , R = ),
-  HCM.young = c(S = , E = , A = , I = , D = , R = ),
-  HN.middle = c(S = , E = , A = , I = , D = , R = ),
-  HN.older = c(S = , E = , A = , I = , D = , R = ),
-  HN.young = c(S = , E = , A = , I = , D = , R = )
-)
-
-# Set up the distributions for all compartments, any compartment without distribution can be deleted
-distributions <- list(
-  HCM.middle = c(S = , E = , A = , I = , D = , R = ),
-  HCM.older = c(S = , E = , A = , I = , D = , R = ),
-  HCM.young = c(S = , E = , A = , I = , D = , R = ),
-  HN.middle = c(S = , E = , A = , I = , D = , R = ),
-  HN.older = c(S = , E = , A = , I = , D = , R = ),
-  HN.young = c(S = , E = , A = , I = , D = , R = )
-)
-
-# Insert all parameters here, please use ?runSim for more details
-fmod <- runSim(daysFollowUp = , errorTolerance = , timeStep = , 
-               transmissionRate = , infectiousComps = , 
-               contacts = , transitions = ,
-               initialValues = initialValues, distributions = distributions)
-```
+![](man/figures/plotdiscrete.png)
 
 ### Comparison with deSolve
 Binning timeStep into 0.001 to have the closest results to deSolve. 
@@ -252,14 +107,15 @@ dsmod <- dsmod[, c("time", "S", "I", "R")]
 colnames(dsmod)[-1] <- paste0(colnames(dsmod)[-1], "_deSolve")
 
 # Our method
-transitions <- c("S -> I", "I -> R")
 initialValues <- c(S = 999, I = 1, R = 0)
-distributions <- c(I = gamma(2, 5))
+parameters <- c(beta = 0.0015, N = 1000)
+transitions <- list("S -> I" = mathExpression(beta * S * I / N), 
+                    "I -> R" = gamma(2, 5))
+
 fmod <- runSim(daysFollowUp = 20, errorTolerance = 0.01, 
-               timeStep = 0.001, 
-               transmissionRate = 1.5, infectiousComps = "I", 
+               timeStep = 0.001,
                transitions = transitions,
-               initialValues = initialValues, distributions = distributions)
+               initialValues = initialValues, parameters = parameters)
 
 # Merge the two results data frame to compare
 colnames(fmod)[-1] <- paste0(colnames(fmod)[-1], "_discrete")
@@ -297,5 +153,11 @@ The results are as follows
 13   12 4.253584e-02 684.835925 3.151215e+02 4.239289e-02 685.110767 3.148468e+02
 14   13 1.632456e-02 591.799588 4.081841e+02 1.625438e-02 592.078497 4.079052e+02
 15   14 7.202036e-03 499.863552 5.001292e+02 7.165272e-03 500.131156 4.998617e+02
+16   15 3.633768e-03 413.460732 5.865356e+02 3.612778e-03 413.706068 5.862903e+02
+17   16 2.074540e-03 335.535057 6.644629e+02 2.061332e-03 335.751685 6.642463e+02
+18   17 1.321349e-03 267.628893 7.323698e+02 1.312357e-03 267.814259 7.321844e+02
+19   18 9.245871e-04 210.148809 7.898503e+02 9.179818e-04 210.303240 7.896958e+02
+20   19 6.998868e-04 162.688892 8.373104e+02 6.946921e-04 162.814630 8.371847e+02
+21   20 5.649312e-04 124.335796 8.756636e+02 5.606225e-04 124.436154 8.755633e+02
 ```
 ![Our package vs deSolve](man/figures/ourVsDesolve.png)

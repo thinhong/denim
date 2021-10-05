@@ -121,7 +121,20 @@ void Compartment::updateSubCompByMath(long iter, size_t outIndex, std::vector<st
         parser.DefineVar(allCompNames[i], &allCompValues[i]);
     }
     // The result of this math expression is the outTotals of this outIndex
-    outTotals[outIndex] = outWeights[outIndex] * parser.Eval();
+    double computeValue = outWeights[outIndex] * parser.Eval();
+
+    double sumOutTotal {0};
+    for (auto& outTotal: outTotals) {
+        sumOutTotal += outTotal;
+    }
+
+    // To prevent a compartment being negative, only use this value if it + sum of
+    // previous out total <= the compTotal of previous iteration
+    if (computeValue + sumOutTotal <= compTotal[iter - 1]) {
+        outTotals[outIndex] = computeValue;
+    } else {
+        outTotals[outIndex] = compTotal[iter - 1] - sumOutTotal;
+    }
 
     // If outWeight = 1 then calculate directly in the subCompartment
     size_t startIndex {0};
@@ -167,7 +180,20 @@ void Compartment::updateSubCompByMath(long iter, size_t outIndex, std::vector<st
 void Compartment::updateSubCompByFreq(long iter, size_t outIndex, std::vector<std::string> &allCompNames,
                                       std::vector<double> &allCompValues) {
 
-    outTotals[outIndex] = outWeights[outIndex] * outDistributions[outIndex]->getTransitionProb(iter);
+    double computeValue = outWeights[outIndex] * outDistributions[outIndex]->getTransitionProb(iter);
+
+    double sumOutTotal {0};
+    for (auto& outTotal: outTotals) {
+        sumOutTotal += outTotal;
+    }
+
+    // To prevent a compartment being negative, only use this value if it + sum of
+    // previous out total <= the compTotal of previous iteration
+    if (computeValue + sumOutTotal <= compTotal[iter - 1]) {
+        outTotals[outIndex] = computeValue;
+    } else {
+        outTotals[outIndex] = compTotal[iter - 1] - sumOutTotal;
+    }
 
     // If outWeight = 1 then calculate directly in the subCompartment
     size_t startIndex {0};
@@ -215,6 +241,7 @@ void Compartment::updateCompartment(long iter, std::vector<std::string>& paramNa
 
     compTotal[iter] = compTotal[iter - 1];
     std::fill(outSubCompartments.begin(), outSubCompartments.end(), 0);
+    std::fill(outTotals.begin(), outTotals.end(), 0);
 
     if (!outCompartments.empty()) {
         for (size_t outIndex {0}; outIndex < outCompartments.size(); ++outIndex) {
