@@ -66,7 +66,7 @@
 	#ifdef MUPARSERLIB_EXPORTS /* defined if we are building the muParser DLL (instead of using it) */
 		#define API_EXPORT_CXX MUPARSER_HELPER_DLL_EXPORT
 	#else
-		#define API_EXPORT_CXX MUPARSER_HELPER_DLL_IMPORT
+		#define API_EXPORT_CXX MUPARSER_HELPER_DLL_EXPORT
 	#endif /* MUPARSER_DLL_EXPORTS */
 	#define MUPARSER_LOCAL MUPARSER_HELPER_DLL_LOCAL
 
