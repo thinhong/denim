@@ -26,14 +26,15 @@ checkInitsTransitions <- function(initialValues, transitions) {
   }
 }
 
-runSim <- function(daysFollowUp, errorTolerance, initialValues, 
+#' @export
+runSim <- function(simulationDuration, errorTolerance, initialValues, 
                    parameters, transitions, timeStep = 1) {
   
   # First check their inputs
-  checkInitsTransitions(initialValues, transitions)
+  # checkInitsTransitions(initialValues, transitions)
   
   # Generate model object
-  mod <- newModel(daysFollowUp, errorTolerance, initialValues, parameters, transitions, timeStep)
+  mod <- newModel(simulationDuration, errorTolerance, initialValues, parameters, transitions, timeStep)
   modJson <- modelToJson(mod)
   # cat(fmodJson) # for debug
   

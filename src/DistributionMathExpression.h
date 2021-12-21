@@ -7,11 +7,11 @@
 
 #include "Distribution.h"
 
-class MathExpression: public Distribution {
+class DistributionMathExpression: public Distribution {
 private:
     std::string expression;
 public:
-    explicit MathExpression(std::string& expression);
+    explicit DistributionMathExpression(std::string& expression);
     double getTransitionProb(size_t index) override;
     size_t getMaxDay() override;
     std::string getDistName() override;

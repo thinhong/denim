@@ -1,5 +1,6 @@
 # Constructors
 ## Gamma distribution
+#' @export
 gamma <- function(scale, shape) {
   distr <- list()
   
@@ -12,6 +13,7 @@ gamma <- function(scale, shape) {
 }
 
 ## Weibull distribution
+#' @export
 weibull <- function(scale, shape) {
   distr <- list()
   
@@ -24,6 +26,7 @@ weibull <- function(scale, shape) {
 }
 
 ## Exponential distribution
+#' @export
 exponential <- function(rate) {
   distr <- list()
   
@@ -34,7 +37,21 @@ exponential <- function(rate) {
   return(distr)
 }
 
+## Log-normal distribution
+#' @export
+lognormal <- function(mu, sigma) {
+  distr <- list()
+  
+  distr$distribution <- "lognormal"
+  distr$mu <- mu
+  distr$sigma <- sigma
+  
+  class(distr) <- c("Distribution", class(distr))
+  return(distr)
+}
+
 ## Math expression
+#' @export
 mathExpression <- function(expression) {
   distr <- list()
   
@@ -46,16 +63,20 @@ mathExpression <- function(expression) {
   return(distr)
 }
 
-frequency <- function(x) {
+## Constant
+#' @export
+constant <- function(x) {
   distr <- list()
   
-  distr$distribution <- "frequency"
-  distr$frequency <- x
+  distr$distribution <- "constant"
+  distr$constant <- x
   
   class(distr) <- c("Distribution", class(distr))
   return(distr)
 }
 
+## Transition probability
+#' @export
 transitionProb <- function(x) {
   distr <- list()
   
@@ -67,11 +88,24 @@ transitionProb <- function(x) {
 }
 
 ## Input with raw values
-values <- function(...) {
+#' @export
+nonparametric <- function(...) {
   distr <- list()
   
-  distr$distribution <- "values"
+  distr$distribution <- "nonparametric"
   distr$waitingTime <- c(...)
+  
+  class(distr) <- c("Distribution", class(distr))
+  return(distr)
+}
+
+## Multinomial
+#' @export
+multinomial <- function(...) {
+  distr <- list()
+  
+  distr$distribution <- "multinomial"
+  distr$probabilities <- c(...)
   
   class(distr) <- c("Distribution", class(distr))
   return(distr)
@@ -83,24 +117,39 @@ print.Distribution <- function(x) {
     cat("Discretized", x$distribution, "distribution\n")
     if (x$distribution %in% c("gamma", "weibull")) {
       cat("Scale = ", x$scale, ", Shape = ", x$shape, sep = "")
-    } else if (x$distribution == "exponential") {
+    } 
+    else if (x$distribution == "exponential") {
       cat("Rate = ", x$rate, sep = "")
     }
-  } else if (x$distribution == "mathExpression") {
+    else if (x$distribution == "lognormal") {
+      cat("Mu = ", x$mu, ", Sigma = ", x$sigma, sep = "")
+    }
+  } 
+  else if (x$distribution == "mathExpression") {
     cat("Math expression: ")
     cat(x$expression, sep = "")
-  } else if (x$distribution == "frequency") {
-    cat("Frequency: ")
+  } 
+  else if (x$distribution == "constant") {
+    cat("Constant: ")
     cat(x$frequency, sep = "")
-  } else if (x$distribution == "transitionProb") {
+  } 
+  else if (x$distribution == "transitionProb") {
     cat("Transition probability: ")
     cat(x$transitionProb, sep = "")
-  } else if (x$distribution == "values") {
-    cat("Raw values: ")
+  } 
+  else if (x$distribution == "nonparametric") {
+    cat("Waiting time values: ")
     wt <- head(x$waitingTime, 5)
     wt <- paste0(wt, collapse = ", ")
     cat(wt, sep = "")
     if (length(x$waitingTime) > 5) cat("...")
+  } 
+  else if (x$distribution == "multinomial") {
+    cat("Probabilities: ")
+    wt <- head(x$probabilities, 5)
+    wt <- paste0(wt, collapse = ", ")
+    cat(wt, sep = "")
+    if (length(x$probabilities) > 5) cat("...")
   }
   cat("\n")
   invisible(x)
@@ -118,11 +167,17 @@ print.Distribution <- function(x) {
 #' @examples
 distributionToJson <- function(distribution) {
   contents <- c()
-  if (distribution$distribution == "values") {
-    dn <- newJsonKeyPair(key = "distribution", value = "values")
+  if (distribution$distribution == "nonparametric") {
+    dn <- newJsonKeyPair(key = "distribution", value = "nonparametric")
     wt <- newJsonKeyPair(key = "waitingTime", value = newJsonArray(distribution$waitingTime))
     contents <- c(dn, wt)
-  } else {
+  } 
+  else if (distribution$distribution == "multinomial") {
+    dn <- newJsonKeyPair(key = "distribution", value = "multinomial")
+    wt <- newJsonKeyPair(key = "probabilities", value = newJsonArray(distribution$probabilities))
+    contents <- c(dn, wt)
+  }
+  else {
     for (i in 1:length(distribution)) {
       key <- names(distribution)[i]
       val <- distribution[[i]]

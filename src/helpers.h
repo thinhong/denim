@@ -9,6 +9,7 @@
 #include <string>
 #include <algorithm>
 #include <memory>
+#include <cstring>
 #include "json.h"
 #include "Model.h"
 

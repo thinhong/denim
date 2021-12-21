@@ -6,16 +6,18 @@
 #define MAIN_CPP_MODELJSON_H
 
 #include <memory>
+#include <sstream>
 #include "json.h"
 #include "Compartment.h"
 #include "Model.h"
-#include "TransitionProb.h"
-#include "DiscreteGammaDistribution.h"
-#include "DiscreteWeibullDistribution.h"
-#include "DiscreteExponentialDistribution.h"
-#include "ValuesDistribution.h"
-#include "MathExpression.h"
-#include "Frequency.h"
+#include "DistributionTransitionProb.h"
+#include "DistributionDiscreteGamma.h"
+#include "DistributionDiscreteWeibull.h"
+#include "DistributionDiscreteExponential.h"
+#include "DistributionLogNormal.h"
+#include "DistributionNonparametric.h"
+#include "DistributionMathExpression.h"
+#include "DistributionConstant.h"
 
 class ModelJSON {
 private:

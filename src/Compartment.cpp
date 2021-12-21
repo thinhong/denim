@@ -11,6 +11,11 @@ void Compartment::addOutDistribution(std::shared_ptr<Distribution>& dist) {
     this->outDistributions.push_back(dist);
 }
 
+void Compartment::editOutDistribution(std::string outName, std::shared_ptr<Distribution> &dist) {
+    size_t pos = findOutCompPosition(outName);
+    outDistributions[pos] = dist;
+}
+
 void Compartment::setOutValues() {
     outTotals.resize(outDistributions.size(), 0);
 }
@@ -41,6 +46,10 @@ std::vector<std::weak_ptr<Compartment>> Compartment::getOutCompartments() {
     return outCompartments;
 }
 
+std::vector<std::string> Compartment::getOutCompartmentNames() {
+    return outCompartmentNames;
+}
+
 std::vector<std::shared_ptr<Distribution>> Compartment::getOutDistributions() {
     return outDistributions;
 }
@@ -62,12 +71,31 @@ void Compartment::addOutCompartment(std::weak_ptr<Compartment>& linkedCompOut) {
     this->outCompartments.push_back(linkedCompOut);
 }
 
+void Compartment::addOutCompartmentName(std::string &nameOutComp) {
+    this->outCompartmentNames.push_back(nameOutComp);
+}
+
 void Compartment::addOutWeight(double weight) {
     outWeights.push_back(weight);
 }
 
 size_t Compartment::findCompPosition(std::vector<std::string> &allCompNames) {
     size_t pos = std::find(allCompNames.begin(), allCompNames.end(), compName) - allCompNames.begin();
+    return pos;
+}
+
+bool Compartment::isOutCompAdded(std::string nameOutComp) {
+    bool exist {false};
+    for (auto& outName: outCompartmentNames) {
+        if (nameOutComp == outName) {
+            exist = true;
+        }
+    }
+    return exist;
+}
+
+size_t Compartment::findOutCompPosition(std::string nameOutComp) {
+    size_t pos = std::find(outCompartmentNames.begin(), outCompartmentNames.end(), nameOutComp) - outCompartmentNames.begin();
     return pos;
 }
 
@@ -97,7 +125,7 @@ void Compartment::updateSubCompByDist(long iter, size_t outIndex,
         std::fill(outSubCompartments.begin(), outSubCompartments.end(), 0);
     } else if (outWeights[outIndex] < 1) {
         for (size_t i {0}; i <= startIndex; ++i) {
-            outTotals[outIndex] += subCompartments[startIndex - i] * outDistributions[outIndex]->getTransitionProb(startIndex - i);
+            outTotals[outIndex] += outWeights[outIndex] * subCompartments[startIndex - i] * outDistributions[outIndex]->getTransitionProb(startIndex - i);
             outSubCompartments[startIndex - i] += outWeights[outIndex] * subCompartments[startIndex - i] * outDistributions[outIndex]->getTransitionProb(startIndex - i);
         }
     }
@@ -177,8 +205,8 @@ void Compartment::updateSubCompByMath(long iter, size_t outIndex, std::vector<st
     updateAllCompValuesFromComp(iter, allCompValues, findCompPosition(allCompNames));
 }
 
-void Compartment::updateSubCompByFreq(long iter, size_t outIndex, std::vector<std::string> &allCompNames,
-                                      std::vector<double> &allCompValues) {
+void Compartment::updateSubCompByConst(long iter, size_t outIndex, std::vector<std::string> &allCompNames,
+                                       std::vector<double> &allCompValues) {
 
     double computeValue = outWeights[outIndex] * outDistributions[outIndex]->getTransitionProb(iter);
 
@@ -248,11 +276,12 @@ void Compartment::updateCompartment(long iter, std::vector<std::string>& paramNa
             if (outDistributions[outIndex]->getDistName() == "gamma" ||
                 outDistributions[outIndex]->getDistName() == "weibull" ||
                 outDistributions[outIndex]->getDistName() == "exponential" ||
+                outDistributions[outIndex]->getDistName() == "lognormal" ||
                 outDistributions[outIndex]->getDistName() == "transitionProb" ||
-                outDistributions[outIndex]->getDistName() == "values") {
+                outDistributions[outIndex]->getDistName() == "nonparametric") {
                 updateSubCompByDist(iter, outIndex, allCompNames, allCompValues);
-            } else if (outDistributions[outIndex]->getDistName() == "frequency") {
-                updateSubCompByFreq(iter, outIndex, allCompNames, allCompValues);
+            } else if (outDistributions[outIndex]->getDistName() == "constant") {
+                updateSubCompByConst(iter, outIndex, allCompNames, allCompValues);
             } else {
                 updateSubCompByMath(iter, outIndex, paramNames, paramValues, allCompNames, allCompValues);
             }

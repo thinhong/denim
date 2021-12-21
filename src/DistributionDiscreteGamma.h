@@ -7,18 +7,17 @@
 
 #include "Distribution.h"
 
-class DiscreteGammaDistribution: public Distribution {
+class DistributionDiscreteGamma: public Distribution {
 private:
-    std::string distName {"gamma"};
     double scale {0};
     double shape {0};
     size_t maxDay {0};
     std::vector<double> transitionProb;
     void calcTransitionProb();
 public:
-    DiscreteGammaDistribution(double scale, double shape);
-    explicit DiscreteGammaDistribution(std::vector<double>& cumulativeProb);
-    DiscreteGammaDistribution() = default;
+    DistributionDiscreteGamma(double scale, double shape);
+    explicit DistributionDiscreteGamma(std::vector<double>& cumulativeProb);
+    DistributionDiscreteGamma() = default;
     std::string getDistName() override;
     double getTransitionProb(size_t index) override;
     size_t getMaxDay() override;

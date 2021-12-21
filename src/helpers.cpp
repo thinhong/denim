@@ -27,9 +27,15 @@ void viewModelStructure(std::shared_ptr<Model> model) {
         }
         std::cout << "\n";
 
-        std::cout << "Out compartments: ";
+        std::cout << "Out compartments (derived from pointer): ";
         for (auto& outComp: comp->getOutCompartments()) {
             std::cout << outComp.lock()->getCompName() << " ";
+        }
+        std::cout << "\n";
+
+        std::cout << "Out compartments (direct from outCompartmentNames): ";
+        for (auto& outComp: comp->getOutCompartmentNames()) {
+            std::cout << outComp << " ";
         }
         std::cout << "\n";
 
@@ -81,28 +87,68 @@ std::vector<std::string> checkInitVal(nlohmann::ordered_json &initialValues, nlo
     }
     // Get compNames in the transitions json
     for (auto& transition: transitions.items()) {
-        std::string inCompName;
-        std::string outCompName;
-
         std::string flow = transition.key();
         // Remove whitespace
         flow.erase(remove(flow.begin(), flow.end(), ' '), flow.end());
 
-        unsigned long transitionSymbol_pos = flow.find("->");
-        // Check whether there is a ":" symbol in this flow
-        unsigned long probSymbol_pos = flow.find('*');
+        // We need to extract inComp, outComp from the string
+        std::string inCompName;
+        std::string outCompName;
 
-        // [inComp] [->] [outComp] [:] [prob]
-        // inComp start from position 0 and spread from 0 -> transitionSymbol_pos => length = transitionSymbol_pos - 0 = transitionSymbol_pos
-        inCompName = flow.substr(0, transitionSymbol_pos);
-        if (probSymbol_pos != -1) {
-            outCompName = flow.substr(probSymbol_pos + 1);
+        // Find [->] symbol
+        unsigned long transitionSymbol_pos = flow.find("->");
+
+        // OutCompName is always everything after the [->] symbol
+        outCompName = flow.substr(transitionSymbol_pos + 2);
+
+        //======================== Manage the inCompName part ========================//
+        // Check if there is a [*] symbol
+        if (flow.find('*') == std::string::npos) {
+            inCompName = flow.substr(0, transitionSymbol_pos);
         } else {
-            // If no weight is defined (S -> I), outCompName start from transitionSymbol_pos + 2 and spans to the end
-            outCompName = flow.substr(transitionSymbol_pos + 2);
+            // Find the proportion [*] symbol
+            unsigned long propSymbol_pos = flow.find('*');
+
+            // Get 3 separated strings out of that flow s1 [*] s2 [->] outCompName
+            std::string s1;
+            std::string s2;
+
+            s1 = flow.substr(0, propSymbol_pos);
+            s2 = flow.substr(propSymbol_pos + 1, transitionSymbol_pos - (propSymbol_pos + 1));
+
+            // Check s1 or s2 is number
+            // If both are number
+            if (std::strspn(s1.c_str(), "-.0123456789") == s1.size() &&
+                std::strspn(s2.c_str(), "-.0123456789") == s2.size()) {
+                std::cout << "Compartment name must be string characters, not number" << std::endl;
+            }
+                // If s1 is number and s2 not number
+            else if (std::strspn(s1.c_str(), "-.0123456789") == s1.size()) {
+                inCompName = s2;
+            }
+                // If s2 is number
+            else if (std::strspn(s2.c_str(), "-.0123456789") == s2.size()) {
+                inCompName = s1;
+            }
+                // Else if both are not number
+            else {
+                std::cout << "Proportion must be a number" << std::endl;
+            }
+        }
+
+        //======================== Manage the outCompName part ========================//
+        if (flow.find(',') != std::string::npos) {
+            // Make a vector outComps to store separated outCompName i.e. from "I1, I2, I3" to "I1", "I2", "I3"
+            std::vector<std::string> outComps;
+            std::stringstream outStrings(outCompName);
+            std::string segment;
+            while (std::getline(outStrings, segment, ',')) {
+                compNamesTransition.push_back(segment);
+            }
+        } else {
+            compNamesTransition.push_back(outCompName);
         }
         compNamesTransition.push_back(inCompName);
-        compNamesTransition.push_back(outCompName);
     }
 
     // Sort the two vectors and get unique compNameTransition

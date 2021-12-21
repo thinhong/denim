@@ -5,24 +5,15 @@ Rcpp::DataFrame simcm(std::string inputPath) {
         // ========================== JSON input ==============================
 
     // Read a JSON input file to provide parameters
-    // std::ifstream inputFile(inputPath);
     nlohmann::ordered_json input;
     input = nlohmann::json::parse(inputPath);
-    // inputFile >> input;
 
-        // Record execution time: https://stackoverflow.com/questions/21856025/getting-an-accurate-execution-time-in-c-micro-seconds
+    // Record execution time: https://stackoverflow.com/questions/21856025/getting-an-accurate-execution-time-in-c-micro-seconds
     auto startTime = std::chrono::high_resolution_clock::now();
 
     std::cout << "Reading input file..." << "\n";
 
-    // Initialize parameters: errorTolerance, timeStep and daysFollowUp
-    Distribution::errorTolerance = input["errorTolerance"];
-    if (!input["timeStep"].is_null()) {
-        Distribution::timeStep = input["timeStep"];
-    }
-    Compartment::timesFollowUp = static_cast<size_t>(static_cast<double>(input["daysFollowUp"]) / Distribution::timeStep + 1);
-
-    // Check whether all compartments have initial values
+        // Check whether all compartments have initial values
     try {
         if (!checkInitVal(input["initialValues"], input["transitions"]).empty()) {
             throw 99;
@@ -42,12 +33,30 @@ Rcpp::DataFrame simcm(std::string inputPath) {
         std::exit(EXIT_FAILURE);
     }
 
+    // Then check errorTolerance > 0
+    try {
+        if (input["errorTolerance"] == 0) {
+            throw 99;
+        }
+    }
+    catch (int exCode) {
+        std::cout << "Error: errorTolerance must > 0" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+
+    // Initialize parameters: errorTolerance, timeStep and daysFollowUp
+    Distribution::errorTolerance = input["errorTolerance"];
+    if (!input["timeStep"].is_null()) {
+        Distribution::timeStep = input["timeStep"];
+    }
+    Compartment::timesFollowUp = static_cast<size_t>(static_cast<double>(input["simulationDuration"]) / Distribution::timeStep + 1);
+
     ModelJSON myModel(input["initialValues"], input["parameters"], input["transitions"]);
 
     myModel.getModel()->sortComps();
     myModel.getModel()->initAllComps();
 
-//    // Debug: view model structure
+    // Debug: view model structure
 //    viewModelStructure(myModel.getModel());
 
     std::cout << "Simulating..." << "\n";
@@ -58,7 +67,7 @@ Rcpp::DataFrame simcm(std::string inputPath) {
 
     for (long i {1}; i < Compartment::timesFollowUp; i++) {
         myModel.getModel()->update(i);
-//        // Debug: view each time step update
+        // Debug: view each time step update
 //        viewModelUpdate(myModel.getModel(), i);
     }
 

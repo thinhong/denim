@@ -7,15 +7,14 @@
 
 #include "Distribution.h"
 
-class DiscreteExponentialDistribution: public Distribution {
+class DistributionDiscreteExponential: public Distribution {
 private:
-    std::string distName {"exponential"};
     double rate {0};
     size_t maxDay {0};
     std::vector<double> transitionProb;
     void calcTransitionProb();
 public:
-    explicit DiscreteExponentialDistribution(double rate);
+    explicit DistributionDiscreteExponential(double rate);
     std::string getDistName() override;
     double getTransitionProb(size_t index) override;
     size_t getMaxDay() override;

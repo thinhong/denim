@@ -19,6 +19,7 @@ private:
     // outCompartments: compartments that this state will move out, with pre-defined outDistributions and outWeights,
     // after calculation the final output will be sum into outTotals
     std::vector<std::weak_ptr<Compartment>> outCompartments;
+    std::vector<std::string> outCompartmentNames;
     std::vector<std::shared_ptr<Distribution>> outDistributions;
     std::vector<double> outWeights;
     std::vector<double> outSubCompartments;
@@ -46,6 +47,7 @@ public:
     std::string getCompName();
     std::vector<std::weak_ptr<Compartment>> getInCompartments();
     std::vector<std::weak_ptr<Compartment>> getOutCompartments();
+    std::vector<std::string> getOutCompartmentNames();
     std::vector<std::shared_ptr<Distribution>> getOutDistributions();
     std::vector<double> getOutWeights();
 
@@ -58,12 +60,16 @@ public:
     void addOutWeight(double weight);
     void addInCompartment(std::weak_ptr<Compartment>& linkedCompIn);
     void addOutCompartment(std::weak_ptr<Compartment>& linkedCompOut);
+    void addOutCompartmentName(std::string& nameOutComp);
+    void editOutDistribution(std::string outName, std::shared_ptr<Distribution>& dist);
 
     // subCompartments and outTotals are set after adding all distributions
     void setLengthSubCompartment();
     void setOutValues();
 
     size_t findCompPosition(std::vector<std::string>& allCompNames);
+    bool isOutCompAdded(std::string nameOutComp);
+    size_t findOutCompPosition(std::string nameOutComp);
     void updateAllCompValuesFromComp(long iter, std::vector<double>& allCompValues, size_t pos);
 
     /**
@@ -75,7 +81,7 @@ public:
     void updateSubCompByMath(long iter, size_t outIndex, std::vector<std::string>& paramNames, std::vector<double>& paramValues,
                              std::vector<std::string>& allCompNames, std::vector<double>& allCompValues);
 
-    void updateSubCompByFreq(long iter, size_t outIndex, std::vector<std::string>& allCompNames, std::vector<double>& allCompValues);
+    void updateSubCompByConst(long iter, size_t outIndex, std::vector<std::string>& allCompNames, std::vector<double>& allCompValues);
 
     void updateCompartment(long iter, std::vector<std::string>& paramNames, std::vector<double>& paramValues,
                            std::vector<std::string>& allCompNames, std::vector<double>& allCompValues);

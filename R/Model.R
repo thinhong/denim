@@ -1,9 +1,9 @@
 # Constructor
-newModel <- function(daysFollowUp, errorTolerance, initialValues, 
+newModel <- function(simulationDuration, errorTolerance, initialValues, 
                      parameters, transitions, timeStep = 1) {
   mod <- list()
   
-  mod$daysFollowUp <- daysFollowUp
+  mod$simulationDuration <- simulationDuration
   mod$errorTolerance <- errorTolerance
   mod$timeStep <- timeStep
   mod$initialValues <- initialValues
@@ -16,7 +16,7 @@ newModel <- function(daysFollowUp, errorTolerance, initialValues,
 
 # Model to json
 modelToJson <- function(mod) {
-  dfu <- newJsonKeyPair("daysFollowUp", mod$daysFollowUp)
+  dfu <- newJsonKeyPair("simulationDuration", mod$simulationDuration)
   et <- newJsonKeyPair("errorTolerance", mod$errorTolerance)
   ts <- newJsonKeyPair("timeStep", mod$timeStep)
   ivKeyPairs <- newJsonKeyPair(names(mod$initialValues), mod$initialValues)
