@@ -18,24 +18,24 @@ errorTolerance <- 0.01
 timeStep <- 0.01
 
 initialValues <- c(
-  S = 999,
-  I1 = 1,
-  R = 0,
-  V = 0,
-  I2 = 0
+  S = 999, 
+  I = 1, 
+  R = 0, 
+  V = 0, 
+  VA = 0, 
+  VS = 0
 )
 
 parameters <- c(
-  beta = 0.012,
+  beta = 0.12,
   N = 1000
 )
 
 transitions <- list(
-  "S -> I1" = mathExpression(beta * S * (I1 + I2) / N),
-  "S -> V" = frequency(0.5),
-  "I1 -> R" = weibull(3, 4),
-  "V -> I2" = mathExpression(beta * V * (I1 + I2) / N),
-  "I2 -> R" = gamma(2, 3)
+  "0.3 * S -> I" = mathExpression(beta * S * I / N),
+  "0.7 * S -> V" = constant(0.5),
+  "V -> VA, VS" = multinomial(0.1, 0.6),
+  "I -> R" = gamma(2, 3)
 )
 
 mod <- runSim(daysFollowUp, errorTolerance, initialValues, 
