@@ -13,7 +13,7 @@ remotes::install_github("thinhong/discreteModel")
 ```
 library(discreteModel)
 
-daysFollowUp <- 30
+simulationDuration <- 30
 errorTolerance <- 0.01
 timeStep <- 0.01
 
@@ -38,7 +38,7 @@ transitions <- list(
   "I -> R" = gamma(2, 3)
 )
 
-mod <- runSim(daysFollowUp, errorTolerance, initialValues, 
+mod <- runSim(simulationDuration, errorTolerance, initialValues, 
               parameters, transitions, timeStep)
 ```
 
