@@ -70,20 +70,20 @@ public:
     size_t findCompPosition(std::vector<std::string>& allCompNames);
     bool isOutCompAdded(std::string nameOutComp);
     size_t findOutCompPosition(std::string nameOutComp);
-    void updateAllCompValuesFromComp(long iter, std::vector<double>& allCompValues, size_t pos);
+    void updateAllCompValuesFromComp(size_t iter, std::vector<double>& allCompValues, size_t pos);
 
     /**
      * Update subCompartments and total at each iteration
      * @param iter
      */
-    void updateSubCompByDist(long iter, size_t outIndex, std::vector<std::string>& allCompNames, std::vector<double>& allCompValues);
+    void updateSubCompByDist(size_t iter, size_t outIndex, std::vector<std::string>& allCompNames, std::vector<double>& allCompValues);
 
-    void updateSubCompByMath(long iter, size_t outIndex, std::vector<std::string>& paramNames, std::vector<double>& paramValues,
+    void updateSubCompByMath(size_t iter, size_t outIndex, std::vector<std::string>& paramNames, std::vector<double>& paramValues,
                              std::vector<std::string>& allCompNames, std::vector<double>& allCompValues);
 
-    void updateSubCompByConst(long iter, size_t outIndex, std::vector<std::string>& allCompNames, std::vector<double>& allCompValues);
+    void updateSubCompByConst(size_t iter, size_t outIndex, std::vector<std::string>& allCompNames, std::vector<double>& allCompValues);
 
-    void updateCompartment(long iter, std::vector<std::string>& paramNames, std::vector<double>& paramValues,
+    void updateCompartment(size_t iter, std::vector<std::string>& paramNames, std::vector<double>& paramValues,
                            std::vector<std::string>& allCompNames, std::vector<double>& allCompValues);
 };
 

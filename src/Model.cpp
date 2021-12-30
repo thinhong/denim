@@ -100,7 +100,7 @@ void Model::sortComps() {
     comps = sortedComps;
 }
 
-void Model::update(long iter) {
+void Model::update(size_t iter) {
     for (auto& comp: comps) {
         comp->updateCompartment(iter, paramNames, paramValues,
                                 allCompNames, allCompValues);

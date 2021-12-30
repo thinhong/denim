@@ -65,7 +65,7 @@ Rcpp::DataFrame simcm(std::string inputPath) {
 
     // ==================== Construct and run model ==========================
 
-    for (long i {1}; i < Compartment::timesFollowUp; i++) {
+    for (size_t i {1}; i < Compartment::timesFollowUp; i++) {
         myModel.getModel()->update(i);
         // Debug: view each time step update
 //        viewModelUpdate(myModel.getModel(), i);

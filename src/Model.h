@@ -75,7 +75,7 @@ public:
      * Update subCompartments and total for each compartments in the model
      * @param iter
      */
-    void update(long iter);
+    void update(size_t iter);
 
     /**
      * Get all compartment names from the comps vector and also initial values of allCompValues

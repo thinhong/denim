@@ -99,11 +99,11 @@ size_t Compartment::findOutCompPosition(std::string nameOutComp) {
     return pos;
 }
 
-void Compartment::updateAllCompValuesFromComp(long iter, std::vector<double> &allCompValues, size_t pos) {
+void Compartment::updateAllCompValuesFromComp(size_t iter, std::vector<double> &allCompValues, size_t pos) {
     allCompValues[pos] = compTotal[iter];
 }
 
-void Compartment::updateSubCompByDist(long iter, size_t outIndex,
+void Compartment::updateSubCompByDist(size_t iter, size_t outIndex,
                                       std::vector<std::string>& allCompNames, std::vector<double>& allCompValues) {
     outTotals[outIndex] = 0;
     // Going backward from subCompartments[n] -> subCompartments[1]
@@ -136,7 +136,7 @@ void Compartment::updateSubCompByDist(long iter, size_t outIndex,
     updateAllCompValuesFromComp(iter, allCompValues, findCompPosition(allCompNames));
 }
 
-void Compartment::updateSubCompByMath(long iter, size_t outIndex, std::vector<std::string>& paramNames, std::vector<double>& paramValues,
+void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<std::string>& paramNames, std::vector<double>& paramValues,
                                       std::vector<std::string>& allCompNames, std::vector<double>& allCompValues) {
     mu::Parser parser;
     parser.SetExpr(outDistributions[outIndex]->getDistName());
@@ -205,7 +205,7 @@ void Compartment::updateSubCompByMath(long iter, size_t outIndex, std::vector<st
     updateAllCompValuesFromComp(iter, allCompValues, findCompPosition(allCompNames));
 }
 
-void Compartment::updateSubCompByConst(long iter, size_t outIndex, std::vector<std::string> &allCompNames,
+void Compartment::updateSubCompByConst(size_t iter, size_t outIndex, std::vector<std::string> &allCompNames,
                                        std::vector<double> &allCompValues) {
 
     double computeValue = outWeights[outIndex] * outDistributions[outIndex]->getTransitionProb(iter);
@@ -264,7 +264,7 @@ void Compartment::updateSubCompByConst(long iter, size_t outIndex, std::vector<s
     updateAllCompValuesFromComp(iter, allCompValues, findCompPosition(allCompNames));
 }
 
-void Compartment::updateCompartment(long iter, std::vector<std::string>& paramNames, std::vector<double>& paramValues,
+void Compartment::updateCompartment(size_t iter, std::vector<std::string>& paramNames, std::vector<double>& paramValues,
                                     std::vector<std::string>& allCompNames, std::vector<double>& allCompValues) {
 
     compTotal[iter] = compTotal[iter - 1];
