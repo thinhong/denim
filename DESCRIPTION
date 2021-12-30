@@ -3,13 +3,12 @@ Type: Package
 Title: Simulate discerete time model
 Version: 1.0
 Date: 2021-05-04
-Author: Your Name
+Author: Thinh Phuc Ong
 Maintainer: Thinh Phuc Ong <ongphucthinh@gmail.com>
-Description: One paragraph description of what the package does as one or more full sentences.
+Description: A non-Markovian discerete time model simulation
 License: GPL (>= 2)
-Depends: 
-    Rcpp (>= 1.0.6)
+Imports:
+    Rcpp (>= 1.0.6),
+    ggplot2
 LinkingTo: Rcpp
 RoxygenNote: 7.1.2
-Imports: 
-    ggplot2
