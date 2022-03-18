@@ -27,8 +27,8 @@ checkInitsTransitions <- function(initialValues, transitions) {
 }
 
 #' @export
-runSim <- function(simulationDuration, errorTolerance, initialValues, 
-                   parameters, transitions, timeStep = 1) {
+runSim <- function(transitions, initialValues, parameters, 
+                   simulationDuration, timeStep = 1, errorTolerance = 0.001) {
   
   # First check their inputs
   # checkInitsTransitions(initialValues, transitions)

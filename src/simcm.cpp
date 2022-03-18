@@ -53,7 +53,8 @@ Rcpp::DataFrame simcm(std::string inputPath) {
 
     ModelJSON myModel(input["initialValues"], input["parameters"], input["transitions"]);
 
-    myModel.getModel()->sortComps();
+    // We sort the comps with order defined by input transition
+    myModel.getModel()->sortCompsByInputTransition();
     myModel.getModel()->initAllComps();
 
     // Debug: view model structure

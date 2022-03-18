@@ -1,0 +1,241 @@
+---
+title: "come"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{come}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.align="center"
+)
+library(DiagrammeR) # for flowchart diagram
+library(ggplot2)
+```
+
+```{r setup}
+library(discreteModel)
+```
+
+## 1. Simple SIR model with gamma distribution length of stay
+
+The SIR model use three compartments S (susceptible), I (infected), R (recovered) to describe clinical status of individuals. We use the most simple form of SIR model to demonstrate how to define length of stay distribution.
+
+<center>
+```{r, echo=FALSE}
+DiagrammeR::grViz("digraph {
+  graph [layout = dot, rankdir = LR]
+  
+  node [shape = rectangle]
+  
+  S -> I [label = '&#946;SI/N']
+  I -> R [label = '&#947;I']
+  }",
+  height = 100)
+```
+</center>
+
+The model equations are:
+
+$$S_{t+1} - S_{t} = -\lambda S_{t} = -\frac{\beta I_{t}}{N}S_{t}$$
+$$I_{t+1} - I_{t} = \frac{\beta I_{t}}{N}S_{t} - \gamma I_{t}$$
+$$R_{t+1} - R_{t} = \gamma I_{t}$$
+
+* $N$: total population size, $N = S + I + R$
+* $\beta$: the product of contact rates and transmission probability; usually we define $\lambda =\frac{\beta I_{t}}{N}$ as the force of infection
+* $\gamma$: recovery rate
+
+Usually to solve the model easier we make an assumption that the recovery rate $\gamma$ is constant, this will leads to an exponentially distributed length of stay i.e most individuals recover after 1 day being infected.
+
+```{r, echo=FALSE, fig.width = 4}
+rates <- c(0.5, 1, 1.5)
+x <- seq(0, 5, 0.001)
+y <- dexp(x = x, rate = rates[1])
+y2 <- dexp(x = x, rate = rates[2])
+y3 <- dexp(x = x, rate = rates[3])
+
+df <- data.frame(x = rep(x, 3), 
+                 y = c(y, y2, y3), 
+                 z = c(rep("0.5", length(x)), rep("1.0", length(x)), rep("1.5", length(x))))
+ggplot(df, aes(x, y = y, color = z)) + 
+  geom_line(size = 1.1) +
+  scale_color_manual(values = c("#374F77", "#EF9F32", "#6ECBD7")) +
+  xlab("Length of Stay (days)") + ylab(NULL) +
+  theme_minimal() +
+  theme(legend.position = c(0.8, 0.8), legend.title = element_blank())
+```
+
+A more realistic length of stay distribution can look like this, of which most patients recovered after 4 days. We defined this using a gamma distribution with shape = 3 and scale = 2.
+
+```{r, echo=FALSE, fig.width = 4}
+x <- seq(0, 20, 0.001)
+y <- dgamma(x = x, shape = 3, scale = 2)
+
+df <- data.frame(x = x, 
+                 y = y)
+ggplot(df, aes(x, y = y)) + 
+  geom_line(size = 1.1, color = "#374F77") +
+  xlab("Length of Stay (days)") + ylab(NULL) +
+  theme_minimal()
+```
+
+The model now look like this:
+
+<center>
+```{r, echo=FALSE}
+DiagrammeR::grViz("digraph {
+  graph [layout = dot, rankdir = LR]
+  
+  node [shape = rectangle]
+  
+  S -> I [label = '&#946;SI/N']
+  I -> R [label = 'gamma(3, 2)']
+  }",
+  height = 120)
+```
+</center>
+
+**Model specification**
+
+*Model transition*
+
+<center>
+```{r, echo=FALSE}
+DiagrammeR::grViz("digraph {
+  graph [layout = dot, rankdir = LR]
+  
+  node [shape = rectangle]
+  
+  S -> I [label = '&#946;SI/N']
+  I -> R [label = 'gamma(3, 2)']
+  }",
+  height = 120)
+```
+</center>
+
+We have two transitions `S -> I` and `I -> R` in this case. The transitions are specified in a list follow this format `"transition" = equation`, of which equation is defined with one of our functions for waiting time distribution.
+
+```{r}
+transitions <- list(
+  "S -> I" = mathExpression(beta * S * I / N),
+  "I -> R" = gamma(3, 2)
+)
+```
+
+*Initial state*
+
+Use a vector to define the compartments with their assigned names and initial values in the format `compartment_name = initial_value`:
+
+```{r}
+initialValues <- c(
+  S = 999, 
+  I = 1, 
+  R = 0
+)
+```
+
+*Model parameters*
+
+If we use a math expression, any symbols except the compartment names are parameters, and would be defined by constant values. There are two constant parameters in our example: `beta` and `N`:
+
+```{r}
+parameters <- c(
+  beta = 0.012,
+  N = 1000
+)
+```
+
+**Model application**
+
+*Time step specification*
+
+We run the model for 30 days and give output at 0.01 daily intervals. The default interval (time step) is 1 if not declared explicitly.
+
+```{r}
+simulationDuration <- 30
+timeStep <- 0.01
+```
+
+```{r, fig.width = 6}
+mod <- runSim(transitions = transitions, 
+              initialValues = initialValues, 
+              parameters = parameters, 
+              simulationDuration = simulationDuration, 
+              timeStep = timeStep)
+head(mod)
+plot(mod)
+```
+
+## 2. How our package work?
+
+In the initial SIR model, all infected individuals are presented by a single compartment I and have the same recovery rate $\gamma$.
+
+<center>
+```{r, echo=FALSE}
+DiagrammeR::grViz("digraph {
+  graph [layout = dot, rankdir = LR]
+  
+  node [shape = rectangle]
+  
+  S -> I [label = '&#946;SI/N']
+  I -> R [label = '&#947;I']
+  }",
+  height = 120)
+```
+</center>
+
+We want the recovery rate of individuals who had been infected for 1 day differ from the recovery rate of 2-day infected patients. So rather than using one compartment for infected (I), we define multiple infected sub-compartments. The number of sub-compartments depends on the maximum day we expect all infected individuals would be recovered.
+
+For example, if we expect a disease with a maximum 4 days of infection, we will end up with 4 sub-compartments. Each sub-compartment has its own recovery rate $\gamma_{1}$, $\gamma_{2}$, $\gamma_{3}$, $\gamma_{4}$. 
+
+<center>
+```{r, echo=FALSE}
+DiagrammeR::grViz("digraph {
+  graph [layout = dot, rankdir = LR]
+  
+  node [shape = rectangle]
+  
+  S -> I1 [label = '&#946;S(I@_{1} + I@_{2} + I@_{3} + I@_{4})/N']
+  I1 -> R [label = '&#947;@_{1}I@_{1}']
+  I2 -> R [label = '&#947;@_{2}I@_{2}']
+  I3 -> R [label = '&#947;@_{3}I@_{3}']
+  I4 -> R [label = 'I@_{4}']
+  I1 -> I2 [label = '(1-&#947;@_{1})I@_{1}']
+  I2 -> I3 [label = '(1-&#947;@_{2})I@_{2}']
+  I3 -> I4 [label = '(1-&#947;@_{3})I@_{3}']
+  }", height = "100%", width = "100%")
+```
+</center>
+
+## 2. Waiting time distribution
+
+Current available distribution in this package including:
+
+* `exponential(rate)`
+* `gamma(scale, shape)`
+* `weibull(scale, shape)`
+`mathExpression(expression)`: user-defined math expression, the expression can be put inside "" or not, e.g mathExpression(beta * S * I / N) or mathExpression("beta * S * I / N") are both acceptable
+`frequency(frequency)`: a fixed number of individuals per time step, e.g "S -> V" = frequency(50) means 50 people got vaccinated per day
+`transitionProb(transitionProb)`: define a transition probability instead of waiting time distribution, this is the conventional dR/dt = gamma * I which we input by "I -> R" = transitionProb(gamma)
+
+
+`values(waitingTimes...)`: a vector of values, could be numbers, percentages, density based on real data distribution
+
+## 3. Multiple distributions
+
+```{r, echo=FALSE}
+DiagrammeR::grViz("digraph {
+  graph [layout = dot, rankdir = LR]
+  
+  node [shape = rectangle]
+  
+  S -> I [label = <&#946;>]
+  I -> R [label = 'gamma(3, 2)']
+  I -> V [label = 'gamma(2, 3)']
+  }",
+  height = 100)
+```

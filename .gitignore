@@ -7,3 +7,4 @@
 /src/*.dll
 /R/.Rhistory
 /R/downloadGithub.R
+inst/doc
