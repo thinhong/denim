@@ -5,6 +5,7 @@
 #ifndef MAIN_CPP_MODELJSON_H
 #define MAIN_CPP_MODELJSON_H
 
+#include <cstring>
 #include <memory>
 #include <sstream>
 #include "json.h"

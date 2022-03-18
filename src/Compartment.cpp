@@ -117,8 +117,8 @@ void Compartment::updateSubCompByDist(size_t iter, size_t outIndex,
     // Put if outside to check condition only once
     if (outWeights[outIndex] == 1) {
         for (size_t i {0}; i <= startIndex; ++i) {
-            outTotals[outIndex] += subCompartments[startIndex - i] * outDistributions[outIndex]->getTransitionProb(startIndex - i);
             subCompartments[startIndex - i] -= outSubCompartments[startIndex - i];
+            outTotals[outIndex] += subCompartments[startIndex - i] * outDistributions[outIndex]->getTransitionProb(startIndex - i);
             subCompartments[startIndex - i] *= (1 - outDistributions[outIndex]->getTransitionProb(startIndex - i));
         }
         // After finishing, clean the outSubCompartments vector

@@ -80,6 +80,9 @@ ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_js
             }
         }
 
+        // Add the inComp to compsOrder
+        model->addCompsOrder(inCompName);
+
         //======================== Manage the outCompName part ========================//
         // Special scenario "multinomial": outCompName is a string of multiple names separated by [,], e.g. "I1, I2, I3"
         if (distributionConfig["distribution"] == "multinomial") {
@@ -105,10 +108,16 @@ ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_js
 
                 std::shared_ptr<Distribution> transitionProb = std::make_shared<DistributionTransitionProb>(1);
                 inComp.lock()->addOutDistribution(transitionProb);
+
+                // Add the outComp to compsOrder
+                model->addCompsOrder(outComps[i]);
             }
         }
         // If not, continue to use outCompName as normal
         else {
+            // Add the outComp to compsOrder
+            model->addCompsOrder(outCompName);
+
             std::weak_ptr<Compartment> inComp = model->getAddressFromName(inCompName);
             std::weak_ptr<Compartment> outComp = model->getAddressFromName(outCompName);
 

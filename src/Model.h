@@ -21,16 +21,8 @@ private:
     std::vector<std::string> allCompNames;
     std::vector<double> allCompValues;
 
-    /**
-     * Contains weak pointers to all models, including itself, with corresponding contact probability stored at the
-     * same indices in vector linkedContactRates
-     */
-    std::vector<std::weak_ptr<Model>> linkedModels;
+    std::vector<std::string> compsOrder;
 
-    /**
-     * Contain the contact probabilities that corresponds to the same indices in linkedModels
-     */
-    std::vector<double> linkedContactRates;
 public:
     // Model structure and infectious compartment are the same for all models for a disease
     std::vector<std::string> transitions;
@@ -58,18 +50,7 @@ public:
      */
     int getIndex(std::shared_ptr<Compartment> comp);
 
-    // Functions to check cycle and sort compartments to the correct order
-    // Use depth-first-search algorithm to detect cycle https://www.geeksforgeeks.org/detect-cycle-in-a-graph/
-    bool checkCycleHelper(size_t i, std::vector<bool>& visited, std::vector<bool>& recursiveStack);
-    void checkCycle();
-    // Then we sort the compartments using topological sorting algorithm https://www.geeksforgeeks.org/topological-sorting/
-    void sortCompsHelper(size_t i, std::vector<bool>& visited, std::stack<std::shared_ptr<Compartment>>& stack);
-    /**
-     * <b>sortComps()</b> comprises of many helper functions (<b>checkCycleHelper()</b>, <b>checkCycle()</b> and
-     * <b>sortCompsHelper()</b>), it will first make sure that there is no cycle in the model, then perform topological
-     * sorting algorithm
-     */
-    void sortComps();
+    void sortCompsByInputTransition();
 
     /**
      * Update subCompartments and total for each compartments in the model
@@ -81,6 +62,13 @@ public:
      * Get all compartment names from the comps vector and also initial values of allCompValues
      */
     void initAllComps();
+
+    void addCompsOrder(std::string compOrder);
+    void getCompsOrder(){
+        for (auto& compOrder: compsOrder) {
+            std::cout << compOrder << " ";
+        }
+    };
 
     /**
      * Helper function to update allCompValues after each iteration

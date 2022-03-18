@@ -13,6 +13,12 @@ class Compartment {
 private:
     std::string compName;
 
+    // The length of subCompartments is the maximum length of vector transitionProb in outDistributions
+    std::vector<double> subCompartments;
+
+    // total: the sum of all subCompartments
+    std::vector<double> compTotal;
+
     // inCompartments: compartments that will move in to this state
     std::vector<std::weak_ptr<Compartment>> inCompartments;
 
@@ -24,12 +30,6 @@ private:
     std::vector<double> outWeights;
     std::vector<double> outSubCompartments;
     std::vector<double> outTotals;
-
-    // The length of subCompartments is the maximum length of vector transitionProb in outDistributions
-    std::vector<double> subCompartments;
-
-    // total: the sum of all subCompartments
-    std::vector<double> compTotal;
 
 public:
     static inline size_t timesFollowUp {200};
