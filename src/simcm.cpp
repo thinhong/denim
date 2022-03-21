@@ -6,7 +6,7 @@ Rcpp::DataFrame simcm(std::string inputPath) {
 
     // Read a JSON input file to provide parameters
     nlohmann::ordered_json input;
-    input = nlohmann::json::parse(inputPath);
+    input = nlohmann::ordered_json::parse(inputPath);
 
     // Record execution time: https://stackoverflow.com/questions/21856025/getting-an-accurate-execution-time-in-c-micro-seconds
     auto startTime = std::chrono::high_resolution_clock::now();
