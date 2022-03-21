@@ -22,15 +22,15 @@ initialValues <- c(
 )
 
 parameters <- c(
-  beta = 0.012,
+  beta = 0.12,
   N = 1000
 )
 
 transitions <- list(
   "0.3 * S -> I" = mathExpression(beta * S * (I + IV) / N),
   "0.7 * S -> V" = constant(2),
-  "I -> R" = gamma(2, 3),
-  "V -> IV" = mathExpression(beta * 0.1 * V * (I + IV) / N),
+  "I -> R" = gamma(3, 2),
+  "V -> IV" = mathExpression(beta * 0.3 * V * (I + IV) / N),
   "IV -> R" = exponential(2)
 )
 

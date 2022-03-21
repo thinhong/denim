@@ -259,9 +259,11 @@ void Compartment::updateSubCompByConst(size_t iter, size_t outIndex, std::vector
         for (size_t i_subComp {0}; i_subComp < subCompartments.size(); ++i_subComp) {
             sumSubComp += subCompartments[i_subComp];
         }
-        double outPct = outTotals[outIndex] / sumSubComp;
-        for (size_t i_subComp {0}; i_subComp < subCompartments.size(); ++i_subComp) {
-            outSubCompartments[i_subComp] += outPct * subCompartments[i_subComp];
+        if (sumSubComp > 0) {
+            double outPct = outTotals[outIndex] / sumSubComp;
+            for (size_t i_subComp {0}; i_subComp < subCompartments.size(); ++i_subComp) {
+                outSubCompartments[i_subComp] += outPct * subCompartments[i_subComp];
+            }
         }
     }
 
