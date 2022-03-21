@@ -4,6 +4,8 @@
 
 #include "ModelJSON.h"
 
+
+
 ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_json &parameters, nlohmann::ordered_json &transitions) {
 
     // Set parameters with parameters json
@@ -23,6 +25,9 @@ ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_js
         allCompartments.push_back(comp);
     }
     model->addCompsFromConfig(allCompartments);
+
+    std::vector<std::string> allInCompNames;
+    std::vector<std::string> allOutCompNames;
 
     // Then add other compartment attributes with the transitions json
     for (auto& transition: transitions.items()) {
@@ -80,8 +85,8 @@ ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_js
             }
         }
 
-        // Add the inComp to compsOrder
-        model->addCompsOrder(inCompName);
+        // Add this inComp to the allInCompNames vector
+        allInCompNames.push_back(inCompName);
 
         //======================== Manage the outCompName part ========================//
         // Special scenario "multinomial": outCompName is a string of multiple names separated by [,], e.g. "I1, I2, I3"
@@ -110,13 +115,13 @@ ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_js
                 inComp.lock()->addOutDistribution(transitionProb);
 
                 // Add the outComp to compsOrder
-                model->addCompsOrder(outComps[i]);
+                allOutCompNames.push_back(outComps[i]);
             }
         }
         // If not, continue to use outCompName as normal
         else {
             // Add the outComp to compsOrder
-            model->addCompsOrder(outCompName);
+            allOutCompNames.push_back(outCompName);
 
             std::weak_ptr<Compartment> inComp = model->getAddressFromName(inCompName);
             std::weak_ptr<Compartment> outComp = model->getAddressFromName(outCompName);
@@ -224,6 +229,14 @@ ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_js
         }
         comp->setLengthSubCompartment();
         comp->setOutValues();
+    }
+
+    // Add compOrder: allInCompNames first, and then allOutCompNames
+    for (auto& inName: allInCompNames) {
+        model->addCompsOrder(inName);
+    }
+    for (auto& outName: allOutCompNames) {
+        model->addCompsOrder(outName);
     }
 }
 

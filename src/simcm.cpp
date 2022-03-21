@@ -11,8 +11,6 @@ Rcpp::DataFrame simcm(std::string inputPath) {
     // Record execution time: https://stackoverflow.com/questions/21856025/getting-an-accurate-execution-time-in-c-micro-seconds
     auto startTime = std::chrono::high_resolution_clock::now();
 
-    std::cout << "Reading input file..." << "\n";
-
         // Check whether all compartments have initial values
     try {
         if (!checkInitVal(input["initialValues"], input["transitions"]).empty()) {

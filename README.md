@@ -13,33 +13,32 @@ remotes::install_github("thinhong/discreteModel")
 ```
 library(discreteModel)
 
-simulationDuration <- 30
-errorTolerance <- 0.01
-timeStep <- 0.01
-
 initialValues <- c(
   S = 999, 
   I = 1, 
   R = 0, 
   V = 0, 
-  VA = 0, 
-  VS = 0
+  IV = 0
 )
 
 parameters <- c(
-  beta = 0.12,
+  beta = 0.012,
   N = 1000
 )
 
 transitions <- list(
-  "0.3 * S -> I" = mathExpression(beta * S * I / N),
-  "0.7 * S -> V" = constant(0.5),
-  "V -> VA, VS" = multinomial(0.1, 0.6),
-  "I -> R" = gamma(2, 3)
+  "0.3 * S -> I" = mathExpression(beta * S * (I + IV) / N),
+  "0.7 * S -> V" = constant(2),
+  "I -> R" = gamma(2, 3),
+  "V -> IV" = mathExpression(beta * 0.1 * V * (I + IV) / N),
+  "IV -> R" = exponential(2)
 )
 
-mod <- runSim(simulationDuration, errorTolerance, initialValues, 
-              parameters, transitions, timeStep)
+simulationDuration <- 10
+timeStep <- 0.01
+
+mod <- runSim(transitions = transitions, initialValues = initialValues, parameters = parameters, 
+              simulationDuration = simulationDuration, timeStep = timeStep)
 ```
 
 Here we have to define:

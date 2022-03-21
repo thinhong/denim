@@ -183,9 +183,11 @@ void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<
         for (size_t i_subComp {0}; i_subComp < subCompartments.size(); ++i_subComp) {
             sumSubComp += subCompartments[i_subComp];
         }
-        double remainPct = (sumSubComp - outTotals[outIndex]) / sumSubComp;
-        for (size_t i_subComp {0}; i_subComp < subCompartments.size(); ++i_subComp) {
-            subCompartments[i_subComp] *= remainPct;
+        if (sumSubComp > 0) {
+            double remainPct = (sumSubComp - outTotals[outIndex]) / sumSubComp;
+            for (size_t i_subComp {0}; i_subComp < subCompartments.size(); ++i_subComp) {
+                subCompartments[i_subComp] *= remainPct;
+            }
         }
     } else if (outWeights[outIndex] < 1) {
         // If weight < 1 then perform it on the outSubCompartments
@@ -193,9 +195,12 @@ void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<
         for (size_t i_subComp {0}; i_subComp < subCompartments.size(); ++i_subComp) {
             sumSubComp += subCompartments[i_subComp];
         }
-        double outPct = outTotals[outIndex] / sumSubComp;
-        for (size_t i_subComp {0}; i_subComp < subCompartments.size(); ++i_subComp) {
-            outSubCompartments[i_subComp] += outPct * subCompartments[i_subComp];
+        // Because sumSubComp is the denominator, sumSubComp = 0 this formula returns error (not a number)
+        if (sumSubComp > 0) {
+            double outPct = outTotals[outIndex] / sumSubComp;
+            for (size_t i_subComp {0}; i_subComp < subCompartments.size(); ++i_subComp) {
+                outSubCompartments[i_subComp] += outPct * subCompartments[i_subComp];
+            }
         }
     }
 
@@ -208,7 +213,7 @@ void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<
 void Compartment::updateSubCompByConst(size_t iter, size_t outIndex, std::vector<std::string> &allCompNames,
                                        std::vector<double> &allCompValues) {
 
-    double computeValue = outWeights[outIndex] * outDistributions[outIndex]->getTransitionProb(iter);
+    double computeValue = outDistributions[outIndex]->getTransitionProb(iter);
 
     double sumOutTotal {0};
     for (auto& outTotal: outTotals) {
@@ -217,10 +222,10 @@ void Compartment::updateSubCompByConst(size_t iter, size_t outIndex, std::vector
 
     // To prevent a compartment being negative, only use this value if it + sum of
     // previous out total <= the compTotal of previous iteration
-    if (computeValue + sumOutTotal <= compTotal[iter - 1]) {
+    if (computeValue + sumOutTotal <= (compTotal[iter - 1] * outWeights[outIndex])) {
         outTotals[outIndex] = computeValue;
     } else {
-        outTotals[outIndex] = compTotal[iter - 1] - sumOutTotal;
+        outTotals[outIndex] = (compTotal[iter - 1] * outWeights[outIndex]) - sumOutTotal;
     }
 
     // If outWeight = 1 then calculate directly in the subCompartment
@@ -242,9 +247,11 @@ void Compartment::updateSubCompByConst(size_t iter, size_t outIndex, std::vector
         for (size_t i_subComp {0}; i_subComp < subCompartments.size(); ++i_subComp) {
             sumSubComp += subCompartments[i_subComp];
         }
-        double remainPct = (sumSubComp - outTotals[outIndex]) / sumSubComp;
-        for (size_t i_subComp {0}; i_subComp < subCompartments.size(); ++i_subComp) {
-            subCompartments[i_subComp] *= remainPct;
+        if (sumSubComp > 0) {
+            double remainPct = (sumSubComp - outTotals[outIndex]) / sumSubComp;
+            for (size_t i_subComp {0}; i_subComp < subCompartments.size(); ++i_subComp) {
+                subCompartments[i_subComp] *= remainPct;
+            }
         }
     } else if (outWeights[outIndex] < 1) {
         // If weight < 1 then perform it on the outSubCompartments
