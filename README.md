@@ -1,4 +1,4 @@
-# denim <img src='man/figures/denim_sticker.png' align="right" height="139" />
+# denim <img src='man/figures/logo.png' align="right" height="139" />
 An R package for simulating deterministic discrete-time model with memory.
 
 ## Installation
