@@ -23,6 +23,7 @@ public:
      * @return
      */
     double calcTransitionProbHelper(std::vector<double> waitingTime, size_t i);
+    virtual ~Distribution() = 0;
 };
 
 #endif //MAIN_CPP_DISTRIBUTION_H

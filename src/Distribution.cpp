@@ -20,3 +20,5 @@ double Distribution::calcTransitionProbHelper(std::vector<double> waitingTime, s
     }
     return prob_i;
 }
+
+Distribution::~Distribution() {};

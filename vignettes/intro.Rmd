@@ -1,8 +1,8 @@
 ---
-title: "come"
+title: "denim: deterministic discrete time model with memory"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{come}
+  %\VignetteIndexEntry{denim}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -35,7 +35,7 @@ DiagrammeR::grViz("digraph {
   S -> I [label = '&#946;SI/N']
   I -> R [label = '&#947;I']
   }",
-  height = 100)
+  height = "100%")
 ```
 </center>
 
@@ -95,7 +95,7 @@ DiagrammeR::grViz("digraph {
   S -> I [label = '&#946;SI/N']
   I -> R [label = 'gamma(3, 2)']
   }",
-  height = 120)
+  width = 330, height = "100%")
 ```
 </center>
 
@@ -113,7 +113,7 @@ DiagrammeR::grViz("digraph {
   S -> I [label = '&#946;SI/N']
   I -> R [label = 'gamma(3, 2)']
   }",
-  height = 120)
+  width = 330, height = "100%")
 ```
 </center>
 
@@ -170,9 +170,9 @@ head(mod)
 plot(mod)
 ```
 
-## 2. How our package work?
+## 2. How the algorithm work?
 
-In the initial SIR model, all infected individuals are presented by a single compartment I and have the same recovery rate $\gamma$.
+In the SIR model, all infected individuals are presented by a single compartment I and have the same recovery rate $\gamma$.
 
 <center>
 ```{r, echo=FALSE}
@@ -184,13 +184,13 @@ DiagrammeR::grViz("digraph {
   S -> I [label = '&#946;SI/N']
   I -> R [label = '&#947;I']
   }",
-  height = 120)
+  height = "100%")
 ```
 </center>
 
 We want the recovery rate of individuals who had been infected for 1 day differ from the recovery rate of 2-day infected patients. So rather than using one compartment for infected (I), we define multiple infected sub-compartments. The number of sub-compartments depends on the maximum day we expect all infected individuals would be recovered.
 
-For example, if we expect a disease with a maximum 4 days of infection, we will end up with 4 sub-compartments. Each sub-compartment has its own recovery rate $\gamma_{1}$, $\gamma_{2}$, $\gamma_{3}$, $\gamma_{4}$. 
+For example, if we expect a disease with a maximum 4 days of infection, we will end up with 4 sub-compartments. Each sub-compartment has its own recovery rate $\gamma_{1}$, $\gamma_{2}$, $\gamma_{3}$, $\gamma_{4}$. At day 4 it is certain that the patient will recover (because we assume that this disease has a maximum 4 days of infection), $\gamma_{4} = 1$.
 
 <center>
 ```{r, echo=FALSE}
@@ -200,10 +200,10 @@ DiagrammeR::grViz("digraph {
   node [shape = rectangle]
   
   S -> I1 [label = '&#946;S(I@_{1} + I@_{2} + I@_{3} + I@_{4})/N']
-  I1 -> R [label = '&#947;@_{1}I@_{1}']
-  I2 -> R [label = '&#947;@_{2}I@_{2}']
-  I3 -> R [label = '&#947;@_{3}I@_{3}']
-  I4 -> R [label = 'I@_{4}']
+  I1 -> R1 [label = '&#947;@_{1}I@_{1}']
+  I2 -> R2 [label = '&#947;@_{2}I@_{2}']
+  I3 -> R3 [label = '&#947;@_{3}I@_{3}']
+  I4 -> R4 [label = 'I@_{4}']
   I1 -> I2 [label = '(1-&#947;@_{1})I@_{1}']
   I2 -> I3 [label = '(1-&#947;@_{2})I@_{2}']
   I3 -> I4 [label = '(1-&#947;@_{3})I@_{3}']
@@ -211,31 +211,79 @@ DiagrammeR::grViz("digraph {
 ```
 </center>
 
-## 2. Waiting time distribution
+Let $R_1 + R_2 + R_3 + R_4 = \Sigma R$. We have $\frac{R_1}{\Sigma R} = p_1$, $\frac{R_2}{\Sigma R} = p_2$, $\frac{R_3}{\Sigma R} = p_3$, $\frac{R_4}{\Sigma R} = p_4$. Our mission is to estimate $\gamma_{1}$, $\gamma_{2}$, $\gamma_{3}$ to obtain $p_1$, $p_2$, $p_3$, $p_4$ that fit a pre-defined distribution at the equilibrium state. This can be obtained by setting:
+
+$$\gamma_{i} = \frac{p_i}{1 - \sum_{j=1}^{i-1}p_j}$$
+
+For a given length of stay distribution, we identify the maximum length of stay using its cumulative distribution function. Because cumulative distribution function is asymptotic to 1 and never equal to 1, we need to set a value that is acceptable to be rounded to 1. If we want a cumulative probability of 0.999 to be rounded as 1, we set the error tolerance threshold as `1 - 0.999 = 0.001` (specified by the argument `errorTolerance = 0.001`), .
+
+## 3. Waiting time distribution
 
 Current available distribution in this package including:
 
-* `exponential(rate)`
-* `gamma(scale, shape)`
-* `weibull(scale, shape)`
-`mathExpression(expression)`: user-defined math expression, the expression can be put inside "" or not, e.g mathExpression(beta * S * I / N) or mathExpression("beta * S * I / N") are both acceptable
-`frequency(frequency)`: a fixed number of individuals per time step, e.g "S -> V" = frequency(50) means 50 people got vaccinated per day
-`transitionProb(transitionProb)`: define a transition probability instead of waiting time distribution, this is the conventional dR/dt = gamma * I which we input by "I -> R" = transitionProb(gamma)
+* `exponential(rate)`: Exponential distribution
+* `gamma(scale, shape)`: Gamma distribution
+* `weibull(scale, shape)`: Weibull distribution
+* `lognormal(mu, sigma)`: Log-normal distribution
+* `mathExpression(expression)`: User-defined math expression, the expression can be put inside `""` or not, e.g `mathExpression(beta * S * I / N)` or `mathExpression("beta * S * I / N")` are both acceptable
+* `constant(x)`: A fixed number of individuals moving per time step, e.g `"S -> V" = constant(50)` means 50 people got vaccinated per day
+* `transitionProb(transitionProb)`: Every time step a fixed percentage of the left compartment transit to the right compartment, this is the conventional $R_t - R_{t-1} = \gamma I$ which we input by `"I -> R" = transitionProb(gamma)`
+* `nonparametric(waitingTimes...)`: A vector of values, could be numbers, percentages, density of the length of stay based on real data
+* `multinomial(probabilities)`: 
 
+## 4. Multiple transitions from a compartment
 
-`values(waitingTimes...)`: a vector of values, could be numbers, percentages, density based on real data distribution
+We have many ways to define the type of transition when there are two or more transitions from a compartment. Consider this example:
 
-## 3. Multiple distributions
-
+<center>
 ```{r, echo=FALSE}
 DiagrammeR::grViz("digraph {
   graph [layout = dot, rankdir = LR]
   
   node [shape = rectangle]
   
-  S -> I [label = <&#946;>]
-  I -> R [label = 'gamma(3, 2)']
-  I -> V [label = 'gamma(2, 3)']
+  S -> I [label = '&#946;SI/N']
+  S -> V [label = 'constant(5)']
+  I -> R [label = '0.9 -> gamma(3, 2)']
+  I -> D [label = '0.1 -> lognormal(2, 0.5)']
   }",
-  height = 100)
+  width = 400, height = "100%")
 ```
+</center>
+
+There are two scenarios in this example:
+
+* Susceptible individuals can be infected or vaccinated. The assumption here is they will be infected first (`S -> I`), and then the rest of them who were not infected will get vaccinated (`S -> V`).
+* Infected individuals can recover or die. If the mortality probability is known, we can implement it into the model, for example by defining `0.9 * I -> R` (90% individuals will recover) and then `0.1 * I -> D` (10% of them die). By doing so, we ensure that the mortality probability is 10%, while also define the length of stay of individuals at the infected state before recover or die follows gamma or log-normal distribution, respectively.
+
+## 5. A more complex example
+
+<center>
+```{r, echo=FALSE}
+DiagrammeR::grViz("digraph {
+  graph [layout = dot, rankdir = LR]
+  
+  node [shape = rectangle]
+  
+  S -> I [label = '&#946;S(I + IV)/N']
+  S -> V [label = 'constant(2)']
+  I -> D [label = '0.1 -> lognormal(2, 0.5)']
+  I -> R [label = '0.9 -> gamma(3, 2)']
+  V -> IV [label = '0.1 * &#946;S(I + IV)/N']
+  IV -> R [label = 'exponential(2)']
+  }",
+  width = 600, height = "100%")
+```
+</center>
+
+```{r}
+transitions <- list(
+  "S -> I" = mathExpression(beta * S * (I + IV) / N),
+  "S -> V" = constant(2),
+  "0.1 * I -> D" = gamma(3, 2),
+  "0.9 * I -> R" = gamma(3, 2),
+  "V -> IV" = mathExpression(0.1 * beta * V * (I + IV) / N),
+  "IV -> R" = exponential(2)
+)
+```
+
