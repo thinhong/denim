@@ -325,7 +325,7 @@ DiagrammeR::grViz("digraph {
   S -> V [label = 'constant(2)']
   I -> D [label = '0.1 -> lognormal(2, 0.5)']
   I -> R [label = '0.9 -> gamma(3, 2)']
-  V -> IV [label = '0.1 * &#946;S(I + IV)/N']
+  V -> IV [label = '0.1 * &#946;V(I + IV)/N']
   IV -> R [label = 'exponential(2)']
   }",
   width = 600, height = "100%")

@@ -1,6 +1,10 @@
 # denim <img src='man/figures/logo.png' align="right" height="139" />
 An R package for simulating deterministic discrete-time model with memory.
 
+<!-- badges: start -->
+  [![R-CMD-check](https://github.com/thinhong/discreteModel/workflows/R-CMD-check/badge.svg)](https://github.com/thinhong/discreteModel/actions)
+<!-- badges: end -->
+
 ## Installation
 Use `install_github()` to install this package
 ```
