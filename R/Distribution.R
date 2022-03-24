@@ -139,14 +139,14 @@ print.Distribution <- function(x) {
   } 
   else if (x$distribution == "nonparametric") {
     cat("Waiting time values: ")
-    wt <- head(x$waitingTime, 5)
+    wt <- utils::head(x$waitingTime, 5)
     wt <- paste0(wt, collapse = ", ")
     cat(wt, sep = "")
     if (length(x$waitingTime) > 5) cat("...")
   } 
   else if (x$distribution == "multinomial") {
     cat("Probabilities: ")
-    wt <- head(x$probabilities, 5)
+    wt <- utils::head(x$probabilities, 5)
     wt <- paste0(wt, collapse = ", ")
     cat(wt, sep = "")
     if (length(x$probabilities) > 5) cat("...")

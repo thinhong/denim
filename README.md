@@ -2,7 +2,8 @@
 An R package for simulating deterministic discrete-time model with memory.
 
 <!-- badges: start -->
-  [![R-CMD-check](https://github.com/thinhong/discreteModel/workflows/R-CMD-check/badge.svg)](https://github.com/thinhong/discreteModel/actions)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![R-CMD-check](https://github.com/thinhong/discreteModel/workflows/R-CMD-check/badge.svg)](https://github.com/thinhong/discreteModel/actions)
 <!-- badges: end -->
 
 ## Installation
