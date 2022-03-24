@@ -10,10 +10,9 @@ License: GPL (>= 2)
 Imports:
     Rcpp (>= 1.0.6),
     ggplot2,
-    DiagrammeR
-LinkingTo: Rcpp
-RoxygenNote: 7.1.2
-Suggests: 
+    DiagrammeR,
     rmarkdown,
     knitr
+LinkingTo: Rcpp
+RoxygenNote: 7.1.2
 VignetteBuilder: knitr
