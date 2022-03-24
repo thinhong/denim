@@ -4,7 +4,6 @@ An R package for simulating deterministic discrete-time model with memory.
 ## Installation
 Use `install_github()` to install this package
 ```
-remotes::install_github("thinhong/discreteModel")
 remotes::install_github("thinhong/discreteModel", build_vignettes = TRUE)
 ```
 
