@@ -215,7 +215,7 @@ Let $R_1 + R_2 + R_3 + R_4 = \Sigma R$. We have $\frac{R_1}{\Sigma R} = p_1$, $\
 
 $$\gamma_{i} = \frac{p_i}{1 - \sum_{j=1}^{i-1}p_j}$$
 
-For a given length of stay distribution, we identify the maximum length of stay using its cumulative distribution function. Because cumulative distribution function is asymptotic to 1 and never equal to 1, we need to set a value that is acceptable to be rounded to 1. If we want a cumulative probability of 0.999 to be rounded as 1, we set the error tolerance threshold as `1 - 0.999 = 0.001` (specified by the argument `errorTolerance = 0.001`), .
+For a given length of stay distribution, we identify the maximum length of stay using its cumulative distribution function. Because cumulative distribution function is asymptotic to 1 and never equal to 1, we need to set a value that is acceptable to be rounded to 1. If we want a cumulative probability of 0.999 to be rounded as 1, we set the error tolerance threshold as `1 - 0.999 = 0.001` (specified by the argument `errorTolerance = 0.001`). The time when cumulative probability = 0.999 will be set as the maximum length of stay of the compartment. Default `errorTolerance` of `denim` is set at `0.001`.
 
 ## 3. Waiting time distribution
 
