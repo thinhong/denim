@@ -33,6 +33,7 @@
 #include <string>
 #include <sstream>
 #include <map>
+#include <Rcpp.h>
 
 #include "muParserFixes.h"
 
@@ -114,7 +115,7 @@ namespace mu
 	*/
 	inline std::ostream& console()
 	{
-		return std::cout;
+		return Rcpp::Rcout;
 	}
 
 	/** \brief Encapsulate cin.

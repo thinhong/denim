@@ -1,4 +1,5 @@
 #include "helpers.h"
+#include <Rcpp.h>
 
 std::vector<std::string> extractCompNames(std::string element) {
     std::vector<std::string> compNames;
@@ -19,60 +20,60 @@ std::vector<std::string> extractCompNames(std::string element) {
 
 void viewModelStructure(std::shared_ptr<Model> model) {
     for (auto& comp: model->getComps()) {
-        std::cout << "Compartment " << comp->getCompName() << "\n";
+        Rcpp::Rcout << "Compartment " << comp->getCompName() << "\n";
 
-        std::cout << "In compartments: ";
+        Rcpp::Rcout << "In compartments: ";
         for (auto& inComp: comp->getInCompartments()) {
-            std::cout << inComp.lock()->getCompName() << " ";
+            Rcpp::Rcout << inComp.lock()->getCompName() << " ";
         }
-        std::cout << "\n";
+        Rcpp::Rcout << "\n";
 
-        std::cout << "Out compartments (derived from pointer): ";
+        Rcpp::Rcout << "Out compartments (derived from pointer): ";
         for (auto& outComp: comp->getOutCompartments()) {
-            std::cout << outComp.lock()->getCompName() << " ";
+            Rcpp::Rcout << outComp.lock()->getCompName() << " ";
         }
-        std::cout << "\n";
+        Rcpp::Rcout << "\n";
 
-        std::cout << "Out compartments (direct from outCompartmentNames): ";
+        Rcpp::Rcout << "Out compartments (direct from outCompartmentNames): ";
         for (auto& outComp: comp->getOutCompartmentNames()) {
-            std::cout << outComp << " ";
+            Rcpp::Rcout << outComp << " ";
         }
-        std::cout << "\n";
+        Rcpp::Rcout << "\n";
 
-        std::cout << "Out distribution: ";
+        Rcpp::Rcout << "Out distribution: ";
         for (auto& outDist: comp->getOutDistributions()) {
-            std::cout << outDist << " (" << outDist->getDistName() << "), ";
+            Rcpp::Rcout << outDist << " (" << outDist->getDistName() << "), ";
         }
-        std::cout << "\n";
+        Rcpp::Rcout << "\n";
 
-        std::cout << "Out weights: ";
+        Rcpp::Rcout << "Out weights: ";
         for (auto& outWeight: comp->getOutWeights()) {
-            std::cout << outWeight << " ";
+            Rcpp::Rcout << outWeight << " ";
         }
-        std::cout << "\n";
+        Rcpp::Rcout << "\n";
 
-        std::cout << "============" << "\n";
+        Rcpp::Rcout << "============" << "\n";
     }
 }
 
 void viewModelUpdate(std::shared_ptr<Model> model, long iter) {
-    std::cout << "====================================" << "\n";
-    std::cout << "Iteration " << iter << "\n";
+    Rcpp::Rcout << "====================================" << "\n";
+    Rcpp::Rcout << "Iteration " << iter << "\n";
     for (auto& comp: model->getComps()) {
-        std::cout << "Compartment " << comp->getCompName() << "\n";
+        Rcpp::Rcout << "Compartment " << comp->getCompName() << "\n";
         for (size_t k {0}; k < comp->getSubCompartmentValues().size(); ++k) {
-            std::cout << comp->getSubCompartmentValues()[k] << " ";
+            Rcpp::Rcout << comp->getSubCompartmentValues()[k] << " ";
         }
-        std::cout << "\n";
+        Rcpp::Rcout << "\n";
         for (size_t j {0}; j < comp->getOutCompartments().size(); ++j) {
-            std::cout << "Out value for " << comp->getOutCompartments()[j].lock()->getCompName() << ": " <<
+            Rcpp::Rcout << "Out value for " << comp->getOutCompartments()[j].lock()->getCompName() << ": " <<
                       comp->getOutValues()[j] << "\n";
         }
-        std::cout << "Total " << comp->getCompName() << ": ";
+        Rcpp::Rcout << "Total " << comp->getCompName() << ": ";
         for (auto& total: comp->getCompTotal()) {
-            std::cout << total << " ";
+            Rcpp::Rcout << total << " ";
         }
-        std::cout << "\n";
+        Rcpp::Rcout << "\n";
     }
 }
 
@@ -120,7 +121,7 @@ std::vector<std::string> checkInitVal(nlohmann::ordered_json &initialValues, nlo
             // If both are number
             if (std::strspn(s1.c_str(), "-.0123456789") == s1.size() &&
                 std::strspn(s2.c_str(), "-.0123456789") == s2.size()) {
-                std::cout << "Compartment name must be string characters, not number" << std::endl;
+                Rcpp::Rcout << "Compartment name must be string characters, not number" << std::endl;
             }
                 // If s1 is number and s2 not number
             else if (std::strspn(s1.c_str(), "-.0123456789") == s1.size()) {
@@ -132,7 +133,7 @@ std::vector<std::string> checkInitVal(nlohmann::ordered_json &initialValues, nlo
             }
                 // Else if both are not number
             else {
-                std::cout << "Proportion must be a number" << std::endl;
+                Rcpp::Rcout << "Proportion must be a number" << std::endl;
             }
         }
 

@@ -1,7 +1,6 @@
 #include "myProb.h"
-# include <cmath>
-# include <iostream>
-
+#include <cmath>
+#include <Rcpp.h>
 
 
 double normal_01_cdf ( double x )
@@ -256,10 +255,10 @@ double r8_gamma_inc ( double p, double x )
 
     if ( p <= 0.0 )
     {
-        std::cerr << " \n";
-        std::cerr << "R8_GAMMA_INC - Fatal error!\n";
-        std::cerr << "  Parameter P <= 0.\n";
-        exit ( 1 );
+        Rcpp::Rcerr << " \n";
+        Rcpp::Rcerr << "R8_GAMMA_INC - Fatal error!\n";
+        Rcpp::Rcerr << "  Parameter P <= 0.\n";
+        Rcpp::stop("Program stop\n");
     }
 
     if ( x <= 0.0 )

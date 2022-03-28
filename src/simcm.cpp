@@ -11,37 +11,6 @@ Rcpp::DataFrame simcm(std::string inputPath) {
     // Record execution time: https://stackoverflow.com/questions/21856025/getting-an-accurate-execution-time-in-c-micro-seconds
     auto startTime = std::chrono::high_resolution_clock::now();
 
-        // Check whether all compartments have initial values
-    try {
-        if (!checkInitVal(input["initialValues"], input["transitions"]).empty()) {
-            throw 99;
-        }
-    }
-    catch (int exCode) {
-        std::vector<std::string> diffs = checkInitVal(input["initialValues"], input["transitions"]);
-        std::cout << "Compartment ";
-        for (auto& diff: diffs) {
-            std::cout << diff << " ";
-        }
-        if (diffs.size() == 1) {
-            std::cout << "is not initialised" << std::endl;
-        } else if (diffs.size() > 1) {
-            std::cout << "are not initialised" << std::endl;
-        }
-        std::exit(EXIT_FAILURE);
-    }
-
-    // Then check errorTolerance > 0
-    try {
-        if (input["errorTolerance"] == 0) {
-            throw 99;
-        }
-    }
-    catch (int exCode) {
-        std::cout << "Error: errorTolerance must > 0" << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
-
     // Initialize parameters: errorTolerance, timeStep and daysFollowUp
     Distribution::errorTolerance = input["errorTolerance"];
     if (!input["timeStep"].is_null()) {
@@ -58,7 +27,7 @@ Rcpp::DataFrame simcm(std::string inputPath) {
     // Debug: view model structure
 //    viewModelStructure(myModel.getModel());
 
-    std::cout << "Simulating..." << "\n";
+    Rcpp::Rcout << "Simulating..." << "\n";
 
     // ======================== End JSON input ==============================
 
@@ -74,8 +43,8 @@ Rcpp::DataFrame simcm(std::string inputPath) {
     auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
     double seconds = std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
     seconds /= 1000;
-    std::cout << "Simulation completed, elapsed time: ";
-    std::cout << std::fixed << std::setprecision(4) << seconds << " seconds\n";
+    Rcpp::Rcout << "Simulation completed, elapsed time: ";
+    Rcpp::Rcout << std::fixed << std::setprecision(4) << seconds << " seconds\n";
 
     // ================== End construct and run model ========================
 

@@ -3,7 +3,7 @@
 //
 
 #include "ModelJSON.h"
-
+#include <Rcpp.h>
 
 
 ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_json &parameters, nlohmann::ordered_json &transitions) {
@@ -67,7 +67,7 @@ ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_js
             // If both are number
             if (std::strspn(s1.c_str(), "-.0123456789") == s1.size() &&
                 std::strspn(s2.c_str(), "-.0123456789") == s2.size()) {
-                std::cout << "Compartment name must be string characters, not number" << std::endl;
+                Rcpp::Rcout << "Compartment name must be string characters, not number" << std::endl;
             }
             // If s1 is number and s2 not number
             else if (std::strspn(s1.c_str(), "-.0123456789") == s1.size()) {
@@ -81,7 +81,7 @@ ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_js
             }
             // Else if both are not number
             else {
-                std::cout << "Proportion must be a number" << std::endl;
+                Rcpp::Rcout << "Proportion must be a number" << "\n";
             }
         }
 
