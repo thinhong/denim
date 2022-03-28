@@ -18,7 +18,7 @@ library(ggplot2)
 ```
 
 ```{r setup}
-library(discreteModel)
+library(denim)
 ```
 
 ## 1. Simple SIR model with gamma distribution length of stay

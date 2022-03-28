@@ -3,20 +3,20 @@ An R package for simulating deterministic discrete-time model with memory.
 
 <!-- badges: start -->
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![R-CMD-check](https://github.com/thinhong/discreteModel/workflows/R-CMD-check/badge.svg)](https://github.com/thinhong/discreteModel/actions)
+[![R-CMD-check](https://github.com/thinhong/denim/workflows/R-CMD-check/badge.svg)](https://github.com/thinhong/denim/actions)
 <!-- badges: end -->
 
 ## Installation
 Use `install_github()` to install this package
 ```
-remotes::install_github("thinhong/discreteModel", build_vignettes = TRUE)
+remotes::install_github("thinhong/denim", build_vignettes = TRUE)
 ```
 
 ## Example
 ### Simple SIR model
 
 ```
-library(discreteModel)
+library(denim)
 
 initialValues <- c(
   S = 999, 
@@ -77,7 +77,7 @@ plot(mod)
 Binning timeStep into 0.001 to have the closest results to deSolve. 
 ```
 library(deSolve)
-library(discreteModel)
+library(denim)
 library(ggplot2)
 library(tidyr)
 
