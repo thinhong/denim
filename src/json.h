@@ -1426,19 +1426,19 @@ inline bool operator<(const value_t lhs, const value_t rhs) noexcept
 #endif
 
 JSON_HEDLEY_DIAGNOSTIC_PUSH
-#if JSON_HEDLEY_HAS_WARNING("-Wpedantic")
-    #pragma clang diagnostic ignored "-Wpedantic"
-#endif
-#if JSON_HEDLEY_HAS_WARNING("-Wc++98-compat-pedantic") && defined(__cplusplus)
-    #pragma clang diagnostic ignored "-Wc++98-compat-pedantic"
-#endif
-#if JSON_HEDLEY_GCC_HAS_WARNING("-Wvariadic-macros",4,0,0)
-    #if defined(__clang__)
-        #pragma clang diagnostic ignored "-Wvariadic-macros"
-    #elif defined(JSON_HEDLEY_GCC_VERSION)
-        #pragma GCC diagnostic ignored "-Wvariadic-macros"
-    #endif
-#endif
+// #if JSON_HEDLEY_HAS_WARNING("-Wpedantic")
+//     #pragma clang diagnostic ignored "-Wpedantic"
+// #endif
+// #if JSON_HEDLEY_HAS_WARNING("-Wc++98-compat-pedantic") && defined(__cplusplus)
+//     #pragma clang diagnostic ignored "-Wc++98-compat-pedantic"
+// #endif
+// #if JSON_HEDLEY_GCC_HAS_WARNING("-Wvariadic-macros",4,0,0)
+//     #if defined(__clang__)
+//         #pragma clang diagnostic ignored "-Wvariadic-macros"
+//     #elif defined(JSON_HEDLEY_GCC_VERSION)
+//         #pragma GCC diagnostic ignored "-Wvariadic-macros"
+//     #endif
+// #endif
 #if defined(JSON_HEDLEY_NON_NULL)
     #undef JSON_HEDLEY_NON_NULL
 #endif
@@ -2237,17 +2237,17 @@ JSON_HEDLEY_DIAGNOSTIC_POP
     #define JSON_HAS_CPP_14
 #endif
 
-// disable float-equal warnings on GCC/clang
-#if defined(__clang__) || defined(__GNUC__) || defined(__GNUG__)
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wfloat-equal"
-#endif
+// // disable float-equal warnings on GCC/clang
+// #if defined(__clang__) || defined(__GNUC__) || defined(__GNUG__)
+//     #pragma GCC diagnostic push
+//     #pragma GCC diagnostic ignored "-Wfloat-equal"
+// #endif
 
-// disable documentation warnings on clang
-#if defined(__clang__)
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wdocumentation"
-#endif
+// // disable documentation warnings on clang
+// #if defined(__clang__)
+//     #pragma GCC diagnostic push
+//     #pragma GCC diagnostic ignored "-Wdocumentation"
+// #endif
 
 // allow to disable exceptions
 #if (defined(__cpp_exceptions) || defined(__EXCEPTIONS) || defined(_CPPUNWIND)) && !defined(JSON_NOEXCEPTION)
@@ -4259,11 +4259,11 @@ auto get(const nlohmann::detail::iteration_proxy_value<IteratorType>& i) -> decl
 // And see https://github.com/nlohmann/json/pull/1391
 namespace std
 {
-#if defined(__clang__)
-    // Fix: https://github.com/nlohmann/json/issues/1401
-    #pragma clang diagnostic push
-    #pragma clang diagnostic ignored "-Wmismatched-tags"
-#endif
+// #if defined(__clang__)
+//     // Fix: https://github.com/nlohmann/json/issues/1401
+//     #pragma clang diagnostic push
+//     #pragma clang diagnostic ignored "-Wmismatched-tags"
+// #endif
 template<typename IteratorType>
 class tuple_size<::nlohmann::detail::iteration_proxy_value<IteratorType>>
             : public std::integral_constant<std::size_t, 2> {};
@@ -4276,9 +4276,9 @@ class tuple_element<N, ::nlohmann::detail::iteration_proxy_value<IteratorType >>
                      get<N>(std::declval <
                             ::nlohmann::detail::iteration_proxy_value<IteratorType >> ()));
 };
-#if defined(__clang__)
-    #pragma clang diagnostic pop
-#endif
+// #if defined(__clang__)
+//     #pragma clang diagnostic pop
+// #endif
 } // namespace std
 
 // #include <nlohmann/detail/meta/cpp_future.hpp>
@@ -25680,12 +25680,12 @@ inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std
 
 
 // restore GCC/clang diagnostic settings
-#if defined(__clang__) || defined(__GNUC__) || defined(__GNUG__)
-    #pragma GCC diagnostic pop
-#endif
-#if defined(__clang__)
-    #pragma GCC diagnostic pop
-#endif
+// #if defined(__clang__) || defined(__GNUC__) || defined(__GNUG__)
+//     #pragma GCC diagnostic pop
+// #endif
+// #if defined(__clang__)
+//     #pragma GCC diagnostic pop
+// #endif
 
 // clean up
 #undef JSON_ASSERT

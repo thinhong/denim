@@ -26,9 +26,53 @@ checkInitsTransitions <- function(initialValues, transitions) {
   }
 }
 
+
+#' Simulator for deterministic discrete time model with memory
+#' 
+#' Simulation function that call the C++ simulator
+#'
+#' @param transitions a list of transitions follows this format `"transition" = distribution()`
+#' @param initialValues a vector contains the initial values of all compartments defined 
+#' in the **transitions**, follows this format `compartment_name = initial_value`
+#' @param parameters a vector contains values of any parameters that are not compartments, 
+#' usually parameters used in `mathexp()` functions
+#' @param simulationDuration duration of time to be simulate
+#' @param timeStep set the output time interval. For example, if `simulationDuration = 10` 
+#' means 10 days and `timeStep = 0.1`, the output will display results for each 0.1 daily interval
+#' @param errorTolerance set the threshold so that a cumulative distribution function 
+#' can be rounded to 1. For example, if we want a cumulative probability of 0.999 to 
+#' be rounded as 1, we set `errorTolerance = 0.001` (1 - 0.999 = 0.001). Default is 0.001
+#'
+#' @return a data.frame with class `denim` that can be plotted with a `plot()` method
 #' @export
-runSim <- function(transitions, initialValues, parameters, 
-                   simulationDuration, timeStep = 1, errorTolerance = 0.001) {
+#'
+#' @examples 
+#' transitions <- list(
+#'    "S -> I" = mathexpr(beta * S * I / N),
+#'    "I -> R" = gamma(3, 2)
+#' )
+#' 
+#' initialValues <- c(
+#'    S = 999, 
+#'    I = 1, 
+#'    R = 0
+#' )
+#' 
+#' parameters <- c(
+#'    beta = 0.012,
+#'    N = 1000
+#' )
+#' 
+#' simulationDuration <- 30
+#' timeStep <- 0.01
+#' 
+#' mod <- denim(transitions = transitions, 
+#'              initialValues = initialValues, 
+#'              parameters = parameters, 
+#'              simulationDuration = simulationDuration, 
+#'              timeStep = timeStep)
+denim <- function(transitions, initialValues, parameters, 
+                  simulationDuration, timeStep = 1, errorTolerance = 0.001) {
   
   # First check their inputs
   # checkInitsTransitions(initialValues, transitions)
@@ -41,19 +85,12 @@ runSim <- function(transitions, initialValues, parameters,
   # Parse the json to C++ with function simcm (simulating compartmental model)
   df <- simcm(modJson)
 
-  class(df) <- c("discretedf", class(df))
+  class(df) <- c("denim", class(df))
   return(df)
 }
 
-#' Title
-#'
-#' @param df
-#'
-#' @return
 #' @export
-#'
-#' @examples
-plot.discretedf <- function(x, ...) {
+plot.denim <- function(x, ...) {
   cols <- colnames(x)[-1]
   df_plot <- stats::reshape(x, varying = cols, v.names = "Value", 
                             times = cols, timevar = "Compartment", 

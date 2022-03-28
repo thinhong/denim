@@ -13,6 +13,6 @@ distributionToJson(distribution)
 a json object that match format {"distribution": "weibull", "scale": 2, "shape": 5}
 }
 \description{
-Input is a distribution object of a compartment, not the full vector/list 
+Input is a distribution object of a compartment, not the full vector/list
 of distributions
 }

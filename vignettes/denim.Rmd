@@ -121,7 +121,7 @@ We have two transitions `S -> I` and `I -> R` in this case. The transitions are 
 
 ```{r}
 transitions <- list(
-  "S -> I" = mathExpression(beta * S * I / N),
+  "S -> I" = mathexpr(beta * S * I / N),
   "I -> R" = gamma(3, 2)
 )
 ```
@@ -161,11 +161,11 @@ timeStep <- 0.01
 ```
 
 ```{r, fig.width = 6}
-mod <- runSim(transitions = transitions, 
-              initialValues = initialValues, 
-              parameters = parameters, 
-              simulationDuration = simulationDuration, 
-              timeStep = timeStep)
+mod <- denim(transitions = transitions, 
+             initialValues = initialValues, 
+             parameters = parameters, 
+             simulationDuration = simulationDuration, 
+             timeStep = timeStep)
 head(mod)
 plot(mod)
 ```
@@ -229,15 +229,15 @@ Current available distribution in this package including:
 
 * `lognormal(mu, sigma)`: Discrete **log-normal distribution** with parameters `mu` and `sigma`
 
-* `mathExpression(expression)`: User-defined **math expression**, the expression can be put inside `""` or not, e.g `mathExpression(beta * S * I / N)` or `mathExpression("beta * S * I / N")` are both acceptable
+* `mathexpr(expression)`: User-defined **mathematical expression**, the expression can be put inside `""` or not, e.g `mathexpr(beta * S * I / N)` or `mathexpr("beta * S * I / N")` are both acceptable
 
 * `constant(x)`: Every time step a **fixed number of individuals** of the left compartment transit to the right compartment, e.g `"S -> V" = constant(50)` means 50 people got vaccinated per day
 
-* `transitionProb(transitionProb)`: Every time step a **fixed percentage** of the left compartment transit to the right compartment, this is also a convenient way to define $R_t - R_{t-1} = \gamma I$ which we can input `"I -> R" = transitionProb(gamma)`
+* `transprob(x)`: Every time step a **fixed percentage** of the left compartment transit to the right compartment, this is also a convenient way to define $R_t - R_{t-1} = \gamma I$ which we can input `"I -> R" = transprob(gamma)`
 
 * `nonparametric(waitingTimes...)`: A **vector of values**, could be numbers, percentages, density of the length of stay based on real data, `denim` will convert it into a distribution
 
-* `multinomial(probabilities)`: A convenient way to define **several probabilities** of a compartment transit to many compartments, may or may not in a time step. For example, `"V -> VA, VS, VH" = multinomial(0.6, 0.3, 0.1)` means 60% of `V` will become `VA`, 30% become `VS` and 10% become `VH`. If we continue to define the length of stay distribution for these transitions e.g `"V -> VA" = gamma(3, 2)`, probabilities defined with `multinomial()` is not the percentage of the left compartment transit in each time step, but the percentage of individuals move to `VA` at the equilibrium state. If we do not define further length of stay distribution, `"V -> VA, VS, VH" = multinomial(0.6, 0.3, 0.1)` is the percentage of `V` transit to the right compartments per time step similar to a `transitionProb()` function. See more detailed explanations in the ***Multiple transitions from a compartment*** section.
+* `multinomial(probabilities)`: A convenient way to define **several probabilities** of a compartment transit to many compartments, may or may not in a time step. For example, `"V -> VA, VS, VH" = multinomial(0.6, 0.3, 0.1)` means 60% of `V` will become `VA`, 30% become `VS` and 10% become `VH`. If we continue to define the length of stay distribution for these transitions e.g `"V -> VA" = gamma(3, 2)`, probabilities defined with `multinomial()` is not the percentage of the left compartment transit in each time step, but the percentage of individuals move to `VA` at the equilibrium state. If we do not define further length of stay distribution, `"V -> VA, VS, VH" = multinomial(0.6, 0.3, 0.1)` is the percentage of `V` transit to the right compartments per time step similar to a `transprob()` function. See more detailed explanations in the ***Multiple transitions from a compartment*** section.
 
 ## 4. Multiple transitions from a compartment
 
@@ -269,7 +269,7 @@ We can define the model for this example as follows:
 
 ```{r, fig.width = 6}
 transitions <- list(
-  "S -> I" = mathExpression(beta * S * I / N),
+  "S -> I" = mathexpr(beta * S * I / N),
   "S -> V" = constant(7),
   "0.9 * I -> R" = gamma(3, 2),
   "0.1 * I -> D" = lognormal(2, 0.5)
@@ -291,11 +291,11 @@ parameters <- c(
 simulationDuration <- 10
 timeStep <- 0.01
 
-mod <- runSim(transitions = transitions, 
-              initialValues = initialValues, 
-              parameters = parameters, 
-              simulationDuration = simulationDuration, 
-              timeStep = timeStep)
+mod <- denim(transitions = transitions, 
+             initialValues = initialValues, 
+             parameters = parameters, 
+             simulationDuration = simulationDuration, 
+             timeStep = timeStep)
 plot(mod)
 ```
 
@@ -334,11 +334,11 @@ DiagrammeR::grViz("digraph {
 
 ```{r, fig.width = 6}
 transitions <- list(
-  "S -> I" = mathExpression(beta * S * (I + IV) / N),
+  "S -> I" = mathexpr(beta * S * (I + IV) / N),
   "S -> V" = constant(2),
   "0.1 * I -> D" = lognormal(2, 0.5),
   "0.9 * I -> R" = gamma(3, 2),
-  "V -> IV" = mathExpression(0.1 * beta * V * (I + IV) / N),
+  "V -> IV" = mathexpr(0.1 * beta * V * (I + IV) / N),
   "IV -> R" = exponential(2)
 )
 
@@ -359,11 +359,11 @@ parameters <- c(
 simulationDuration <- 10
 timeStep <- 0.01
 
-mod <- runSim(transitions = transitions, 
-              initialValues = initialValues, 
-              parameters = parameters, 
-              simulationDuration = simulationDuration, 
-              timeStep = timeStep)
+mod <- denim(transitions = transitions, 
+             initialValues = initialValues, 
+             parameters = parameters, 
+             simulationDuration = simulationDuration, 
+             timeStep = timeStep)
 plot(mod)
 ```
 

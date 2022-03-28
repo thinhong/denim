@@ -1,5 +1,10 @@
-# Constructors
-## Gamma distribution
+# Constructors for distributions
+
+#' Discrete gamma distribution
+#' 
+#' @param scale scale parameter of a gamma distribution
+#' @param shape shape parameter of a gamma distribution
+#'
 #' @export
 gamma <- function(scale, shape) {
   distr <- list()
@@ -12,7 +17,12 @@ gamma <- function(scale, shape) {
   return(distr)
 }
 
-## Weibull distribution
+
+#' Discrete Weibull distribution
+#' 
+#' @param scale scale parameter of a Weibull distribution
+#' @param shape shape parameter of a Weibull distribution
+#'
 #' @export
 weibull <- function(scale, shape) {
   distr <- list()
@@ -25,7 +35,10 @@ weibull <- function(scale, shape) {
   return(distr)
 }
 
-## Exponential distribution
+#' Discrete exponential distribution
+#' 
+#' @param rate rate parameter of an exponential distribution
+#'
 #' @export
 exponential <- function(rate) {
   distr <- list()
@@ -37,7 +50,11 @@ exponential <- function(rate) {
   return(distr)
 }
 
-## Log-normal distribution
+#' Discrete log-normal distribution
+#' 
+#' @param mu location parameter or the ln mean
+#' @param sigma scale parameter or ln standard deviation
+#'
 #' @export
 lognormal <- function(mu, sigma) {
   distr <- list()
@@ -50,9 +67,20 @@ lognormal <- function(mu, sigma) {
   return(distr)
 }
 
-## Math expression
+
+#' Mathematical expression
+#' 
+#' User-defined mathematical expression. The expression will be processed by 
+#' `muparser` library which offers a wide variety of operators. Kindly visit 
+#' [muparser website](https://beltoforion.de/en/muparser/features.php) 
+#' to see full list of available operators.
+#' 
+#' @param expression math expression, can be put inside "" or not, 
+#' e.g `mathexpr(beta * S * I / N)` or `mathexpr("beta * S * I / N")` 
+#' are both acceptable
+#'
 #' @export
-mathExpression <- function(expression) {
+mathexpr <- function(expression) {
   distr <- list()
   
   distr$distribution <- "mathExpression"
@@ -63,7 +91,14 @@ mathExpression <- function(expression) {
   return(distr)
 }
 
-## Constant
+
+#' Constant
+#' 
+#' Define a fixed number of individuals of the left compartment transit to the 
+#' right compartment at every time step
+#' 
+#' @param x a constant number
+#'
 #' @export
 constant <- function(x) {
   distr <- list()
@@ -75,9 +110,16 @@ constant <- function(x) {
   return(distr)
 }
 
-## Transition probability
+
+#' Transition probability
+#' 
+#' A fixed percentage of the left compartment transit to the right compartment 
+#' at every time step
+#' 
+#' @param x a float number between 0 to 1
+#'
 #' @export
-transitionProb <- function(x) {
+transprob <- function(x) {
   distr <- list()
   
   distr$distribution <- "transitionProb"
@@ -87,7 +129,13 @@ transitionProb <- function(x) {
   return(distr)
 }
 
-## Input with raw values
+
+#' Nonparametric
+#' 
+#' Convert a vector of frequencies, percentages... into a distribution
+#' 
+#' @param ... a vector of values
+#'
 #' @export
 nonparametric <- function(...) {
   distr <- list()
@@ -99,7 +147,24 @@ nonparametric <- function(...) {
   return(distr)
 }
 
-## Multinomial
+
+#' Multinomial
+#' 
+#' Define a set of probabilities of transition from one compartment to multiple
+#' compartments
+#' ```
+#' "I -> R, D" = multinomial(0.9, 0.1),
+#' "I -> R" = gamma(3, 2),
+#' "I -> D" = lognormal(2, 0.5)
+#' ```
+#' is equal to
+#' ```
+#' "0.9 * I -> R" = gamma(3, 2),
+#' "0.1 * I -> D" = lognormal(2, 0.5)
+#' ```
+#'
+#' @param ... a vector of probabilities, must add up to 1
+#'
 #' @export
 multinomial <- function(...) {
   distr <- list()
@@ -111,7 +176,8 @@ multinomial <- function(...) {
   return(distr)
 }
 
-print.Distribution <- function(x) {
+#' @export
+print.Distribution <- function(x, ...) {
   # Print the name of this distribution
   if (x$distribution %in% c("gamma", "weibull", "exponential")) {
     cat("Discretized", x$distribution, "distribution\n")
@@ -163,8 +229,6 @@ print.Distribution <- function(x) {
 #'
 #' @return a json object that match format {"distribution": "weibull", "scale": 2, "shape": 5}
 #' @export
-#'
-#' @examples
 distributionToJson <- function(distribution) {
   contents <- c()
   if (distribution$distribution == "nonparametric") {

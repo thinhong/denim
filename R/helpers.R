@@ -19,15 +19,6 @@ displayModelGroups <- function(modelGroups) {
   }
 }
 
-#' Generate correct input format
-#'
-#' @param transitions 
-#' @param contacts
-#'
-#' @return
-#' @export
-#'
-#' @examples
 inputHelper <- function(transitions, contacts = NULL) {
   # First, check that the contact matrices are correct
   checkContactMatrices(contacts)
