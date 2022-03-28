@@ -42,7 +42,9 @@ transitions <- list(
 simulationDuration <- 10
 timeStep <- 0.01
 
-mod <- sim(transitions = transitions, initialValues = initialValues, parameters = parameters, simulationDuration = simulationDuration, timeStep = timeStep)
+mod <- sim(transitions = transitions, initialValues = initialValues, 
+           parameters = parameters, simulationDuration = simulationDuration, 
+           timeStep = timeStep)
 ```
 
 Here we have to define:
