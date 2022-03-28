@@ -161,11 +161,11 @@ timeStep <- 0.01
 ```
 
 ```{r, fig.width = 6}
-mod <- denim(transitions = transitions, 
-             initialValues = initialValues, 
-             parameters = parameters, 
-             simulationDuration = simulationDuration, 
-             timeStep = timeStep)
+mod <- sim(transitions = transitions, 
+           initialValues = initialValues, 
+           parameters = parameters, 
+           simulationDuration = simulationDuration, 
+           timeStep = timeStep)
 head(mod)
 plot(mod)
 ```
@@ -291,11 +291,11 @@ parameters <- c(
 simulationDuration <- 10
 timeStep <- 0.01
 
-mod <- denim(transitions = transitions, 
-             initialValues = initialValues, 
-             parameters = parameters, 
-             simulationDuration = simulationDuration, 
-             timeStep = timeStep)
+mod <- sim(transitions = transitions, 
+           initialValues = initialValues, 
+           parameters = parameters, 
+           simulationDuration = simulationDuration, 
+           timeStep = timeStep)
 plot(mod)
 ```
 
@@ -359,11 +359,11 @@ parameters <- c(
 simulationDuration <- 10
 timeStep <- 0.01
 
-mod <- denim(transitions = transitions, 
-             initialValues = initialValues, 
-             parameters = parameters, 
-             simulationDuration = simulationDuration, 
-             timeStep = timeStep)
+mod <- sim(transitions = transitions, 
+           initialValues = initialValues, 
+           parameters = parameters, 
+           simulationDuration = simulationDuration, 
+           timeStep = timeStep)
 plot(mod)
 ```
 

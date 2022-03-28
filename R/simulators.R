@@ -66,13 +66,13 @@ checkInitsTransitions <- function(initialValues, transitions) {
 #' simulationDuration <- 30
 #' timeStep <- 0.01
 #' 
-#' mod <- denim(transitions = transitions, 
-#'              initialValues = initialValues, 
-#'              parameters = parameters, 
-#'              simulationDuration = simulationDuration, 
-#'              timeStep = timeStep)
-denim <- function(transitions, initialValues, parameters, 
-                  simulationDuration, timeStep = 1, errorTolerance = 0.001) {
+#' mod <- sim(transitions = transitions, 
+#'            initialValues = initialValues, 
+#'            parameters = parameters, 
+#'            simulationDuration = simulationDuration, 
+#'            timeStep = timeStep)
+sim <- function(transitions, initialValues, parameters, 
+                simulationDuration, timeStep = 1, errorTolerance = 0.001) {
   
   # First check their inputs
   # checkInitsTransitions(initialValues, transitions)
