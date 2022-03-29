@@ -1,10 +1,16 @@
 Package: denim
 Type: Package
 Title: Simulate deterministic discrete time model
-Version: 1.0
+Version: 1.0.0
 Date: 2021-05-04
-Author: Thinh Ong, Marc Choisy
-Maintainer: Thinh Ong <ongphucthinh@gmail.com>
+Authors@R: c(
+    person("Thinh", "Ong", email = "thinhop@oucru.org", role = c("aut", "cre"),
+      comment = c(ORCID = "0000-0001-6772-9291")
+    ),
+    person("Marc", "Choisy", email = "mchoisy@oucru.org", role = "aut",
+      comment = c(ORCID = "0000-0002-5187-6390")
+    )
+  )
 Description: This is a deterministic non-Markovian discerete time model simulator.
 License: GPL (>= 2)
 Imports:
