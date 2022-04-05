@@ -13,12 +13,16 @@ Authors@R: c(
   )
 Description: This is a deterministic non-Markovian discerete time model simulator.
 License: GPL (>= 2)
+URL: https://thinhong.github.io/denim,
+    https://github.com/thinhong/denim
+BugReports: https://github.com/thinhong/denim/issues
 Imports:
     Rcpp (>= 1.0.6),
     ggplot2,
     DiagrammeR,
-    rmarkdown,
-    knitr
+Suggests:
+    knitr,
+    rmarkdown
 LinkingTo: Rcpp
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
