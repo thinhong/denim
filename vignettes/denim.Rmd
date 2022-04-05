@@ -1,5 +1,5 @@
 ---
-title: "denim: deterministic discrete time model with memory"
+title: "denim: deterministic discrete-time model with memory"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{denim: deterministic discrete time model with memory}
