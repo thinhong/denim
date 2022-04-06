@@ -136,7 +136,7 @@ df2
 
 # Or plot them using these ggplot2 codes
 df_plot <- gather(df2, key = "Compartment", value = "Value", grep("time", colnames(df2), invert = T))
-df_plot$package <- sapply(df_plot$Compartment, function(x) {a <- strsplit(x, "_")[[1]]; b <- a[length(a)]; return(b)})
+df_plot$package <- sapply(df_plot$Compartment, function(x) tail(strsplit(x, "_")[[1]], 1))
 df_plot$Compartment <- gsub("_deSolve|_discrete", "", df_plot$Compartment)
 df_plot$Compartment <- factor(df_plot$Compartment)
 
