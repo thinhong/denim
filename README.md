@@ -63,7 +63,7 @@ Here we have to define:
   * `gamma(scale, shape)`
   * `weibull(scale, shape)`
   * `mathexpr(expression)`: user-defined math expression, the expression can be put inside `""` or not, e.g `mathexpr(beta * S * I / N)` or `mathexpr("beta * S * I / N")` are both acceptable
-  * `frequency(frequency)`: a fixed number of individuals per time step, e.g `"S -> V" = frequency(50)` means 50 people got vaccinated per day
+  * `constant(constant)`: a fixed number of individuals per time step, e.g `"S -> V" = constant(50)` means 50 people got vaccinated per day
   * `transprob(transitionProb)`: define a transition probability instead of waiting time distribution, this is the conventional dR/dt = gamma * I which we input by `"I -> R" = transprob(gamma)`
   * `values(waitingTimes...)`: a vector of values, could be numbers, percentages, density based on real data distribution
 
