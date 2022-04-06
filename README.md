@@ -49,7 +49,7 @@ mod <- sim(transitions = transitions, initialValues = initialValues,
 
 Here we have to define:
 
-* `daysFollowUp`: how many days (or any unit of time) to simulate
+* `simulationDuration`: how many time steps to simulate
 * `errorTolerance`: a decimal number, when a probability reach (1 - `errorTolerance`) it will be rounded to 1.0, e.g if we set `errorTolerance <- 0.01` then when a probability is 0.99 it will be rounded to 1.0
 * `timeStep`: how much a day will be binned, if we want to bin a day into 100 time bins, a time step will be 0.01 day, define here `timeStep <- 0.01`
 * `initialValues`: a vector defines initial values of compartments
@@ -122,7 +122,7 @@ parameters <- c(beta = 0.0015, N = 1000)
 transitions <- list("S -> I" = mathexpr(beta * S * I / N), 
                     "I -> R" = gamma(2, 5))
 
-fmod <- sim(daysFollowUp = 20, errorTolerance = 0.01, 
+fmod <- sim(simulationDuration = 20, errorTolerance = 0.01, 
             timeStep = 0.001,
             transitions = transitions,
             initialValues = initialValues, parameters = parameters)
