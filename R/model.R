@@ -1,35 +1,40 @@
 # Constructor
 newModel <- function(simulationDuration, errorTolerance, initialValues, 
                      parameters, transitions, timeStep = 1) {
-  mod <- list()
+  mod <- list(
+    simulationDuration = simulationDuration,
+    errorTolerance     = errorTolerance,
+    timeStep           = timeStep,
+    initialValues      = initialValues,
+    parameters         = parameters,
+    transitions        = transitions)
   
-  mod$simulationDuration <- simulationDuration
-  mod$errorTolerance <- errorTolerance
-  mod$timeStep <- timeStep
-  mod$initialValues <- initialValues
-  mod$parameters <- parameters
-  mod$transitions <- transitions
-  
-  class(mod) <- "Model"
-  return(mod)
+  class(mod) <- c("Model", class(mod))
+  mod
 }
 
 # Model to json
 modelToJson <- function(mod) {
-  dfu <- newJsonKeyPair("simulationDuration", mod$simulationDuration)
-  et <- newJsonKeyPair("errorTolerance", mod$errorTolerance)
-  ts <- newJsonKeyPair("timeStep", mod$timeStep)
-  ivKeyPairs <- newJsonKeyPair(names(mod$initialValues), mod$initialValues)
-  iv <- newJsonNestedObject("initialValues", newJsonObject(ivKeyPairs, inline = T))
-  pmKeyPairs <- newJsonKeyPair(names(mod$parameters), mod$parameters)
-  pm <- newJsonNestedObject("parameters", newJsonObject(pmKeyPairs, inline = T))
-  distr <- c()
-  for (i in 1:length(mod$transitions)) {
-    distrName <- names(mod$transitions)[i]
-    distrParams <- distributionToJson(mod$transitions[[i]])
-    distr <- c(distr, newJsonNestedObject(distrName, distrParams, inline = TRUE))
+  intialValues <- mod$initialValues
+  parameters   <- mod$parameters
+  transitions  <- mod$transitions
+  
+  ivKeyPairs <- newJsonKeyPair(names(initialValues), initialValues)
+  pmKeyPairs <- newJsonKeyPair(names(parameters), parameters)
+  
+  nb <- length(transitions)
+  distr <- vector("list", nb)
+  for (i in 1:nb) {
+    distr[i] <- newJsonNestedObject(
+      names(transitions)[i],
+      distributionToJson(transitions[[i]]), inline = TRUE)
   }
-  tr <- newJsonNestedObject("transitions", newJsonObject(distr))
-  contents <- newJsonObject(dfu, et, ts, iv, pm, tr)
-  return(contents)
+  
+  newJsonObject(
+    newJsonKeyPair("simulationDuration", mod$simulationDuration),
+    newJsonKeyPair("errorTolerance"    , mod$errorTolerance),
+    newJsonKeyPair("timeStep"          , mod$timeStep),
+    newJsonNestedObject("initialValues", newJsonObject(ivKeyPairs, inline = TRUE)),
+    newJsonNestedObject("parameters"   , newJsonObject(pmKeyPairs, inline = TRUE)),
+    newJsonNestedObject("transitions"  , newJsonObject(distr)))
 }

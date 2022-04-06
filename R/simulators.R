@@ -2,15 +2,16 @@ checkInitsTransitions <- function(initialValues, transitions) {
   # Compartment name in initialValues
   initNames <- names(initialValues)
   # Compartment name in transitions
-  transNames <- c()
-  for (transName in names(transitions)) {
+  the_names <- names(transitions)
+  transNames <- vector("list", length(the_names))
+  for (i in seq_along(the_names)) {
     # # Remove white space " ", any number, "*" symbol
-    transName <- gsub(" ", "", transName)
+    transName <- gsub(" ", "", the_names[i])
     tempNames <- unlist(strsplit(transName, "->|\\*")[[1]])
     if (length(tempNames) == 3) {
       tempNames <- tempNames[-2]
     }
-    transNames <- append(transNames, tempNames)
+    transNames[i] <- tempNames
   }
   transNames <- unique(transNames)
   
@@ -72,7 +73,7 @@ checkInitsTransitions <- function(initialValues, transitions) {
 #'            simulationDuration = simulationDuration, 
 #'            timeStep = timeStep)
 sim <- function(transitions, initialValues, parameters, 
-                simulationDuration, timeStep = 1, errorTolerance = 0.001) {
+                simulationDuration, timeStep = 1, errorTolerance = .001) {
   
   # First check their inputs
   # checkInitsTransitions(initialValues, transitions)
@@ -86,7 +87,7 @@ sim <- function(transitions, initialValues, parameters,
   df <- simcm(modJson)
 
   class(df) <- c("denim", class(df))
-  return(df)
+  df
 }
 
 #' @export
@@ -95,9 +96,7 @@ plot.denim <- function(x, ...) {
   df_plot <- stats::reshape(x, varying = cols, v.names = "Value", 
                             times = cols, timevar = "Compartment", 
                             direction = "long")
-  p <- ggplot2::ggplot(df_plot, ggplot2::aes(x = df_plot$Time, y = df_plot$Value, col = df_plot$Compartment)) + 
+  ggplot2::ggplot(df_plot, ggplot2::aes(x = df_plot$Time, y = df_plot$Value, col = df_plot$Compartment)) + 
     ggplot2::geom_line(size = 1.1) + ggplot2::theme_light() + 
     ggplot2::labs(x = "Time", y = "Value", color = "Compartment")
-  
-  return(p)
 }
