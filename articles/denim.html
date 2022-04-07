@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="denim">
-<title>denim: deterministic discrete time model with memory • denim</title>
+<title>denim: deterministic discrete-time model with memory • denim</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -17,7 +17,7 @@
 <link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="denim: deterministic discrete time model with memory">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="denim: deterministic discrete-time model with memory">
 <meta property="og:description" content="denim">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -53,7 +53,14 @@
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
 </form>
 
-      <ul class="navbar-nav"></ul>
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/thinhong/denim/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 
     
@@ -65,29 +72,29 @@
 <script src="denim_files/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="denim_files/htmlwidgets-1.5.4/htmlwidgets.js"></script><script src="denim_files/viz-1.8.2/viz.js"></script><link href="denim_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
 <script src="denim_files/grViz-binding-1.0.9/grViz.js"></script><div class="row">
   <main id="main"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>denim: deterministic discrete time model with memory</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>denim: deterministic discrete-time model with memory</h1>
             
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/thinhong/denim/blob/HEAD/vignettes/denim.Rmd" class="external-link"><code>vignettes/denim.Rmd</code></a></small>
       <div class="d-none name"><code>denim.Rmd</code></div>
     </div>
 
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">denim</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://thinhong.github.io/denim" class="external-link">denim</a></span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Attaching package: 'denim'</span>
 <span class="co">#&gt; The following object is masked from 'package:base':</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     gamma</span></code></pre></div>
 <div class="section level2">
-<h2 id="simple-sir-model-with-gamma-distribution-length-of-stay">1. Simple SIR model with gamma distribution length of stay<a class="anchor" aria-label="anchor" href="#simple-sir-model-with-gamma-distribution-length-of-stay"></a>
+<h2 id="simple-sir-model-with-gamma-distributed-lengths-of-stay">1. Simple SIR model with gamma distributed lengths of stay<a class="anchor" aria-label="anchor" href="#simple-sir-model-with-gamma-distributed-lengths-of-stay"></a>
 </h2>
-<p>The SIR model use three compartments S (susceptible), I (infected), R (recovered) to describe clinical status of individuals. We use the most simple form of SIR model to demonstrate how to define length of stay distribution.</p>
+<p>The SIR model uses 3 compartments: S (susceptible), I (infected), R (recovered) to describe clinical status of individuals. We use the most simple form of SIR model to demonstrate how to define the distribution of the lengths of stay distribution.</p>
 <center>
-<div id="htmlwidget-2599b6d28a040324e98c" style="width:700px;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-2599b6d28a040324e98c">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"&#947;I\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-e4b510a318c32a1b6507" style="width:700px;height:100%;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e4b510a318c32a1b6507">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"&#947;I\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </center>
 <p>The model equations are:</p>
 <p><span class="math display">\[S_{t+1} - S_{t} = -\lambda S_{t} = -\frac{\beta I_{t}}{N}S_{t}\]</span> <span class="math display">\[I_{t+1} - I_{t} = \frac{\beta I_{t}}{N}S_{t} - \gamma I_{t}\]</span> <span class="math display">\[R_{t+1} - R_{t} = \gamma I_{t}\]</span></p>
@@ -106,14 +113,14 @@
 <p><img src="denim_files/figure-html/unnamed-chunk-4-1.png" width="384" style="display: block; margin: auto;"></p>
 <p>The model now look like this:</p>
 <center>
-<div id="htmlwidget-4d1da0bc900336610d75" style="width:330px;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-4d1da0bc900336610d75">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"gamma(3, 2)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-8e5d8a3886c7ff6b7fc9" style="width:330px;height:100%;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8e5d8a3886c7ff6b7fc9">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"gamma(3, 2)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </center>
 <p><strong>Model specification</strong></p>
 <p><em>Model transition</em></p>
 <center>
-<div id="htmlwidget-06201d66e61d4b43318c" style="width:330px;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-06201d66e61d4b43318c">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"gamma(3, 2)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-5df66837abf9758f6b7d" style="width:330px;height:100%;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5df66837abf9758f6b7d">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"gamma(3, 2)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </center>
 <p>We have two transitions <code>S -&gt; I</code> and <code>I -&gt; R</code> in this case. The transitions are specified in a list follow this format <code>"transition" = equation</code>, of which equation is defined with one of our functions for waiting time distribution.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -149,7 +156,7 @@
            simulationDuration <span class="op">=</span> <span class="va">simulationDuration</span>, 
            timeStep <span class="op">=</span> <span class="va">timeStep</span><span class="op">)</span>
 <span class="co">#&gt; Simulating...</span>
-<span class="co">#&gt; Simulation completed, elapsed time: 0.0940 seconds</span>
+<span class="co">#&gt; Simulation completed, elapsed time: 0.1150 seconds</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span>
 <span class="co">#&gt;   Time        S        I            R</span>
 <span class="co">#&gt; 1 0.00 999.0000 1.000000 0.000000e+00</span>
@@ -166,14 +173,14 @@
 </h2>
 <p>In the SIR model, all infected individuals are presented by a single compartment I and have the same recovery rate <span class="math inline">\(\gamma\)</span>.</p>
 <center>
-<div id="htmlwidget-d607d52da4289e43bc60" style="width:700px;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-d607d52da4289e43bc60">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"&#947;I\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-185d122f370c89e9f0f3" style="width:700px;height:100%;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-185d122f370c89e9f0f3">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"&#947;I\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </center>
 <p>We want the recovery rate of individuals who had been infected for 1 day differ from the recovery rate of 2-day infected patients. So rather than using one compartment for infected (I), we define multiple infected sub-compartments. The number of sub-compartments depends on the maximum day we expect all infected individuals would be recovered.</p>
 <p>For example, if we expect a disease with a maximum 4 days of infection, we will end up with 4 sub-compartments. Each sub-compartment has its own recovery rate <span class="math inline">\(\gamma_{1}\)</span>, <span class="math inline">\(\gamma_{2}\)</span>, <span class="math inline">\(\gamma_{3}\)</span>, <span class="math inline">\(\gamma_{4}\)</span>. At day 4 it is certain that the patient will recover (because we assume that this disease has a maximum 4 days of infection), <span class="math inline">\(\gamma_{4} = 1\)</span>.</p>
 <center>
-<div id="htmlwidget-3a8dff16f17d8c916042" style="width:100%;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-3a8dff16f17d8c916042">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I1 [label = <&#946;S(I<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT> + I<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT> + I<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT> + I<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>)/N>]\n  I1 -> R1 [label = <&#947;<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>I<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>]\n  I2 -> R2 [label = <&#947;<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>I<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>]\n  I3 -> R3 [label = <&#947;<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>I<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>]\n  I4 -> R4 [label = <I<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>>]\n  I1 -> I2 [label = <(1-&#947;<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>)I<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>]\n  I2 -> I3 [label = <(1-&#947;<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>)I<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>]\n  I3 -> I4 [label = <(1-&#947;<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>)I<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-e505d8b62cec7efab8a4" style="width:100%;height:100%;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e505d8b62cec7efab8a4">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I1 [label = <&#946;S(I<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT> + I<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT> + I<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT> + I<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>)/N>]\n  I1 -> R1 [label = <&#947;<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>I<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>]\n  I2 -> R2 [label = <&#947;<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>I<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>]\n  I3 -> R3 [label = <&#947;<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>I<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>]\n  I4 -> R4 [label = <I<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>>]\n  I1 -> I2 [label = <(1-&#947;<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>)I<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>]\n  I2 -> I3 [label = <(1-&#947;<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>)I<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>]\n  I3 -> I4 [label = <(1-&#947;<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>)I<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </center>
 <p>Let <span class="math inline">\(R_1 + R_2 + R_3 + R_4 = \Sigma R\)</span>. We have <span class="math inline">\(\frac{R_1}{\Sigma R} = p_1\)</span>, <span class="math inline">\(\frac{R_2}{\Sigma R} = p_2\)</span>, <span class="math inline">\(\frac{R_3}{\Sigma R} = p_3\)</span>, <span class="math inline">\(\frac{R_4}{\Sigma R} = p_4\)</span>. Our mission is to estimate <span class="math inline">\(\gamma_{1}\)</span>, <span class="math inline">\(\gamma_{2}\)</span>, <span class="math inline">\(\gamma_{3}\)</span> to obtain <span class="math inline">\(p_1\)</span>, <span class="math inline">\(p_2\)</span>, <span class="math inline">\(p_3\)</span>, <span class="math inline">\(p_4\)</span> that fit a pre-defined distribution at the equilibrium state. This can be obtained by setting:</p>
 <p><span class="math display">\[\gamma_{i} = \frac{p_i}{1 - \sum_{j=1}^{i-1}p_j}\]</span></p>
@@ -200,8 +207,8 @@
 </h2>
 <p>We have many ways to define the type of transition when there are two or more transitions from a compartment. Consider this example:</p>
 <center>
-<div id="htmlwidget-d15e670c3060a456e6b0" style="width:400px;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-d15e670c3060a456e6b0">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  S -> V [label = \"constant(5)\"]\n  I -> R [label = \"0.9 -> gamma(3, 2)\"]\n  I -> D [label = \"0.1 -> lognormal(2, 0.5)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-5ab48701c8e26567375e" style="width:400px;height:100%;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5ab48701c8e26567375e">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  S -> V [label = \"constant(5)\"]\n  I -> R [label = \"0.9 -> gamma(3, 2)\"]\n  I -> D [label = \"0.1 -> lognormal(2, 0.5)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </center>
 <p>There are two scenarios in this example:</p>
 <ul>
@@ -239,7 +246,7 @@
            simulationDuration <span class="op">=</span> <span class="va">simulationDuration</span>, 
            timeStep <span class="op">=</span> <span class="va">timeStep</span><span class="op">)</span>
 <span class="co">#&gt; Simulating...</span>
-<span class="co">#&gt; Simulation completed, elapsed time: 0.0420 seconds</span>
+<span class="co">#&gt; Simulation completed, elapsed time: 0.0530 seconds</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></code></pre></div>
 <p><img src="denim_files/figure-html/unnamed-chunk-15-1.png" width="576" style="display: block; margin: auto;"></p>
 <p><strong>Tips</strong>: Instead of writing:</p>
@@ -254,8 +261,8 @@
 <h2 id="another-example">5. Another example<a class="anchor" aria-label="anchor" href="#another-example"></a>
 </h2>
 <center>
-<div id="htmlwidget-5fff682d1490fb56e02a" style="width:600px;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-5fff682d1490fb56e02a">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;S(I + IV)/N\"]\n  S -> V [label = \"constant(2)\"]\n  I -> D [label = \"0.1 -> lognormal(2, 0.5)\"]\n  I -> R [label = \"0.9 -> gamma(3, 2)\"]\n  V -> IV [label = \"0.1 * &#946;V(I + IV)/N\"]\n  IV -> R [label = \"exponential(2)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-f22ac7945a277b59ef1b" style="width:600px;height:100%;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-f22ac7945a277b59ef1b">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;S(I + IV)/N\"]\n  S -> V [label = \"constant(2)\"]\n  I -> D [label = \"0.1 -> lognormal(2, 0.5)\"]\n  I -> R [label = \"0.9 -> gamma(3, 2)\"]\n  V -> IV [label = \"0.1 * &#946;V(I + IV)/N\"]\n  IV -> R [label = \"exponential(2)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </center>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
@@ -290,7 +297,7 @@
            simulationDuration <span class="op">=</span> <span class="va">simulationDuration</span>, 
            timeStep <span class="op">=</span> <span class="va">timeStep</span><span class="op">)</span>
 <span class="co">#&gt; Simulating...</span>
-<span class="co">#&gt; Simulation completed, elapsed time: 0.0690 seconds</span>
+<span class="co">#&gt; Simulation completed, elapsed time: 0.0850 seconds</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></code></pre></div>
 <p><img src="denim_files/figure-html/unnamed-chunk-17-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
