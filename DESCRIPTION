@@ -1,6 +1,6 @@
 Package: denim
 Type: Package
-Title: Simulate deterministic discrete time model
+Title: Generate and simulate deterministic discrete-time compartmental models
 Version: 1.0.0
 Date: 2021-05-04
 Authors@R: c(
@@ -11,14 +11,18 @@ Authors@R: c(
       comment = c(ORCID = "0000-0002-5187-6390")
     )
   )
-Description: This is a deterministic non-Markovian discerete time model simulator.
+Description: Allows to build and simulate deterministic discerete-time compartmental models that can be non-Markovian.
 License: GPL (>= 2)
+URL: https://thinhong.github.io/denim,
+    https://github.com/thinhong/denim
+BugReports: https://github.com/thinhong/denim/issues
 Imports:
     Rcpp (>= 1.0.6),
-    ggplot2,
     DiagrammeR,
+Suggests:
+    knitr,
     rmarkdown,
-    knitr
+    ggplot2
 LinkingTo: Rcpp
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2

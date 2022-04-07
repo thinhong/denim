@@ -7,14 +7,13 @@
 #'
 #' @export
 gamma <- function(scale, shape) {
-  distr <- list()
-  
-  distr$distribution <- "gamma"
-  distr$scale <- scale
-  distr$shape <- shape
+  distr <- list(
+    distribution = "gamma",
+    scale = scale,
+    shape = shape)
   
   class(distr) <- c("Distribution", class(distr))
-  return(distr)
+  distr
 }
 
 
@@ -25,14 +24,13 @@ gamma <- function(scale, shape) {
 #'
 #' @export
 weibull <- function(scale, shape) {
-  distr <- list()
-  
-  distr$distribution <- "weibull"
-  distr$scale <- scale
-  distr$shape <- shape
+  distr <- list(
+    distribution = "weibull",
+    scale = scale,
+    shape = shape)
   
   class(distr) <- c("Distribution", class(distr))
-  return(distr)
+  distr
 }
 
 #' Discrete exponential distribution
@@ -41,13 +39,12 @@ weibull <- function(scale, shape) {
 #'
 #' @export
 exponential <- function(rate) {
-  distr <- list()
-  
-  distr$distribution <- "exponential"
-  distr$rate <- rate
+  distr <- list(
+    distribution = "exponential",
+    rate = rate)
   
   class(distr) <- c("Distribution", class(distr))
-  return(distr)
+  distr
 }
 
 #' Discrete log-normal distribution
@@ -57,14 +54,13 @@ exponential <- function(rate) {
 #'
 #' @export
 lognormal <- function(mu, sigma) {
-  distr <- list()
-  
-  distr$distribution <- "lognormal"
-  distr$mu <- mu
-  distr$sigma <- sigma
+  distr <- list(
+    distribution = "lognormal",
+    mu = mu,
+    sigma = sigma)
   
   class(distr) <- c("Distribution", class(distr))
-  return(distr)
+  distr
 }
 
 
@@ -81,14 +77,12 @@ lognormal <- function(mu, sigma) {
 #'
 #' @export
 mathexpr <- function(expression) {
-  distr <- list()
-  
-  distr$distribution <- "mathExpression"
-  distr$expression <- deparse(substitute(expression))
-  distr$expression <- gsub("\\\"", "", distr$expression)
+  distr <- list(
+    distribution = "mathExpression",
+    expression = gsub("\\\"", "", deparse(substitute(expression))))
   
   class(distr) <- c("Distribution", class(distr))
-  return(distr)
+  distr
 }
 
 
@@ -101,13 +95,12 @@ mathexpr <- function(expression) {
 #'
 #' @export
 constant <- function(x) {
-  distr <- list()
-  
-  distr$distribution <- "constant"
-  distr$constant <- x
+  distr <- list(
+    distribution = "constant",
+    constant = x)
   
   class(distr) <- c("Distribution", class(distr))
-  return(distr)
+  distr
 }
 
 
@@ -120,13 +113,12 @@ constant <- function(x) {
 #'
 #' @export
 transprob <- function(x) {
-  distr <- list()
-  
-  distr$distribution <- "transitionProb"
-  distr$transitionProb <- x
+  distr <- list(
+    distribution = "transitionProb",
+    transitionProb = x)
   
   class(distr) <- c("Distribution", class(distr))
-  return(distr)
+  distr
 }
 
 
@@ -138,13 +130,12 @@ transprob <- function(x) {
 #'
 #' @export
 nonparametric <- function(...) {
-  distr <- list()
-  
-  distr$distribution <- "nonparametric"
-  distr$waitingTime <- c(...)
+  distr <- list(
+    distribution = "nonparametric",
+    waitingTime = c(...))
   
   class(distr) <- c("Distribution", class(distr))
-  return(distr)
+  distr
 }
 
 
@@ -167,13 +158,12 @@ nonparametric <- function(...) {
 #'
 #' @export
 multinomial <- function(...) {
-  distr <- list()
-  
-  distr$distribution <- "multinomial"
-  distr$probabilities <- c(...)
+  distr <- list(
+    distribution = "multinomial",
+    probabilities = c(...))
   
   class(distr) <- c("Distribution", class(distr))
-  return(distr)
+  distr
 }
 
 #' @export
@@ -249,7 +239,6 @@ distributionToJson <- function(distribution) {
       contents <- c(contents, kp)
     }
   }
-  obj <- newJsonObject(contents, inline = TRUE)
-  return(obj)
+  newJsonObject(contents, inline = TRUE)
 }
 

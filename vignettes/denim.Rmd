@@ -1,5 +1,5 @@
 ---
-title: "denim: deterministic discrete time model with memory"
+title: "denim: deterministic discrete-time model with memory"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{denim: deterministic discrete time model with memory}
@@ -21,9 +21,9 @@ library(ggplot2)
 library(denim)
 ```
 
-## 1. Simple SIR model with gamma distribution length of stay
+## 1. Simple SIR model with gamma distributed lengths of stay
 
-The SIR model use three compartments S (susceptible), I (infected), R (recovered) to describe clinical status of individuals. We use the most simple form of SIR model to demonstrate how to define length of stay distribution.
+The SIR model uses 3 compartments: S (susceptible), I (infected), R (recovered) to describe clinical status of individuals. We use the most simple form of SIR model to demonstrate how to define the distribution of the lengths of stay distribution.
 
 <center>
 ```{r, echo=FALSE}

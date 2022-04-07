@@ -4,8 +4,7 @@ newJsonKeyPair <- function(key, value) {
   if (is.character(value) && !grepl("\\[", value)) {
     value <- paste0("\"", value, "\"")
   }
-  js <- paste0("\"", key, "\": ", value)
-  return(js)
+  paste0("\"", key, "\": ", value)
 }
 
 # Json array is [ content_1, content_2 ]
@@ -19,7 +18,7 @@ newJsonArray <- function(...) {
       js <- paste0(js, content, "]")
     }
   }
-  return(js)
+  js
 }
 
 # Json object is { content_1, content_2 }
@@ -44,8 +43,7 @@ newJsonObject <- function(..., inline = FALSE) {
       }
     }
   }
-  js <- paste0(js, "}")
-  return(js)
+  paste0(js, "}")
 }
 
 # Nested array is "key": [ array ]
@@ -59,8 +57,7 @@ newJsonNestedArray <- function(key, array, quotation = FALSE) {
     # If not an array of string, just paste all
     arrayContent <- paste(array, collapse = ", ")
   }
-  js <- paste0("\"", key, "\": [", arrayContent, "]")
-  return(js)
+  paste0("\"", key, "\": [", arrayContent, "]")
 }
 
 # Nested object is "key": { object } with object created by function newJsonObject()
@@ -69,6 +66,5 @@ newJsonNestedObject <- function(key, object, inline = FALSE) {
     object <- gsub("\n", "", object)
     object <- gsub("  ", "", object)
   }
-  js <- paste0("\"", key, "\": ", object)
-  return(js)
+  paste0("\"", key, "\": ", object)
 }

@@ -26,16 +26,10 @@ initValsVsContacts <- function(initialValues, contacts) {
   initValNames <- strsplit(names(initialValues), "\\.")
   for (i in 1:length(initValNames)) {
     iname <- initValNames[[i]]
-    counter <- 0
-    # Screen across all names in modelNames
-    for (mname in modelNames) {
-      # If the initialName match any name in modelNames, increase the counter
-      if (all(sort(iname) == sort(mname))) {
-        counter <- counter + 1
-      }
-    }
+    counter <- sum(sapply(modelNames, function(mname) all(sort(iname) == sort(mname))))
+    
     # Finally, if the initialName did not match any name in modelNames, display warning
-    if (counter == 0) {
+    if (counter < 1) {
       stop(names(initialValues)[i], " in initial values does not match any names defined in the contact matrices",
            call. = FALSE)
     }
