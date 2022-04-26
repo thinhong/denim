@@ -69,31 +69,29 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header">
-<img src="logo.png" class="logo" alt=""><h1 id="denim-">denim <a class="anchor" aria-label="anchor" href="#denim-"></a>
+<img src="logo.png" class="logo" alt=""><h1 id="denim">denim<a class="anchor" aria-label="anchor" href="#denim"></a>
 </h1>
 </div>
-<p>An R package for building and simulating deterministic discrete-time compartmental models with memory.</p>
 <!-- badges: start -->
+<p>An R package for building and simulating deterministic discrete-time compartmental models with memory.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>Use <code>install_github()</code> to install this package</p>
-<pre><code><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"thinhong/denim"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre>
+<p>You can install the development version of denim from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"thinhong/denim"</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<div class="section level3">
-<h3 id="simple-sir-model">Simple SIR model<a class="anchor" aria-label="anchor" href="#simple-sir-model"></a>
-</h3>
-<pre><code><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://thinhong.github.io/denim" class="external-link">denim</a></span><span class="op">)</span>
+<p>This is a basic example to illustrate the specification of a simple SIR model, which contains the three compartments susceptible (S), infected (I) and recovered (R). The recovery probabilities of infected individuals are gamma distributed in this example:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://thinhong.github.io/denim" class="external-link">denim</a></span><span class="op">)</span>
 
 <span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-  <span class="st">"0.3 * S -&gt; I"</span> <span class="op">=</span> <span class="fu"><a href="reference/mathexpr.html">mathexpr</a></span><span class="op">(</span><span class="va">beta</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="op">(</span><span class="va">I</span> <span class="op">+</span> <span class="va">IV</span><span class="op">)</span> <span class="op">/</span> <span class="va">N</span><span class="op">)</span>,
-  <span class="st">"0.7 * S -&gt; V"</span> <span class="op">=</span> <span class="fu"><a href="reference/constant.html">constant</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>,
-  <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="reference/d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>,
-  <span class="st">"V -&gt; IV"</span> <span class="op">=</span> <span class="fu"><a href="reference/mathexpr.html">mathexpr</a></span><span class="op">(</span><span class="va">beta</span> <span class="op">*</span> <span class="fl">0.3</span> <span class="op">*</span> <span class="va">V</span> <span class="op">*</span> <span class="op">(</span><span class="va">I</span> <span class="op">+</span> <span class="va">IV</span><span class="op">)</span> <span class="op">/</span> <span class="va">N</span><span class="op">)</span>,
-  <span class="st">"IV -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="reference/d_exponential.html">d_exponential</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>
+  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="fu"><a href="reference/mathexpr.html">mathexpr</a></span><span class="op">(</span><span class="va">beta</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="va">I</span> <span class="op">/</span> <span class="va">N</span><span class="op">)</span>,
+  <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="reference/d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>
 <span class="op">)</span>
 
 <span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>
@@ -104,9 +102,7 @@
 <span class="va">initialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>
   S <span class="op">=</span> <span class="fl">999</span>, 
   I <span class="op">=</span> <span class="fl">1</span>, 
-  R <span class="op">=</span> <span class="fl">0</span>, 
-  V <span class="op">=</span> <span class="fl">0</span>, 
-  IV <span class="op">=</span> <span class="fl">0</span>
+  R <span class="op">=</span> <span class="fl">0</span>
 <span class="op">)</span>
 
 <span class="va">simulationDuration</span> <span class="op">&lt;-</span> <span class="fl">10</span>
@@ -114,150 +110,21 @@
 
 <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sim.html">sim</a></span><span class="op">(</span>transitions <span class="op">=</span> <span class="va">transitions</span>, initialValues <span class="op">=</span> <span class="va">initialValues</span>, 
            parameters <span class="op">=</span> <span class="va">parameters</span>, simulationDuration <span class="op">=</span> <span class="va">simulationDuration</span>, 
-           timeStep <span class="op">=</span> <span class="va">timeStep</span><span class="op">)</span></code></pre>
-<p>Here we have to define:</p>
-<ul>
-<li>
-<code>simulationDuration</code>: how many time steps to simulate</li>
-<li>
-<code>errorTolerance</code>: a decimal number, when a probability reach (1 - <code>errorTolerance</code>) it will be rounded to 1.0, e.g if we set <code>errorTolerance &lt;- 0.01</code> then when a probability is 0.99 it will be rounded to 1.0</li>
-<li>
-<code>timeStep</code>: how much a day will be binned, if we want to bin a day into 100 time bins, a time step will be 0.01 day, define here <code>timeStep &lt;- 0.01</code>
-</li>
-<li>
-<code>initialValues</code>: a vector defines initial values of compartments</li>
-<li>
-<code>parameters</code>: if we define a compartment transition using math expression, list all parameters (except the compartment names) inside the math expression here</li>
-<li>
-<code>transitions</code>: a list with format <code>"transition" = distribution()</code><ul><li>
-<code>"transition"</code>: structure of the model, e.g a simple SIR model S -&gt; I -&gt; R would be defined by <code>"S -&gt; I"</code>, <code>"I -&gt; R"</code> (note the <code>""</code> symbol, this will be read as strings), white space can be ignored here i.e we can write <code>"S-&gt;I"</code><ul>
-<li>
-<code>"S -&gt; I"</code>, <code>"S -&gt; V"</code>: compartment S transitions to I first, then the rest of S transitions to V</li>
-<li>
-<code>"S -&gt; 0.3 * I"</code>, <code>"S -&gt; 0.7 * V"</code>: S transitions to I and V concurrently, of which 30% transitions to I and 70% transitions to V</li>
-</ul>
-</li></ul>
-</li>
-<li>
-<code>distributions</code>: distributions of compartments, currently the followings are available:<ul>
-<li><code>d_exponential(rate)</code></li>
-<li><code>d_gamma(scale, shape)</code></li>
-<li><code>d_weibull(scale, shape)</code></li>
-<li>
-<code>mathexpr(expression)</code>: user-defined math expression, the expression can be put inside <code>""</code> or not, e.g <code>mathexpr(beta * S * I / N)</code> or <code>mathexpr("beta * S * I / N")</code> are both acceptable</li>
-<li>
-<code>constant(constant)</code>: a fixed number of individuals per time step, e.g <code>"S -&gt; V" = constant(50)</code> means 50 people got vaccinated per day</li>
-<li>
-<code>transprob(transitionProb)</code>: define a transition probability instead of waiting time distribution, this is the conventional dR/dt = gamma * I which we input by <code>"I -&gt; R" = transprob(gamma)</code>
-</li>
-<li>
-<code>values(waitingTimes...)</code>: a vector of values, could be numbers, percentages, density based on real data distribution</li>
-</ul>
-</li>
-</ul>
-</div>
-<div class="section level3">
-<h3 id="visualization">Visualization<a class="anchor" aria-label="anchor" href="#visualization"></a>
-</h3>
-<p>We can plot the data frame generated by <code><a href="reference/sim.html">sim()</a></code> function with <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>. The <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> function uses <code>ggplot2</code> to visualize.</p>
-<pre><code><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></code></pre>
-<p><img src="reference/figures/plotdiscrete.png"></p>
-</div>
-<div class="section level3">
-<h3 id="comparison-with-desolve">Comparison with deSolve<a class="anchor" aria-label="anchor" href="#comparison-with-desolve"></a>
-</h3>
-<p>Binning timeStep into 0.001 to have the closest results to deSolve.</p>
-<pre><code><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://desolve.r-forge.r-project.org/" class="external-link">deSolve</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://thinhong.github.io/denim" class="external-link">denim</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span>
-
-<span class="co"># deSolve</span>
-<span class="va">sir_equations</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">time</span>, <span class="va">variables</span>, <span class="va">parameters</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">variables</span>, <span class="va">parameters</span><span class="op">)</span><span class="op">)</span>, <span class="op">{</span>
-    <span class="va">dS</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="va">beta</span> <span class="op">*</span> <span class="op">(</span><span class="va">I1</span> <span class="op">+</span> <span class="va">I2</span> <span class="op">+</span> <span class="va">I3</span> <span class="op">+</span> <span class="va">I4</span> <span class="op">+</span> <span class="va">I5</span><span class="op">)</span> <span class="op">*</span> <span class="va">S</span>
-    <span class="va">dI1</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">beta</span> <span class="op">*</span> <span class="op">(</span><span class="va">I1</span> <span class="op">+</span> <span class="va">I2</span> <span class="op">+</span> <span class="va">I3</span> <span class="op">+</span> <span class="va">I4</span> <span class="op">+</span> <span class="va">I5</span><span class="op">)</span> <span class="op">*</span> <span class="va">S</span><span class="op">)</span> <span class="op">-</span> <span class="op">(</span><span class="va">gamma</span> <span class="op">*</span> <span class="va">I1</span><span class="op">)</span>
-    <span class="va">dI2</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">gamma</span> <span class="op">*</span> <span class="va">I1</span><span class="op">)</span> <span class="op">-</span> <span class="op">(</span><span class="va">gamma</span> <span class="op">*</span> <span class="va">I2</span><span class="op">)</span>
-    <span class="va">dI3</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">gamma</span> <span class="op">*</span> <span class="va">I2</span><span class="op">)</span> <span class="op">-</span> <span class="op">(</span><span class="va">gamma</span> <span class="op">*</span> <span class="va">I3</span><span class="op">)</span>
-    <span class="va">dI4</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">gamma</span> <span class="op">*</span> <span class="va">I3</span><span class="op">)</span> <span class="op">-</span> <span class="op">(</span><span class="va">gamma</span> <span class="op">*</span> <span class="va">I4</span><span class="op">)</span>
-    <span class="va">dI5</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">gamma</span> <span class="op">*</span> <span class="va">I4</span><span class="op">)</span> <span class="op">-</span> <span class="op">(</span><span class="va">gamma</span> <span class="op">*</span> <span class="va">I5</span><span class="op">)</span>
-    <span class="va">dR</span> <span class="op">&lt;-</span>  <span class="va">gamma</span> <span class="op">*</span> <span class="va">I5</span>
-    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">dS</span>, <span class="va">dI1</span>, <span class="va">dI2</span>, <span class="va">dI3</span>, <span class="va">dI4</span>, <span class="va">dI5</span>, <span class="va">dR</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">}</span><span class="op">)</span>
-<span class="op">}</span>
-
-<span class="va">parameters_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>beta  <span class="op">=</span> <span class="fl">0.0015</span>, gamma <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
-<span class="va">initial_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>S <span class="op">=</span> <span class="fl">999</span>, I1 <span class="op">=</span> <span class="fl">1</span>, I2 <span class="op">=</span> <span class="fl">0</span>, I3 <span class="op">=</span> <span class="fl">0</span>, I4 <span class="op">=</span> <span class="fl">0</span>, I5 <span class="op">=</span> <span class="fl">0</span>, R <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
-<span class="va">time_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">20</span><span class="op">)</span>
-
-<span class="va">dsmod</span> <span class="op">&lt;-</span> <span class="fu">ode</span><span class="op">(</span>
-  y <span class="op">=</span> <span class="va">initial_values</span>,
-  times <span class="op">=</span> <span class="va">time_values</span>,
-  func <span class="op">=</span> <span class="va">sir_equations</span>,
-  parms <span class="op">=</span> <span class="va">parameters_values</span>
-<span class="op">)</span>
-
-<span class="co">## Sum up I1 + I2 + I3 + I4 + I5 to get the final I compartment</span>
-<span class="va">dsmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">dsmod</span><span class="op">)</span>
-<span class="va">dsmod</span><span class="op">$</span><span class="va">I</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">dsmod</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"I"</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">dsmod</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
-<span class="va">dsmod</span> <span class="op">&lt;-</span> <span class="va">dsmod</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time"</span>, <span class="st">"S"</span>, <span class="st">"I"</span>, <span class="st">"R"</span><span class="op">)</span><span class="op">]</span>
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">dsmod</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">dsmod</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>, <span class="st">"_deSolve"</span><span class="op">)</span>
-
-<span class="co"># Our method</span>
-<span class="va">initialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>S <span class="op">=</span> <span class="fl">999</span>, I <span class="op">=</span> <span class="fl">1</span>, R <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
-<span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>beta <span class="op">=</span> <span class="fl">0.0015</span>, N <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span>
-<span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="fu"><a href="reference/mathexpr.html">mathexpr</a></span><span class="op">(</span><span class="va">beta</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="va">I</span> <span class="op">/</span> <span class="va">N</span><span class="op">)</span>, 
-                    <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="reference/d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span>
-
-<span class="va">fmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sim.html">sim</a></span><span class="op">(</span>simulationDuration <span class="op">=</span> <span class="fl">20</span>, errorTolerance <span class="op">=</span> <span class="fl">0.01</span>, 
-            timeStep <span class="op">=</span> <span class="fl">0.001</span>,
-            transitions <span class="op">=</span> <span class="va">transitions</span>,
-            initialValues <span class="op">=</span> <span class="va">initialValues</span>, parameters <span class="op">=</span> <span class="va">parameters</span><span class="op">)</span>
-
-<span class="co"># Merge the two results data frame to compare</span>
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">fmod</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">fmod</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>, <span class="st">"_discrete"</span><span class="op">)</span>
-<span class="va">df2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">dsmod</span>, <span class="va">fmod</span>, by.x <span class="op">=</span> <span class="st">"time"</span>, by.y <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span>
-
-<span class="co"># We can make comparison by viewing the merged data frame</span>
-<span class="va">df2</span>
-
-<span class="co"># Or plot them using these ggplot2 codes</span>
-<span class="va">df_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/gather.html" class="external-link">gather</a></span><span class="op">(</span><span class="va">df2</span>, key <span class="op">=</span> <span class="st">"Compartment"</span>, value <span class="op">=</span> <span class="st">"Value"</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"time"</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">df2</span><span class="op">)</span>, invert <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
-<span class="va">df_plot</span><span class="op">$</span><span class="va">package</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">df_plot</span><span class="op">$</span><span class="va">Compartment</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/strsplit.html" class="external-link">strsplit</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"_"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
-<span class="va">df_plot</span><span class="op">$</span><span class="va">Compartment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"_deSolve|_discrete"</span>, <span class="st">""</span>, <span class="va">df_plot</span><span class="op">$</span><span class="va">Compartment</span><span class="op">)</span>
-<span class="va">df_plot</span><span class="op">$</span><span class="va">Compartment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">df_plot</span><span class="op">$</span><span class="va">Compartment</span><span class="op">)</span>
-
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">df_plot</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">Value</span>, col <span class="op">=</span> <span class="va">Compartment</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">package</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span></code></pre>
-<p>The results are as follows</p>
-<pre><code>   time    S_deSolve  I_deSolve    R_deSolve   S_discrete I_discrete   R_discrete
-1     0 9.990000e+02   1.000000 0.000000e+00 9.990000e+02   1.000000 0.000000e+00
-2     1 9.955339e+02   4.465856 2.303639e-04 9.955389e+02   4.460865 2.301190e-04
-3     2 9.802964e+02  19.696340 7.267827e-03 9.803393e+02  19.653437 7.257803e-03
-4     3 9.174280e+02  82.509558 6.244174e-02 9.176736e+02  82.264069 6.232200e-02
-5     4 7.128656e+02 286.788494 3.458764e-01 7.136823e+02 285.972686 3.449851e-01
-6     5 3.570668e+02 641.372446 1.560792e+00 3.580034e+02 640.440678 1.555952e+00
-7     6 1.108652e+02 883.247525 5.887297e+00 1.112038e+02 882.927489 5.868694e+00
-8     7 2.753151e+01 954.609024 1.785947e+01 2.759597e+01 954.594431 1.780960e+01
-9     8 6.560794e+00 950.121748 4.331746e+01 6.568916e+00 950.212553 4.321853e+01
-10    9 1.618453e+00 911.744233 8.663731e+01 1.618522e+00 911.901014 8.648046e+01
-11   10 4.304366e-01 850.902950 1.486666e+02 4.299393e-01 851.114669 1.484554e+02
-12   11 1.270917e-01 773.290746 2.265822e+02 1.267988e-01 773.543162 2.263300e+02
-13   12 4.253584e-02 684.835925 3.151215e+02 4.239289e-02 685.110767 3.148468e+02
-14   13 1.632456e-02 591.799588 4.081841e+02 1.625438e-02 592.078497 4.079052e+02
-15   14 7.202036e-03 499.863552 5.001292e+02 7.165272e-03 500.131156 4.998617e+02
-16   15 3.633768e-03 413.460732 5.865356e+02 3.612778e-03 413.706068 5.862903e+02
-17   16 2.074540e-03 335.535057 6.644629e+02 2.061332e-03 335.751685 6.642463e+02
-18   17 1.321349e-03 267.628893 7.323698e+02 1.312357e-03 267.814259 7.321844e+02
-19   18 9.245871e-04 210.148809 7.898503e+02 9.179818e-04 210.303240 7.896958e+02
-20   19 6.998868e-04 162.688892 8.373104e+02 6.946921e-04 162.814630 8.371847e+02
-21   20 5.649312e-04 124.335796 8.756636e+02 5.606225e-04 124.436154 8.755633e+02</code></pre>
-<div class="figure">
-<img src="reference/figures/ourVsDesolve.png" alt=""><p class="caption">Our package vs deSolve</p>
-</div>
-</div>
+           timeStep <span class="op">=</span> <span class="va">timeStep</span><span class="op">)</span>
+<span class="co">#&gt; Simulating...</span>
+<span class="co">#&gt; Simulation completed, elapsed time: 0.0310 seconds</span></code></pre></div>
+<p>The output is a data frame with 4 columns: <code>Time</code>, <code>S</code>, <code>I</code> and <code>R</code></p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span>
+<span class="co">#&gt;   Time        S        I            R</span>
+<span class="co">#&gt; 1 0.00 999.0000 1.000000 0.000000e+00</span>
+<span class="co">#&gt; 2 0.01 998.8801 1.119874 5.543225e-06</span>
+<span class="co">#&gt; 3 0.02 998.7459 1.254092 2.278823e-05</span>
+<span class="co">#&gt; 4 0.03 998.5956 1.404364 5.306419e-05</span>
+<span class="co">#&gt; 5 0.04 998.4273 1.572606 9.785981e-05</span>
+<span class="co">#&gt; 6 0.05 998.2389 1.760961 1.588423e-04</span></code></pre></div>
+<p>We can plot the output with:</p>
+<p><img src="reference/figures/README-example-plot-1.png" width="100%"></p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
