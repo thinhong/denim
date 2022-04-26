@@ -91,9 +91,9 @@
 <span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
   <span class="st">"0.3 * S -&gt; I"</span> <span class="op">=</span> <span class="fu"><a href="reference/mathexpr.html">mathexpr</a></span><span class="op">(</span><span class="va">beta</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="op">(</span><span class="va">I</span> <span class="op">+</span> <span class="va">IV</span><span class="op">)</span> <span class="op">/</span> <span class="va">N</span><span class="op">)</span>,
   <span class="st">"0.7 * S -&gt; V"</span> <span class="op">=</span> <span class="fu"><a href="reference/constant.html">constant</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>,
-  <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="reference/gamma.html">gamma</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>,
+  <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="reference/d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>,
   <span class="st">"V -&gt; IV"</span> <span class="op">=</span> <span class="fu"><a href="reference/mathexpr.html">mathexpr</a></span><span class="op">(</span><span class="va">beta</span> <span class="op">*</span> <span class="fl">0.3</span> <span class="op">*</span> <span class="va">V</span> <span class="op">*</span> <span class="op">(</span><span class="va">I</span> <span class="op">+</span> <span class="va">IV</span><span class="op">)</span> <span class="op">/</span> <span class="va">N</span><span class="op">)</span>,
-  <span class="st">"IV -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="reference/exponential.html">exponential</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>
+  <span class="st">"IV -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="reference/d_exponential.html">d_exponential</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>
 <span class="op">)</span>
 
 <span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>
@@ -140,9 +140,9 @@
 </li>
 <li>
 <code>distributions</code>: distributions of compartments, currently the followings are available:<ul>
-<li><code>exponential(rate)</code></li>
-<li><code>gamma(scale, shape)</code></li>
-<li><code>weibull(scale, shape)</code></li>
+<li><code>d_exponential(rate)</code></li>
+<li><code>d_gamma(scale, shape)</code></li>
+<li><code>d_weibull(scale, shape)</code></li>
 <li>
 <code>mathexpr(expression)</code>: user-defined math expression, the expression can be put inside <code>""</code> or not, e.g <code>mathexpr(beta * S * I / N)</code> or <code>mathexpr("beta * S * I / N")</code> are both acceptable</li>
 <li>
@@ -207,7 +207,7 @@
 <span class="va">initialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>S <span class="op">=</span> <span class="fl">999</span>, I <span class="op">=</span> <span class="fl">1</span>, R <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
 <span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>beta <span class="op">=</span> <span class="fl">0.0015</span>, N <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span>
 <span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="fu"><a href="reference/mathexpr.html">mathexpr</a></span><span class="op">(</span><span class="va">beta</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="va">I</span> <span class="op">/</span> <span class="va">N</span><span class="op">)</span>, 
-                    <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="reference/gamma.html">gamma</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span>
+                    <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="reference/d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">fmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sim.html">sim</a></span><span class="op">(</span>simulationDuration <span class="op">=</span> <span class="fl">20</span>, errorTolerance <span class="op">=</span> <span class="fl">0.01</span>, 
             timeStep <span class="op">=</span> <span class="fl">0.001</span>,
