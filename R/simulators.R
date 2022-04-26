@@ -50,7 +50,7 @@ checkInitsTransitions <- function(initialValues, transitions) {
 #' @examples 
 #' transitions <- list(
 #'    "S -> I" = mathexpr(beta * S * I / N),
-#'    "I -> R" = gamma(3, 2)
+#'    "I -> R" = d_gamma(3, 2)
 #' )
 #' 
 #' initialValues <- c(
