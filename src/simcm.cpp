@@ -8,9 +8,6 @@ Rcpp::DataFrame simcm(std::string inputPath) {
     nlohmann::ordered_json input;
     input = nlohmann::ordered_json::parse(inputPath);
 
-    // Record execution time: https://stackoverflow.com/questions/21856025/getting-an-accurate-execution-time-in-c-micro-seconds
-    auto startTime = std::chrono::high_resolution_clock::now();
-
     // Initialize parameters: errorTolerance, timeStep and daysFollowUp
     Distribution::errorTolerance = input["errorTolerance"];
     if (!input["timeStep"].is_null()) {
@@ -27,8 +24,6 @@ Rcpp::DataFrame simcm(std::string inputPath) {
     // Debug: view model structure
 //    viewModelStructure(myModel.getModel());
 
-    Rcpp::Rcout << "Simulating..." << "\n";
-
     // ======================== End JSON input ==============================
 
     // ==================== Construct and run model ==========================
@@ -38,13 +33,6 @@ Rcpp::DataFrame simcm(std::string inputPath) {
         // Debug: view each time step update
 //        viewModelUpdate(myModel.getModel(), i);
     }
-
-    // Display execution time
-    auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
-    double seconds = std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
-    seconds /= 1000;
-    Rcpp::Rcout << "Simulation completed, elapsed time: ";
-    Rcpp::Rcout << std::fixed << std::setprecision(4) << seconds << " seconds\n";
 
     // ================== End construct and run model ========================
 

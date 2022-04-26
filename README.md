@@ -56,8 +56,6 @@ timeStep <- 0.01
 mod <- sim(transitions = transitions, initialValues = initialValues, 
            parameters = parameters, simulationDuration = simulationDuration, 
            timeStep = timeStep)
-#> Simulating...
-#> Simulation completed, elapsed time: 0.0300 seconds
 ```
 
 The output is a data frame with 4 columns: `Time`, `S`, `I` and `R`
@@ -75,4 +73,4 @@ head(mod)
 
 We can plot the output with:
 
-<img src="man/figures/README-example-plot-1.png" width="100%" />
+<img src="man/figures/README-example-plot-1.png" width="70%" />

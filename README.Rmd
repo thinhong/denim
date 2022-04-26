@@ -70,6 +70,6 @@ head(mod)
 
 We can plot the output with:
 
-```{r example-plot, echo = FALSE}
+```{r example-plot, echo = FALSE, fig.width=7}
 plot(mod)
 ```
