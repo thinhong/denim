@@ -6,7 +6,7 @@
 #' @param shape shape parameter of a gamma distribution
 #'
 #' @export
-gamma <- function(scale, shape) {
+d_gamma <- function(scale, shape) {
   distr <- list(
     distribution = "gamma",
     scale = scale,
@@ -23,7 +23,7 @@ gamma <- function(scale, shape) {
 #' @param shape shape parameter of a Weibull distribution
 #'
 #' @export
-weibull <- function(scale, shape) {
+d_weibull <- function(scale, shape) {
   distr <- list(
     distribution = "weibull",
     scale = scale,
@@ -38,7 +38,7 @@ weibull <- function(scale, shape) {
 #' @param rate rate parameter of an exponential distribution
 #'
 #' @export
-exponential <- function(rate) {
+d_exponential <- function(rate) {
   distr <- list(
     distribution = "exponential",
     rate = rate)
@@ -53,7 +53,7 @@ exponential <- function(rate) {
 #' @param sigma scale parameter or ln standard deviation
 #'
 #' @export
-lognormal <- function(mu, sigma) {
+d_lognormal <- function(mu, sigma) {
   distr <- list(
     distribution = "lognormal",
     mu = mu,
@@ -145,13 +145,13 @@ nonparametric <- function(...) {
 #' compartments
 #' ```
 #' "I -> R, D" = multinomial(0.9, 0.1),
-#' "I -> R" = gamma(3, 2),
-#' "I -> D" = lognormal(2, 0.5)
+#' "I -> R" = d_gamma(3, 2),
+#' "I -> D" = d_lognormal(2, 0.5)
 #' ```
 #' is equal to
 #' ```
-#' "0.9 * I -> R" = gamma(3, 2),
-#' "0.1 * I -> D" = lognormal(2, 0.5)
+#' "0.9 * I -> R" = d_gamma(3, 2),
+#' "0.1 * I -> D" = d_lognormal(2, 0.5)
 #' ```
 #'
 #' @param ... a vector of probabilities, must add up to 1

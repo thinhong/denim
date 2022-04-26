@@ -15,9 +15,9 @@ newModel <- function(simulationDuration, errorTolerance, initialValues,
 
 # Model to json
 modelToJson <- function(mod) {
-  intialValues <- mod$initialValues
-  parameters   <- mod$parameters
-  transitions  <- mod$transitions
+  initialValues <- mod$initialValues
+  parameters    <- mod$parameters
+  transitions   <- mod$transitions
   
   ivKeyPairs <- newJsonKeyPair(names(initialValues), initialValues)
   pmKeyPairs <- newJsonKeyPair(names(parameters), parameters)

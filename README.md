@@ -21,9 +21,9 @@ library(denim)
 transitions <- list(
   "0.3 * S -> I" = mathexpr(beta * S * (I + IV) / N),
   "0.7 * S -> V" = constant(2),
-  "I -> R" = gamma(3, 2),
+  "I -> R" = d_gamma(3, 2),
   "V -> IV" = mathexpr(beta * 0.3 * V * (I + IV) / N),
-  "IV -> R" = exponential(2)
+  "IV -> R" = d_exponential(2)
 )
 
 parameters <- c(
@@ -59,9 +59,9 @@ Here we have to define:
     * `"S -> I"`, `"S -> V"`: compartment S transitions to I first, then the rest of S transitions to V
     * `"S -> 0.3 * I"`, `"S -> 0.7 * V"`: S transitions to I and V concurrently, of which 30% transitions to I and 70% transitions to V
 * `distributions`: distributions of compartments, currently the followings are available:
-  * `exponential(rate)`
-  * `gamma(scale, shape)`
-  * `weibull(scale, shape)`
+  * `d_exponential(rate)`
+  * `d_gamma(scale, shape)`
+  * `d_weibull(scale, shape)`
   * `mathexpr(expression)`: user-defined math expression, the expression can be put inside `""` or not, e.g `mathexpr(beta * S * I / N)` or `mathexpr("beta * S * I / N")` are both acceptable
   * `constant(constant)`: a fixed number of individuals per time step, e.g `"S -> V" = constant(50)` means 50 people got vaccinated per day
   * `transprob(transitionProb)`: define a transition probability instead of waiting time distribution, this is the conventional dR/dt = gamma * I which we input by `"I -> R" = transprob(gamma)`
@@ -120,7 +120,7 @@ colnames(dsmod)[-1] <- paste0(colnames(dsmod)[-1], "_deSolve")
 initialValues <- c(S = 999, I = 1, R = 0)
 parameters <- c(beta = 0.0015, N = 1000)
 transitions <- list("S -> I" = mathexpr(beta * S * I / N), 
-                    "I -> R" = gamma(2, 5))
+                    "I -> R" = d_gamma(2, 5))
 
 fmod <- sim(simulationDuration = 20, errorTolerance = 0.01, 
             timeStep = 0.001,

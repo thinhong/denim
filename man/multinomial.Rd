@@ -12,11 +12,11 @@ multinomial(...)
 \description{
 Define a set of probabilities of transition from one compartment to multiple
 compartments\preformatted{"I -> R, D" = multinomial(0.9, 0.1),
-"I -> R" = gamma(3, 2),
-"I -> D" = lognormal(2, 0.5)
+"I -> R" = d_gamma(3, 2),
+"I -> D" = d_lognormal(2, 0.5)
 }
 
-is equal to\preformatted{"0.9 * I -> R" = gamma(3, 2),
-"0.1 * I -> D" = lognormal(2, 0.5)
+is equal to\preformatted{"0.9 * I -> R" = d_gamma(3, 2),
+"0.1 * I -> D" = d_lognormal(2, 0.5)
 }
 }
