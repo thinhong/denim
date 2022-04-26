@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# denim
+# denim <img src="man/figures/logo.png" align="right" width="120" />
 
 <!-- badges: start -->
 
@@ -57,7 +57,7 @@ mod <- sim(transitions = transitions, initialValues = initialValues,
            parameters = parameters, simulationDuration = simulationDuration, 
            timeStep = timeStep)
 #> Simulating...
-#> Simulation completed, elapsed time: 0.0310 seconds
+#> Simulation completed, elapsed time: 0.0300 seconds
 ```
 
 The output is a data frame with 4 columns: `Time`, `S`, `I` and `R`
