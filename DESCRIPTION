@@ -18,11 +18,11 @@ URL: https://thinhong.github.io/denim,
 BugReports: https://github.com/thinhong/denim/issues
 Imports:
     Rcpp (>= 1.0.6),
-    DiagrammeR,
 Suggests:
     knitr,
     rmarkdown,
-    ggplot2
+    ggplot2,
+    DiagrammeR
 LinkingTo: Rcpp
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
