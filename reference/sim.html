@@ -90,9 +90,8 @@ be rounded as 1, we set <code>errorTolerance = 0.001</code> (1 - 0.999 = 0.001).
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span class="r-in">   <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="fu"><a href="mathexpr.html">mathexpr</a></span><span class="op">(</span><span class="va">beta</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="va">I</span> <span class="op">/</span> <span class="va">N</span><span class="op">)</span>,</span>
-<span class="r-in">   <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Special.html" class="external-link">gamma</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span class="r-in">   <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in gamma(3, 2):</span> 2 arguments passed to 'gamma' which requires 1</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">initialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span class="r-in">   S <span class="op">=</span> <span class="fl">999</span>, </span>
@@ -113,7 +112,8 @@ be rounded as 1, we set <code>errorTolerance = 0.001</code> (1 - 0.999 = 0.001).
 <span class="r-in">           parameters <span class="op">=</span> <span class="va">parameters</span>, </span>
 <span class="r-in">           simulationDuration <span class="op">=</span> <span class="va">simulationDuration</span>, </span>
 <span class="r-in">           timeStep <span class="op">=</span> <span class="va">timeStep</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in newModel(simulationDuration, errorTolerance, initialValues, parameters,     transitions, timeStep):</span> object 'transitions' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simulating...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simulation completed, elapsed time: 0.1520 seconds</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
