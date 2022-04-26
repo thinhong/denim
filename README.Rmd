@@ -1,0 +1,75 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# denim
+
+<!-- badges: start -->
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![R-CMD-check](https://github.com/thinhong/denim/workflows/R-CMD-check/badge.svg)](https://github.com/thinhong/denim/actions)
+<!-- badges: end -->
+
+An R package for building and simulating deterministic discrete-time compartmental models with memory.
+
+## Installation
+
+You can install the development version of denim from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("thinhong/denim")
+```
+
+## Example
+
+This is a basic example to illustrate the specification of a simple SIR model, which contains the three compartments susceptible (S), infected (I) and recovered (R). The recovery probabilities of infected individuals are gamma distributed in this example:
+
+```{r example}
+library(denim)
+
+transitions <- list(
+  "S -> I" = mathexpr(beta * S * I / N),
+  "I -> R" = d_gamma(3, 2)
+)
+
+parameters <- c(
+  beta = 0.12,
+  N = 1000
+)
+
+initialValues <- c(
+  S = 999, 
+  I = 1, 
+  R = 0
+)
+
+simulationDuration <- 10
+timeStep <- 0.01
+
+mod <- sim(transitions = transitions, initialValues = initialValues, 
+           parameters = parameters, simulationDuration = simulationDuration, 
+           timeStep = timeStep)
+```
+
+The output is a data frame with 4 columns: `Time`, `S`, `I` and `R`
+
+```{r}
+head(mod)
+```
+
+We can plot the output with:
+
+```{r example-plot, echo = FALSE}
+plot(mod)
+```
