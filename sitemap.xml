@@ -19,25 +19,22 @@
     <loc>/reference/constant.html</loc>
   </url>
   <url>
-    <loc>/reference/d_exponential.html</loc>
-  </url>
-  <url>
-    <loc>/reference/d_gamma.html</loc>
-  </url>
-  <url>
-    <loc>/reference/d_lognormal.html</loc>
-  </url>
-  <url>
-    <loc>/reference/d_weibull.html</loc>
-  </url>
-  <url>
     <loc>/reference/denim-package.html</loc>
   </url>
   <url>
     <loc>/reference/distributionToJson.html</loc>
   </url>
   <url>
+    <loc>/reference/exponential.html</loc>
+  </url>
+  <url>
+    <loc>/reference/gamma.html</loc>
+  </url>
+  <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/lognormal.html</loc>
   </url>
   <url>
     <loc>/reference/mathexpr.html</loc>
@@ -53,5 +50,8 @@
   </url>
   <url>
     <loc>/reference/transprob.html</loc>
+  </url>
+  <url>
+    <loc>/reference/weibull.html</loc>
   </url>
 </urlset>
