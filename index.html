@@ -74,7 +74,6 @@
 </div>
 <p>An R package for building and simulating deterministic discrete-time compartmental models with memory.</p>
 <!-- badges: start -->
-
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -92,9 +91,9 @@
 <span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
   <span class="st">"0.3 * S -&gt; I"</span> <span class="op">=</span> <span class="fu"><a href="reference/mathexpr.html">mathexpr</a></span><span class="op">(</span><span class="va">beta</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="op">(</span><span class="va">I</span> <span class="op">+</span> <span class="va">IV</span><span class="op">)</span> <span class="op">/</span> <span class="va">N</span><span class="op">)</span>,
   <span class="st">"0.7 * S -&gt; V"</span> <span class="op">=</span> <span class="fu"><a href="reference/constant.html">constant</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>,
-  <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="reference/gamma.html">gamma</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>,
+  <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="reference/d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>,
   <span class="st">"V -&gt; IV"</span> <span class="op">=</span> <span class="fu"><a href="reference/mathexpr.html">mathexpr</a></span><span class="op">(</span><span class="va">beta</span> <span class="op">*</span> <span class="fl">0.3</span> <span class="op">*</span> <span class="va">V</span> <span class="op">*</span> <span class="op">(</span><span class="va">I</span> <span class="op">+</span> <span class="va">IV</span><span class="op">)</span> <span class="op">/</span> <span class="va">N</span><span class="op">)</span>,
-  <span class="st">"IV -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="reference/exponential.html">exponential</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>
+  <span class="st">"IV -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="reference/d_exponential.html">d_exponential</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>
 <span class="op">)</span>
 
 <span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>
@@ -130,25 +129,20 @@
 <li>
 <code>parameters</code>: if we define a compartment transition using math expression, list all parameters (except the compartment names) inside the math expression here</li>
 <li>
-<code>transitions</code>: a list with format <code>"transition" = distribution()</code>
-<ul>
-<li>
-<code>"transition"</code>: structure of the model, e.g a simple SIR model S -&gt; I -&gt; R would be defined by <code>"S -&gt; I"</code>, <code>"I -&gt; R"</code> (note the <code>""</code> symbol, this will be read as strings), white space can be ignored here i.e we can write <code>"S-&gt;I"</code>
-<ul>
+<code>transitions</code>: a list with format <code>"transition" = distribution()</code><ul><li>
+<code>"transition"</code>: structure of the model, e.g a simple SIR model S -&gt; I -&gt; R would be defined by <code>"S -&gt; I"</code>, <code>"I -&gt; R"</code> (note the <code>""</code> symbol, this will be read as strings), white space can be ignored here i.e we can write <code>"S-&gt;I"</code><ul>
 <li>
 <code>"S -&gt; I"</code>, <code>"S -&gt; V"</code>: compartment S transitions to I first, then the rest of S transitions to V</li>
 <li>
 <code>"S -&gt; 0.3 * I"</code>, <code>"S -&gt; 0.7 * V"</code>: S transitions to I and V concurrently, of which 30% transitions to I and 70% transitions to V</li>
 </ul>
-</li>
-</ul>
+</li></ul>
 </li>
 <li>
-<code>distributions</code>: distributions of compartments, currently the followings are available:
-<ul>
-<li><code>exponential(rate)</code></li>
-<li><code>gamma(scale, shape)</code></li>
-<li><code>weibull(scale, shape)</code></li>
+<code>distributions</code>: distributions of compartments, currently the followings are available:<ul>
+<li><code>d_exponential(rate)</code></li>
+<li><code>d_gamma(scale, shape)</code></li>
+<li><code>d_weibull(scale, shape)</code></li>
 <li>
 <code>mathexpr(expression)</code>: user-defined math expression, the expression can be put inside <code>""</code> or not, e.g <code>mathexpr(beta * S * I / N)</code> or <code>mathexpr("beta * S * I / N")</code> are both acceptable</li>
 <li>
@@ -213,7 +207,7 @@
 <span class="va">initialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>S <span class="op">=</span> <span class="fl">999</span>, I <span class="op">=</span> <span class="fl">1</span>, R <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
 <span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>beta <span class="op">=</span> <span class="fl">0.0015</span>, N <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span>
 <span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="fu"><a href="reference/mathexpr.html">mathexpr</a></span><span class="op">(</span><span class="va">beta</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="va">I</span> <span class="op">/</span> <span class="va">N</span><span class="op">)</span>, 
-                    <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="reference/gamma.html">gamma</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span>
+                    <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="reference/d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">fmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sim.html">sim</a></span><span class="op">(</span>simulationDuration <span class="op">=</span> <span class="fl">20</span>, errorTolerance <span class="op">=</span> <span class="fl">0.01</span>, 
             timeStep <span class="op">=</span> <span class="fl">0.001</span>,
@@ -316,7 +310,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
     </footer>
