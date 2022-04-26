@@ -73,4 +73,4 @@ head(mod)
 
 We can plot the output with:
 
-<img src="man/figures/README-example-plot-1.png" width="70%" />
+<img src="man/figures/README-example-plot-1.png" width="100%" />
