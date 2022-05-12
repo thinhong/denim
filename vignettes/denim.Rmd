@@ -121,7 +121,7 @@ We have two transitions `S -> I` and `I -> R` in this case. The transitions are 
 
 ```{r}
 transitions <- list(
-  "S -> I" = mathexpr(beta * S * I / N),
+  "S -> I" = "beta * S * I / N",
   "I -> R" = d_gamma(3, 2)
 )
 ```
@@ -229,9 +229,11 @@ Current available distribution in this package including:
 
 * `d_lognormal(mu, sigma)`: Discrete **log-normal distribution** with parameters `mu` and `sigma`
 
-* `mathexpr(expression)`: User-defined **mathematical expression**, the expression can be put inside `""` or not, e.g `mathexpr(beta * S * I / N)` or `mathexpr("beta * S * I / N")` are both acceptable
+You can define other type of transitions such as:
 
-* `constant(x)`: Every time step a **fixed number of individuals** of the left compartment transit to the right compartment, e.g `"S -> V" = constant(50)` means 50 people got vaccinated per day
+* Mathematical expression: Transition defined with a string value such as `"beta * S * I / N"` will be converted to a mathematical expression. You will need to define parameters that are not compartment names in the `parameters` argument
+
+* Constant: Transition defined with a numerical value such as `1`, `2` will be converted to a constant. This is to define the number of individuals moving in a time step.
 
 * `transprob(x)`: Every time step a **fixed percentage** of the left compartment transit to the right compartment, this is also a convenient way to define $R_t - R_{t-1} = \gamma I$ which we can input `"I -> R" = transprob(gamma)`
 
@@ -251,7 +253,7 @@ DiagrammeR::grViz("digraph {
   node [shape = rectangle]
   
   S -> I [label = '&#946;SI/N']
-  S -> V [label = 'constant(5)']
+  S -> V [label = '5']
   I -> R [label = '0.9 -> d_gamma(3, 2)']
   I -> D [label = '0.1 -> d_lognormal(2, 0.5)']
   }",
@@ -269,8 +271,8 @@ We can define the model for this example as follows:
 
 ```{r, fig.width = 6}
 transitions <- list(
-  "S -> I" = mathexpr(beta * S * I / N),
-  "S -> V" = constant(7),
+  "S -> I" = "beta * S * I / N",
+  "S -> V" = 7,
   "0.9 * I -> R" = d_gamma(3, 2),
   "0.1 * I -> D" = d_lognormal(2, 0.5)
 )
@@ -322,7 +324,7 @@ DiagrammeR::grViz("digraph {
   node [shape = rectangle]
   
   S -> I [label = '&#946;S(I + IV)/N']
-  S -> V [label = 'constant(2)']
+  S -> V [label = '2']
   I -> D [label = '0.1 -> d_lognormal(2, 0.5)']
   I -> R [label = '0.9 -> d_gamma(3, 2)']
   V -> IV [label = '0.1 * &#946;V(I + IV)/N']
@@ -334,11 +336,11 @@ DiagrammeR::grViz("digraph {
 
 ```{r, fig.width = 6}
 transitions <- list(
-  "S -> I" = mathexpr(beta * S * (I + IV) / N),
-  "S -> V" = constant(2),
+  "S -> I" = "beta * S * (I + IV) / N",
+  "S -> V" = 2,
   "0.1 * I -> D" = d_lognormal(2, 0.5),
   "0.9 * I -> R" = d_gamma(3, 2),
-  "V -> IV" = mathexpr(0.1 * beta * V * (I + IV) / N),
+  "V -> IV" = "0.1 * beta * V * (I + IV) / N",
   "IV -> R" = d_exponential(2)
 )
 
