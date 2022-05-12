@@ -89,7 +89,7 @@ be rounded as 1, we set <code>errorTolerance = 0.001</code> (1 - 0.999 = 0.001).
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span class="r-in">   <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="fu"><a href="mathexpr.html">mathexpr</a></span><span class="op">(</span><span class="va">beta</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="va">I</span> <span class="op">/</span> <span class="va">N</span><span class="op">)</span>,</span>
+<span class="r-in">   <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * S * I / N"</span>,</span>
 <span class="r-in">   <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>

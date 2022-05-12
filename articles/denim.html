@@ -88,8 +88,8 @@
 </h2>
 <p>The SIR model uses 3 compartments: S (susceptible), I (infected), R (recovered) to describe clinical status of individuals. We use the most simple form of SIR model to demonstrate how to define the distribution of the lengths of stay distribution.</p>
 <center>
-<div id="htmlwidget-c88e2cec0435eb915a0c" style="width:700px;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-c88e2cec0435eb915a0c">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"&#947;I\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-00b975e8ad8a9971d019" style="width:700px;height:100%;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-00b975e8ad8a9971d019">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"&#947;I\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </center>
 <p>The model equations are:</p>
 <p><span class="math display">\[S_{t+1} - S_{t} = -\lambda S_{t} = -\frac{\beta I_{t}}{N}S_{t}\]</span> <span class="math display">\[I_{t+1} - I_{t} = \frac{\beta I_{t}}{N}S_{t} - \gamma I_{t}\]</span> <span class="math display">\[R_{t+1} - R_{t} = \gamma I_{t}\]</span></p>
@@ -108,19 +108,19 @@
 <p><img src="denim_files/figure-html/unnamed-chunk-4-1.png" width="384" style="display: block; margin: auto;"></p>
 <p>The model now look like this:</p>
 <center>
-<div id="htmlwidget-3d9683be2c078db34899" style="width:330px;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-3d9683be2c078db34899">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"d_gamma(3, 2)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-89ff6599aa35c15fb49c" style="width:330px;height:100%;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-89ff6599aa35c15fb49c">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"d_gamma(3, 2)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </center>
 <p><strong>Model specification</strong></p>
 <p><em>Model transition</em></p>
 <center>
-<div id="htmlwidget-015c127c490039867604" style="width:330px;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-015c127c490039867604">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"d_gamma(3, 2)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-ab250a7bee17d23a40ef" style="width:330px;height:100%;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ab250a7bee17d23a40ef">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"d_gamma(3, 2)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </center>
 <p>We have two transitions <code>S -&gt; I</code> and <code>I -&gt; R</code> in this case. The transitions are specified in a list follow this format <code>"transition" = equation</code>, of which equation is defined with one of our functions for waiting time distribution.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="fu"><a href="../reference/mathexpr.html">mathexpr</a></span><span class="op">(</span><span class="va">beta</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="va">I</span> <span class="op">/</span> <span class="va">N</span><span class="op">)</span>,
+  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * S * I / N"</span>,
   <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 <p><em>Initial state</em></p>
@@ -166,14 +166,14 @@
 </h2>
 <p>In the SIR model, all infected individuals are presented by a single compartment I and have the same recovery rate <span class="math inline">\(\gamma\)</span>.</p>
 <center>
-<div id="htmlwidget-29da97c5913cd430749a" style="width:700px;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-29da97c5913cd430749a">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"&#947;I\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-7a945b58cf3f96dea502" style="width:700px;height:100%;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-7a945b58cf3f96dea502">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"&#947;I\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </center>
 <p>We want the recovery rate of individuals who had been infected for 1 day differ from the recovery rate of 2-day infected patients. So rather than using one compartment for infected (I), we define multiple infected sub-compartments. The number of sub-compartments depends on the maximum day we expect all infected individuals would be recovered.</p>
 <p>For example, if we expect a disease with a maximum 4 days of infection, we will end up with 4 sub-compartments. Each sub-compartment has its own recovery rate <span class="math inline">\(\gamma_{1}\)</span>, <span class="math inline">\(\gamma_{2}\)</span>, <span class="math inline">\(\gamma_{3}\)</span>, <span class="math inline">\(\gamma_{4}\)</span>. At day 4 it is certain that the patient will recover (because we assume that this disease has a maximum 4 days of infection), <span class="math inline">\(\gamma_{4} = 1\)</span>.</p>
 <center>
-<div id="htmlwidget-ab5795bcdf067e199a0d" style="width:100%;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ab5795bcdf067e199a0d">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I1 [label = <&#946;S(I<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT> + I<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT> + I<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT> + I<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>)/N>]\n  I1 -> R1 [label = <&#947;<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>I<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>]\n  I2 -> R2 [label = <&#947;<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>I<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>]\n  I3 -> R3 [label = <&#947;<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>I<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>]\n  I4 -> R4 [label = <I<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>>]\n  I1 -> I2 [label = <(1-&#947;<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>)I<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>]\n  I2 -> I3 [label = <(1-&#947;<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>)I<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>]\n  I3 -> I4 [label = <(1-&#947;<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>)I<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-f1f2fabc48dc90bf0bd6" style="width:100%;height:100%;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-f1f2fabc48dc90bf0bd6">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I1 [label = <&#946;S(I<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT> + I<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT> + I<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT> + I<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>)/N>]\n  I1 -> R1 [label = <&#947;<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>I<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>]\n  I2 -> R2 [label = <&#947;<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>I<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>]\n  I3 -> R3 [label = <&#947;<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>I<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>]\n  I4 -> R4 [label = <I<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>>]\n  I1 -> I2 [label = <(1-&#947;<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>)I<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>]\n  I2 -> I3 [label = <(1-&#947;<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>)I<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>]\n  I3 -> I4 [label = <(1-&#947;<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>)I<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </center>
 <p>Let <span class="math inline">\(R_1 + R_2 + R_3 + R_4 = \Sigma R\)</span>. We have <span class="math inline">\(\frac{R_1}{\Sigma R} = p_1\)</span>, <span class="math inline">\(\frac{R_2}{\Sigma R} = p_2\)</span>, <span class="math inline">\(\frac{R_3}{\Sigma R} = p_3\)</span>, <span class="math inline">\(\frac{R_4}{\Sigma R} = p_4\)</span>. Our mission is to estimate <span class="math inline">\(\gamma_{1}\)</span>, <span class="math inline">\(\gamma_{2}\)</span>, <span class="math inline">\(\gamma_{3}\)</span> to obtain <span class="math inline">\(p_1\)</span>, <span class="math inline">\(p_2\)</span>, <span class="math inline">\(p_3\)</span>, <span class="math inline">\(p_4\)</span> that fit a pre-defined distribution at the equilibrium state. This can be obtained by setting:</p>
 <p><span class="math display">\[\gamma_{i} = \frac{p_i}{1 - \sum_{j=1}^{i-1}p_j}\]</span></p>
@@ -188,8 +188,11 @@
 <li><p><code>d_gamma(scale, shape)</code>: Discrete <strong>gamma distribution</strong> with parameters <code>scale</code> and <code>shape</code></p></li>
 <li><p><code>d_weibull(scale, shape)</code>: Discrete <strong>Weibull distribution</strong> with parameters <code>scale</code> and <code>shape</code></p></li>
 <li><p><code>d_lognormal(mu, sigma)</code>: Discrete <strong>log-normal distribution</strong> with parameters <code>mu</code> and <code>sigma</code></p></li>
-<li><p><code>mathexpr(expression)</code>: User-defined <strong>mathematical expression</strong>, the expression can be put inside <code>""</code> or not, e.g <code>mathexpr(beta * S * I / N)</code> or <code>mathexpr("beta * S * I / N")</code> are both acceptable</p></li>
-<li><p><code>constant(x)</code>: Every time step a <strong>fixed number of individuals</strong> of the left compartment transit to the right compartment, e.g <code>"S -&gt; V" = constant(50)</code> means 50 people got vaccinated per day</p></li>
+</ul>
+<p>You can define other type of transitions such as:</p>
+<ul>
+<li><p>Mathematical expression: Transition defined with a string value such as <code>"beta * S * I / N"</code> will be converted to a mathematical expression. You will need to define parameters that are not compartment names in the <code>parameters</code> argument</p></li>
+<li><p>Constant: Transition defined with a numerical value such as <code>1</code>, <code>2</code> will be converted to a constant. This is to define the number of individuals moving in a time step.</p></li>
 <li><p><code>transprob(x)</code>: Every time step a <strong>fixed percentage</strong> of the left compartment transit to the right compartment, this is also a convenient way to define <span class="math inline">\(R_t - R_{t-1} = \gamma I\)</span> which we can input <code>"I -&gt; R" = transprob(gamma)</code></p></li>
 <li><p><code>nonparametric(waitingTimes...)</code>: A <strong>vector of values</strong>, could be numbers, percentages, density of the length of stay based on real data, <code>denim</code> will convert it into a distribution</p></li>
 <li><p><code>multinomial(probabilities)</code>: A convenient way to define <strong>several probabilities</strong> of a compartment transit to many compartments, may or may not in a time step. For example, <code>"V -&gt; VA, VS, VH" = multinomial(0.6, 0.3, 0.1)</code> means 60% of <code>V</code> will become <code>VA</code>, 30% become <code>VS</code> and 10% become <code>VH</code>. If we continue to define the length of stay distribution for these transitions e.g <code>"V -&gt; VA" = d_gamma(3, 2)</code>, probabilities defined with <code><a href="../reference/multinomial.html">multinomial()</a></code> is not the percentage of the left compartment transit in each time step, but the percentage of individuals move to <code>VA</code> at the equilibrium state. If we do not define further length of stay distribution, <code>"V -&gt; VA, VS, VH" = multinomial(0.6, 0.3, 0.1)</code> is the percentage of <code>V</code> transit to the right compartments per time step similar to a <code><a href="../reference/transprob.html">transprob()</a></code> function. See more detailed explanations in the <strong><em>Multiple transitions from a compartment</em></strong> section.</p></li>
@@ -200,8 +203,8 @@
 </h2>
 <p>We have many ways to define the type of transition when there are two or more transitions from a compartment. Consider this example:</p>
 <center>
-<div id="htmlwidget-b944c40bab8ace78f261" style="width:400px;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-b944c40bab8ace78f261">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  S -> V [label = \"constant(5)\"]\n  I -> R [label = \"0.9 -> d_gamma(3, 2)\"]\n  I -> D [label = \"0.1 -> d_lognormal(2, 0.5)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-b2ce30283e253cf6f41c" style="width:400px;height:100%;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-b2ce30283e253cf6f41c">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  S -> V [label = \"5\"]\n  I -> R [label = \"0.9 -> d_gamma(3, 2)\"]\n  I -> D [label = \"0.1 -> d_lognormal(2, 0.5)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </center>
 <p>There are two scenarios in this example:</p>
 <ul>
@@ -211,8 +214,8 @@
 <p>We can define the model for this example as follows:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="fu"><a href="../reference/mathexpr.html">mathexpr</a></span><span class="op">(</span><span class="va">beta</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="va">I</span> <span class="op">/</span> <span class="va">N</span><span class="op">)</span>,
-  <span class="st">"S -&gt; V"</span> <span class="op">=</span> <span class="fu"><a href="../reference/constant.html">constant</a></span><span class="op">(</span><span class="fl">7</span><span class="op">)</span>,
+  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * S * I / N"</span>,
+  <span class="st">"S -&gt; V"</span> <span class="op">=</span> <span class="fl">7</span>,
   <span class="st">"0.9 * I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>,
   <span class="st">"0.1 * I -&gt; D"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_lognormal.html">d_lognormal</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">0.5</span><span class="op">)</span>
 <span class="op">)</span>
@@ -252,16 +255,16 @@
 <h2 id="another-example">5. Another example<a class="anchor" aria-label="anchor" href="#another-example"></a>
 </h2>
 <center>
-<div id="htmlwidget-e25a877ec6ff69e92897" style="width:600px;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-e25a877ec6ff69e92897">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;S(I + IV)/N\"]\n  S -> V [label = \"constant(2)\"]\n  I -> D [label = \"0.1 -> d_lognormal(2, 0.5)\"]\n  I -> R [label = \"0.9 -> d_gamma(3, 2)\"]\n  V -> IV [label = \"0.1 * &#946;V(I + IV)/N\"]\n  IV -> R [label = \"d_exponential(2)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-4f2d7b32650917287bda" style="width:600px;height:100%;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-4f2d7b32650917287bda">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;S(I + IV)/N\"]\n  S -> V [label = \"2\"]\n  I -> D [label = \"0.1 -> d_lognormal(2, 0.5)\"]\n  I -> R [label = \"0.9 -> d_gamma(3, 2)\"]\n  V -> IV [label = \"0.1 * &#946;V(I + IV)/N\"]\n  IV -> R [label = \"d_exponential(2)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </center>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="fu"><a href="../reference/mathexpr.html">mathexpr</a></span><span class="op">(</span><span class="va">beta</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="op">(</span><span class="va">I</span> <span class="op">+</span> <span class="va">IV</span><span class="op">)</span> <span class="op">/</span> <span class="va">N</span><span class="op">)</span>,
-  <span class="st">"S -&gt; V"</span> <span class="op">=</span> <span class="fu"><a href="../reference/constant.html">constant</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>,
+  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * S * (I + IV) / N"</span>,
+  <span class="st">"S -&gt; V"</span> <span class="op">=</span> <span class="fl">2</span>,
   <span class="st">"0.1 * I -&gt; D"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_lognormal.html">d_lognormal</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">0.5</span><span class="op">)</span>,
   <span class="st">"0.9 * I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>,
-  <span class="st">"V -&gt; IV"</span> <span class="op">=</span> <span class="fu"><a href="../reference/mathexpr.html">mathexpr</a></span><span class="op">(</span><span class="fl">0.1</span> <span class="op">*</span> <span class="va">beta</span> <span class="op">*</span> <span class="va">V</span> <span class="op">*</span> <span class="op">(</span><span class="va">I</span> <span class="op">+</span> <span class="va">IV</span><span class="op">)</span> <span class="op">/</span> <span class="va">N</span><span class="op">)</span>,
+  <span class="st">"V -&gt; IV"</span> <span class="op">=</span> <span class="st">"0.1 * beta * V * (I + IV) / N"</span>,
   <span class="st">"IV -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_exponential.html">d_exponential</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>
 <span class="op">)</span>
 

@@ -90,7 +90,7 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://thinhong.github.io/denim" class="external-link">denim</a></span><span class="op">)</span>
 
 <span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="fu"><a href="reference/mathexpr.html">mathexpr</a></span><span class="op">(</span><span class="va">beta</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="va">I</span> <span class="op">/</span> <span class="va">N</span><span class="op">)</span>,
+  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * S * I / N"</span>,
   <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="reference/d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>
 <span class="op">)</span>
 
@@ -122,6 +122,8 @@
 <span class="co">#&gt; 5 0.04 998.4273 1.572606 9.785981e-05</span>
 <span class="co">#&gt; 6 0.05 998.2389 1.760961 1.588423e-04</span></code></pre></div>
 <p>We can plot the output with:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-example-plot-1.png" width="100%"></p>
 </div>
 </div>
