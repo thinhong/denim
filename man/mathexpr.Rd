@@ -7,7 +7,7 @@
 mathexpr(expr)
 }
 \arguments{
-\item{exp}{math expression, a string}
+\item{expr}{math expression, a string}
 }
 \description{
 User-defined mathematical expression. The expression will be processed by
