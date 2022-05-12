@@ -49,7 +49,7 @@ checkInitsTransitions <- function(initialValues, transitions) {
 #'
 #' @examples 
 #' transitions <- list(
-#'    "S -> I" = mathexpr(beta * S * I / N),
+#'    "S -> I" = "beta * S * I / N",
 #'    "I -> R" = d_gamma(3, 2)
 #' )
 #' 

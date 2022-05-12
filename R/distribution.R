@@ -71,7 +71,7 @@ d_lognormal <- function(mu, sigma) {
 #' [muparser website](https://beltoforion.de/en/muparser/features.php) 
 #' to see full list of available operators.
 #' 
-#' @param exp math expression, a string
+#' @param expr math expression, a string
 mathexpr <- function(expr) {
   distr <- list(
     distribution = "mathExpression",
