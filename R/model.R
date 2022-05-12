@@ -1,6 +1,17 @@
 # Constructor
 newModel <- function(simulationDuration, errorTolerance, initialValues, 
                      parameters, transitions, timeStep = 1) {
+  
+  # Convert string in transitions into math expression and number to constant
+  for (i in 1:length(transitions)) {
+    if (is.character(transitions[[i]]) & length(transitions[[i]]) == 1) {
+      transitions[[i]] <- mathexpr(transitions[[i]])
+    }
+    if (is.numeric(transitions[[i]]) & length(transitions[[i]]) == 1) {
+      transitions[[i]] <- constant(transitions[[i]])
+    }
+  }
+  
   mod <- list(
     simulationDuration = simulationDuration,
     errorTolerance     = errorTolerance,

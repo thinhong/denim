@@ -4,12 +4,10 @@
 \alias{mathexpr}
 \title{Mathematical expression}
 \usage{
-mathexpr(expression)
+mathexpr(expr)
 }
 \arguments{
-\item{expression}{math expression, can be put inside "" or not,
-e.g \code{mathexpr(beta * S * I / N)} or \code{mathexpr("beta * S * I / N")}
-are both acceptable}
+\item{exp}{math expression, a string}
 }
 \description{
 User-defined mathematical expression. The expression will be processed by

@@ -35,7 +35,7 @@ individuals are gamma distributed in this example:
 library(denim)
 
 transitions <- list(
-  "S -> I" = mathexpr(beta * S * I / N),
+  "S -> I" = "beta * S * I / N",
   "I -> R" = d_gamma(3, 2)
 )
 
@@ -72,5 +72,9 @@ head(mod)
 ```
 
 We can plot the output with:
+
+``` r
+plot(mod)
+```
 
 <img src="man/figures/README-example-plot-1.png" width="100%" />

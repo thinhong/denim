@@ -39,7 +39,7 @@ This is a basic example to illustrate the specification of a simple SIR model, w
 library(denim)
 
 transitions <- list(
-  "S -> I" = mathexpr(beta * S * I / N),
+  "S -> I" = "beta * S * I / N",
   "I -> R" = d_gamma(3, 2)
 )
 
@@ -70,6 +70,6 @@ head(mod)
 
 We can plot the output with:
 
-```{r example-plot, echo = FALSE}
+```{r example-plot}
 plot(mod)
 ```

@@ -71,15 +71,11 @@ d_lognormal <- function(mu, sigma) {
 #' [muparser website](https://beltoforion.de/en/muparser/features.php) 
 #' to see full list of available operators.
 #' 
-#' @param expression math expression, can be put inside "" or not, 
-#' e.g `mathexpr(beta * S * I / N)` or `mathexpr("beta * S * I / N")` 
-#' are both acceptable
-#'
-#' @export
-mathexpr <- function(expression) {
+#' @param exp math expression, a string
+mathexpr <- function(expr) {
   distr <- list(
     distribution = "mathExpression",
-    expression = gsub("\\\"", "", deparse(substitute(expression))))
+    expression = expr)
   
   class(distr) <- c("Distribution", class(distr))
   distr
@@ -92,8 +88,6 @@ mathexpr <- function(expression) {
 #' right compartment at every time step
 #' 
 #' @param x a constant number
-#'
-#' @export
 constant <- function(x) {
   distr <- list(
     distribution = "constant",
@@ -187,7 +181,7 @@ print.Distribution <- function(x, ...) {
   } 
   else if (x$distribution == "constant") {
     cat("Constant: ")
-    cat(x$frequency, sep = "")
+    cat(x$constant, sep = "")
   } 
   else if (x$distribution == "transitionProb") {
     cat("Transition probability: ")
@@ -218,7 +212,6 @@ print.Distribution <- function(x, ...) {
 #' @param distribution a list with elements $name, $rate / $scale / $shape...
 #'
 #' @return a json object that match format {"distribution": "weibull", "scale": 2, "shape": 5}
-#' @export
 distributionToJson <- function(distribution) {
   contents <- c()
   if (distribution$distribution == "nonparametric") {
@@ -241,4 +234,3 @@ distributionToJson <- function(distribution) {
   }
   newJsonObject(contents, inline = TRUE)
 }
-
