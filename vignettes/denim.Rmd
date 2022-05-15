@@ -14,7 +14,6 @@ knitr::opts_chunk$set(
   fig.align="center"
 )
 library(DiagrammeR) # for flowchart diagram
-library(ggplot2)
 ```
 
 ```{r setup}
@@ -52,21 +51,21 @@ $$R_{t+1} - R_{t} = \gamma I_{t}$$
 Usually to solve the model easier we make an assumption that the recovery rate $\gamma$ is constant, this will leads to an exponentially distributed length of stay i.e most individuals recover after 1 day being infected.
 
 ```{r, echo=FALSE, fig.width = 4}
+
 rates <- c(0.5, 1, 1.5)
 x <- seq(0, 5, 0.001)
 y <- dexp(x = x, rate = rates[1])
 y2 <- dexp(x = x, rate = rates[2])
 y3 <- dexp(x = x, rate = rates[3])
 
-df <- data.frame(x = rep(x, 3), 
-                 y = c(y, y2, y3), 
-                 z = c(rep("0.5", length(x)), rep("1.0", length(x)), rep("1.5", length(x))))
-ggplot(df, aes(x, y = y, color = z)) + 
-  geom_line(size = 1.1) +
-  scale_color_manual(values = c("#374F77", "#EF9F32", "#6ECBD7")) +
-  xlab("Length of Stay (days)") + ylab(NULL) +
-  theme_minimal() +
-  theme(legend.position = c(0.8, 0.8), legend.title = element_blank())
+col_codes <- c("#374F77", "#EF9F32", "#6ECBD7")
+plot(x, y, type = "l", col = col_codes[1], lty = 1, lwd = 3,
+     xlab = "Length of stay (days)", ylab = "", 
+     ylim = c(0, 1.5), yaxt = 'n')
+lines(x, y2, col = col_codes[2], lty = 1, lwd = 3)
+lines(x, y3, col = col_codes[3], lty = 1, lwd = 3)
+legend("right", legend = c(0.5, 1.0, 1.5), 
+       col = col_codes, lty = 1, lwd = 3, bty = "\n")
 ```
 
 A more realistic length of stay distribution can look like this, of which most patients recovered after 4 days. We defined this using a gamma distribution with shape = 3 and scale = 2.
@@ -75,12 +74,8 @@ A more realistic length of stay distribution can look like this, of which most p
 x <- seq(0, 20, 0.001)
 y <- dgamma(x = x, shape = 3, scale = 2)
 
-df <- data.frame(x = x, 
-                 y = y)
-ggplot(df, aes(x, y = y)) + 
-  geom_line(size = 1.1, color = "#374F77") +
-  xlab("Length of Stay (days)") + ylab(NULL) +
-  theme_minimal()
+plot(x, y, type = "l", col = col_codes[1], lty = 1, lwd = 3,
+     xlab = "Length of stay (days)", ylab = "", yaxt = 'n')
 ```
 
 The model now look like this:
