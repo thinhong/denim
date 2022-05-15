@@ -2,3 +2,11 @@ url: ~
 template:
   bootstrap: 5
 
+navbar:
+  title: ~
+  type: default
+  left:
+    - text: Articles
+      menu:
+      - text: Introduction to denim
+        href: articles/web_only/denim.html

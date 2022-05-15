@@ -2,7 +2,7 @@
 title: "denim: deterministic discrete-time model with memory"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{denim: deterministic discrete time model with memory}
+  %\VignetteIndexEntry{denim: deterministic discrete-time model with memory}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,6 +14,7 @@ knitr::opts_chunk$set(
   fig.align="center"
 )
 library(DiagrammeR) # for flowchart diagram
+library(viridis)
 ```
 
 ```{r setup}
@@ -264,7 +265,7 @@ There are two scenarios in this example:
 
 We can define the model for this example as follows:
 
-```{r, fig.width = 6}
+```{r, fig.width = 5}
 transitions <- list(
   "S -> I" = "beta * S * I / N",
   "S -> V" = 7,
@@ -329,7 +330,7 @@ DiagrammeR::grViz("digraph {
 ```
 </center>
 
-```{r, fig.width = 6}
+```{r, fig.width = 5}
 transitions <- list(
   "S -> I" = "beta * S * (I + IV) / N",
   "S -> V" = 2,
