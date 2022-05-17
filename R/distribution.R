@@ -64,14 +64,12 @@ d_lognormal <- function(mu, sigma) {
 }
 
 
-#' Mathematical expression
-#' 
-#' User-defined mathematical expression. The expression will be processed by 
-#' `muparser` library which offers a wide variety of operators. Kindly visit 
-#' [muparser website](https://beltoforion.de/en/muparser/features.php) 
-#' to see full list of available operators.
-#' 
-#' @param expr math expression, a string
+# Mathematical expression
+# 
+# User-defined mathematical expression. The expression will be processed by 
+# muparser library which offers a wide variety of operators. Visit 
+# muparser website (https://beltoforion.de/en/muparser/features.php) 
+# to see full list of available operators.
 mathexpr <- function(expr) {
   distr <- list(
     distribution = "mathExpression",
@@ -82,12 +80,10 @@ mathexpr <- function(expr) {
 }
 
 
-#' Constant
-#' 
-#' Define a fixed number of individuals of the left compartment transit to the 
-#' right compartment at every time step
-#' 
-#' @param x a constant number
+# Constant
+# 
+# Define a fixed number of individuals of the left compartment transit to the 
+# right compartment at every time step
 constant <- function(x) {
   distr <- list(
     distribution = "constant",
@@ -205,13 +201,12 @@ print.Distribution <- function(x, ...) {
   invisible(x)
 }
 
-#' Distribution object to json
-#'
-#' Input is a distribution object of a compartment, not the full vector/list 
-#' of distributions
-#' @param distribution a list with elements $name, $rate / $scale / $shape...
-#'
-#' @return a json object that match format {"distribution": "weibull", "scale": 2, "shape": 5}
+# Distribution object to json
+#
+# Input is a distribution object of a compartment, not the full vector/list 
+# of distributions
+# distribution: a list with elements $name, $rate / $scale / $shape...
+# return a json object that match format {"distribution": "weibull", "scale": 2, "shape": 5}
 distributionToJson <- function(distribution) {
   contents <- c()
   if (distribution$distribution == "nonparametric") {

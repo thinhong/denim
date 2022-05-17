@@ -77,4 +77,4 @@ We can plot the output with:
 plot(mod)
 ```
 
-<img src="man/figures/README-example-plot-1.png" width="100%" />
+![](man/figures/README-example-plot-1.png)<!-- -->

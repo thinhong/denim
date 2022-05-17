@@ -14,7 +14,6 @@ knitr::opts_chunk$set(
   fig.align="center"
 )
 library(DiagrammeR) # for flowchart diagram
-library(viridis)
 ```
 
 ```{r setup}
@@ -35,7 +34,7 @@ DiagrammeR::grViz("digraph {
   S -> I [label = '&#946;SI/N']
   I -> R [label = '&#947;I']
   }",
-  height = "100%")
+  width = 300, height = "100%")
 ```
 </center>
 
@@ -51,7 +50,7 @@ $$R_{t+1} - R_{t} = \gamma I_{t}$$
 
 Usually to solve the model easier we make an assumption that the recovery rate $\gamma$ is constant, this will leads to an exponentially distributed length of stay i.e most individuals recover after 1 day being infected.
 
-```{r, echo=FALSE, fig.width = 4}
+```{r, echo=FALSE}
 
 rates <- c(0.5, 1, 1.5)
 x <- seq(0, 5, 0.001)
@@ -71,7 +70,7 @@ legend("right", legend = c(0.5, 1.0, 1.5),
 
 A more realistic length of stay distribution can look like this, of which most patients recovered after 4 days. We defined this using a gamma distribution with shape = 3 and scale = 2.
 
-```{r, echo=FALSE, fig.width = 4}
+```{r, echo=FALSE}
 x <- seq(0, 20, 0.001)
 y <- dgamma(x = x, shape = 3, scale = 2)
 
@@ -91,7 +90,7 @@ DiagrammeR::grViz("digraph {
   S -> I [label = '&#946;SI/N']
   I -> R [label = 'd_gamma(3, 2)']
   }",
-  width = 330, height = "100%")
+  width = 400, height = "100%")
 ```
 </center>
 
@@ -109,7 +108,7 @@ DiagrammeR::grViz("digraph {
   S -> I [label = '&#946;SI/N']
   I -> R [label = 'd_gamma(3, 2)']
   }",
-  width = 330, height = "100%")
+  width = 400, height = "100%")
 ```
 </center>
 
@@ -180,7 +179,7 @@ DiagrammeR::grViz("digraph {
   S -> I [label = '&#946;SI/N']
   I -> R [label = '&#947;I']
   }",
-  height = "100%")
+  width = 300, height = "100%")
 ```
 </center>
 
@@ -253,7 +252,7 @@ DiagrammeR::grViz("digraph {
   I -> R [label = '0.9 -> d_gamma(3, 2)']
   I -> D [label = '0.1 -> d_lognormal(2, 0.5)']
   }",
-  width = 400, height = "100%")
+  width = 500, height = "100%")
 ```
 </center>
 
@@ -326,7 +325,7 @@ DiagrammeR::grViz("digraph {
   V -> IV [label = '0.1 * &#946;V(I + IV)/N']
   IV -> R [label = 'd_exponential(2)']
   }",
-  width = 600, height = "100%")
+  width = 700, height = "100%")
 ```
 </center>
 

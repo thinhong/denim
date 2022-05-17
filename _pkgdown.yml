@@ -2,11 +2,35 @@ url: ~
 template:
   bootstrap: 5
 
+figures:
+  dpi: 300
+
 navbar:
   title: ~
-  type: default
-  left:
+  articles:
     - text: Articles
       menu:
       - text: Introduction to denim
         href: articles/web_only/denim.html
+        
+reference:
+- title: Transition
+- title: Distribution
+  desc: Define transition with length of stay distribution
+- subtitle: Parametric distribution
+  contents:
+  - starts_with("d_")
+- subtitle: Non-parametric distribution
+  contents:
+  - nonparametric
+- subtitle: Fixed percentage
+  contents:
+  - transprob
+- title: Multinomial
+  contents: 
+  - multinomial
+- title: Simulator
+  contents:
+  - sim
+  
+

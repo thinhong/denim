@@ -18,11 +18,11 @@ URL: https://thinhong.github.io/denim,
 BugReports: https://github.com/thinhong/denim/issues
 Imports:
     Rcpp (>= 1.0.6),
+    viridisLite
 Suggests:
     knitr,
-    rmarkdown,
-    viridisLite
+    rmarkdown
 LinkingTo: Rcpp
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 VignetteBuilder: knitr
