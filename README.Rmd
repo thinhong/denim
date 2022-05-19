@@ -8,8 +8,7 @@ output: github_document
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
+  fig.path = "man/figures/README-"
 )
 ```
 
@@ -33,7 +32,7 @@ devtools::install_github("thinhong/denim")
 
 ## Example
 
-This is a basic example to illustrate the specification of a simple SIR model, which contains the three compartments susceptible (S), infected (I) and recovered (R). The recovery probabilities of infected individuals are gamma distributed in this example:
+This is a basic example to illustrate the specification of a simple SIR model, which contains three compartments susceptible (S), infected (I) and recovered (R). The recovery probabilities of infected individuals are gamma distributed in this example:
 
 ```{r example}
 library(denim)
@@ -70,6 +69,6 @@ head(mod)
 
 We can plot the output with:
 
-```{r example-plot, fig.width=5}
+```{r example-plot, dpi=300, fig.width=5}
 plot(mod)
 ```

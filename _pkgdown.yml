@@ -32,5 +32,8 @@ reference:
 - title: Simulator
   contents:
   - sim
+- title: internal
+  contents:
+  - denim-package
   
 

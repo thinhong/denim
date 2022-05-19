@@ -27,9 +27,9 @@ devtools::install_github("thinhong/denim")
 ## Example
 
 This is a basic example to illustrate the specification of a simple SIR
-model, which contains the three compartments susceptible (S), infected
-(I) and recovered (R). The recovery probabilities of infected
-individuals are gamma distributed in this example:
+model, which contains three compartments susceptible (S), infected (I)
+and recovered (R). The recovery probabilities of infected individuals
+are gamma distributed in this example:
 
 ``` r
 library(denim)
