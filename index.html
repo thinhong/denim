@@ -29,7 +29,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-default navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
     
     <a class="navbar-brand me-2" href="index.html">denim</a>
 
@@ -42,10 +42,13 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
+<li class="nav-item">
+  <a class="nav-link" href="reference/index.html">Reference</a>
+</li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="articles/web_only/denim.html">Introduction to denim</a>
+    <a class="dropdown-item" href="articles/web_only/denim.html">denim: deterministic discrete-time model with memory</a>
   </div>
 </li>
       </ul>
@@ -85,7 +88,7 @@
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>This is a basic example to illustrate the specification of a simple SIR model, which contains the three compartments susceptible (S), infected (I) and recovered (R). The recovery probabilities of infected individuals are gamma distributed in this example:</p>
+<p>This is a basic example to illustrate the specification of a simple SIR model, which contains three compartments susceptible (S), infected (I) and recovered (R). The recovery probabilities of infected individuals are gamma distributed in this example:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://thinhong.github.io/denim" class="external-link">denim</a></span><span class="op">)</span>
 
@@ -124,7 +127,7 @@
 <p>We can plot the output with:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></code></pre></div>
-<p><img src="reference/figures/README-example-plot-1.png" width="100%"></p>
+<p><img src="reference/figures/README-example-plot-1.png"><!-- --></p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
