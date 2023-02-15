@@ -21,8 +21,11 @@ Imports:
     viridisLite
 Suggests:
     knitr,
-    rmarkdown
-LinkingTo: Rcpp
+    rmarkdown,
+    xml2
+LinkingTo: 
+    Rcpp,
+    testthat
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0
 VignetteBuilder: knitr
