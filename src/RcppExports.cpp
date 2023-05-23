@@ -11,10 +11,12 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 
+RcppExport SEXP run_testthat_tests(SEXP);
 RcppExport SEXP _rcpp_module_boot_simcm();
 
 static const R_CallMethodDef CallEntries[] = {
     {"_rcpp_module_boot_simcm", (DL_FUNC) &_rcpp_module_boot_simcm, 0},
+    {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}
 };
 
