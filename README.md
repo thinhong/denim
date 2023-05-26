@@ -8,7 +8,9 @@
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![R-CMD-check](https://github.com/thinhong/denim/workflows/R-CMD-check/badge.svg)](https://github.com/thinhong/denim/actions)
+[![R-CMD-check](https://github.com/thinhong/denim/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/thinhong/denim/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/thinhong/denim/branch/master/graph/badge.svg)](https://app.codecov.io/gh/thinhong/denim?branch=master)
 <!-- badges: end -->
 
 An R package for building and simulating deterministic discrete-time
