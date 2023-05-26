@@ -34,14 +34,10 @@ context("ModelJSON") {
     ModelJSON modeljson(j["initialValues"], j["parameters"], j["transitions"]);
     auto model = modeljson.getModel();
     model->sortCompsByInputTransition();
+    std::vector<std::string> compsOrder = {"S", "I", "R"};
 
     test_that("getCompsOrder()") {
-        // consume getCompsOrder() standard output
-        std::stringstream buffer;
-        std::streambuf* old = std::cout.rdbuf(buffer.rdbuf());
-
-        expect_true(model->getCompsOrder() == "S I R ");
-        expect_false(model->getCompsOrder() == "I R S ");
+      expect_true(model->getCompsOrder() == compsOrder);
     }
 }
 

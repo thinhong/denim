@@ -8,3 +8,5 @@
 ^pkgdown$
 ^README\.Rmd$
 ^vignettes/web_only
+^.covrignore$
+^codecov\.yml$

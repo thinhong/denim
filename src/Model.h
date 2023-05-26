@@ -64,10 +64,8 @@ public:
     void initAllComps();
 
     void addCompsOrder(std::string compOrder);
-    void getCompsOrder(){
-        for (auto& compOrder: compsOrder) {
-            std::cout << compOrder << " ";
-        }
+    std::vector<std::string> getCompsOrder(){
+        return compsOrder;
     };
 
     /**
