@@ -92,8 +92,8 @@
 simple form of SIR model to demonstrate how to define the distribution
 of the lengths of stay distribution.</p>
 <center>
-<div id="htmlwidget-004e86ab1e095c556bd6" style="width:300px;height:100%;" class="grViz html-widget "></div>
-<script type="application/json" data-for="htmlwidget-004e86ab1e095c556bd6">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"&#947;I\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-2a658970f2fac2a5c998" style="width:300px;height:100%;" class="grViz html-widget "></div>
+<script type="application/json" data-for="htmlwidget-2a658970f2fac2a5c998">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"&#947;I\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </center>
 <p>The model equations are:</p>
 <p><span class="math display">\[S_{t+1} - S_{t} = -\lambda S_{t} =
@@ -122,14 +122,14 @@ gamma distribution with shape = 3 and scale = 2.</p>
 <p><img src="denim_files/figure-html/unnamed-chunk-3-1.png" width="2187.5" style="display: block; margin: auto;"></p>
 <p>The model now look like this:</p>
 <center>
-<div id="htmlwidget-4121be429e2f4b618182" style="width:400px;height:100%;" class="grViz html-widget "></div>
-<script type="application/json" data-for="htmlwidget-4121be429e2f4b618182">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"d_gamma(3, 2)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-31f54dd498ee6cd545e6" style="width:400px;height:100%;" class="grViz html-widget "></div>
+<script type="application/json" data-for="htmlwidget-31f54dd498ee6cd545e6">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"d_gamma(3, 2)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </center>
 <p><strong>Model specification</strong></p>
 <p><em>Model transition</em></p>
 <center>
-<div id="htmlwidget-2b5065eeabb42744b70e" style="width:400px;height:100%;" class="grViz html-widget "></div>
-<script type="application/json" data-for="htmlwidget-2b5065eeabb42744b70e">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"d_gamma(3, 2)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-04f65901f8485623b949" style="width:400px;height:100%;" class="grViz html-widget "></div>
+<script type="application/json" data-for="htmlwidget-04f65901f8485623b949">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"d_gamma(3, 2)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </center>
 <p>We have two transitions <code>S -&gt; I</code> and
 <code>I -&gt; R</code> in this case. The transitions are specified in a
@@ -191,8 +191,8 @@ The default interval (time step) is 1 if not declared explicitly.</p>
 <p>In the SIR model, all infected individuals are presented by a single
 compartment I and have the same recovery rate <span class="math inline">\(\gamma\)</span>.</p>
 <center>
-<div id="htmlwidget-553617ab2e724ac4aa4c" style="width:300px;height:100%;" class="grViz html-widget "></div>
-<script type="application/json" data-for="htmlwidget-553617ab2e724ac4aa4c">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"&#947;I\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-8c643c289aae4f4a91b8" style="width:300px;height:100%;" class="grViz html-widget "></div>
+<script type="application/json" data-for="htmlwidget-8c643c289aae4f4a91b8">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"&#947;I\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </center>
 <p>We want the recovery rate of individuals who had been infected for 1
 day differ from the recovery rate of 2-day infected patients. So rather
@@ -206,8 +206,8 @@ the patient will recover (because we assume that this disease has a
 maximum 4 days of infection), <span class="math inline">\(\gamma_{4} =
 1\)</span>.</p>
 <center>
-<div id="htmlwidget-2d2d6e00a61a3991125d" style="width:100%;height:100%;" class="grViz html-widget "></div>
-<script type="application/json" data-for="htmlwidget-2d2d6e00a61a3991125d">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I1 [label = <&#946;S(I<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT> + I<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT> + I<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT> + I<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>)/N>]\n  I1 -> R1 [label = <&#947;<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>I<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>]\n  I2 -> R2 [label = <&#947;<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>I<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>]\n  I3 -> R3 [label = <&#947;<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>I<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>]\n  I4 -> R4 [label = <I<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>>]\n  I1 -> I2 [label = <(1-&#947;<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>)I<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>]\n  I2 -> I3 [label = <(1-&#947;<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>)I<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>]\n  I3 -> I4 [label = <(1-&#947;<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>)I<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-a6c3dcdf208736186f17" style="width:100%;height:100%;" class="grViz html-widget "></div>
+<script type="application/json" data-for="htmlwidget-a6c3dcdf208736186f17">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I1 [label = <&#946;S(I<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT> + I<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT> + I<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT> + I<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>)/N>]\n  I1 -> R1 [label = <&#947;<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>I<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>]\n  I2 -> R2 [label = <&#947;<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>I<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>]\n  I3 -> R3 [label = <&#947;<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>I<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>]\n  I4 -> R4 [label = <I<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>>]\n  I1 -> I2 [label = <(1-&#947;<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>)I<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>]\n  I2 -> I3 [label = <(1-&#947;<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>)I<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>]\n  I3 -> I4 [label = <(1-&#947;<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>)I<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </center>
 <p>Let <span class="math inline">\(R_1 + R_2 + R_3 + R_4 = \Sigma
 R\)</span>. We have <span class="math inline">\(\frac{R_1}{\Sigma R} =
@@ -288,8 +288,8 @@ compartment</em></strong> section.</p></li>
 <p>We have many ways to define the type of transition when there are two
 or more transitions from a compartment. Consider this example:</p>
 <center>
-<div id="htmlwidget-5ae523bb93eefe0bbd56" style="width:500px;height:100%;" class="grViz html-widget "></div>
-<script type="application/json" data-for="htmlwidget-5ae523bb93eefe0bbd56">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  S -> V [label = \"5\"]\n  I -> R [label = \"0.9 -> d_gamma(3, 2)\"]\n  I -> D [label = \"0.1 -> d_lognormal(2, 0.5)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-47ddddce30b752e1c53e" style="width:500px;height:100%;" class="grViz html-widget "></div>
+<script type="application/json" data-for="htmlwidget-47ddddce30b752e1c53e">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  S -> V [label = \"5\"]\n  I -> R [label = \"0.9 -> d_gamma(3, 2)\"]\n  I -> D [label = \"0.1 -> d_lognormal(2, 0.5)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </center>
 <p>There are two scenarios in this example:</p>
 <ul>
@@ -350,8 +350,8 @@ length of stay distribution and obtain the same result:</p>
 <h2 id="another-example">5. Another example<a class="anchor" aria-label="anchor" href="#another-example"></a>
 </h2>
 <center>
-<div id="htmlwidget-cf8fde7615743f806f06" style="width:700px;height:100%;" class="grViz html-widget "></div>
-<script type="application/json" data-for="htmlwidget-cf8fde7615743f806f06">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;S(I + IV)/N\"]\n  S -> V [label = \"2\"]\n  I -> D [label = \"0.1 -> d_lognormal(2, 0.5)\"]\n  I -> R [label = \"0.9 -> d_gamma(3, 2)\"]\n  V -> IV [label = \"0.1 * &#946;V(I + IV)/N\"]\n  IV -> R [label = \"d_exponential(2)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-69f92025e8f8ecbbaf3a" style="width:700px;height:100%;" class="grViz html-widget "></div>
+<script type="application/json" data-for="htmlwidget-69f92025e8f8ecbbaf3a">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;S(I + IV)/N\"]\n  S -> V [label = \"2\"]\n  I -> D [label = \"0.1 -> d_lognormal(2, 0.5)\"]\n  I -> R [label = \"0.9 -> d_gamma(3, 2)\"]\n  V -> IV [label = \"0.1 * &#946;V(I + IV)/N\"]\n  IV -> R [label = \"d_exponential(2)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </center>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
