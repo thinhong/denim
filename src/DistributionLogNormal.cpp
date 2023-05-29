@@ -55,11 +55,3 @@ size_t DistributionLogNormal::getMaxDay() {
 std::string DistributionLogNormal::getDistName() {
     return "lognormal";
 }
-
-double DistributionLogNormal::getMu() {
-    return mu;
-}
-
-double DistributionLogNormal::getSigma() {
-    return sigma;
-}

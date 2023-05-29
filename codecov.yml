@@ -1,5 +1,11 @@
 comment: false
 
+ignore:
+  - "src/json.h"
+  - "src/simcm.cpp"
+  - "src/muParser*.cpp"
+  - "src/muParser*.h"
+
 coverage:
   status:
     project:

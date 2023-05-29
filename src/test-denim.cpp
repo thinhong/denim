@@ -12,20 +12,29 @@
 
 // denim headers
 #include "DistributionConstant.h"
+#include "DistributionLogNormal.h"
 #include "ModelJSON.h"
 
 // Initialize a unit test context. This is similar to how you
 // might begin an R test file with 'context()', expect the
 // associated context should be wrapped in braced.
 context("Distribution class") {
-    DistributionConstant distribution(0.5);
     std::vector<double> inputVect{0.3, 0.5, 0.1, 0.1};
+    DistributionNonparametric distribution(inputVect);
     size_t idx = 2;
 
     test_that("calcTransitionProbHelper()") {
         expect_true(distribution.calcTransitionProbHelper(inputVect, idx) == Approx(0.5).margin(0.001));
         expect_false(distribution.calcTransitionProbHelper(inputVect, idx) == Approx(1).margin(0.001));
     }
+}
+
+context("Lognormal distribution") {
+  DistributionLogNormal distr(1, 0.25);
+  
+  test_that("calcTransitionProbHelper()") {
+    expect_true(distr.getTransitionProb(2) == Approx(0.6106).margin(0.01));
+  }
 }
 
 context("ModelJSON") {

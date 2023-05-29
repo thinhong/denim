@@ -20,8 +20,6 @@ public:
     std::string getDistName() override;
     double getTransitionProb(size_t index) override;
     size_t getMaxDay() override;
-    double getMu();
-    double getSigma();
 };
 
 

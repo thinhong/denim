@@ -10,7 +10,7 @@
 
 class Distribution {
 public:
-    static inline double errorTolerance {0.01};
+    static inline double errorTolerance {0.001};
     static inline double timeStep {1};
     virtual std::string getDistName() = 0;
     virtual size_t getMaxDay() = 0;
