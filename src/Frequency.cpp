@@ -6,16 +6,11 @@
 
 Frequency::Frequency(double frequency) {
     this->frequency = frequency;
+    this->distName = "frequency";
+    this->maxDay = 1;
 }
 
-std::string Frequency::getDistName() {
-    return "frequency";
-}
 
 double Frequency::getTransitionProb(size_t index) {
     return frequency;
-}
-
-size_t Frequency::getMaxDay() {
-    return 1;
 }

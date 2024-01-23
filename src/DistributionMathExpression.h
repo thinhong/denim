@@ -13,8 +13,6 @@ private:
 public:
     explicit DistributionMathExpression(std::string& expression);
     double getTransitionProb(size_t index) override;
-    size_t getMaxDay() override;
-    std::string getDistName() override;
 };
 
 

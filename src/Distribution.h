@@ -8,12 +8,16 @@
 #include <string>
 #include <vector>
 
+
 class Distribution {
+protected:
+    double maxDay {1};
+    std::string distName;
 public:
     static inline double errorTolerance {0.001};
     static inline double timeStep {1};
-    virtual std::string getDistName() = 0;
-    virtual size_t getMaxDay() = 0;
+    std::string getDistName();
+    size_t getMaxDay();
     virtual double getTransitionProb(size_t index) = 0;
     /**
      * Helper function to calculate probability (x0, x1, x2...) from waiting time distribution (proportion p0, p1, p2

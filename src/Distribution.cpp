@@ -21,4 +21,12 @@ double Distribution::calcTransitionProbHelper(std::vector<double> waitingTime, s
     return prob_i;
 }
 
+std::string Distribution::getDistName(){
+    return this->distName;
+};
+
+size_t Distribution::getMaxDay(){
+    return this->maxDay;
+}
+
 Distribution::~Distribution() {}

@@ -6,16 +6,10 @@
 
 DistributionTransitionProb::DistributionTransitionProb(double transitionProb) {
     this->transitionProb = transitionProb;
+    this->maxDay = 1;
+    this->distName = "transitionProb";
 }
 
 double DistributionTransitionProb::getTransitionProb(size_t index) {
     return transitionProb;
-}
-
-size_t DistributionTransitionProb::getMaxDay() {
-    return 1;
-}
-
-std::string DistributionTransitionProb::getDistName() {
-    return "transitionProb";
 }

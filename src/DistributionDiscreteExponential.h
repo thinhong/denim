@@ -4,20 +4,13 @@
 
 #ifndef MAIN_CPP_DISCRETEEXPONENTIALDISTRIBUTION_H
 #define MAIN_CPP_DISCRETEEXPONENTIALDISTRIBUTION_H
+#include "DistributionFunc.h"
 
-#include "Distribution.h"
-
-class DistributionDiscreteExponential: public Distribution {
+class DistributionDiscreteExponential: public DistributionFunc {
 private:
     double rate {0};
-    size_t maxDay {0};
-    std::vector<double> transitionProb;
-    void calcTransitionProb();
 public:
     explicit DistributionDiscreteExponential(double rate);
-    std::string getDistName() override;
-    double getTransitionProb(size_t index) override;
-    size_t getMaxDay() override;
     double getRate();
 };
 
