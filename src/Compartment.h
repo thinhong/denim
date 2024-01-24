@@ -14,9 +14,10 @@ private:
     std::string compName;
 
     // The length of subCompartments is the maximum length of vector transitionProb in outDistributions
+    // store population in each sub compartment
     std::vector<double> subCompartments;
 
-    // total: the sum of all subCompartments
+    // total: the sum of all subCompartments per iteration/timestep
     std::vector<double> compTotal;
 
     // inCompartments: compartments that will move in to this state
@@ -26,9 +27,15 @@ private:
     // after calculation the final output will be sum into outTotals
     std::vector<std::weak_ptr<Compartment>> outCompartments;
     std::vector<std::string> outCompartmentNames;
-    std::vector<std::shared_ptr<Distribution>> outDistributions;
+    // out distribution corresponding to each outCompartment
+    std::vector<std::shared_ptr<Distribution>> outDistributions; 
+    // out weight corresponding to each outCompartment
     std::vector<double> outWeights;
+    
+    // store population that move out of each sub compartment in the current iteration
+    // values will be reset to 0 then updated while iterating through each out compartment
     std::vector<double> outSubCompartments;
+    // out population corresponding to each outCompartment in current iteration (sum over all outSubCompartment of that out compartment)
     std::vector<double> outTotals;
 
 public:

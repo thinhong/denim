@@ -103,21 +103,85 @@ void Compartment::updateAllCompValuesFromComp(size_t iter, std::vector<double> &
     allCompValues[pos] = compTotal[iter];
 }
 
+/// @brief 
+/// @param iter 
+/// @param paramNames 
+/// @param paramValues 
+/// @param allCompNames 
+/// @param allCompValues 
+void Compartment::updateCompartment(size_t iter, std::vector<std::string>& paramNames, std::vector<double>& paramValues,
+                                    std::vector<std::string>& allCompNames, std::vector<double>& allCompValues) {
+
+    compTotal[iter] = compTotal[iter - 1];
+    std::fill(outSubCompartments.begin(), outSubCompartments.end(), 0);
+    std::fill(outTotals.begin(), outTotals.end(), 0);
+
+    if (!outCompartments.empty()) {
+        // for each time step (iter)
+        // for each compartment in model 
+        // update population for each sub compartment then update compartment 
+
+        for (size_t outIndex {0}; outIndex < outCompartments.size(); ++outIndex) {
+            if (outDistributions[outIndex]->getDistName() == "gamma" ||
+                outDistributions[outIndex]->getDistName() == "weibull" ||
+                outDistributions[outIndex]->getDistName() == "exponential" ||
+                outDistributions[outIndex]->getDistName() == "lognormal" ||
+                outDistributions[outIndex]->getDistName() == "transitionProb" ||
+                outDistributions[outIndex]->getDistName() == "nonparametric") {
+                updateSubCompByDist(iter, outIndex, allCompNames, allCompValues);
+            } else if (outDistributions[outIndex]->getDistName() == "constant") {
+                updateSubCompByConst(iter, outIndex, allCompNames, allCompValues);
+            } else {
+                updateSubCompByMath(iter, outIndex, paramNames, paramValues, allCompNames, allCompValues);
+            }
+        }
+    }
+
+    // update population of each sub compartment
+    if (subCompartments.size() == 1) {
+        subCompartments[0] -= outSubCompartments[0];
+    } else {
+        size_t n_subComp = subCompartments.size() - 1;
+        for (size_t i_subComp {n_subComp}; i_subComp > 0; --i_subComp) {
+            subCompartments[i_subComp] = subCompartments[i_subComp - 1] - outSubCompartments[i_subComp - 1];
+        }
+        subCompartments[0] = 0;
+    }
+
+    // Add the inValue to subCompartments[0]
+    double inValue {0};
+    // Loop over all inCompartments
+    for (size_t inIndex {0}; inIndex < inCompartments.size(); ++inIndex) {
+        // Find the outCompartments of these inCompartments
+        for (size_t outOfIn {0}; outOfIn < inCompartments[inIndex].lock()->outCompartments.size(); ++outOfIn) {
+            // Based on name, find the outValue that correspond to this compartment and add to inValue
+            if (compName == inCompartments[inIndex].lock()->outCompartments[outOfIn].lock()->getCompName()) {
+                inValue += inCompartments[inIndex].lock()->outTotals[outOfIn];
+            }
+        }
+    }
+    subCompartments[0] += inValue;
+    compTotal[iter] += inValue;
+}
+
+/// @brief 
+/// @param iter 
+/// @param outIndex 
+/// @param allCompNames 
+/// @param allCompValues 
 void Compartment::updateSubCompByDist(size_t iter, size_t outIndex,
                                       std::vector<std::string>& allCompNames, std::vector<double>& allCompValues) {
     outTotals[outIndex] = 0;
     // Going backward from subCompartments[n] -> subCompartments[1]
     // This startIndex is to reduce the number of calculations
     size_t startIndex {0};
-    if (iter < (subCompartments.size() - 1)) {
-        startIndex = iter;
-    } else {
-        startIndex = subCompartments.size() - 1;
-    }
+    startIndex = std::min(iter, subCompartments.size() - 1);
+    
     // Put if outside to check condition only once
     if (outWeights[outIndex] == 1) {
         for (size_t i {0}; i <= startIndex; ++i) {
             subCompartments[startIndex - i] -= outSubCompartments[startIndex - i];
+            // udpate total 
             outTotals[outIndex] += subCompartments[startIndex - i] * outDistributions[outIndex]->getTransitionProb(startIndex - i);
             subCompartments[startIndex - i] *= (1 - outDistributions[outIndex]->getTransitionProb(startIndex - i));
         }
@@ -273,52 +337,3 @@ void Compartment::updateSubCompByConst(size_t iter, size_t outIndex, std::vector
     updateAllCompValuesFromComp(iter, allCompValues, findCompPosition(allCompNames));
 }
 
-void Compartment::updateCompartment(size_t iter, std::vector<std::string>& paramNames, std::vector<double>& paramValues,
-                                    std::vector<std::string>& allCompNames, std::vector<double>& allCompValues) {
-
-    compTotal[iter] = compTotal[iter - 1];
-    std::fill(outSubCompartments.begin(), outSubCompartments.end(), 0);
-    std::fill(outTotals.begin(), outTotals.end(), 0);
-
-    if (!outCompartments.empty()) {
-        for (size_t outIndex {0}; outIndex < outCompartments.size(); ++outIndex) {
-            if (outDistributions[outIndex]->getDistName() == "gamma" ||
-                outDistributions[outIndex]->getDistName() == "weibull" ||
-                outDistributions[outIndex]->getDistName() == "exponential" ||
-                outDistributions[outIndex]->getDistName() == "lognormal" ||
-                outDistributions[outIndex]->getDistName() == "transitionProb" ||
-                outDistributions[outIndex]->getDistName() == "nonparametric") {
-                updateSubCompByDist(iter, outIndex, allCompNames, allCompValues);
-            } else if (outDistributions[outIndex]->getDistName() == "constant") {
-                updateSubCompByConst(iter, outIndex, allCompNames, allCompValues);
-            } else {
-                updateSubCompByMath(iter, outIndex, paramNames, paramValues, allCompNames, allCompValues);
-            }
-        }
-    }
-
-    if (subCompartments.size() == 1) {
-        subCompartments[0] -= outSubCompartments[0];
-    } else {
-        size_t n_subComp = subCompartments.size() - 1;
-        for (size_t i_subComp {n_subComp}; i_subComp > 0; --i_subComp) {
-            subCompartments[i_subComp] = subCompartments[i_subComp - 1] - outSubCompartments[i_subComp - 1];
-        }
-        subCompartments[0] = 0;
-    }
-
-    // Add the inValue to subCompartments[0]
-    double inValue {0};
-    // Loop over all inCompartments
-    for (size_t inIndex {0}; inIndex < inCompartments.size(); ++inIndex) {
-        // Find the outCompartments of these inCompartments
-        for (size_t outOfIn {0}; outOfIn < inCompartments[inIndex].lock()->outCompartments.size(); ++outOfIn) {
-            // Based on name, find the outValue that correspond to this compartment and add to inValue
-            if (compName == inCompartments[inIndex].lock()->outCompartments[outOfIn].lock()->getCompName()) {
-                inValue += inCompartments[inIndex].lock()->outTotals[outOfIn];
-            }
-        }
-    }
-    subCompartments[0] += inValue;
-    compTotal[iter] += inValue;
-}
