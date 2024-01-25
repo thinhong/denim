@@ -103,12 +103,12 @@ void Compartment::updateAllCompValuesFromComp(size_t iter, std::vector<double> &
     allCompValues[pos] = compTotal[iter];
 }
 
-/// @brief 
-/// @param iter 
-/// @param paramNames 
-/// @param paramValues 
-/// @param allCompNames 
-/// @param allCompValues 
+/// @brief update compartment attributes for each iteration
+/// @param iter current iteration/ time step
+/// @param paramNames model parameters
+/// @param paramValues model parameters' values
+/// @param allCompNames model compartment names
+/// @param allCompValues population in every model's compartment
 void Compartment::updateCompartment(size_t iter, std::vector<std::string>& paramNames, std::vector<double>& paramValues,
                                     std::vector<std::string>& allCompNames, std::vector<double>& allCompValues) {
 
@@ -117,9 +117,8 @@ void Compartment::updateCompartment(size_t iter, std::vector<std::string>& param
     std::fill(outTotals.begin(), outTotals.end(), 0);
 
     if (!outCompartments.empty()) {
-        // for each time step (iter)
-        // for each compartment in model 
-        // update population for each sub compartment then update compartment 
+        // loop through each out compartment 
+        // update out values
 
         for (size_t outIndex {0}; outIndex < outCompartments.size(); ++outIndex) {
             if (outDistributions[outIndex]->getDistName() == "gamma" ||
@@ -196,7 +195,7 @@ void Compartment::updateSubCompByDist(size_t iter, size_t outIndex,
 
     // Update compTotal after finish this outSubComp
     compTotal[iter] -= outTotals[outIndex];
-    // After updating compTotal, also update vector allCompValues
+    // After updating compTotal, also update vector allCompValues 
     updateAllCompValuesFromComp(iter, allCompValues, findCompPosition(allCompNames));
 }
 
@@ -230,11 +229,8 @@ void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<
 
     // If outWeight = 1 then calculate directly in the subCompartment
     size_t startIndex {0};
-    if (iter < (subCompartments.size() - 1)) {
-        startIndex = iter;
-    } else {
-        startIndex = subCompartments.size() - 1;
-    }
+    startIndex = std::min(iter, subCompartments.size() - 1);
+
     if (outWeights[outIndex] == 1) {
         for (size_t i {0}; i <= startIndex; ++i) {
             subCompartments[startIndex - i] -= outSubCompartments[startIndex - i];
@@ -294,11 +290,8 @@ void Compartment::updateSubCompByConst(size_t iter, size_t outIndex, std::vector
 
     // If outWeight = 1 then calculate directly in the subCompartment
     size_t startIndex {0};
-    if (iter < (subCompartments.size() - 1)) {
-        startIndex = iter;
-    } else {
-        startIndex = subCompartments.size() - 1;
-    }
+    startIndex = std::min(iter, subCompartments.size() - 1);
+
     if (outWeights[outIndex] == 1) {
         for (size_t i {0}; i <= startIndex; ++i) {
             subCompartments[startIndex - i] -= outSubCompartments[startIndex - i];

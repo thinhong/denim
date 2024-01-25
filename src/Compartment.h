@@ -17,7 +17,7 @@ private:
     // store population in each sub compartment
     std::vector<double> subCompartments;
 
-    // total: the sum of all subCompartments per iteration/timestep
+    // total: the sum of all subCompartments (i.e. population of this compartment) per iteration/timestep
     std::vector<double> compTotal;
 
     // inCompartments: compartments that will move in to this state
@@ -36,6 +36,7 @@ private:
     // values will be reset to 0 then updated while iterating through each out compartment
     std::vector<double> outSubCompartments;
     // out population corresponding to each outCompartment in current iteration (sum over all outSubCompartment of that out compartment)
+    // values will be reset to 0 then updated while iterating through each timestep
     std::vector<double> outTotals;
 
 public:
