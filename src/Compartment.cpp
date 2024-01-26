@@ -33,6 +33,10 @@ void Compartment::setLengthSubCompartment() {
     outSubCompartments.resize(maxLength);
 }
 
+void Compartment::updateCompTotal(size_t iter){
+    this -> compTotal[iter] = this -> compTotal[iter - 1];
+}
+
 // Define list of getters
 std::string Compartment::getCompName() {
     return compName;
@@ -79,10 +83,6 @@ void Compartment::addOutWeight(double weight) {
     outWeights.push_back(weight);
 }
 
-size_t Compartment::findCompPosition(std::vector<std::string> &allCompNames) {
-    size_t pos = std::find(allCompNames.begin(), allCompNames.end(), compName) - allCompNames.begin();
-    return pos;
-}
 
 bool Compartment::isOutCompAdded(std::string nameOutComp) {
     bool exist {false};
@@ -100,6 +100,7 @@ size_t Compartment::findOutCompPosition(std::string nameOutComp) {
 }
 
 void Compartment::updateAllCompValuesFromComp(size_t iter, std::vector<double> &allCompValues, size_t pos) {
+    // update value of current comp in model's all comp values
     allCompValues[pos] = compTotal[iter];
 }
 
@@ -107,18 +108,15 @@ void Compartment::updateAllCompValuesFromComp(size_t iter, std::vector<double> &
 /// @param iter current iteration/ time step
 /// @param paramNames model parameters
 /// @param paramValues model parameters' values
-/// @param allCompNames model compartment names
-/// @param allCompValues population in every model's compartment
-void Compartment::updateCompartment(size_t iter, std::vector<std::string>& paramNames, std::vector<double>& paramValues,
-                                    std::vector<std::string>& allCompNames, std::vector<double>& allCompValues) {
+void Compartment::updateCompartment(size_t iter, std::vector<std::string>& paramNames, std::vector<double>& paramValues, std::vector<std::shared_ptr<Compartment>> &comps) {
 
-    compTotal[iter] = compTotal[iter - 1];
+    // compTotal[iter] = compTotal[iter - 1];
     std::fill(outSubCompartments.begin(), outSubCompartments.end(), 0);
     std::fill(outTotals.begin(), outTotals.end(), 0);
 
     if (!outCompartments.empty()) {
         // loop through each out compartment 
-        // update out values
+        // update out values and compTotal
 
         for (size_t outIndex {0}; outIndex < outCompartments.size(); ++outIndex) {
             if (outDistributions[outIndex]->getDistName() == "gamma" ||
@@ -127,11 +125,11 @@ void Compartment::updateCompartment(size_t iter, std::vector<std::string>& param
                 outDistributions[outIndex]->getDistName() == "lognormal" ||
                 outDistributions[outIndex]->getDistName() == "transitionProb" ||
                 outDistributions[outIndex]->getDistName() == "nonparametric") {
-                updateSubCompByDist(iter, outIndex, allCompNames, allCompValues);
+                updateSubCompByDist(iter, outIndex);
             } else if (outDistributions[outIndex]->getDistName() == "constant") {
-                updateSubCompByConst(iter, outIndex, allCompNames, allCompValues);
+                updateSubCompByConst(iter, outIndex);
             } else {
-                updateSubCompByMath(iter, outIndex, paramNames, paramValues, allCompNames, allCompValues);
+                updateSubCompByMath(iter, outIndex, paramNames, paramValues, comps);
             }
         }
     }
@@ -160,16 +158,13 @@ void Compartment::updateCompartment(size_t iter, std::vector<std::string>& param
         }
     }
     subCompartments[0] += inValue;
-    compTotal[iter] += inValue;
+    this -> compTotal[iter] += inValue;
 }
 
-/// @brief 
-/// @param iter 
-/// @param outIndex 
-/// @param allCompNames 
-/// @param allCompValues 
-void Compartment::updateSubCompByDist(size_t iter, size_t outIndex,
-                                      std::vector<std::string>& allCompNames, std::vector<double>& allCompValues) {
+/// @brief Update sub compartment with predefined distribution
+/// @param iter current iteration
+/// @param outIndex index of out compartment
+void Compartment::updateSubCompByDist(size_t iter, size_t outIndex) {
     outTotals[outIndex] = 0;
     // Going backward from subCompartments[n] -> subCompartments[1]
     // This startIndex is to reduce the number of calculations
@@ -195,21 +190,29 @@ void Compartment::updateSubCompByDist(size_t iter, size_t outIndex,
 
     // Update compTotal after finish this outSubComp
     compTotal[iter] -= outTotals[outIndex];
-    // After updating compTotal, also update vector allCompValues 
-    updateAllCompValuesFromComp(iter, allCompValues, findCompPosition(allCompNames));
 }
 
+
+/// @brief Update sub compartment with math expression as distribution
+/// @param iter current iteration
+/// @param outIndex index of out compartment
+/// @param paramNames model parameteres
+/// @param paramValues value of model parameters
+/// @param comps all model's compartments, required to get the current population of compartents
 void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<std::string>& paramNames, std::vector<double>& paramValues,
-                                      std::vector<std::string>& allCompNames, std::vector<double>& allCompValues) {
+                std::vector<std::shared_ptr<Compartment>> &comps) {
     mu::Parser parser;
     parser.SetExpr(outDistributions[outIndex]->getDistName());
     // Add parameter values
     for (size_t i {0}; i < paramNames.size(); ++i) {
-        parser.DefineVar(paramNames[i], &paramValues[i]);
+        parser.DefineConst(paramNames[i], paramValues[i]);
     }
-    // Add compartment values
-    for (size_t i {0}; i < allCompNames.size(); ++i) {
-        parser.DefineVar(allCompNames[i], &allCompValues[i]);
+
+    for (auto &comp: comps){
+        // if(iter < 3){
+        //     std::cout << comp->getCompName() << " val from compartment compTotal " << comp->getCompTotal()[iter] << std::endl;
+        // }
+        parser.DefineConst(comp->getCompName(), comp->getCompTotal()[iter]);
     }
     // The result of this math expression is the outTotals of this outIndex
     double computeValue = outWeights[outIndex] * parser.Eval();
@@ -265,13 +268,13 @@ void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<
     }
 
     // Update compTotal after finish this outSubComp
-    compTotal[iter] -= outTotals[outIndex];
-    // After updating compTotal, also update vector allCompValues
-    updateAllCompValuesFromComp(iter, allCompValues, findCompPosition(allCompNames));
+    this -> compTotal[iter] -= outTotals[outIndex];
 }
 
-void Compartment::updateSubCompByConst(size_t iter, size_t outIndex, std::vector<std::string> &allCompNames,
-                                       std::vector<double> &allCompValues) {
+/// @brief Update sub compartment with constant transition rate
+/// @param iter current iteration
+/// @param outIndex index of out compartment
+void Compartment::updateSubCompByConst(size_t iter, size_t outIndex) {
 
     double computeValue = outDistributions[outIndex]->getTransitionProb(iter);
 
@@ -325,8 +328,6 @@ void Compartment::updateSubCompByConst(size_t iter, size_t outIndex, std::vector
     }
 
     // Update compTotal after finish this outSubComp
-    compTotal[iter] -= outTotals[outIndex];
-    // After updating compTotal, also update vector allCompValues
-    updateAllCompValuesFromComp(iter, allCompValues, findCompPosition(allCompNames));
+    this -> compTotal[iter] -= outTotals[outIndex];
 }
 

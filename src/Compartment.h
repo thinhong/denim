@@ -70,12 +70,12 @@ public:
     void addOutCompartment(std::weak_ptr<Compartment>& linkedCompOut);
     void addOutCompartmentName(std::string& nameOutComp);
     void editOutDistribution(std::string outName, std::shared_ptr<Distribution>& dist);
+    void updateCompTotal(size_t iter);
 
     // subCompartments and outTotals are set after adding all distributions
     void setLengthSubCompartment();
     void setOutValues();
 
-    size_t findCompPosition(std::vector<std::string>& allCompNames);
     bool isOutCompAdded(std::string nameOutComp);
     size_t findOutCompPosition(std::string nameOutComp);
     void updateAllCompValuesFromComp(size_t iter, std::vector<double>& allCompValues, size_t pos);
@@ -84,15 +84,13 @@ public:
      * Update subCompartments and total at each iteration
      * @param iter
      */
-    void updateSubCompByDist(size_t iter, size_t outIndex, std::vector<std::string>& allCompNames, std::vector<double>& allCompValues);
+    void updateSubCompByDist(size_t iter, size_t outIndex);
 
-    void updateSubCompByMath(size_t iter, size_t outIndex, std::vector<std::string>& paramNames, std::vector<double>& paramValues,
-                             std::vector<std::string>& allCompNames, std::vector<double>& allCompValues);
+    void updateSubCompByMath(size_t iter, size_t outIndex, std::vector<std::string>& paramNames, std::vector<double>& paramValues, std::vector<std::shared_ptr<Compartment>> &comps);
 
-    void updateSubCompByConst(size_t iter, size_t outIndex, std::vector<std::string>& allCompNames, std::vector<double>& allCompValues);
+    void updateSubCompByConst(size_t iter, size_t outIndex);
 
-    void updateCompartment(size_t iter, std::vector<std::string>& paramNames, std::vector<double>& paramValues,
-                           std::vector<std::string>& allCompNames, std::vector<double>& allCompValues);
+    void updateCompartment(size_t iter, std::vector<std::string>& paramNames, std::vector<double>& paramValues, std::vector<std::shared_ptr<Compartment>> &comps);
 };
 
 
