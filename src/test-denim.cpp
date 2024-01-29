@@ -15,6 +15,7 @@
 #include "DistributionLogNormal.h"
 #include "ModelJSON.h"
 
+
 // Initialize a unit test context. This is similar to how you
 // might begin an R test file with 'context()', expect the
 // associated context should be wrapped in braced.
@@ -31,11 +32,24 @@ context("Distribution class") {
 
 context("Lognormal distribution") {
   DistributionLogNormal distr(1, 0.25);
+  std::shared_ptr<Distribution> test_polymorphism; 
+  test_polymorphism = std::make_shared<DistributionLogNormal>(1, 0.25);
+
+  std::cout << "getter output " << test_polymorphism -> getTransitionProb(2) <<std::endl;
   
-  test_that("calcTransitionProbHelper()") {
+  test_that("getTransitionProb") {
     expect_true(distr.getTransitionProb(2) == Approx(0.6106).margin(0.01));
   }
+
+  test_that("maxDay") {
+    expect_true(distr.getMaxDay() > 1);
+  }
+
+  test_that("polymorphism") {
+    expect_true(distr.getTransitionProb(2) == test_polymorphism->getTransitionProb(2));
+  }
 }
+
 
 context("ModelJSON") {
     nlohmann::ordered_json j = nlohmann::ordered_json::parse("{  \"simulationDuration\": 10,  \"errorTolerance\": 0.001,  \"timeStep\": 0.01,  \"initialValues\": {\"S\": 999, \"I\": 1, \"R\": 0},  \"parameters\": {\"beta\": 0.12, \"N\": 1000},  \"transitions\": {  \"S -> I\": {\"distribution\": \"mathExpression\", \"expression\": \"beta * S * I / N\"},  \"I -> R\": {\"distribution\": \"gamma\", \"scale\": 3, \"shape\": 2}}}");

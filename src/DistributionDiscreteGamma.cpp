@@ -15,7 +15,7 @@ DistributionDiscreteGamma::DistributionDiscreteGamma(double scale, double shape)
     // B is the "scale" parameter; 0.0 < B, and is often 1.0.
     // C is the "shape" parameter; 0.0 < C, and is often 1.0.
     calcTransitionProb(
-        [scale, shape](int i) {return gamma_cdf(i, 0, scale, shape);}
+        [scale, shape](double timestep) {return gamma_cdf(timestep, 0, scale, shape);}
         );
     this->distName = "gamma";
 }
@@ -23,6 +23,7 @@ DistributionDiscreteGamma::DistributionDiscreteGamma(double scale, double shape)
 DistributionDiscreteGamma::DistributionDiscreteGamma(std::vector<double> &cumulativeProb) {
     this->transitionProb = cumulativeProb;
     this->maxDay = cumulativeProb.size();
+    this->distName = "gamma";
 }
 
 double DistributionDiscreteGamma::getScale() {

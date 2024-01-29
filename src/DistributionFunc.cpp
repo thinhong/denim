@@ -10,11 +10,12 @@ double DistributionFunc::getTransitionProb(size_t index) {
     if (index >= transitionProb.size()) {
         return 1;
     } else {
-        return transitionProb[index];
+        // std::cout << "Call from getter " << this -> transitionProb[index]<< std::endl;
+        return this -> transitionProb[index];
     }
 }
 
-void DistributionFunc::calcTransitionProb(std::function<double(int)> cdf_func) {
+void DistributionFunc::calcTransitionProb(std::function<double(double)> cdf_func) {
     // First, generate cumulative probability
     double tempProb {0};
     std::vector<double> cumulativeProb;
@@ -28,7 +29,6 @@ void DistributionFunc::calcTransitionProb(std::function<double(int)> cdf_func) {
 
     // Then compute P(0 < waiting time <= 1) by cdf(1) - cdf(0)
     std::vector<double> waitingTime;
-    // Vector storing cumulative prob
 
     for (size_t j {0}; j < (cumulativeProb.size() - 1); ++j) {
         tempProb = cumulativeProb[j + 1] - cumulativeProb[j];
@@ -41,12 +41,10 @@ void DistributionFunc::calcTransitionProb(std::function<double(int)> cdf_func) {
         }else{
             currTransitionProb = tempProb/(1 - cumulativeProb[j]);
         }
-
-        transitionProb.push_back(currTransitionProb);
+        this -> transitionProb.push_back(currTransitionProb);
     }
 
     // Remember to calculate max day
-    this -> maxDay = transitionProb.size();
-//    std::cout << maxDay << "\n";
+    this -> maxDay = this -> transitionProb.size();
 }
 

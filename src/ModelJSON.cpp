@@ -160,7 +160,23 @@ ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_js
             else if (distributionConfig["distribution"] == "lognormal") {
                 double mu = distributionConfig["mu"];
                 double sigma = distributionConfig["sigma"];
+                std::cout << "Check distribution init" <<std::endl;
+                std::cout << "mu " << mu << " sigma " <<sigma << std::endl;
+                
                 distribution = std::make_shared<DistributionLogNormal>(mu, sigma);
+                
+                // TODO: fix weirdest bug on Earth, same code, different output somehow
+                std::cout << "getter output " << distribution -> getTransitionProb(2) <<std::endl;
+
+                std::shared_ptr<DistributionLogNormal> test_polymorphism; 
+                test_polymorphism = std::make_shared<DistributionLogNormal>(1, 0.25);
+                std::cout << "getter output " << test_polymorphism -> getTransitionProb(2) <<std::endl;
+
+                // test DistributionLogNormal altogether
+                DistributionLogNormal test(1, 0.25);
+                std::cout << "just work pwease " << test.getTransitionProb(2) <<std::endl;
+                std::cout << "just work pwease " << test.getTransitionProb(2) <<std::endl;
+
             }
                 // Values distribution: parameter is a vector "waitingTime"
             else if (distributionConfig["distribution"] == "nonparametric") {

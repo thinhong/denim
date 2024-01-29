@@ -89,6 +89,7 @@ bool Compartment::isOutCompAdded(std::string nameOutComp) {
     for (auto& outName: outCompartmentNames) {
         if (nameOutComp == outName) {
             exist = true;
+            break;
         }
     }
     return exist;
@@ -170,14 +171,16 @@ void Compartment::updateSubCompByDist(size_t iter, size_t outIndex) {
     // This startIndex is to reduce the number of calculations
     size_t startIndex {0};
     startIndex = std::min(iter, subCompartments.size() - 1);
-    
+        
     // Put if outside to check condition only once
     if (outWeights[outIndex] == 1) {
         for (size_t i {0}; i <= startIndex; ++i) {
             subCompartments[startIndex - i] -= outSubCompartments[startIndex - i];
             // udpate total 
+            // std::cout << "Calculating distribution " << outDistributions[outIndex] -> getDistName() <<std::endl;
+            // std::cout << "Transition prob at index " << (startIndex - i) << ": " << outDistributions[outIndex] -> getTransitionProb(startIndex - i) <<std::endl;
             outTotals[outIndex] += subCompartments[startIndex - i] * outDistributions[outIndex]->getTransitionProb(startIndex - i);
-            subCompartments[startIndex - i] *= (1 - outDistributions[outIndex]->getTransitionProb(startIndex - i));
+            subCompartments[startIndex - i] *= (1 - outDistributions[outIndex] -> getTransitionProb(startIndex - i));
         }
         // After finishing, clean the outSubCompartments vector
         std::fill(outSubCompartments.begin(), outSubCompartments.end(), 0);
@@ -189,7 +192,7 @@ void Compartment::updateSubCompByDist(size_t iter, size_t outIndex) {
     }
 
     // Update compTotal after finish this outSubComp
-    compTotal[iter] -= outTotals[outIndex];
+    this -> compTotal[iter] -= outTotals[outIndex];
 }
 
 

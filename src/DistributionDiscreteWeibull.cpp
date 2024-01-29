@@ -14,7 +14,7 @@ DistributionDiscreteWeibull::DistributionDiscreteWeibull(double scale, double sh
         // B is the "scale" parameter; 0.0 < B, and is often 1.0.
         // C is the "shape" parameter; 0.0 < C, and is often 1.0.
     calcTransitionProb(
-        [scale, shape](int i){ return weibull_cdf(i, 0, scale, shape); }
+        [scale, shape](double timestep){ return weibull_cdf(timestep, 0, scale, shape); }
         );
     this->distName = "weibull";
 }

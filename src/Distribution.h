@@ -11,7 +11,7 @@
 
 class Distribution {
 protected:
-    double maxDay {1};
+    size_t maxDay {1};
     std::string distName;
 public:
     static inline double errorTolerance {0.001};

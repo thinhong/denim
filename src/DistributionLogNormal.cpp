@@ -10,7 +10,7 @@ DistributionLogNormal::DistributionLogNormal(double mu, double sigma) {
     this->mu = mu;
     this->sigma = sigma;
     calcTransitionProb(
-        [mu, sigma](int i){return log_normal_cdf(i, mu, sigma);}
+        [mu, sigma](double timestep){return log_normal_cdf(timestep, mu, sigma);}
     );
     this->distName = "lognormal";
 }
