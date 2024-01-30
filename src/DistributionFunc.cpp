@@ -10,38 +10,40 @@ double DistributionFunc::getTransitionProb(size_t index) {
     if (index >= transitionProb.size()) {
         return 1;
     } else {
-        // std::cout << "Call from getter " << this -> transitionProb[index]<< std::endl;
         return this -> transitionProb[index];
     }
 }
 
 void DistributionFunc::calcTransitionProb(std::function<double(double)> cdf_func) {
-    // First, generate cumulative probability
+    // current cumulative prob
     double tempProb {0};
-    std::vector<double> cumulativeProb;
+    // previous cumulative prob
+    double prevProb {0};
     double i {0};
-    while (tempProb < (1 - Distribution::errorTolerance)) {
-        tempProb = cdf_func(i);
-        cumulativeProb.push_back(tempProb);
-        i += Distribution::timeStep;
-    }
-    cumulativeProb.push_back(1);
+    double currTransitionProb {0};
+    
 
-    // Then compute P(0 < waiting time <= 1) by cdf(1) - cdf(0)
-    std::vector<double> waitingTime;
+    while (true){
+        // --- Calculate current cumulative prob 
+        // current cumulative prob is value from cdf func if its less than (1 - errorTolerance)
+        // otherwise, set it to 1
+        tempProb = cdf_func(i) < (1 - Distribution::errorTolerance) ? cdf_func(i) : 1;
 
-    for (size_t j {0}; j < (cumulativeProb.size() - 1); ++j) {
-        tempProb = cumulativeProb[j + 1] - cumulativeProb[j];
-        waitingTime.push_back(tempProb);
-
-        // calculate current transition prob
-        double currTransitionProb = 0;
-        if (j == 0){
-            currTransitionProb = tempProb;
-        }else{
-            currTransitionProb = tempProb/(1 - cumulativeProb[j]);
+        // --- Calculate the current transition prob
+        if (i != 0){ // skip fist iteration (i.e. time = 0) 
+            // Transition prob = curr prob / 1 - previous cumulative prob (i.e. gamma_i = p_i / (1 - cdf(i - 1)) )
+            currTransitionProb = (tempProb - prevProb) / (1 - prevProb);
+            this -> transitionProb.push_back(currTransitionProb);
+            prevProb = tempProb;
         }
-        this -> transitionProb.push_back(currTransitionProb);
+
+        // --- Update current time
+        i += Distribution::timeStep;
+
+        // --- Stop when tempProb, i.e. cumulative probability at 1 
+        if (tempProb == 1){
+            break;
+        }
     }
 
     // Remember to calculate max day

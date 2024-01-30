@@ -70,6 +70,9 @@ public:
     void addOutCompartment(std::weak_ptr<Compartment>& linkedCompOut);
     void addOutCompartmentName(std::string& nameOutComp);
     void editOutDistribution(std::string outName, std::shared_ptr<Distribution>& dist);
+    /**
+     * Update compTotal value for current iteration
+    */
     void updateCompTotal(size_t iter);
 
     // subCompartments and outTotals are set after adding all distributions
@@ -78,7 +81,6 @@ public:
 
     bool isOutCompAdded(std::string nameOutComp);
     size_t findOutCompPosition(std::string nameOutComp);
-    void updateAllCompValuesFromComp(size_t iter, std::vector<double>& allCompValues, size_t pos);
 
     /**
      * Update subCompartments and total at each iteration

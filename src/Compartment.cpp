@@ -33,6 +33,9 @@ void Compartment::setLengthSubCompartment() {
     outSubCompartments.resize(maxLength);
 }
 
+/**
+     * Update compTotal value for current iteration
+    */
 void Compartment::updateCompTotal(size_t iter){
     this -> compTotal[iter] = this -> compTotal[iter - 1];
 }
@@ -100,25 +103,18 @@ size_t Compartment::findOutCompPosition(std::string nameOutComp) {
     return pos;
 }
 
-void Compartment::updateAllCompValuesFromComp(size_t iter, std::vector<double> &allCompValues, size_t pos) {
-    // update value of current comp in model's all comp values
-    allCompValues[pos] = compTotal[iter];
-}
-
 /// @brief update compartment attributes for each iteration
 /// @param iter current iteration/ time step
 /// @param paramNames model parameters
 /// @param paramValues model parameters' values
 void Compartment::updateCompartment(size_t iter, std::vector<std::string>& paramNames, std::vector<double>& paramValues, std::vector<std::shared_ptr<Compartment>> &comps) {
 
-    // compTotal[iter] = compTotal[iter - 1];
     std::fill(outSubCompartments.begin(), outSubCompartments.end(), 0);
     std::fill(outTotals.begin(), outTotals.end(), 0);
 
     if (!outCompartments.empty()) {
         // loop through each out compartment 
         // update out values and compTotal
-
         for (size_t outIndex {0}; outIndex < outCompartments.size(); ++outIndex) {
             if (outDistributions[outIndex]->getDistName() == "gamma" ||
                 outDistributions[outIndex]->getDistName() == "weibull" ||
@@ -176,9 +172,7 @@ void Compartment::updateSubCompByDist(size_t iter, size_t outIndex) {
     if (outWeights[outIndex] == 1) {
         for (size_t i {0}; i <= startIndex; ++i) {
             subCompartments[startIndex - i] -= outSubCompartments[startIndex - i];
-            // udpate total 
-            // std::cout << "Calculating distribution " << outDistributions[outIndex] -> getDistName() <<std::endl;
-            // std::cout << "Transition prob at index " << (startIndex - i) << ": " << outDistributions[outIndex] -> getTransitionProb(startIndex - i) <<std::endl;
+            // update total 
             outTotals[outIndex] += subCompartments[startIndex - i] * outDistributions[outIndex]->getTransitionProb(startIndex - i);
             subCompartments[startIndex - i] *= (1 - outDistributions[outIndex] -> getTransitionProb(startIndex - i));
         }
@@ -212,9 +206,6 @@ void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<
     }
 
     for (auto &comp: comps){
-        // if(iter < 3){
-        //     std::cout << comp->getCompName() << " val from compartment compTotal " << comp->getCompTotal()[iter] << std::endl;
-        // }
         parser.DefineConst(comp->getCompName(), comp->getCompTotal()[iter]);
     }
     // The result of this math expression is the outTotals of this outIndex
