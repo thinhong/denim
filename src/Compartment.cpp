@@ -34,8 +34,8 @@ void Compartment::setLengthSubCompartment() {
 }
 
 /**
-     * Update compTotal value for current iteration
-    */
+ * Update compTotal value for current iteration
+*/
 void Compartment::updateCompTotal(size_t iter){
     this -> compTotal[iter] = this -> compTotal[iter - 1];
 }
@@ -204,18 +204,15 @@ void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<
     for (size_t i {0}; i < paramNames.size(); ++i) {
         parser.DefineConst(paramNames[i], paramValues[i]);
     }
-
+    // Add current population in each compartment 
     for (auto &comp: comps){
         parser.DefineConst(comp->getCompName(), comp->getCompTotal()[iter]);
     }
     // The result of this math expression is the outTotals of this outIndex
     double computeValue = outWeights[outIndex] * parser.Eval();
 
-    double sumOutTotal {0};
-    for (auto& outTotal: outTotals) {
-        sumOutTotal += outTotal;
-    }
-
+    double sumOutTotal = std::accumulate(this -> outTotals.begin(), this -> outTotals.end(), (double) 0);
+    
     // To prevent a compartment being negative, only use this value if it + sum of
     // previous out total <= the compTotal of previous iteration
     if (computeValue + sumOutTotal <= compTotal[iter - 1]) {
@@ -227,7 +224,7 @@ void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<
     // If outWeight = 1 then calculate directly in the subCompartment
     size_t startIndex {0};
     startIndex = std::min(iter, subCompartments.size() - 1);
-
+    
     if (outWeights[outIndex] == 1) {
         for (size_t i {0}; i <= startIndex; ++i) {
             subCompartments[startIndex - i] -= outSubCompartments[startIndex - i];
@@ -236,10 +233,7 @@ void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<
         std::fill(outSubCompartments.begin(), outSubCompartments.end(), 0);
 
         // Calculate how many people remain in each subCompartment
-        double sumSubComp {0};
-        for (size_t i_subComp {0}; i_subComp < subCompartments.size(); ++i_subComp) {
-            sumSubComp += subCompartments[i_subComp];
-        }
+        double sumSubComp = std::accumulate(this -> subCompartments.begin(), this -> subCompartments.end(), (double) 0);
         if (sumSubComp > 0) {
             double remainPct = (sumSubComp - outTotals[outIndex]) / sumSubComp;
             for (size_t i_subComp {0}; i_subComp < subCompartments.size(); ++i_subComp) {
@@ -248,10 +242,7 @@ void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<
         }
     } else if (outWeights[outIndex] < 1) {
         // If weight < 1 then perform it on the outSubCompartments
-        double sumSubComp {0};
-        for (size_t i_subComp {0}; i_subComp < subCompartments.size(); ++i_subComp) {
-            sumSubComp += subCompartments[i_subComp];
-        }
+        double sumSubComp = std::accumulate(this -> subCompartments.begin(), this -> subCompartments.end(), (double) 0);
         // Because sumSubComp is the denominator, sumSubComp = 0 this formula returns error (not a number)
         if (sumSubComp > 0) {
             double outPct = outTotals[outIndex] / sumSubComp;
@@ -271,12 +262,7 @@ void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<
 void Compartment::updateSubCompByConst(size_t iter, size_t outIndex) {
 
     double computeValue = outDistributions[outIndex]->getTransitionProb(iter);
-
-    double sumOutTotal {0};
-    for (auto& outTotal: outTotals) {
-        sumOutTotal += outTotal;
-    }
-
+    double sumOutTotal = std::accumulate(this -> outTotals.begin(), this -> outTotals.end(), (double) 0);
     // To prevent a compartment being negative, only use this value if it + sum of
     // previous out total <= the compTotal of previous iteration
     if (computeValue + sumOutTotal <= (compTotal[iter - 1] * outWeights[outIndex])) {
@@ -297,10 +283,8 @@ void Compartment::updateSubCompByConst(size_t iter, size_t outIndex) {
         std::fill(outSubCompartments.begin(), outSubCompartments.end(), 0);
 
         // Calculate how many people remain in each subCompartment
-        double sumSubComp {0};
-        for (size_t i_subComp {0}; i_subComp < subCompartments.size(); ++i_subComp) {
-            sumSubComp += subCompartments[i_subComp];
-        }
+        double sumSubComp = std::accumulate(this->subCompartments.begin(), this->subCompartments.end(), (double) 0);
+
         if (sumSubComp > 0) {
             double remainPct = (sumSubComp - outTotals[outIndex]) / sumSubComp;
             for (size_t i_subComp {0}; i_subComp < subCompartments.size(); ++i_subComp) {
@@ -309,10 +293,8 @@ void Compartment::updateSubCompByConst(size_t iter, size_t outIndex) {
         }
     } else if (outWeights[outIndex] < 1) {
         // If weight < 1 then perform it on the outSubCompartments
-        double sumSubComp {0};
-        for (size_t i_subComp {0}; i_subComp < subCompartments.size(); ++i_subComp) {
-            sumSubComp += subCompartments[i_subComp];
-        }
+        double sumSubComp = std::accumulate(this->subCompartments.begin(), this->subCompartments.end(), (double) 0);
+
         if (sumSubComp > 0) {
             double outPct = outTotals[outIndex] / sumSubComp;
             for (size_t i_subComp {0}; i_subComp < subCompartments.size(); ++i_subComp) {

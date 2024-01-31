@@ -18,13 +18,11 @@ void Model::addCompsFromConfig(std::vector<std::shared_ptr<Compartment>> &comps)
 }
 
 std::weak_ptr<Compartment> Model::getAddressFromName(std::string compName) {
-    std::weak_ptr<Compartment> compAddress;
     for (auto& comp: comps) {
         if (comp->getCompName() == compName) {
-            compAddress = comp;
+            return comp;
         }
     }
-    return compAddress;
 }
 
 int Model::getIndex(std::shared_ptr<Compartment> comp) {
