@@ -12,7 +12,6 @@
 class DistributionNonparametric: public Distribution {
 private:
     std::vector<double> waitingTime;
-    size_t maxDay;
     std::vector<double> transitionProb;
     void calcTransitionProb();
 public:

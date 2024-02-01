@@ -20,14 +20,18 @@
 // might begin an R test file with 'context()', expect the
 // associated context should be wrapped in braced.
 context("Distribution class") {
-    std::vector<double> inputVect{0.3, 0.5, 0.1, 0.1};
-    DistributionNonparametric distribution(inputVect);
-    size_t idx = 2;
+  std::vector<double> inputVect{0.3, 0.5, 0.1, 0.1};
+  DistributionNonparametric distribution(inputVect);
+  size_t idx = 2;
 
-    test_that("calcTransitionProbHelper()") {
-        expect_true(distribution.calcTransitionProbHelper(inputVect, idx) == Approx(0.5).margin(0.001));
-        expect_false(distribution.calcTransitionProbHelper(inputVect, idx) == Approx(1).margin(0.001));
-    }
+  test_that("getTransititionProb") {
+    expect_true(distribution.getTransitionProb(idx) == Approx(0.5).margin(0.001));
+    expect_false(distribution.getTransitionProb(idx) == Approx(1).margin(0.001));
+  }
+
+  test_that("maxDay"){
+    expect_true(distribution.getMaxDay() == inputVect.size());
+  }
 }
 
 context("Lognormal distribution") {

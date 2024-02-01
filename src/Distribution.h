@@ -26,7 +26,7 @@ public:
      * @param i index of the probability (e.g x0 is index 0, x1 is index 1...)
      * @return
      */
-    double calcTransitionProbHelper(std::vector<double> waitingTime, size_t i);
+    // double calcTransitionProbHelper(std::vector<double> waitingTime, size_t i);
     virtual ~Distribution() = 0;
 };
 
