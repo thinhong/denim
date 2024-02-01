@@ -37,7 +37,7 @@ int Model::getIndex(std::shared_ptr<Compartment> comp) {
 void Model::update(size_t iter) {
     // initialize comp total of current iteration with values from previous iteration
     for (auto& comp: this -> comps) {
-        comp->updateCompTotal(iter);
+        comp->initCompTotal(iter);
     }
     
     for (auto& comp: this -> comps) {

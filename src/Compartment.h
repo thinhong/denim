@@ -71,7 +71,7 @@ public:
     /**
      * Update compTotal value for current iteration
     */
-    void updateCompTotal(size_t iter);
+    void initCompTotal(size_t iter);
 
     // subCompartments and outTotals are set after adding all distributions
     void setLengthSubCompartment();

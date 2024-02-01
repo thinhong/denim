@@ -4,6 +4,8 @@
 
 #include "Distribution.h"
 
+
+// TODO: bring this function to DistributionParametic as it is the only class that utilize this function
 double Distribution::calcTransitionProbHelper(std::vector<double> waitingTime, size_t i) {
     double prob_i {0};
     // Remember that C++ use 0-based indexing

@@ -34,9 +34,9 @@ void Compartment::setLengthSubCompartment() {
 }
 
 /**
- * Update compTotal value for current iteration
+ * Initialize compTotal value for current iteration
 */
-void Compartment::updateCompTotal(size_t iter){
+void Compartment::initCompTotal(size_t iter){
     this -> compTotal[iter] = this -> compTotal[iter - 1];
 }
 
