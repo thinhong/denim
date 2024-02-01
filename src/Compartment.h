@@ -26,7 +26,6 @@ private:
     // outCompartments: compartments that this state will move out, with pre-defined outDistributions and outWeights,
     // after calculation the final output will be sum into outTotals
     std::vector<std::weak_ptr<Compartment>> outCompartments;
-    std::vector<std::string> outCompartmentNames;
     // out distribution corresponding to each outCompartment
     std::vector<std::shared_ptr<Distribution>> outDistributions; 
     // out weight corresponding to each outCompartment
@@ -68,7 +67,6 @@ public:
     void addOutWeight(double weight);
     void addInCompartment(std::weak_ptr<Compartment>& linkedCompIn);
     void addOutCompartment(std::weak_ptr<Compartment>& linkedCompOut);
-    void addOutCompartmentName(std::string& nameOutComp);
     void editOutDistribution(std::string outName, std::shared_ptr<Distribution>& dist);
     /**
      * Update compTotal value for current iteration

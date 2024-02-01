@@ -54,7 +54,11 @@ std::vector<std::weak_ptr<Compartment>> Compartment::getOutCompartments() {
 }
 
 std::vector<std::string> Compartment::getOutCompartmentNames() {
-    return outCompartmentNames;
+    std::vector<std::string> names;
+    for (auto& comp: this->outCompartments) {
+        names.push_back(comp.lock()->getCompName());
+    }
+    return names;
 }
 
 std::vector<std::shared_ptr<Distribution>> Compartment::getOutDistributions() {
@@ -78,9 +82,6 @@ void Compartment::addOutCompartment(std::weak_ptr<Compartment>& linkedCompOut) {
     this->outCompartments.push_back(linkedCompOut);
 }
 
-void Compartment::addOutCompartmentName(std::string &nameOutComp) {
-    this->outCompartmentNames.push_back(nameOutComp);
-}
 
 void Compartment::addOutWeight(double weight) {
     outWeights.push_back(weight);
@@ -88,19 +89,21 @@ void Compartment::addOutWeight(double weight) {
 
 
 bool Compartment::isOutCompAdded(std::string nameOutComp) {
-    bool exist {false};
-    for (auto& outName: outCompartmentNames) {
-        if (nameOutComp == outName) {
-            exist = true;
-            break;
+    for (auto& comp: this->outCompartments) {
+        if (nameOutComp == comp.lock()->getCompName()) {
+            return true;
         }
     }
-    return exist;
+    return false;
 }
 
 size_t Compartment::findOutCompPosition(std::string nameOutComp) {
-    size_t pos = std::find(outCompartmentNames.begin(), outCompartmentNames.end(), nameOutComp) - outCompartmentNames.begin();
-    return pos;
+    for (size_t pos = 0; pos < this->outCompartments.size(); pos++){
+        if (this->outCompartments[pos].lock()->getCompName() == nameOutComp){
+            return pos;
+        }
+    }
+    return 0;
 }
 
 /// @brief update compartment attributes for each iteration

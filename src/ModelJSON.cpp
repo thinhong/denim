@@ -110,7 +110,6 @@ ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_js
                 std::weak_ptr<Compartment> outComp = model->getAddressFromName(outComps[i]);
 
                 inComp.lock()->addOutCompartment(outComp);
-                inComp.lock()->addOutCompartmentName(outComps[i]); 
                 outComp.lock()->addInCompartment(inComp);
                 // Here we add to weight not to probability because we need them to be calculated concurrently
                 inComp.lock()->addOutWeight(weights[i]);
@@ -188,7 +187,6 @@ ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_js
             // If outCompartment has not been added: set linked compartment in, out, outName, weight
             if (inComp.lock()->isOutCompAdded(outCompName) == false) {
                 inComp.lock()->addOutCompartment(outComp);
-                inComp.lock()->addOutCompartmentName(outCompName);
                 outComp.lock()->addInCompartment(inComp);
                 inComp.lock()->addOutWeight(weight);
             }
