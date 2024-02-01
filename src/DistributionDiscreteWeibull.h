@@ -5,9 +5,9 @@
 #ifndef MAIN_CPP_DISCRETEWEIBULLDISTRIBUTION_H
 #define MAIN_CPP_DISCRETEWEIBULLDISTRIBUTION_H
 
-#include "DistributionFunc.h"
+#include "DistributionParametric.h"
 
-class DistributionDiscreteWeibull: public DistributionFunc {
+class DistributionDiscreteWeibull: public DistributionParametric {
 private:
     double scale {0};
     double shape {0};

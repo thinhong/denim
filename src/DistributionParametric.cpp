@@ -4,9 +4,9 @@
 
 #include <iostream>
 #include "myProb.h"
-#include "DistributionFunc.h"
+#include "DistributionParametric.h"
 
-double DistributionFunc::getTransitionProb(size_t index) {
+double DistributionParametric::getTransitionProb(size_t index) {
     if (index >= transitionProb.size()) {
         return 1;
     } else {
@@ -14,7 +14,7 @@ double DistributionFunc::getTransitionProb(size_t index) {
     }
 }
 
-void DistributionFunc::calcTransitionProb(std::function<double(double)> cdf_func) {
+void DistributionParametric::calcTransitionProb(std::function<double(double)> cdf_func) {
     // current cumulative prob
     double tempProb {0};
     // previous cumulative prob

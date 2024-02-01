@@ -9,7 +9,7 @@
 
 DistributionDiscreteExponential::DistributionDiscreteExponential(double rate) {
     this->rate = rate;
-    // call calcTransitionProb inherited from DistributionFunc 
+    // call calcTransitionProb inherited from DistributionParametric 
     // pass exponential_cdf function with its parameter
     // https://people.sc.fsu.edu/~jburkardt/cpp_src/prob/prob.cpp
     calcTransitionProb([rate](double timestep){return exponential_cdf(timestep, 0, 1/rate);});

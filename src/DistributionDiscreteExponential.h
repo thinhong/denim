@@ -4,9 +4,9 @@
 
 #ifndef MAIN_CPP_DISCRETEEXPONENTIALDISTRIBUTION_H
 #define MAIN_CPP_DISCRETEEXPONENTIALDISTRIBUTION_H
-#include "DistributionFunc.h"
+#include "DistributionParametric.h"
 
-class DistributionDiscreteExponential: public DistributionFunc {
+class DistributionDiscreteExponential: public DistributionParametric {
 private:
     double rate {0};
 public:

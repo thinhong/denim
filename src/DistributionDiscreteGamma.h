@@ -5,9 +5,9 @@
 #ifndef MAIN_CPP_DISCRETEGAMMADISTRIBUTION_H
 #define MAIN_CPP_DISCRETEGAMMADISTRIBUTION_H
 
-#include "DistributionFunc.h"
+#include "DistributionParametric.h"
 
-class DistributionDiscreteGamma: public DistributionFunc {
+class DistributionDiscreteGamma: public DistributionParametric {
 private:
     double scale {0};
     double shape {0};

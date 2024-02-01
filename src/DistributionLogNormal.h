@@ -5,9 +5,9 @@
 #ifndef COMPARTMENT_CPP_DISTRIBUTIONLOGNORMAL_H
 #define COMPARTMENT_CPP_DISTRIBUTIONLOGNORMAL_H
 
-#include "DistributionFunc.h"
+#include "DistributionParametric.h"
 
-class DistributionLogNormal: public DistributionFunc {
+class DistributionLogNormal: public DistributionParametric {
 private:
     double mu {0};
     double sigma {0};
