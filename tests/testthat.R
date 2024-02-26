@@ -8,5 +8,6 @@
 
 library(testthat)
 library(denim)
+library(deSolve)
 
 test_check("denim")
