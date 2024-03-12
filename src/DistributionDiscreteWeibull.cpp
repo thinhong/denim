@@ -6,55 +6,17 @@
 #include "myProb.h"
 #include "DistributionDiscreteWeibull.h"
 
-void DistributionDiscreteWeibull::calcTransitionProb() {
-    // First, generate cumulative probability
-    double tempProb {0};
-    std::vector<double> cumulativeProb;
-    double i {0};
-    while (tempProb < (1 - Distribution::errorTolerance)) {
-        // https://people.sc.fsu.edu/~jburkardt/cpp_src/prob/prob.cpp
-        // A controls the location of the peak;  A is often chosen to be 0.0.
-        // B is the "scale" parameter; 0.0 < B, and is often 1.0.
-        // C is the "shape" parameter; 0.0 < C, and is often 1.0.
-        tempProb = weibull_cdf(i, 0, scale, shape);
-        cumulativeProb.push_back(tempProb);
-        i += Distribution::timeStep;
-    }
-    cumulativeProb.push_back(1);
-
-    // Then compute P(0 < waiting time <= 1) by cdf(1) - cdf(0)
-    std::vector<double> waitingTime;
-    for (size_t j {0}; j < (cumulativeProb.size() - 1); ++j) {
-        tempProb = cumulativeProb[j + 1] - cumulativeProb[j];
-        waitingTime.push_back(tempProb);
-    }
-
-    // Finally, compute transitionProb using waiting time
-    for (size_t k {0}; k < waitingTime.size(); ++k) {
-        transitionProb.push_back(calcTransitionProbHelper(waitingTime, k));
-    }
-
-    // Remember to calculate max day
-    maxDay = transitionProb.size();
-//    std::cout << maxDay << "\n";
-}
-
 DistributionDiscreteWeibull::DistributionDiscreteWeibull(double scale, double shape) {
     this->scale = scale;
     this->shape = shape;
-    this->calcTransitionProb();
-}
-
-double DistributionDiscreteWeibull::getTransitionProb(size_t index) {
-    if (index >= transitionProb.size()) {
-        return 1;
-    } else {
-        return transitionProb[index];
-    }
-}
-
-size_t DistributionDiscreteWeibull::getMaxDay() {
-    return maxDay;
+    // https://people.sc.fsu.edu/~jburkardt/cpp_src/prob/prob.cpp
+        // A controls the location of the peak;  A is often chosen to be 0.0.
+        // B is the "scale" parameter; 0.0 < B, and is often 1.0.
+        // C is the "shape" parameter; 0.0 < C, and is often 1.0.
+    calcTransitionProb(
+        [scale, shape](double timestep){ return weibull_cdf(timestep, 0, scale, shape); }
+        );
+    this->distName = "weibull";
 }
 
 double DistributionDiscreteWeibull::getScale() {
@@ -63,8 +25,4 @@ double DistributionDiscreteWeibull::getScale() {
 
 double DistributionDiscreteWeibull::getShape() {
     return shape;
-}
-
-std::string DistributionDiscreteWeibull::getDistName() {
-    return "weibull";
 }

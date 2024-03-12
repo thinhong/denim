@@ -6,16 +6,12 @@
 
 DistributionConstant::DistributionConstant(double constValue) {
     this->constant = constValue;
-}
 
-std::string DistributionConstant::getDistName() {
-    return "constant";
+    // update dist name and max date
+    this->distName = "constant";
+    this->maxDay = 1;
 }
 
 double DistributionConstant::getTransitionProb(size_t index) {
     return constant;
-}
-
-size_t DistributionConstant::getMaxDay() {
-    return 1;
 }
