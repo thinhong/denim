@@ -31,7 +31,7 @@ void DistributionParametric::calcTransitionProb(std::function<double(double)> cd
 
         // --- Calculate the current transition prob
         if (i != 0){ // skip fist iteration (i.e. time = 0) 
-            // Transition prob = curr prob / 1 - previous cumulative prob (i.e. gamma_i = p_i / (1 - cdf(i - 1)) )
+            // Transition prob = curr prob / (1 - previous cumulative prob) (i.e. gamma_i = p_i / (1 - cdf(i - 1)) )
             currTransitionProb = (tempProb - prevProb) / (1 - prevProb);
             this -> transitionProb.push_back(currTransitionProb);
             prevProb = tempProb;
