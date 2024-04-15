@@ -2,6 +2,7 @@
 #define MAIN_CPP_DISTRIBUTIONPARAMETRIC_H
 
 #include "Distribution.h"
+#include <functional>
 
 // Parent class for defined cdf distribution 
 class DistributionParametric: public Distribution {    
