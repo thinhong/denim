@@ -11,7 +11,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 
-RcppExport SEXP run_testthat_tests(void *);
+RcppExport SEXP run_testthat_tests(SEXP);
 RcppExport SEXP _rcpp_module_boot_simcm();
 
 static const R_CallMethodDef CallEntries[] = {

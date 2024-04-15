@@ -18,13 +18,12 @@ void Model::addCompsFromConfig(std::vector<std::shared_ptr<Compartment>> &comps)
 }
 
 std::weak_ptr<Compartment> Model::getAddressFromName(std::string compName) {
-    std::weak_ptr<Compartment> compAddress;
     for (auto& comp: comps) {
         if (comp->getCompName() == compName) {
-            compAddress = comp;
+            return comp;
         }
     }
-    return compAddress;
+    return comps[0]; // extra return statement to avoid warnings
 }
 
 int Model::getIndex(std::shared_ptr<Compartment> comp) {
@@ -37,18 +36,13 @@ int Model::getIndex(std::shared_ptr<Compartment> comp) {
 }
 
 void Model::update(size_t iter) {
-    for (auto& comp: comps) {
-        comp->updateCompartment(iter, paramNames, paramValues,
-                                allCompNames, allCompValues);
+    // initialize comp total of current iteration with values from previous iteration
+    for (auto& comp: this -> comps) {
+        comp->initCompTotal(iter);
     }
-    updateAllCompValues(iter);
-}
-
-void Model::initAllComps() {
-    allCompNames.clear();
-    for (auto& comp: comps) {
-        allCompNames.push_back(comp->getCompName());
-        allCompValues.push_back(comp->getCompTotal()[0]);
+    
+    for (auto& comp: this -> comps) {
+        comp->updateCompartment(iter, paramNames, paramValues, this -> comps);
     }
 }
 
@@ -56,13 +50,6 @@ void Model::addCompsOrder(std::string compOrder) {
     // Only add if the comp does not exist in vector compsOrder
     if (std::find(compsOrder.begin(), compsOrder.end(), compOrder) == compsOrder.end()) {
         compsOrder.push_back(compOrder);
-    }
-}
-
-void Model::updateAllCompValues(size_t iter) {
-    for (size_t i_comp {0}; i_comp < comps.size(); ++i_comp) {
-        allCompNames[i_comp] = comps[i_comp]->getCompName();
-        allCompValues[i_comp] = comps[i_comp]->getCompTotal()[iter];
     }
 }
 

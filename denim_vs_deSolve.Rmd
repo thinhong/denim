@@ -1,0 +1,65 @@
+```{r define variables}
+library(denim)
+library(deSolve)
+
+# --- Transition def for denim
+transitions <- list(
+  "S -> I" = d_exponential(0.2),
+  "I -> R" = d_gamma(3, 2)
+)
+parameters <- c(rate = 0.2, scale = 3, shape=2) 
+initialValues <- c(S = 999, I = 1, I1 = 1, I2=0, R=0)
+
+# --- Transition def for deSolve
+transition_func <- function(t, state, param){
+  with(as.list( c(state, param) ), {
+      gamma_rate = 1/scale
+      dS = -rate*S
+      dI1 = rate*S - gamma_rate*I1
+      dI2 = gamma_rate*I1 - gamma_rate*I2
+      dI =  dI1 + dI2
+      dR = gamma_rate*I2
+      list(c(dS, dI, dI1, dI2, dR))
+  })
+}
+
+# --- Timestep definition
+simulationDuration <- 20 
+timestep <- 0.0005
+```
+
+## Run simulation with denim
+```{r}
+mod <- sim(transitions = transitions, initialValues = initialValues, parameters = parameters, simulationDuration = simulationDuration, timeStep = timestep)
+head(mod[mod$Time %in% 1:simulationDuration,])
+```
+
+## Run simulation with deSolve
+```{r}
+times <- seq(0, simulationDuration, timestep)
+ode_mod <- ode(y = initialValues, times = times, parms = parameters, func = transition_func)
+ode_mod <- as.data.frame(ode_mod)
+head(ode_mod[ode_mod$time %in% 1:simulationDuration, c("time", "S", "I", "R")])
+```
+
+# plot the result
+```{r}
+library(ggplot2)
+ggplot() +
+  ggtitle("S compartment") +
+  geom_line(aes(x = ode_mod$time, y = ode_mod$S), color = "royalblue") +
+  geom_line(aes(x = mod$Time, y = mod$S), color = "red", alpha=0.4) +
+  labs(x = "Time", y = "Count")
+
+ggplot() +
+  ggtitle("I compartment") +
+  geom_line(aes(x = ode_mod$time, y = ode_mod$I), color = "royalblue") +
+  geom_line(aes(x = mod$Time, y = mod$I), color = "red", alpha=0.4) +
+  labs(x = "Time", y = "Count")
+
+ggplot() +
+  ggtitle("R compartment") +
+  geom_line(aes(x = ode_mod$time, y = ode_mod$R), color = "royalblue") +
+  geom_line(aes(x = mod$Time, y = mod$R), color = "red", alpha=0.4) +
+  labs(x = "Time", y = "Count")
+```

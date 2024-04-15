@@ -15,8 +15,6 @@ private:
 public:
     explicit DistributionTransitionProb(double transitionProb);
     double getTransitionProb(size_t index) override;
-    size_t getMaxDay() override;
-    std::string getDistName() override;
 };
 
 

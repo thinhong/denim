@@ -19,7 +19,6 @@ Rcpp::DataFrame simcm(std::string inputPath) {
 
     // We sort the comps with order defined by input transition
     myModel.getModel()->sortCompsByInputTransition();
-    myModel.getModel()->initAllComps();
 
     // Debug: view model structure
 //    viewModelStructure(myModel.getModel());

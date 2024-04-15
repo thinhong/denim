@@ -6,16 +6,6 @@
 #include <stdexcept>
 #include "DistributionNonparametric.h"
 
-void DistributionNonparametric::calcTransitionProb() {
-    // Compute transitionProb using waiting time
-    for (size_t k {0}; k < waitingTime.size(); ++k) {
-        transitionProb.push_back(calcTransitionProbHelper(waitingTime, k));
-    }
-
-    // Remember to calculate max day
-    maxDay = transitionProb.size();
-}
-
 DistributionNonparametric::DistributionNonparametric(std::vector<double> waitingTime) {
     // Make sure that waiting time distribution is a probability distribution (sum = 1)
     double sumWaitingTime {0};
@@ -29,10 +19,23 @@ DistributionNonparametric::DistributionNonparametric(std::vector<double> waiting
     }
     this->waitingTime = waitingTime;
     this->calcTransitionProb();
+    this->distName = "nonparametric";
 }
 
-std::string DistributionNonparametric::getDistName() {
-    return "nonparametric";
+void DistributionNonparametric::calcTransitionProb() { 
+    // variable to keep track of cumulated prob
+    // at iteration i, cumulatedProb = p1 + p2 + ... + p[i-1]
+    double cumulatedProb {0};
+
+    // --- Compute transitionProb
+    // x1 = p1 / (1 - p0), x2 = p2 / (1 - (p0 + p1)), x3 = p3 / (1 - (p0 + p1 + p2)) and so on
+    for (auto &currProb: waitingTime) {
+        this -> transitionProb.push_back( (currProb/(1 - cumulatedProb)) );
+        cumulatedProb += currProb;
+    }
+
+    // Remember to calculate max day
+    this -> maxDay = this -> transitionProb.size();
 }
 
 double DistributionNonparametric::getTransitionProb(size_t index) {
@@ -43,9 +46,6 @@ double DistributionNonparametric::getTransitionProb(size_t index) {
     }
 }
 
-size_t DistributionNonparametric::getMaxDay() {
-    return maxDay;
-}
 
 std::vector<double> DistributionNonparametric::getWaitingTime() {
     return waitingTime;

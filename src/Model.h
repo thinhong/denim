@@ -17,10 +17,6 @@ private:
     std::vector<std::string> paramNames;
     std::vector<double> paramValues;
 
-    // Extract these values from comps vector
-    std::vector<std::string> allCompNames;
-    std::vector<double> allCompValues;
-
     std::vector<std::string> compsOrder;
 
 public:
@@ -58,20 +54,11 @@ public:
      */
     void update(size_t iter);
 
-    /**
-     * Get all compartment names from the comps vector and also initial values of allCompValues
-     */
-    void initAllComps();
-
     void addCompsOrder(std::string compOrder);
     std::vector<std::string> getCompsOrder(){
         return compsOrder;
     };
 
-    /**
-     * Helper function to update allCompValues after each iteration
-     */
-    void updateAllCompValues(size_t iter);
 };
 
 
