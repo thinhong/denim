@@ -23,6 +23,7 @@ std::weak_ptr<Compartment> Model::getAddressFromName(std::string compName) {
             return comp;
         }
     }
+    return comps[0]; // extra return statement to avoid warnings
 }
 
 int Model::getIndex(std::shared_ptr<Compartment> comp) {
