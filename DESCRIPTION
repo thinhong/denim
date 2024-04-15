@@ -18,7 +18,6 @@ URL: https://thinhong.github.io/denim,
 BugReports: https://github.com/thinhong/denim/issues
 Imports:
     Rcpp (>= 1.0.6),
-    deSolve,
     viridisLite
 Suggests:
     covr,
@@ -26,6 +25,7 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0),
     xml2,
+    deSolve,
     DiagrammeR
 LinkingTo: 
     Rcpp,
