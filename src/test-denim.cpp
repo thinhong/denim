@@ -32,6 +32,10 @@ context("Distribution class") {
   test_that("maxDay"){
     expect_true(distribution.getMaxDay() == inputVect.size());
   }
+  
+  test_that("getWaitingTime"){
+    expect_true(distribution.getWaitingTime() == inputVect);
+  }
 }
 
 context("Lognormal distribution") {
@@ -58,6 +62,14 @@ context("Gamma distribution") {
   test_that("getTransitionProb") {
     expect_true(distr.getTransitionProb(4) == Approx(0.4764).margin(0.01));
   }
+  
+  test_that("getScale") {
+    expect_true(distr.getScale() == Approx(1).margin(0.01));
+  }
+  
+  test_that("getShape") {
+    expect_true(distr.getShape() == Approx(3).margin(0.01));
+  }
 }
 
 context("Exponential distribution") {
@@ -65,6 +77,18 @@ context("Exponential distribution") {
 
   test_that("getTransitionProb") {
     expect_true(distr.getTransitionProb(2) == Approx(0.3934).margin(0.01));
+  }
+  
+  test_that("getRate") {
+    expect_true(distr.getRate() == Approx(0.5).margin(0.01));
+  }
+}
+
+context("Distribution Constant"){
+  DistributionConstant distr(10);
+  
+  test_that("getTransitionProb"){
+    expect_true(distr.getTransitionProb(3) == 10);
   }
 }
 
@@ -74,7 +98,26 @@ context("Weibull distribution") {
   test_that("getTransitionProb") {
     expect_true(distr.getTransitionProb(2) == Approx(0.5803).margin(0.01));
   }
+  
+  test_that("getScale") {
+    expect_true(distr.getScale() == Approx(3).margin(0.01));
+  }
+  
+  test_that("getShape") {
+    expect_true(distr.getShape() == Approx(5).margin(0.01));
+  }
 }
+
+
+context("Transition prob") {
+  DistributionTransitionProb distr(0.6);
+  
+  test_that("getTransitionProb") {
+    expect_true(distr.getTransitionProb(2) == Approx(0.6).margin(0.01));
+  }
+}
+
+
 
 context("Model and JSON conversion") {
     nlohmann::ordered_json j = nlohmann::ordered_json::parse("{  \"simulationDuration\": 10,  \"errorTolerance\": 0.001,  \"timeStep\": 0.01,  \"initialValues\": {\"S\": 999, \"I\": 1, \"R\": 0},  \"parameters\": {\"beta\": 0.12, \"N\": 1000},  \"transitions\": {  \"S -> I\": {\"distribution\": \"mathExpression\", \"expression\": \"beta * S * I / N\"},  \"I -> R\": {\"distribution\": \"gamma\", \"scale\": 3, \"shape\": 2}}}");
@@ -116,4 +159,5 @@ context("Model and JSON conversion") {
         }
       }
     }
+
 }

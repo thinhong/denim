@@ -7,7 +7,7 @@
 sim(
   transitions,
   initialValues,
-  parameters,
+  parameters = NULL,
   simulationDuration,
   timeStep = 1,
   errorTolerance = 0.001

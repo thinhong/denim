@@ -33,5 +33,11 @@ test_that("Compare denim and deSolve", {
 
     tolerance <- 0.1
     abs_diff <- abs(mod[, c("Time", "S", "I")] - ode_mod[, c("time", "S", "I")])
+    
     expect_true(all(abs_diff <= tolerance))
+    
+   
+    # test plot function does not throw error
+    expect_no_error(plot(mod))
 })
+

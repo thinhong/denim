@@ -72,7 +72,7 @@ checkInitsTransitions <- function(initialValues, transitions) {
 #'            parameters = parameters, 
 #'            simulationDuration = simulationDuration, 
 #'            timeStep = timeStep)
-sim <- function(transitions, initialValues, parameters, 
+sim <- function(transitions, initialValues, parameters=NULL, 
                 simulationDuration, timeStep = 1, errorTolerance = .001) {
   
   # First check their inputs
@@ -81,7 +81,7 @@ sim <- function(transitions, initialValues, parameters,
   # Generate model object
   mod <- newModel(simulationDuration, errorTolerance, initialValues, parameters, transitions, timeStep)
   modJson <- modelToJson(mod)
-  # cat(fmodJson) # for debug
+  # cat(modJson) # for debug
   
   # Parse the json to C++ with function simcm (simulating compartmental model)
   df <- simcm(modJson)

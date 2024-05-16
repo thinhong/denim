@@ -1,6 +1,8 @@
 # Constructor
 newModel <- function(simulationDuration, errorTolerance, initialValues, 
-                     parameters, transitions, timeStep = 1) {
+                     parameters=NULL, transitions, timeStep = 1) {
+  
+  has_math_dist <- FALSE
   
   # Convert string in transitions into math expression and number to constant
   for (i in 1:length(transitions)) {
@@ -10,6 +12,21 @@ newModel <- function(simulationDuration, errorTolerance, initialValues,
     if (is.numeric(transitions[[i]]) & length(transitions[[i]]) == 1) {
       transitions[[i]] <- constant(transitions[[i]])
     }
+    
+    # if transition -> get parameters from Distribution object
+    if( (class(transitions[[i]])=="Distribution")[[1]] ){
+      if((transitions[[i]]$distribution) != "mathExpression"){
+        parameters <- c(parameters, transitions[[i]][-1])
+      }else{
+        has_math_dist <- TRUE
+      }
+    }
+  }
+  
+  # print(parameters) for debugging
+  
+  if(has_math_dist & is.null(parameters)){
+    stop("Parameters must be defined for Math Expression Distribution")
   }
   
   mod <- list(
