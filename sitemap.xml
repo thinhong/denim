@@ -16,6 +16,9 @@
     <loc>/index.html</loc>
   </url>
   <url>
+    <loc>/reference/constant.html</loc>
+  </url>
+  <url>
     <loc>/reference/d_exponential.html</loc>
   </url>
   <url>
@@ -32,6 +35,9 @@
   </url>
   <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/mathexpr.html</loc>
   </url>
   <url>
     <loc>/reference/multinomial.html</loc>
