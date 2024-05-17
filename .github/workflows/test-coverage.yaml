@@ -48,3 +48,22 @@ jobs:
         with:
           name: coverage-test-failures
           path: ${{ runner.temp }}/package
+          
+      - name: Install dependencies
+        run: |
+          install.packages('remotes')
+          remotes::install_deps(dependencies = TRUE)
+
+      - name: Install covr
+        run: install.packages('covr')
+
+      - name: Run tests and generate coverage report
+        run: |
+          Rscript -e 'library(covr); coverage <- package_coverage(); print(coverage); covr::codecov()'
+
+      - name: Upload coverage report to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage.json
+          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true
