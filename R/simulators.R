@@ -1,31 +1,31 @@
-checkInitsTransitions <- function(initialValues, transitions) {
-  # Compartment name in initialValues
-  initNames <- names(initialValues)
-  # Compartment name in transitions
-  the_names <- names(transitions)
-  transNames <- vector("list", length(the_names))
-  for (i in seq_along(the_names)) {
-    # # Remove white space " ", any number, "*" symbol
-    transName <- gsub(" ", "", the_names[i])
-    tempNames <- unlist(strsplit(transName, "->|\\*")[[1]])
-    if (length(tempNames) == 3) {
-      tempNames <- tempNames[-2]
-    }
-    transNames[i] <- tempNames
-  }
-  transNames <- unique(transNames)
-  
-  i_t <- setdiff(initNames, transNames)
-  if (length(i_t)) {
-    mestext <- paste0("Compartment(s) ", paste0(i_t, collapse = ", "), " not existed in your transitions list")
-    stop(mestext, call. = FALSE)
-  }
-  t_i <- setdiff(transNames, initNames)
-  if (length(t_i)) {
-    mestext <- paste0("Compartment(s) ", paste0(t_i, collapse = ", "), " not initialized")
-    stop(mestext, call. = FALSE)
-  }
-}
+# checkInitsTransitions <- function(initialValues, transitions) {
+#   # Compartment name in initialValues
+#   initNames <- names(initialValues)
+#   # Compartment name in transitions
+#   the_names <- names(transitions)
+#   transNames <- vector("list", length(the_names))
+#   for (i in seq_along(the_names)) {
+#     # # Remove white space " ", any number, "*" symbol
+#     transName <- gsub(" ", "", the_names[i])
+#     tempNames <- unlist(strsplit(transName, "->|\\*")[[1]])
+#     if (length(tempNames) == 3) {
+#       tempNames <- tempNames[-2]
+#     }
+#     transNames[i] <- tempNames
+#   }
+#   transNames <- unique(transNames)
+#   
+#   i_t <- setdiff(initNames, transNames)
+#   if (length(i_t)) {
+#     mestext <- paste0("Compartment(s) ", paste0(i_t, collapse = ", "), " not existed in your transitions list")
+#     stop(mestext, call. = FALSE)
+#   }
+#   t_i <- setdiff(transNames, initNames)
+#   if (length(t_i)) {
+#     mestext <- paste0("Compartment(s) ", paste0(t_i, collapse = ", "), " not initialized")
+#     stop(mestext, call. = FALSE)
+#   }
+# }
 
 
 #' Simulator for deterministic discrete time model with memory

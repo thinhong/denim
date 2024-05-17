@@ -36,7 +36,6 @@ test_that("Compare denim and deSolve", {
     
     expect_true(all(abs_diff <= tolerance))
     
-   
     # test plot function does not throw error
     expect_no_error(plot(mod))
 })

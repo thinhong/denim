@@ -5,6 +5,9 @@ ignore:
   - "src/simcm.cpp"
   - "src/muParser*.cpp"
   - "src/muParser*.h"
+  - "R/helpers.R"
+  - "R/validators.R"
+  - "R/distribution.R"
 
 coverage:
   status:

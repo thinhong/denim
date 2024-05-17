@@ -15,7 +15,12 @@ newModel <- function(simulationDuration, errorTolerance, initialValues,
     
     # if transition -> get parameters from Distribution object
     if( (class(transitions[[i]])=="Distribution")[[1]] ){
-      if((transitions[[i]]$distribution) != "mathExpression"){
+      if((transitions[[i]]$distribution) == "nonparametric" | 
+               (transitions[[i]]$distribution) == "constant"|
+               (transitions[[i]]$distribution) == "multinomial"){
+        # dont do anything to non parametric model
+        next
+      }else if((transitions[[i]]$distribution) != "mathExpression"){
         parameters <- c(parameters, transitions[[i]][-1])
       }else{
         has_math_dist <- TRUE

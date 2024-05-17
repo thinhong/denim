@@ -11,11 +11,18 @@ newJsonKeyPair <- function(key, value) {
 newJsonArray <- function(...) {
   contents <- c(...)
   js <- "["
-  for (content in contents) {
-    if (content != contents[length(contents)]) {
-      js <- paste0(js, content, ", ")
+  # for (content in contents) {
+  #   if (content != contents[length(contents)]) {
+  #     js <- paste0(js, content, ", ")
+  #   } else {
+  #     js <- paste0(js, content, "]")
+  #   }
+  # }
+  for (i in 1:length(contents)) {
+    if (i != length(contents)) {
+      js <- paste0(js, contents[i], ", ")
     } else {
-      js <- paste0(js, content, "]")
+      js <- paste0(js, contents[i], "]")
     }
   }
   js

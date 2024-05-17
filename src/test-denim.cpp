@@ -108,6 +108,17 @@ context("Weibull distribution") {
   }
 }
 
+context("Math Expression"){
+  std::string expr = "beta * S * I / N";
+  
+  DistributionMathExpression distr(expr);
+  
+  test_that("getTransitionProb"){
+    expect_true(distr.getTransitionProb(1) == Approx(1.0).margin(0.0001));
+  }
+}
+
+
 
 context("Transition prob") {
   DistributionTransitionProb distr(0.6);
@@ -117,10 +128,38 @@ context("Transition prob") {
   }
 }
 
+context("Testing complex model"){
+  nlohmann::ordered_json j = nlohmann::ordered_json::parse("{\"simulationDuration\": 10,  \"errorTolerance\": 0.001,  \"timeStep\": 1,  \"initialValues\": {\"S\": 999, \"I\": 1, \"R\": 0, \"V\": 0, \"D\": 0},  \"parameters\": {\"N\": 1000, \"waitingTime\": [0.1, 0.2, 0.5, 0.2], \"constant\": 2, \"mu\": 2, \"sigma\": 0.5, \"scale\": 3, \"shape\": 2},  \"transitions\": {  \"S -> I\": {\"distribution\": \"nonparametric\", \"waitingTime\": [0.1, 0.2, 0.5, 0.2]},  \"S -> V\": {\"distribution\": \"constant\", \"constant\": 2},  \"0.1 * I -> D\": {\"distribution\": \"lognormal\", \"mu\": 2, \"sigma\": 0.5},  \"0.9 * I -> R\": {\"distribution\": \"gamma\", \"scale\": 3, \"shape\": 2}}}");
+  
+  ModelJSON modeljson(j["initialValues"], j["parameters"], j["transitions"]);
+  auto model = modeljson.getModel();
+  model->sortCompsByInputTransition();
+  std::vector<std::string> compsOrder = {"S", "I", "V", "D", "R"};
+  
+  test_that("complexGetCompsOrder") {
+    expect_true(model->getCompsOrder() == compsOrder);
+  }
+}
 
 
-context("Model and JSON conversion") {
-    nlohmann::ordered_json j = nlohmann::ordered_json::parse("{  \"simulationDuration\": 10,  \"errorTolerance\": 0.001,  \"timeStep\": 0.01,  \"initialValues\": {\"S\": 999, \"I\": 1, \"R\": 0},  \"parameters\": {\"beta\": 0.12, \"N\": 1000},  \"transitions\": {  \"S -> I\": {\"distribution\": \"mathExpression\", \"expression\": \"beta * S * I / N\"},  \"I -> R\": {\"distribution\": \"gamma\", \"scale\": 3, \"shape\": 2}}}");
+context("Testing distributions in model"){
+  nlohmann::ordered_json j = nlohmann::ordered_json::parse("{  \"simulationDuration\": 10,\"errorTolerance\": 0.001,  \"timeStep\": 1,  \"initialValues\": {\"S\": 999, \"I\": 1, \"R\": 0, \"V\": 0, \"D\": 0},  \"parameters\": {\"N\": 1000},  \"transitions\": {  \"S -> I\": {\"distribution\": \"nonparametric\", \"waitingTime\": [0.1, 0.2, 0.5, 0.2]},  \"S -> V\": {\"distribution\": \"constant\", \"constant\": 2},  \"0.1 * I -> D\": {\"distribution\": \"lognormal\", \"mu\": 2, \"sigma\": 0.5},  \"0.9 * I -> R\": {\"distribution\": \"gamma\", \"scale\": 3, \"shape\": 2}}}");
+
+
+  ModelJSON modeljson(j["initialValues"], j["parameters"], j["transitions"]);
+  auto model = modeljson.getModel();
+  model->sortCompsByInputTransition();
+  std::vector<std::string> compsOrder = {"S", "I", "V", "D", "R"};
+
+  test_that("complexGetCompsOrder") {
+    expect_true(model->getCompsOrder() == compsOrder);
+  }
+}
+
+
+
+context("Model JSON conversion") {
+    nlohmann::ordered_json j = nlohmann::ordered_json::parse("{  \"simulationDuration\": 10,\"errorTolerance\": 0.001,  \"timeStep\": 0.01,  \"initialValues\": {\"S\": 999, \"I\": 1, \"R\": 0},  \"parameters\": {\"beta\": 0.12, \"N\": 1000},  \"transitions\": {  \"S -> I\": {\"distribution\": \"mathExpression\", \"expression\": \"beta * S * I / N\"},  \"I -> R\": {\"distribution\": \"gamma\", \"scale\": 3, \"shape\": 2}}}");
 
     ModelJSON modeljson(j["initialValues"], j["parameters"], j["transitions"]);
     auto model = modeljson.getModel();
@@ -140,6 +179,17 @@ context("Model and JSON conversion") {
       {"I",2},
       {"R",3}
     };
+    
+    test_that("compGetters"){
+      model -> getComps()[0] -> getInCompartments();
+      model -> getComps()[0] -> getOutCompartments();
+      model -> getComps()[0] -> getOutWeights();
+      model -> getComps()[0] -> getOutValues();
+      model -> getComps()[0] -> getSubCompartmentValues();
+      
+      expect_true(model -> getComps()[0] -> findOutCompPosition("N") == 0);
+    }
+    
     test_that("update()"){
       // test updated value for each compartment
       for (auto &comp: model -> getComps()){
@@ -159,5 +209,12 @@ context("Model and JSON conversion") {
         }
       }
     }
+    
+    test_that("editOutDistribution()"){
+      std::shared_ptr<Distribution> distr = std::make_shared<DistributionDiscreteWeibull>(3, 5);
+      model -> getComps()[0] -> editOutDistribution("I", distr);
+    }
 
 }
+
+
