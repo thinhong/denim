@@ -30,7 +30,7 @@ timestep <- 0.0005
 
 ## Run simulation with denim
 ```{r}
-mod <- sim(transitions = transitions, initialValues = initialValues, parameters = parameters, simulationDuration = simulationDuration, timeStep = timestep)
+mod <- sim(transitions = transitions, initialValues = initialValues, parameters, simulationDuration = simulationDuration, timeStep = timestep)
 head(mod[mod$Time %in% 1:simulationDuration,])
 ```
 
@@ -63,3 +63,19 @@ ggplot() +
   geom_line(aes(x = mod$Time, y = mod$R), color = "red", alpha=0.4) +
   labs(x = "Time", y = "Count")
 ```
+
+
+
+# Trying out constant
+```{r}
+
+initialValues <- c(S = 999, I = 1, R=0)
+parameters <- c(constant=0)
+transitions <- list(
+  "S->I" = constant(100),
+  "I->R" = constant(50)
+)
+model <- sim(transitions, initialValues, simulationDuration = 10)
+plot(model)
+```
+

@@ -63,13 +63,14 @@ d_lognormal <- function(mu, sigma) {
   distr
 }
 
-
-# Mathematical expression
-# 
-# User-defined mathematical expression. The expression will be processed by 
-# muparser library which offers a wide variety of operators. Visit 
-# muparser website (https://beltoforion.de/en/muparser/features.php) 
-# to see full list of available operators.
+#' Mathematical expression
+#'
+#' @param expr User defined mathematial expression. he expression will be processed by 
+#' muparser library which offers a wide variety of operators. Visit 
+#' muparser website (https://beltoforion.de/en/muparser/features.php) 
+#' to see full list of available operators.
+#'
+#' @export
 mathexpr <- function(expr) {
   distr <- list(
     distribution = "mathExpression",
@@ -80,10 +81,12 @@ mathexpr <- function(expr) {
 }
 
 
-# Constant
-# 
-# Define a fixed number of individuals of the left compartment transit to the 
-# right compartment at every time step
+#' Define a fixed number of individuals of the left compartment transit to the 
+#' right compartment at every time step
+#'
+#' @param x number of individuals who move from one compartment to another
+#'
+#' @export
 constant <- function(x) {
   distr <- list(
     distribution = "constant",

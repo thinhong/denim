@@ -14,7 +14,7 @@ private:
     std::vector<double> transitionProb;
 public:
     DistributionDiscreteGamma(double scale, double shape);
-    explicit DistributionDiscreteGamma(std::vector<double>& cumulativeProb);
+    // explicit DistributionDiscreteGamma(std::vector<double>& cumulativeProb);
     DistributionDiscreteGamma() = default;
     double getScale();
     double getShape();

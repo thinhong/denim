@@ -20,11 +20,11 @@ DistributionDiscreteGamma::DistributionDiscreteGamma(double scale, double shape)
     this->distName = "gamma";
 }
 
-DistributionDiscreteGamma::DistributionDiscreteGamma(std::vector<double> &cumulativeProb) {
-    this->transitionProb = cumulativeProb;
-    this->maxDay = cumulativeProb.size();
-    this->distName = "gamma";
-}
+// DistributionDiscreteGamma::DistributionDiscreteGamma(std::vector<double> &cumulativeProb) {
+//     this->transitionProb = cumulativeProb;
+//     this->maxDay = cumulativeProb.size();
+//     this->distName = "gamma";
+// }
 
 double DistributionDiscreteGamma::getScale() {
     return scale;
