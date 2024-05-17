@@ -26,6 +26,12 @@ reference:
 - subtitle: Fixed percentage
   contents:
   - transprob
+- subtitle: Fixed transition
+  contents:
+  - constant
+- subtitle: Math Expression
+  contents:
+  - mathexpr
 - title: Multinomial
   contents: 
   - multinomial
