@@ -183,6 +183,7 @@ context("Model JSON conversion") {
     test_that("compGetters"){
       model -> getComps()[0] -> getInCompartments();
       model -> getComps()[0] -> getOutCompartments();
+      model -> getComps()[0] -> getOutCompartmentNames();
       model -> getComps()[0] -> getOutWeights();
       model -> getComps()[0] -> getOutValues();
       model -> getComps()[0] -> getSubCompartmentValues();

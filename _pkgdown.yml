@@ -12,6 +12,8 @@ navbar:
       menu:
       - text: Introduction to denim
         href: articles/web_only/denim.html
+      - text: denim Vs deSolve
+        href: articles/web_only/denim.html
         
 reference:
 - title: Transition

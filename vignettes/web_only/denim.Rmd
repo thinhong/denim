@@ -22,6 +22,7 @@ library(denim)
 The SIR model uses 3 compartments: S (susceptible), I (infected), R (recovered) to describe clinical status of individuals. We use the most simple form of SIR model to demonstrate how to define the distribution of the lengths of stay distribution.
 
 <center>
+
 ```{r, echo=FALSE}
 DiagrammeR::grViz("digraph {
   graph [layout = dot, rankdir = LR]
@@ -33,17 +34,16 @@ DiagrammeR::grViz("digraph {
   }",
   width = 300, height = "100%")
 ```
+
 </center>
 
 The model equations are:
 
-$$S_{t+1} - S_{t} = -\lambda S_{t} = -\frac{\beta I_{t}}{N}S_{t}$$
-$$I_{t+1} - I_{t} = \frac{\beta I_{t}}{N}S_{t} - \gamma I_{t}$$
-$$R_{t+1} - R_{t} = \gamma I_{t}$$
+$$S_{t+1} - S_{t} = -\lambda S_{t} = -\frac{\beta I_{t}}{N}S_{t}$$ $$I_{t+1} - I_{t} = \frac{\beta I_{t}}{N}S_{t} - \gamma I_{t}$$ $$R_{t+1} - R_{t} = \gamma I_{t}$$
 
-* $N$: total population size, $N = S + I + R$
-* $\beta$: the product of contact rates and transmission probability; usually we define $\lambda =\frac{\beta I_{t}}{N}$ as the force of infection
-* $\gamma$: recovery rate
+-   $N$: total population size, $N = S + I + R$
+-   $\beta$: the product of contact rates and transmission probability; usually we define $\lambda =\frac{\beta I_{t}}{N}$ as the force of infection
+-   $\gamma$: recovery rate
 
 Usually to solve the model easier we make an assumption that the recovery rate $\gamma$ is constant, this will leads to an exponentially distributed length of stay i.e most individuals recover after 1 day being infected.
 
@@ -78,6 +78,7 @@ plot(x, y, type = "l", col = col_codes[1], lty = 1, lwd = 3,
 The model now look like this:
 
 <center>
+
 ```{r, echo=FALSE}
 DiagrammeR::grViz("digraph {
   graph [layout = dot, rankdir = LR]
@@ -89,6 +90,7 @@ DiagrammeR::grViz("digraph {
   }",
   width = 400, height = "100%")
 ```
+
 </center>
 
 **Model specification**
@@ -96,6 +98,7 @@ DiagrammeR::grViz("digraph {
 *Model transition*
 
 <center>
+
 ```{r, echo=FALSE}
 DiagrammeR::grViz("digraph {
   graph [layout = dot, rankdir = LR]
@@ -107,6 +110,7 @@ DiagrammeR::grViz("digraph {
   }",
   width = 400, height = "100%")
 ```
+
 </center>
 
 We have two transitions `S -> I` and `I -> R` in this case. The transitions are specified in a list follow this format `"transition" = equation`, of which equation is defined with one of our functions for waiting time distribution.
@@ -167,6 +171,7 @@ plot(mod)
 In the SIR model, all infected individuals are presented by a single compartment I and have the same recovery rate $\gamma$.
 
 <center>
+
 ```{r, echo=FALSE}
 DiagrammeR::grViz("digraph {
   graph [layout = dot, rankdir = LR]
@@ -178,6 +183,7 @@ DiagrammeR::grViz("digraph {
   }",
   width = 300, height = "100%")
 ```
+
 </center>
 
 We want the recovery rate of individuals who had been infected for 1 day differ from the recovery rate of 2-day infected patients. So rather than using one compartment for infected (I), we define multiple infected sub-compartments. The number of sub-compartments depends on the maximum day we expect all infected individuals would be recovered.
@@ -185,6 +191,7 @@ We want the recovery rate of individuals who had been infected for 1 day differ 
 For example, if we expect a disease with a maximum 4 days of infection, we will end up with 4 sub-compartments. Each sub-compartment has its own recovery rate $\gamma_{1}$, $\gamma_{2}$, $\gamma_{3}$, $\gamma_{4}$. At day 4 it is certain that the patient will recover (because we assume that this disease has a maximum 4 days of infection), $\gamma_{4} = 1$.
 
 <center>
+
 ```{r, echo=FALSE}
 DiagrammeR::grViz("digraph {
   graph [layout = dot, rankdir = LR]
@@ -201,6 +208,7 @@ DiagrammeR::grViz("digraph {
   I3 -> I4 [label = '(1-&#947;@_{3})I@_{3}']
   }", height = "100%", width = "100%")
 ```
+
 </center>
 
 Let $R_1 + R_2 + R_3 + R_4 = \Sigma R$. We have $\frac{R_1}{\Sigma R} = p_1$, $\frac{R_2}{\Sigma R} = p_2$, $\frac{R_3}{\Sigma R} = p_3$, $\frac{R_4}{\Sigma R} = p_4$. Our mission is to estimate $\gamma_{1}$, $\gamma_{2}$, $\gamma_{3}$ to obtain $p_1$, $p_2$, $p_3$, $p_4$ that fit a pre-defined distribution at the equilibrium state. This can be obtained by setting:
@@ -213,31 +221,32 @@ For a given length of stay distribution, we identify the maximum length of stay 
 
 Current available distribution in this package including:
 
-* `d_exponential(rate)`: Discrete **exponential distribution** with parameter `rate`
+-   `d_exponential(rate)`: Discrete **exponential distribution** with parameter `rate`
 
-* `d_gamma(scale, shape)`: Discrete **gamma distribution** with parameters `scale` and `shape`
+-   `d_gamma(scale, shape)`: Discrete **gamma distribution** with parameters `scale` and `shape`
 
-* `d_weibull(scale, shape)`: Discrete **Weibull distribution** with parameters `scale` and `shape`
+-   `d_weibull(scale, shape)`: Discrete **Weibull distribution** with parameters `scale` and `shape`
 
-* `d_lognormal(mu, sigma)`: Discrete **log-normal distribution** with parameters `mu` and `sigma`
+-   `d_lognormal(mu, sigma)`: Discrete **log-normal distribution** with parameters `mu` and `sigma`
 
 You can define other type of transitions such as:
 
-* Mathematical expression: Transition defined with a string value such as `"beta * S * I / N"` will be converted to a mathematical expression. You will need to define parameters that are not compartment names in the `parameters` argument
+-   Mathematical expression: Transition defined with a string value such as `"beta * S * I / N"` will be converted to a mathematical expression. You will need to define parameters that are not compartment names in the `parameters` argument
 
-* Constant: Transition defined with a numerical value such as `1`, `2` will be converted to a constant. This is to define the number of individuals moving in a time step.
+-   Constant: Transition defined with a numerical value such as `1`, `2` will be converted to a constant. This is to define the number of individuals moving in a time step.
 
-* `transprob(x)`: Every time step a **fixed percentage** of the left compartment transit to the right compartment, this is also a convenient way to define $R_t - R_{t-1} = \gamma I$ which we can input `"I -> R" = transprob(gamma)`
+-   `transprob(x)`: Every time step a **fixed percentage** of the left compartment transit to the right compartment, this is also a convenient way to define $R_t - R_{t-1} = \gamma I$ which we can input `"I -> R" = transprob(gamma)`
 
-* `nonparametric(waitingTimes...)`: A **vector of values**, could be numbers, percentages, density of the length of stay based on real data, `denim` will convert it into a distribution
+-   `nonparametric(waitingTimes...)`: A **vector of values**, could be numbers, percentages, density of the length of stay based on real data, `denim` will convert it into a distribution
 
-* `multinomial(probabilities)`: A convenient way to define **several probabilities** of a compartment transit to many compartments, may or may not in a time step. For example, `"V -> VA, VS, VH" = multinomial(0.6, 0.3, 0.1)` means 60% of `V` will become `VA`, 30% become `VS` and 10% become `VH`. If we continue to define the length of stay distribution for these transitions e.g `"V -> VA" = d_gamma(3, 2)`, probabilities defined with `multinomial()` is not the percentage of the left compartment transit in each time step, but the percentage of individuals move to `VA` at the equilibrium state. If we do not define further length of stay distribution, `"V -> VA, VS, VH" = multinomial(0.6, 0.3, 0.1)` is the percentage of `V` transit to the right compartments per time step similar to a `transprob()` function. See more detailed explanations in the ***Multiple transitions from a compartment*** section.
+-   `multinomial(probabilities)`: A convenient way to define **several probabilities** of a compartment transit to many compartments, may or may not in a time step. For example, `"V -> VA, VS, VH" = multinomial(0.6, 0.3, 0.1)` means 60% of `V` will become `VA`, 30% become `VS` and 10% become `VH`. If we continue to define the length of stay distribution for these transitions e.g `"V -> VA" = d_gamma(3, 2)`, probabilities defined with `multinomial()` is not the percentage of the left compartment transit in each time step, but the percentage of individuals move to `VA` at the equilibrium state. If we do not define further length of stay distribution, `"V -> VA, VS, VH" = multinomial(0.6, 0.3, 0.1)` is the percentage of `V` transit to the right compartments per time step similar to a `transprob()` function. See more detailed explanations in the ***Multiple transitions from a compartment*** section.
 
 ## 4. Multiple transitions from a compartment
 
 We have many ways to define the type of transition when there are two or more transitions from a compartment. Consider this example:
 
 <center>
+
 ```{r, echo=FALSE}
 DiagrammeR::grViz("digraph {
   graph [layout = dot, rankdir = LR]
@@ -251,13 +260,14 @@ DiagrammeR::grViz("digraph {
   }",
   width = 500, height = "100%")
 ```
+
 </center>
 
 There are two scenarios in this example:
 
-* Susceptible individuals can be infected or vaccinated. The assumption here is they will be infected first (`S -> I`), and then the rest of them who were not infected will get vaccinated (`S -> V`).
+-   Susceptible individuals can be infected or vaccinated. The assumption here is they will be infected first (`S -> I`), and then the rest of them who were not infected will get vaccinated (`S -> V`).
 
-* Infected individuals can recover or die. If the mortality probability is known, we can implement it into the model, for example by defining `0.9 * I -> R` (90% individuals will recover) and then `0.1 * I -> D` (10% of them die). By doing so, we ensure that the mortality probability is 10%, while also define the length of stay of individuals at the infected state before recover or die follows gamma or log-normal distribution, respectively.
+-   Infected individuals can recover or die. If the mortality probability is known, we can implement it into the model, for example by defining `0.9 * I -> R` (90% individuals will recover) and then `0.1 * I -> D` (10% of them die). By doing so, we ensure that the mortality probability is 10%, while also define the length of stay of individuals at the infected state before recover or die follows gamma or log-normal distribution, respectively.
 
 We can define the model for this example as follows:
 
@@ -294,13 +304,15 @@ plot(mod)
 ```
 
 **Tips**: Instead of writing:
-```
+
+```         
 "0.9 * I -> R" = d_gamma(3, 2),
 "0.1 * I -> D" = d_lognormal(2, 0.5)
 ```
 
 You can also use the `multinomial()`, then define the length of stay distribution and obtain the same result:
-```
+
+```         
 "I -> R, D" = multinomial(0.9, 0.1),
 "I -> R" = d_gamma(3, 2),
 "I -> D" = d_lognormal(2, 0.5)
@@ -309,6 +321,7 @@ You can also use the `multinomial()`, then define the length of stay distributio
 ## 5. Another example
 
 <center>
+
 ```{r, echo=FALSE}
 DiagrammeR::grViz("digraph {
   graph [layout = dot, rankdir = LR]
@@ -324,6 +337,7 @@ DiagrammeR::grViz("digraph {
   }",
   width = 700, height = "100%")
 ```
+
 </center>
 
 ```{r, fig.width = 5}
@@ -360,4 +374,3 @@ mod <- sim(transitions = transitions,
            timeStep = timeStep)
 plot(mod)
 ```
-
