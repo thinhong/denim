@@ -4,7 +4,9 @@
 #' 
 #' @param scale scale parameter of a gamma distribution
 #' @param shape shape parameter of a gamma distribution
-#'
+#' 
+#' @examples
+#' transitions <- list("S -> I" = d_gamma(1, 5))
 #' @export
 d_gamma <- function(scale, shape) {
   distr <- list(
@@ -21,7 +23,9 @@ d_gamma <- function(scale, shape) {
 #' 
 #' @param scale scale parameter of a Weibull distribution
 #' @param shape shape parameter of a Weibull distribution
-#'
+#' 
+#' @examples
+#' transitions <- list("I -> D" = d_weibull(0.6, 2))
 #' @export
 d_weibull <- function(scale, shape) {
   distr <- list(
@@ -36,6 +40,10 @@ d_weibull <- function(scale, shape) {
 #' Discrete exponential distribution
 #' 
 #' @param rate rate parameter of an exponential distribution
+#' 
+#' @examples
+#' transitions <- list("I -> D" = d_exponential(0.3))
+#' 
 #'
 #' @export
 d_exponential <- function(rate) {
@@ -51,7 +59,9 @@ d_exponential <- function(rate) {
 #' 
 #' @param mu location parameter or the ln mean
 #' @param sigma scale parameter or ln standard deviation
-#'
+#' 
+#' @examples
+#' transitions <- list("I -> D" = d_lognormal(3, 0.6))
 #' @export
 d_lognormal <- function(mu, sigma) {
   distr <- list(
@@ -69,7 +79,11 @@ d_lognormal <- function(mu, sigma) {
 #' muparser library which offers a wide variety of operators. Visit 
 #' muparser website (https://beltoforion.de/en/muparser/features.php) 
 #' to see full list of available operators.
-#'
+#' 
+#' @examples
+#' transitions <- list("S->I"=mathexpr("beta*S/N"))
+#' # definition for parameters in the expression required
+#' params <- c(N = 1000, beta = 0.3)
 #' @export
 mathexpr <- function(expr) {
   distr <- list(
@@ -81,11 +95,15 @@ mathexpr <- function(expr) {
 }
 
 
+#' Fixed transition
+#' 
 #' Define a fixed number of individuals of the left compartment transit to the 
 #' right compartment at every time step
 #'
 #' @param x number of individuals who move from one compartment to another
-#'
+#' 
+#' @examples
+#' transitions <- list("S->I" = constant(10))
 #' @export
 constant <- function(x) {
   distr <- list(
@@ -103,7 +121,9 @@ constant <- function(x) {
 #' at every time step
 #' 
 #' @param x a float number between 0 to 1
-#'
+#' 
+#' @examples
+#' transitions <- list("S->I"=transprob(0.8))
 #' @export
 transprob <- function(x) {
   distr <- list(
@@ -115,12 +135,14 @@ transprob <- function(x) {
 }
 
 
-#' Nonparametric
+#' Nonparametric distribution
 #' 
 #' Convert a vector of frequencies, percentages... into a distribution
 #' 
 #' @param ... a vector of values
-#'
+#' 
+#' @examples
+#' transitions <- list("S->I"=nonparametric(0.1, 0.2, 0.5, 0.2))
 #' @export
 nonparametric <- function(...) {
   distr <- list(

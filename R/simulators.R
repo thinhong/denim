@@ -1,3 +1,4 @@
+# --- Helper for testing only
 # checkInitsTransitions <- function(initialValues, transitions) {
 #   # Compartment name in initialValues
 #   initNames <- names(initialValues)

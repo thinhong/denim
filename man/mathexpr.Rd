@@ -15,3 +15,8 @@ to see full list of available operators.}
 \description{
 Mathematical expression
 }
+\examples{
+transitions <- list("S->I"=mathexpr("beta*S/N"))
+# definition for parameters in the expression required
+params <- c(N = 1000, beta = 0.3)
+}

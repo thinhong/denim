@@ -14,3 +14,6 @@ d_gamma(scale, shape)
 \description{
 Discrete gamma distribution
 }
+\examples{
+transitions <- list("S -> I" = d_gamma(1, 5))
+}

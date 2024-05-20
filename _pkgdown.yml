@@ -5,19 +5,19 @@ template:
 figures:
   dpi: 300
 
-navbar:
-  title: ~
-  articles:
-    - text: Articles
-      menu:
-      - text: Introduction to denim
-        href: articles/web_only/denim.html
-      - text: denim Vs deSolve
-        href: articles/web_only/denim.html
+
+articles:
+- title: Introduction to denim
+  navbar: ~
+  contents:
+  - web_only/denim
+- title: denim Vs deSolve
+  navbar: ~
+  contents:
+  - web_only/denim_vs_deSolve
         
 reference:
-- title: Transition
-- title: Distribution
+- title: Transition Distribution
   desc: Define transition with length of stay distribution
 - subtitle: Parametric distribution
   contents:
@@ -35,6 +35,7 @@ reference:
   contents:
   - mathexpr
 - title: Multinomial
+  desc: Define a set of probabilities of transition from one compartment to multiple compartments
   contents: 
   - multinomial
 - title: Simulator

@@ -2,7 +2,7 @@
 % Please edit documentation in R/distribution.R
 \name{nonparametric}
 \alias{nonparametric}
-\title{Nonparametric}
+\title{Nonparametric distribution}
 \usage{
 nonparametric(...)
 }
@@ -11,4 +11,7 @@ nonparametric(...)
 }
 \description{
 Convert a vector of frequencies, percentages... into a distribution
+}
+\examples{
+transitions <- list("S->I"=nonparametric(0.1, 0.2, 0.5, 0.2))
 }

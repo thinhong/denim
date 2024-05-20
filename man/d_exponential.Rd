@@ -12,3 +12,8 @@ d_exponential(rate)
 \description{
 Discrete exponential distribution
 }
+\examples{
+transitions <- list("I -> D" = d_exponential(0.3))
+
+
+}

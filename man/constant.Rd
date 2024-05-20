@@ -2,8 +2,7 @@
 % Please edit documentation in R/distribution.R
 \name{constant}
 \alias{constant}
-\title{Define a fixed number of individuals of the left compartment transit to the
-right compartment at every time step}
+\title{Fixed transition}
 \usage{
 constant(x)
 }
@@ -13,4 +12,7 @@ constant(x)
 \description{
 Define a fixed number of individuals of the left compartment transit to the
 right compartment at every time step
+}
+\examples{
+transitions <- list("S->I" = constant(10))
 }

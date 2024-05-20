@@ -14,3 +14,6 @@ d_weibull(scale, shape)
 \description{
 Discrete Weibull distribution
 }
+\examples{
+transitions <- list("I -> D" = d_weibull(0.6, 2))
+}

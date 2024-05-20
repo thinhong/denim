@@ -11,13 +11,6 @@ newJsonKeyPair <- function(key, value) {
 newJsonArray <- function(...) {
   contents <- c(...)
   js <- "["
-  # for (content in contents) {
-  #   if (content != contents[length(contents)]) {
-  #     js <- paste0(js, content, ", ")
-  #   } else {
-  #     js <- paste0(js, content, "]")
-  #   }
-  # }
   for (i in 1:length(contents)) {
     if (i != length(contents)) {
       js <- paste0(js, contents[i], ", ")
@@ -33,13 +26,6 @@ newJsonObject <- function(..., inline = FALSE) {
   contents <- c(...)
   if (inline == FALSE) {
     js <- "{\n"
-    # for (content in contents) {
-    #   if (content != contents[length(contents)]) {
-    #     js <- paste0(js, "  ", content, ",\n")
-    #   } else {
-    #     js <- paste0(js, "  ", content, "\n")
-    #   }
-    # }
     for (i in 1:length(contents)) {
       if (i != length(contents)) {
         js <- paste0(js, "  ", contents[i], ",\n")
@@ -49,13 +35,6 @@ newJsonObject <- function(..., inline = FALSE) {
     }
   } else {
     js <- "{"
-    # for (content in contents) {
-    #   if (content != contents[length(contents)]) {
-    #     js <- paste0(js, content, ", ")
-    #   } else {
-    #     js <- paste0(js, content, "")
-    #   }
-    # }
     
     for (i in 1:length(contents)) {
       if (i != length(contents)) {

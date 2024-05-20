@@ -14,3 +14,6 @@ d_lognormal(mu, sigma)
 \description{
 Discrete log-normal distribution
 }
+\examples{
+transitions <- list("I -> D" = d_lognormal(3, 0.6))
+}

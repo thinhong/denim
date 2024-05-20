@@ -13,3 +13,6 @@ transprob(x)
 A fixed percentage of the left compartment transit to the right compartment
 at every time step
 }
+\examples{
+transitions <- list("S->I"=transprob(0.8))
+}
