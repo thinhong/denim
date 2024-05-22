@@ -138,6 +138,50 @@ context("Testing complex model"){
   
   test_that("complexGetCompsOrder") {
     expect_true(model->getCompsOrder() == compsOrder);
+    
+  }
+  
+  test_that("update"){
+    // making sure update work
+    model->update(1);
+  }
+}
+
+context("Testing multinomial transition"){
+  
+  nlohmann::ordered_json j = nlohmann::ordered_json::parse("{\n  \"simulationDuration\": 10,\n  \"errorTolerance\": 0.001,\n  \"timeStep\": 1,\n  \"initialValues\": {\"S\": 1000, \"I\": 0, \"V\": 0},\n  \"parameters\": {\"transitionProb\": 0.2, \"mu\": 2, \"sigma\": 0.5},\n  \"transitions\": {\n  \"S -> I, V\": {\"distribution\": \"multinomial\", \"probabilities\": [0.9, 0.1]},\n  \"S -> I\": {\"distribution\": \"transitionProb\", \"transitionProb\": 0.2},\n  \"S -> V\": {\"distribution\": \"lognormal\", \"mu\": 2, \"sigma\": 0.5}\n}\n}");
+  ModelJSON modeljson(j["initialValues"], j["parameters"], j["transitions"]);
+  auto model = modeljson.getModel();
+  
+  // map to convert compartment name to int per C++ requirement for switch case
+  const static std::unordered_map<std::string,int> name_to_case{
+    {"S",1},
+    {"I",2},
+    {"V",3}
+  };
+  
+  // Set timestep and test values for the first iteration
+  Distribution::timeStep = j["timeStep"];
+  model->update(1);
+  
+  test_that("update()"){
+    // test updated value for each compartment
+    for (auto &comp: model -> getComps()){
+      switch (name_to_case.at(comp->getCompName())){
+      case 1: 
+        // check value for compartment S 
+        expect_true(comp->getCompTotal()[1] == Approx(819.996).margin(0.01));
+        break;
+      case 2:
+        // check value for compartment I 
+        expect_true(comp->getCompTotal()[1] == Approx(180).margin(0.001));
+        break;
+      case 3:
+        // check value for compartment V
+        expect_true(comp->getCompTotal()[1] == Approx(0.003167).margin(0.001e-03));
+        break;
+      }
+    }
   }
 }
 
@@ -154,6 +198,47 @@ context("Testing distributions in model"){
   test_that("complexGetCompsOrder") {
     expect_true(model->getCompsOrder() == compsOrder);
   }
+  
+  // map to convert compartment name to int per C++ requirement for switch case
+  const static std::unordered_map<std::string,int> name_to_case{
+    {"S",1},
+    {"I",2},
+    {"V",3},
+    {"D",4},
+    {"R",5}
+  };
+  
+  // Set timestep and test values for the first iteration
+  Distribution::timeStep = j["timeStep"];
+  model->update(1);
+  // making sure update is working
+  test_that("update"){
+    // test updated value for each compartment
+    for (auto &comp: model -> getComps()){
+      switch (name_to_case.at(comp->getCompName())){
+      case 1: 
+        // check value for compartment S 
+        expect_true(comp->getCompTotal()[1] == Approx(897.1).margin(0.01));
+        break;
+      case 2:
+        // check value for compartment I 
+        expect_true(comp->getCompTotal()[1] == Approx(100.86).margin(0.001));
+        break;
+      case 3:
+        // check value for compartment V
+        expect_true(comp->getCompTotal()[1] == Approx(2).margin(0.001e-03));
+        break;
+      case 4:
+        // check value for compartment V
+        expect_true(comp->getCompTotal()[1] == Approx(3.167e-06).margin(0.001e-06));
+        break;
+      case 5:
+        // check value for compartment V
+        expect_true(comp->getCompTotal()[1] == Approx(0.04016).margin(0.001e-03));
+        break;
+      }
+    }
+  }
 }
 
 
@@ -168,6 +253,10 @@ context("Model JSON conversion") {
 
     test_that("getCompsOrder()") {
       expect_true(model->getCompsOrder() == compsOrder);
+    }
+    
+    test_that("getIndex"){
+      expect_true(model->getIndex(model->getComps()[0]) == 0);
     }
 
     // Set timestep and test values for the first iteration

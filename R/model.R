@@ -63,11 +63,22 @@ modelToJson <- function(mod) {
       distributionToJson(transitions[[i]]), inline = TRUE)
   }
   
-  newJsonObject(
-    newJsonKeyPair("simulationDuration", mod$simulationDuration),
-    newJsonKeyPair("errorTolerance"    , mod$errorTolerance),
-    newJsonKeyPair("timeStep"          , mod$timeStep),
-    newJsonNestedObject("initialValues", newJsonObject(ivKeyPairs, inline = TRUE)),
-    newJsonNestedObject("parameters"   , newJsonObject(pmKeyPairs, inline = TRUE)),
-    newJsonNestedObject("transitions"  , newJsonObject(distr)))
+  # add handlers when transitions doesn't involve any parameters
+  if( length(parameters > 0)){
+    newJsonObject(
+      newJsonKeyPair("simulationDuration", mod$simulationDuration),
+      newJsonKeyPair("errorTolerance"    , mod$errorTolerance),
+      newJsonKeyPair("timeStep"          , mod$timeStep),
+      newJsonNestedObject("initialValues", newJsonObject(ivKeyPairs, inline = TRUE)),
+      newJsonNestedObject("parameters"   , newJsonObject(pmKeyPairs, inline = TRUE)),
+      newJsonNestedObject("transitions"  , newJsonObject(distr)))
+  }else{
+    newJsonObject(
+      newJsonKeyPair("simulationDuration", mod$simulationDuration),
+      newJsonKeyPair("errorTolerance"    , mod$errorTolerance),
+      newJsonKeyPair("timeStep"          , mod$timeStep),
+      newJsonNestedObject("initialValues", newJsonObject(ivKeyPairs, inline = TRUE)),
+      newJsonNestedObject("transitions"  , newJsonObject(distr)))
+  }
+  
 }

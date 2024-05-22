@@ -6,6 +6,7 @@ ignore:
   - "src/muParser*.cpp"
   - "src/helpers.cpp"
   - "src/muParser*.h"
+  - "src/*.h"
   - "R/helpers.R"
   - "R/validators.R"
   - "R/distribution.R"
