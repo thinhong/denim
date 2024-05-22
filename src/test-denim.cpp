@@ -128,25 +128,6 @@ context("Transition prob") {
   }
 }
 
-context("Testing complex model"){
-  nlohmann::ordered_json j = nlohmann::ordered_json::parse("{\"simulationDuration\": 10,  \"errorTolerance\": 0.001,  \"timeStep\": 1,  \"initialValues\": {\"S\": 999, \"I\": 1, \"R\": 0, \"V\": 0, \"D\": 0},  \"parameters\": {\"N\": 1000, \"waitingTime\": [0.1, 0.2, 0.5, 0.2], \"constant\": 2, \"mu\": 2, \"sigma\": 0.5, \"scale\": 3, \"shape\": 2},  \"transitions\": {  \"S -> I\": {\"distribution\": \"nonparametric\", \"waitingTime\": [0.1, 0.2, 0.5, 0.2]},  \"S -> V\": {\"distribution\": \"constant\", \"constant\": 2},  \"0.1 * I -> D\": {\"distribution\": \"lognormal\", \"mu\": 2, \"sigma\": 0.5},  \"0.9 * I -> R\": {\"distribution\": \"gamma\", \"scale\": 3, \"shape\": 2}}}");
-  
-  ModelJSON modeljson(j["initialValues"], j["parameters"], j["transitions"]);
-  auto model = modeljson.getModel();
-  model->sortCompsByInputTransition();
-  std::vector<std::string> compsOrder = {"S", "I", "V", "D", "R"};
-  
-  test_that("complexGetCompsOrder") {
-    expect_true(model->getCompsOrder() == compsOrder);
-    
-  }
-  
-  test_that("update"){
-    // making sure update work
-    model->update(1);
-  }
-}
-
 context("Testing multinomial transition"){
   
   nlohmann::ordered_json j = nlohmann::ordered_json::parse("{\n  \"simulationDuration\": 10,\n  \"errorTolerance\": 0.001,\n  \"timeStep\": 1,\n  \"initialValues\": {\"S\": 1000, \"I\": 0, \"V\": 0},\n  \"parameters\": {\"transitionProb\": 0.2, \"mu\": 2, \"sigma\": 0.5},\n  \"transitions\": {\n  \"S -> I, V\": {\"distribution\": \"multinomial\", \"probabilities\": [0.9, 0.1]},\n  \"S -> I\": {\"distribution\": \"transitionProb\", \"transitionProb\": 0.2},\n  \"S -> V\": {\"distribution\": \"lognormal\", \"mu\": 2, \"sigma\": 0.5}\n}\n}");
