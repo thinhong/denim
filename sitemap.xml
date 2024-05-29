@@ -7,19 +7,25 @@
     <loc>/LICENSE-text.html</loc>
   </url>
   <url>
+    <loc>/LICENSE.html</loc>
+  </url>
+  <url>
+    <loc>/articles/denim.html</loc>
+  </url>
+  <url>
+    <loc>/articles/denim_vs_deSolve.html</loc>
+  </url>
+  <url>
     <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/web_only/denim.html</loc>
-  </url>
-  <url>
-    <loc>/articles/web_only/denim_vs_deSolve.html</loc>
   </url>
   <url>
     <loc>/authors.html</loc>
   </url>
   <url>
     <loc>/index.html</loc>
+  </url>
+  <url>
+    <loc>/news/index.html</loc>
   </url>
   <url>
     <loc>/reference/constant.html</loc>
