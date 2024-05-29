@@ -9,6 +9,9 @@ multinomial(...)
 \arguments{
 \item{...}{a vector of probabilities, must add up to 1}
 }
+\value{
+a Distribution object for simulator
+}
 \description{
 Define a set of probabilities of transition from one compartment to multiple
 compartments

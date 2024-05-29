@@ -91,6 +91,7 @@ sim <- function(transitions, initialValues, parameters=NULL,
   df
 }
 
+# Overloaded plot function for denim object
 #' @export
 plot.denim <- function(x, ...) {
   

@@ -14,17 +14,18 @@ Imports
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://thinhong.github.io/denim}
+  \item \url{https://drthinhong.com/denim/}
   \item \url{https://github.com/thinhong/denim}
   \item Report bugs at \url{https://github.com/thinhong/denim/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Thinh Ong \email{thinhop@oucru.org} (\href{https://orcid.org/0000-0001-6772-9291}{ORCID})
+\strong{Maintainer}: Thinh Ong \email{thinhop@oucru.org} (\href{https://orcid.org/0000-0001-6772-9291}{ORCID}) [copyright holder]
 
 Authors:
 \itemize{
+  \item Anh Phan \email{anhptq@oucru.org}
   \item Marc Choisy \email{mchoisy@oucru.org} (\href{https://orcid.org/0000-0002-5187-6390}{ORCID})
 }
 

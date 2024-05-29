@@ -11,6 +11,9 @@ d_gamma(scale, shape)
 
 \item{shape}{shape parameter of a gamma distribution}
 }
+\value{
+a Distribution object for simulator
+}
 \description{
 Discrete gamma distribution
 }

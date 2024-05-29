@@ -10,11 +10,11 @@ articles:
 - title: Introduction to denim
   navbar: ~
   contents:
-  - web_only/denim
+  - denim
 - title: denim Vs deSolve
   navbar: ~
   contents:
-  - web_only/denim_vs_deSolve
+  - denim_vs_deSolve
         
 reference:
 - title: Transition Distribution

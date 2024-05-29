@@ -11,6 +11,9 @@ d_lognormal(mu, sigma)
 
 \item{sigma}{scale parameter or ln standard deviation}
 }
+\value{
+a Distribution object for simulator
+}
 \description{
 Discrete log-normal distribution
 }

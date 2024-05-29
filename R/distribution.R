@@ -4,6 +4,7 @@
 #' 
 #' @param scale scale parameter of a gamma distribution
 #' @param shape shape parameter of a gamma distribution
+#' @return a Distribution object for simulator
 #' 
 #' @examples
 #' transitions <- list("S -> I" = d_gamma(1, 5))
@@ -23,6 +24,7 @@ d_gamma <- function(scale, shape) {
 #' 
 #' @param scale scale parameter of a Weibull distribution
 #' @param shape shape parameter of a Weibull distribution
+#' @return a Distribution object for simulator
 #' 
 #' @examples
 #' transitions <- list("I -> D" = d_weibull(0.6, 2))
@@ -40,6 +42,7 @@ d_weibull <- function(scale, shape) {
 #' Discrete exponential distribution
 #' 
 #' @param rate rate parameter of an exponential distribution
+#' @return a Distribution object for simulator
 #' 
 #' @examples
 #' transitions <- list("I -> D" = d_exponential(0.3))
@@ -59,6 +62,7 @@ d_exponential <- function(rate) {
 #' 
 #' @param mu location parameter or the ln mean
 #' @param sigma scale parameter or ln standard deviation
+#' @return a Distribution object for simulator
 #' 
 #' @examples
 #' transitions <- list("I -> D" = d_lognormal(3, 0.6))
@@ -79,6 +83,7 @@ d_lognormal <- function(mu, sigma) {
 #' muparser library which offers a wide variety of operators. Visit 
 #' muparser website (https://beltoforion.de/en/muparser/features.php) 
 #' to see full list of available operators.
+#' @return a Distribution object for simulator
 #' 
 #' @examples
 #' transitions <- list("S->I"=mathexpr("beta*S/N"))
@@ -101,6 +106,7 @@ mathexpr <- function(expr) {
 #' right compartment at every time step
 #'
 #' @param x number of individuals who move from one compartment to another
+#' @return a Distribution object for simulator
 #' 
 #' @examples
 #' transitions <- list("S->I" = constant(10))
@@ -121,6 +127,7 @@ constant <- function(x) {
 #' at every time step
 #' 
 #' @param x a float number between 0 to 1
+#' @return a Distribution object for simulator
 #' 
 #' @examples
 #' transitions <- list("S->I"=transprob(0.8))
@@ -140,6 +147,7 @@ transprob <- function(x) {
 #' Convert a vector of frequencies, percentages... into a distribution
 #' 
 #' @param ... a vector of values
+#' @return a Distribution object for simulator
 #' 
 #' @examples
 #' transitions <- list("S->I"=nonparametric(0.1, 0.2, 0.5, 0.2))
@@ -170,6 +178,7 @@ nonparametric <- function(...) {
 #' ```
 #'
 #' @param ... a vector of probabilities, must add up to 1
+#' @return a Distribution object for simulator
 #'
 #' @export
 multinomial <- function(...) {

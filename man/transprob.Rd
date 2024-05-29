@@ -9,6 +9,9 @@ transprob(x)
 \arguments{
 \item{x}{a float number between 0 to 1}
 }
+\value{
+a Distribution object for simulator
+}
 \description{
 A fixed percentage of the left compartment transit to the right compartment
 at every time step

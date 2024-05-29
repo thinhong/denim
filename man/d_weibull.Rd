@@ -11,6 +11,9 @@ d_weibull(scale, shape)
 
 \item{shape}{shape parameter of a Weibull distribution}
 }
+\value{
+a Distribution object for simulator
+}
 \description{
 Discrete Weibull distribution
 }

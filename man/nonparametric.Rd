@@ -9,6 +9,9 @@ nonparametric(...)
 \arguments{
 \item{...}{a vector of values}
 }
+\value{
+a Distribution object for simulator
+}
 \description{
 Convert a vector of frequencies, percentages... into a distribution
 }

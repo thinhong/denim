@@ -9,6 +9,9 @@ constant(x)
 \arguments{
 \item{x}{number of individuals who move from one compartment to another}
 }
+\value{
+a Distribution object for simulator
+}
 \description{
 Define a fixed number of individuals of the left compartment transit to the
 right compartment at every time step

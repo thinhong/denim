@@ -1,7 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^doc$
-^Meta$
 ^\.github$
 ^_pkgdown\.yml$
 ^docs$
@@ -10,3 +9,6 @@
 ^vignettes/web_only
 ^.covrignore$
 ^codecov\.yml$
+^cran-comments\.md$
+^Meta$
+^revdep$

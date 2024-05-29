@@ -12,6 +12,9 @@ muparser library which offers a wide variety of operators. Visit
 muparser website (https://beltoforion.de/en/muparser/features.php)
 to see full list of available operators.}
 }
+\value{
+a Distribution object for simulator
+}
 \description{
 Mathematical expression
 }

@@ -1,19 +1,21 @@
 Package: denim
 Type: Package
-Title: Generate and simulate deterministic discrete-time compartmental models
+Title: Generate and Simulate Deterministic Discrete-Time Compartmental Models
 Version: 1.0.0
-Date: 2021-05-04
+Date: 2024-05-28
 Authors@R: c(
-    person("Thinh", "Ong", email = "thinhop@oucru.org", role = c("aut", "cre"),
+    person("Thinh", "Ong", email = "thinhop@oucru.org", role = c("aut", "cre", "cph"),
       comment = c(ORCID = "0000-0001-6772-9291")
     ),
+    person("Anh", "Phan", email = "anhptq@oucru.org", role = c("aut")
+    ), 
     person("Marc", "Choisy", email = "mchoisy@oucru.org", role = "aut",
       comment = c(ORCID = "0000-0002-5187-6390")
     )
   )
-Description: Allows to build and simulate deterministic discerete-time compartmental models that can be non-Markovian.
-License: GPL (>= 2)
-URL: https://thinhong.github.io/denim,
+Description: Allows to build and simulate deterministic discrete-time compartmental models that can be non-Markovian.
+License: MIT + file LICENSE
+URL: https://drthinhong.com/denim/,
     https://github.com/thinhong/denim
 BugReports: https://github.com/thinhong/denim/issues
 Imports:
@@ -30,6 +32,7 @@ Suggests:
 LinkingTo: 
     Rcpp,
     testthat
+Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
 VignetteBuilder: knitr

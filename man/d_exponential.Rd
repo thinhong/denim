@@ -9,6 +9,9 @@ d_exponential(rate)
 \arguments{
 \item{rate}{rate parameter of an exponential distribution}
 }
+\value{
+a Distribution object for simulator
+}
 \description{
 Discrete exponential distribution
 }
