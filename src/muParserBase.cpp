@@ -1043,33 +1043,33 @@ namespace mu
 		switch (tok->Cmd)
 		{
 		case cmVAL:		
-			return tok->Val.data2;
+			return tok->tokenData.Val.data2;
 
 		case cmVAR:		
-			return *tok->Val.ptr;
+			return *tok->tokenData.Val.ptr;
 
 		case cmVARMUL:	
-			return *tok->Val.ptr * tok->Val.data + tok->Val.data2;
+			return *tok->tokenData.Val.ptr * tok->tokenData.Val.data + tok->tokenData.Val.data2;
 
 		case cmVARPOW2: 
-			buf = *(tok->Val.ptr);
+			buf = *(tok->tokenData.Val.ptr);
 			return buf * buf;
 
 		case  cmVARPOW3: 				
-			buf = *(tok->Val.ptr);
+			buf = *(tok->tokenData.Val.ptr);
 			return buf * buf * buf;
 
 		case  cmVARPOW4: 				
-			buf = *(tok->Val.ptr);
+			buf = *(tok->tokenData.Val.ptr);
 			return buf * buf * buf * buf;
 
 		// numerical function without any argument
 		case cmFUNC:
-			return tok->Fun.cb.call_fun<0>();
+			return tok->tokenData.Fun.cb.call_fun<0>();
 
 		// String function without a numerical argument
 		case cmFUNC_STR:
-			return tok->Fun.cb.call_strfun<1>(m_vStringBuf[0].c_str());
+			return tok->tokenData.Fun.cb.call_strfun<1>(m_vStringBuf[0].c_str());
 
 		default:
 			throw ParserError(ecINTERNAL_ERROR);
@@ -1120,7 +1120,7 @@ namespace mu
 				// for details see:
 				//    https://groups.google.com/forum/embed/?place=forum/muparser-dev&showsearch=true&showpopout=true&showtabs=false&parenturl=http://muparser.beltoforion.de/mup_forum.html&afterlogin&pli=1#!topic/muparser-dev/szgatgoHTws
 				--sidx; 
-				stack[sidx] = *(pTok->Oprt.ptr + nOffset) = stack[sidx + 1]; 
+				stack[sidx] = *(pTok->tokenData.Oprt.ptr + nOffset) = stack[sidx + 1]; 
 				continue;
 				// original code:
 				//--sidx; Stack[sidx] = *pTok->Oprt.ptr = Stack[sidx+1]; continue;
@@ -1129,56 +1129,56 @@ namespace mu
 				if (stack[sidx--] == 0)
 				{
 					MUP_ASSERT(sidx >= 0);
-					pTok += pTok->Oprt.offset;
+					pTok += pTok->tokenData.Oprt.offset;
 				}
 				continue;
 
 			case  cmELSE:
-				pTok += pTok->Oprt.offset;
+				pTok += pTok->tokenData.Oprt.offset;
 				continue;
 
 			case  cmENDIF:
 				continue;
 
 				// value and variable tokens
-			case  cmVAR:    stack[++sidx] = *(pTok->Val.ptr + nOffset);  continue;
-			case  cmVAL:    stack[++sidx] = pTok->Val.data2;  continue;
+			case  cmVAR:    stack[++sidx] = *(pTok->tokenData.Val.ptr + nOffset);  continue;
+			case  cmVAL:    stack[++sidx] = pTok->tokenData.Val.data2;  continue;
 
-			case  cmVARPOW2: buf = *(pTok->Val.ptr + nOffset);
+			case  cmVARPOW2: buf = *(pTok->tokenData.Val.ptr + nOffset);
 				stack[++sidx] = buf * buf;
 				continue;
 
-			case  cmVARPOW3: buf = *(pTok->Val.ptr + nOffset);
+			case  cmVARPOW3: buf = *(pTok->tokenData.Val.ptr + nOffset);
 				stack[++sidx] = buf * buf * buf;
 				continue;
 
-			case  cmVARPOW4: buf = *(pTok->Val.ptr + nOffset);
+			case  cmVARPOW4: buf = *(pTok->tokenData.Val.ptr + nOffset);
 				stack[++sidx] = buf * buf * buf * buf;
 				continue;
 
 			case  cmVARMUL:  
-				stack[++sidx] = *(pTok->Val.ptr + nOffset) * pTok->Val.data + pTok->Val.data2;
+				stack[++sidx] = *(pTok->tokenData.Val.ptr + nOffset) * pTok->tokenData.Val.data + pTok->tokenData.Val.data2;
 				continue;
 
 				// Next is treatment of numeric functions
 			case  cmFUNC:
 			{
-				int iArgCount = pTok->Fun.argc;
+				int iArgCount = pTok->tokenData.Fun.argc;
 
 				// switch according to argument count
 				switch (iArgCount)
 				{
-				case 0: sidx += 1; stack[sidx] = pTok->Fun.cb.call_fun<0 >(); continue;
-				case 1:            stack[sidx] = pTok->Fun.cb.call_fun<1 >(stack[sidx]);   continue;
-				case 2: sidx -= 1; stack[sidx] = pTok->Fun.cb.call_fun<2 >(stack[sidx], stack[sidx + 1]); continue;
-				case 3: sidx -= 2; stack[sidx] = pTok->Fun.cb.call_fun<3 >(stack[sidx], stack[sidx + 1], stack[sidx + 2]); continue;
-				case 4: sidx -= 3; stack[sidx] = pTok->Fun.cb.call_fun<4 >(stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3]); continue;
-				case 5: sidx -= 4; stack[sidx] = pTok->Fun.cb.call_fun<5 >(stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3], stack[sidx + 4]); continue;
-				case 6: sidx -= 5; stack[sidx] = pTok->Fun.cb.call_fun<6 >(stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3], stack[sidx + 4], stack[sidx + 5]); continue;
-				case 7: sidx -= 6; stack[sidx] = pTok->Fun.cb.call_fun<7 >(stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3], stack[sidx + 4], stack[sidx + 5], stack[sidx + 6]); continue;
-				case 8: sidx -= 7; stack[sidx] = pTok->Fun.cb.call_fun<8 >(stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3], stack[sidx + 4], stack[sidx + 5], stack[sidx + 6], stack[sidx + 7]); continue;
-				case 9: sidx -= 8; stack[sidx] = pTok->Fun.cb.call_fun<9 >(stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3], stack[sidx + 4], stack[sidx + 5], stack[sidx + 6], stack[sidx + 7], stack[sidx + 8]); continue;
-				case 10:sidx -= 9; stack[sidx] = pTok->Fun.cb.call_fun<10>(stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3], stack[sidx + 4], stack[sidx + 5], stack[sidx + 6], stack[sidx + 7], stack[sidx + 8], stack[sidx + 9]); continue;
+				case 0: sidx += 1; stack[sidx] = pTok->tokenData.Fun.cb.call_fun<0 >(); continue;
+				case 1:            stack[sidx] = pTok->tokenData.Fun.cb.call_fun<1 >(stack[sidx]);   continue;
+				case 2: sidx -= 1; stack[sidx] = pTok->tokenData.Fun.cb.call_fun<2 >(stack[sidx], stack[sidx + 1]); continue;
+				case 3: sidx -= 2; stack[sidx] = pTok->tokenData.Fun.cb.call_fun<3 >(stack[sidx], stack[sidx + 1], stack[sidx + 2]); continue;
+				case 4: sidx -= 3; stack[sidx] = pTok->tokenData.Fun.cb.call_fun<4 >(stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3]); continue;
+				case 5: sidx -= 4; stack[sidx] = pTok->tokenData.Fun.cb.call_fun<5 >(stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3], stack[sidx + 4]); continue;
+				case 6: sidx -= 5; stack[sidx] = pTok->tokenData.Fun.cb.call_fun<6 >(stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3], stack[sidx + 4], stack[sidx + 5]); continue;
+				case 7: sidx -= 6; stack[sidx] = pTok->tokenData.Fun.cb.call_fun<7 >(stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3], stack[sidx + 4], stack[sidx + 5], stack[sidx + 6]); continue;
+				case 8: sidx -= 7; stack[sidx] = pTok->tokenData.Fun.cb.call_fun<8 >(stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3], stack[sidx + 4], stack[sidx + 5], stack[sidx + 6], stack[sidx + 7]); continue;
+				case 9: sidx -= 8; stack[sidx] = pTok->tokenData.Fun.cb.call_fun<9 >(stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3], stack[sidx + 4], stack[sidx + 5], stack[sidx + 6], stack[sidx + 7], stack[sidx + 8]); continue;
+				case 10:sidx -= 9; stack[sidx] = pTok->tokenData.Fun.cb.call_fun<10>(stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3], stack[sidx + 4], stack[sidx + 5], stack[sidx + 6], stack[sidx + 7], stack[sidx + 8], stack[sidx + 9]); continue;
 				default:
 					// function with variable arguments store the number as a negative value
 					if (iArgCount > 0)
@@ -1196,7 +1196,7 @@ namespace mu
 						Error(ecINTERNAL_ERROR, -1);
 					// </ibg>
 
-					stack[sidx] = pTok->Fun.cb.call_multfun(&stack[sidx], -iArgCount);
+					stack[sidx] = pTok->tokenData.Fun.cb.call_multfun(&stack[sidx], -iArgCount);
 					continue;
 				}
 			}
@@ -1204,20 +1204,20 @@ namespace mu
 			// Next is treatment of string functions
 			case  cmFUNC_STR:
 			{
-				sidx -= pTok->Fun.argc - 1;
+				sidx -= pTok->tokenData.Fun.argc - 1;
 
 				// The index of the string argument in the string table
-				int iIdxStack = pTok->Fun.idx;
+				int iIdxStack = pTok->tokenData.Fun.idx;
 				if (iIdxStack < 0 || iIdxStack >= (int)m_vStringBuf.size())
 					Error(ecINTERNAL_ERROR, m_pTokenReader->GetPos());
 
-				switch (pTok->Fun.argc)  // switch according to argument count
+				switch (pTok->tokenData.Fun.argc)  // switch according to argument count
 				{
-				case 0: stack[sidx] = pTok->Fun.cb.call_strfun<1>(m_vStringBuf[iIdxStack].c_str()); continue;
-				case 1: stack[sidx] = pTok->Fun.cb.call_strfun<2>(m_vStringBuf[iIdxStack].c_str(), stack[sidx]); continue;
-				case 2: stack[sidx] = pTok->Fun.cb.call_strfun<3>(m_vStringBuf[iIdxStack].c_str(), stack[sidx], stack[sidx + 1]); continue;
-				case 3: stack[sidx] = pTok->Fun.cb.call_strfun<4>(m_vStringBuf[iIdxStack].c_str(), stack[sidx], stack[sidx + 1], stack[sidx + 2]); continue;
-				case 4: stack[sidx] = pTok->Fun.cb.call_strfun<5>(m_vStringBuf[iIdxStack].c_str(), stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3]); continue;
+				case 0: stack[sidx] = pTok->tokenData.Fun.cb.call_strfun<1>(m_vStringBuf[iIdxStack].c_str()); continue;
+				case 1: stack[sidx] = pTok->tokenData.Fun.cb.call_strfun<2>(m_vStringBuf[iIdxStack].c_str(), stack[sidx]); continue;
+				case 2: stack[sidx] = pTok->tokenData.Fun.cb.call_strfun<3>(m_vStringBuf[iIdxStack].c_str(), stack[sidx], stack[sidx + 1]); continue;
+				case 3: stack[sidx] = pTok->tokenData.Fun.cb.call_strfun<4>(m_vStringBuf[iIdxStack].c_str(), stack[sidx], stack[sidx + 1], stack[sidx + 2]); continue;
+				case 4: stack[sidx] = pTok->tokenData.Fun.cb.call_strfun<5>(m_vStringBuf[iIdxStack].c_str(), stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3]); continue;
 				}
 
 				continue;
@@ -1225,22 +1225,22 @@ namespace mu
 
 			case  cmFUNC_BULK:
 			{
-				int iArgCount = pTok->Fun.argc;
+				int iArgCount = pTok->tokenData.Fun.argc;
 
 				// switch according to argument count
 				switch (iArgCount)
 				{
-				case 0: sidx += 1; stack[sidx] = pTok->Fun.cb.call_bulkfun<0 >(nOffset, nThreadID); continue;
-				case 1:            stack[sidx] = pTok->Fun.cb.call_bulkfun<1 >(nOffset, nThreadID, stack[sidx]); continue;
-				case 2: sidx -= 1; stack[sidx] = pTok->Fun.cb.call_bulkfun<2 >(nOffset, nThreadID, stack[sidx], stack[sidx + 1]); continue;
-				case 3: sidx -= 2; stack[sidx] = pTok->Fun.cb.call_bulkfun<3 >(nOffset, nThreadID, stack[sidx], stack[sidx + 1], stack[sidx + 2]); continue;
-				case 4: sidx -= 3; stack[sidx] = pTok->Fun.cb.call_bulkfun<4 >(nOffset, nThreadID, stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3]); continue;
-				case 5: sidx -= 4; stack[sidx] = pTok->Fun.cb.call_bulkfun<5 >(nOffset, nThreadID, stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3], stack[sidx + 4]); continue;
-				case 6: sidx -= 5; stack[sidx] = pTok->Fun.cb.call_bulkfun<6 >(nOffset, nThreadID, stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3], stack[sidx + 4], stack[sidx + 5]); continue;
-				case 7: sidx -= 6; stack[sidx] = pTok->Fun.cb.call_bulkfun<7 >(nOffset, nThreadID, stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3], stack[sidx + 4], stack[sidx + 5], stack[sidx + 6]); continue;
-				case 8: sidx -= 7; stack[sidx] = pTok->Fun.cb.call_bulkfun<8 >(nOffset, nThreadID, stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3], stack[sidx + 4], stack[sidx + 5], stack[sidx + 6], stack[sidx + 7]); continue;
-				case 9: sidx -= 8; stack[sidx] = pTok->Fun.cb.call_bulkfun<9 >(nOffset, nThreadID, stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3], stack[sidx + 4], stack[sidx + 5], stack[sidx + 6], stack[sidx + 7], stack[sidx + 8]); continue;
-				case 10:sidx -= 9; stack[sidx] = pTok->Fun.cb.call_bulkfun<10>(nOffset, nThreadID, stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3], stack[sidx + 4], stack[sidx + 5], stack[sidx + 6], stack[sidx + 7], stack[sidx + 8], stack[sidx + 9]); continue;
+				case 0: sidx += 1; stack[sidx] = pTok->tokenData.Fun.cb.call_bulkfun<0 >(nOffset, nThreadID); continue;
+				case 1:            stack[sidx] = pTok->tokenData.Fun.cb.call_bulkfun<1 >(nOffset, nThreadID, stack[sidx]); continue;
+				case 2: sidx -= 1; stack[sidx] = pTok->tokenData.Fun.cb.call_bulkfun<2 >(nOffset, nThreadID, stack[sidx], stack[sidx + 1]); continue;
+				case 3: sidx -= 2; stack[sidx] = pTok->tokenData.Fun.cb.call_bulkfun<3 >(nOffset, nThreadID, stack[sidx], stack[sidx + 1], stack[sidx + 2]); continue;
+				case 4: sidx -= 3; stack[sidx] = pTok->tokenData.Fun.cb.call_bulkfun<4 >(nOffset, nThreadID, stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3]); continue;
+				case 5: sidx -= 4; stack[sidx] = pTok->tokenData.Fun.cb.call_bulkfun<5 >(nOffset, nThreadID, stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3], stack[sidx + 4]); continue;
+				case 6: sidx -= 5; stack[sidx] = pTok->tokenData.Fun.cb.call_bulkfun<6 >(nOffset, nThreadID, stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3], stack[sidx + 4], stack[sidx + 5]); continue;
+				case 7: sidx -= 6; stack[sidx] = pTok->tokenData.Fun.cb.call_bulkfun<7 >(nOffset, nThreadID, stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3], stack[sidx + 4], stack[sidx + 5], stack[sidx + 6]); continue;
+				case 8: sidx -= 7; stack[sidx] = pTok->tokenData.Fun.cb.call_bulkfun<8 >(nOffset, nThreadID, stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3], stack[sidx + 4], stack[sidx + 5], stack[sidx + 6], stack[sidx + 7]); continue;
+				case 9: sidx -= 8; stack[sidx] = pTok->tokenData.Fun.cb.call_bulkfun<9 >(nOffset, nThreadID, stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3], stack[sidx + 4], stack[sidx + 5], stack[sidx + 6], stack[sidx + 7], stack[sidx + 8]); continue;
+				case 10:sidx -= 9; stack[sidx] = pTok->tokenData.Fun.cb.call_bulkfun<10>(nOffset, nThreadID, stack[sidx], stack[sidx + 1], stack[sidx + 2], stack[sidx + 3], stack[sidx + 4], stack[sidx + 5], stack[sidx + 6], stack[sidx + 7], stack[sidx + 8], stack[sidx + 9]); continue;
 				default:
 					throw exception_type(ecINTERNAL_ERROR, 2, _T(""));
 				}

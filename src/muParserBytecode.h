@@ -48,7 +48,7 @@ namespace mu
 	{
 		ECmdCode Cmd;
 
-		union
+		union 
 		{
 			struct // SValData
 			{
@@ -73,7 +73,7 @@ namespace mu
 				value_type* ptr;
 				int offset;
 			} Oprt;
-		};
+		} tokenData;
 	};
 
 

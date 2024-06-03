@@ -21,11 +21,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Thinh Ong \email{thinhop@oucru.org} (\href{https://orcid.org/0000-0001-6772-9291}{ORCID}) [copyright holder]
+\strong{Maintainer}: Anh Phan \email{anhptq@oucru.org}
 
 Authors:
 \itemize{
-  \item Anh Phan \email{anhptq@oucru.org}
+  \item Thinh Ong \email{thinhop@oucru.org} (\href{https://orcid.org/0000-0001-6772-9291}{ORCID}) [copyright holder]
   \item Marc Choisy \email{mchoisy@oucru.org} (\href{https://orcid.org/0000-0002-5187-6390}{ORCID})
 }
 
