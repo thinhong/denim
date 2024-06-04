@@ -8,9 +8,13 @@ Authors@R: c(
            comment = c(ORCID = "0000-0001-6772-9291")),
     person("Anh", "Phan", , "anhptq@oucru.org", role = c("aut", "cre")),
     person("Marc", "Choisy", , "mchoisy@oucru.org", role = "aut",
-           comment = c(ORCID = "0000-0002-5187-6390"))
+           comment = c(ORCID = "0000-0002-5187-6390")),
+    person("Niels", "Lohman", ,role = "ctb"),
+    person("Bjoern", "Hoehrmann", ,email = "bjoern@hoehrmann.de", role = "ctb"),
+    person("Florian", "Loitsch", ,role = "ctb"),
+    person("Ingo", "Berg", ,role = "ctb")
   )
-Description: Allows to build and simulate deterministic discrete-time compartmental models that can be non-Markov.
+Description: R package to build and simulate deterministic discrete-time compartmental models that can be non-Markov. Length of stay in each compartment can be defined to follow a parametric distribution ('d_exponential', 'd_gamma', 'd_weibull', 'd_lognormal') or a non-parametric distribution ('nonparametric'). Other supported types of transition from one compartment to another includes fixed transition ('constant'), multinomial ('multinomial'), fixed transition probability ('transprob').
 License: MIT + file LICENSE
 URL: https://drthinhong.com/denim/,
     https://github.com/thinhong/denim

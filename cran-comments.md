@@ -1,3 +1,14 @@
+## Resubmission
+This is a resubmission. In this version I have:
+
+* Added more information about the package in the DESCRIPTION file
+
+* Added 4 authors of copied/ derived codes to Authors@R with role "ctb" in DESCRIPTION file (Niels Lohman & Florian Loitsch & Bjoern Hoehrmann for json parser, Ingo Berg for muparser files)
+
+* Since no references were used for the methods in the package, references are not included
+
+* Since copyright is held by package authors, Copyright field is not included
+
 ## R CMD check results
 Duration: 1m 4.5s
 

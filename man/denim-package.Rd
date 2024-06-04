@@ -29,4 +29,12 @@ Authors:
   \item Marc Choisy \email{mchoisy@oucru.org} (\href{https://orcid.org/0000-0002-5187-6390}{ORCID})
 }
 
+Other contributors:
+\itemize{
+  \item Niels Lohman [contributor]
+  \item Bjoern Hoehrmann \email{bjoern@hoehrmann.de} [contributor]
+  \item Florian Loitsch [contributor]
+  \item Ingo Berg [contributor]
+}
+
 }
