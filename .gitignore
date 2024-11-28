@@ -13,3 +13,5 @@ inst/doc
 docs
 /.vscode
 /revdep/
+/.Renviron
+/supplements/

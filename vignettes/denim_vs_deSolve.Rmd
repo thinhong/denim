@@ -39,7 +39,7 @@ transition_func <- function(t, state, param){
 
 # --- Timestep definition
 simulationDuration <- 20 
-timestep <- 0.001 # small timestep required for comparison
+timestep <- 0.01 # small timestep required for comparison
 ```
 
 ### Run simulation with denim
@@ -88,7 +88,7 @@ mod <- mod[mod$Time %in% seq(0, simulationDuration, 0.2),]
 ode_mod <- ode_mod[ode_mod$time %in% seq(0, simulationDuration, 0.2),]
 ```
 
-```{r, fig.width=8, fig.height=5}
+```{r,echo=FALSE, fig.width=8, fig.height=5}
 # ---- Plot S compartment
 plot(x = mod$Time, y = mod$S,xlab = "Time", ylab = "Count", main="S compartment",
      col = "#4876ff", type="l", lwd=3)
@@ -107,4 +107,117 @@ plot(x = mod$Time, y = mod$R, xlab = "Time", ylab = "Count", main="R compartment
 lines(ode_mod$time, ode_mod$R, lwd=3, lty=3)
 legend(x = 15, y = 300,legend=c("denim", "deSolve"), col = c("#4876ff", "black"), lty=c(1,3))
 
+```
+
+## Comparison with SEIR model
+
+### Implementation using deSolve
+
+<details>
+  <summary> model definition and runtime using `deSolve` </summary>
+```{r }
+library(deSolve)
+parameters <- c(scale_I = 4, shape_I=2,
+                scale_R = 3, shape_R = 2,
+                timeStepDur = 1, R0 = 3.5, N = 1e6) 
+initialValues <- c(S = 999999, E1 = 1,
+                   E2 = 0, E = 0, I1=0, 
+                   I2=0, I=0, R=0
+                   )
+
+# --- Transition def for deSolve
+transition_func <- function(t, state, param){
+  with(as.list( c(state, param) ), {
+      gamma_rate_I = 1/scale_I
+      gamma_rate_R = 1/scale_R
+      
+      tr = scale_R*shape_R
+      
+      dS = - (R0/tr) * S * I/N
+      # apply linear chain trick
+      dE1 = (R0/tr) * S * I/N - gamma_rate_I*E1
+      dE2 = gamma_rate_I*E1 - gamma_rate_I*E2
+      dE = dE1 + dE2
+      dI1 = gamma_rate_I*E2 - gamma_rate_R*I1
+      dI2 = gamma_rate_R*I1 - gamma_rate_R*I2
+      dI =  dI1 + dI2
+
+      dR = gamma_rate_R*I2
+      list(c(dS, dE1, dE2, dE, dI1, dI2, dI, dR))
+  })
+}
+
+times <- seq(0, 210, 1)
+
+runtime <- system.time(
+  ode_mod <- ode(y = initialValues, times = times, parms = parameters, func = transition_func)
+)
+
+# --- show output
+ode_mod <- as.data.frame(ode_mod)
+```
+
+</details>
+
+Runtime for deSolve is `~ 0.013`
+
+### Implementation using denim
+
+<details>
+  <summary> model definition and runtime using `denim` </summary>
+
+```{r }
+denim_model <- list(
+  "S -> E" = "(R0/tr) * timeStepDur * S * (I/N)", # formulate according that of uSEIR method
+  "E -> I" = d_gamma(scale = 4, shape = 2),
+  "I -> R" = d_gamma(scale = 3, shape = 2)
+)
+
+initialValues <- c(S = 999999, E = 1, I= 0, R= 0)
+parameters <- c(R0 = 3.5, 
+                tr = 3*2, # compute mean recovery time, for gamma it's scale*shape
+                N = 1e6, timeStepDur = 0.01)
+
+runtime <- system.time(
+  mod <- sim(transitions = denim_model, 
+                 initialValues = initialValues,
+                 parameters = parameters,
+                 simulationDuration = 210, timeStep = 0.01)
+)
+
+# denim_out[, c("S","E", "I", "R")] <- denim_out[, c("S","E", "I", "R")]/1e6
+plot(mod)
+```
+
+</details>
+
+Runtime for denim is `~ 0.987`
+
+
+### Plot result
+
+```{r, echo=FALSE, fig.width=8, fig.height=5}
+# ---- Plot S compartment
+plot(x = mod$Time, y = mod$S,xlab = "Time", ylab = "Count", main="S compartment",
+     col = "#4876ff", type="l", lwd=3)
+lines(ode_mod$time, ode_mod$S, lwd=3, lty=3)
+legend(x = 15, y = 4e5,legend=c("denim", "deSolve"), col = c("#4876ff", "black"), lty=c(1,3))
+
+# ---- Plot E compartment
+plot(x = mod$Time, y = mod$E, xlab = "Time", ylab = "Count", main="E compartment",
+      col = "#4876ff", type="l", lwd=2)
+lines(ode_mod$time, ode_mod$E, lwd=3, lty=3)
+legend(x = 15, y = 1e5,legend=c("denim", "deSolve"), col = c("#4876ff", "black"), lty=c(1,3))
+
+# ---- Plot I compartment
+plot(x = mod$Time, y = mod$I, xlab = "Time", ylab = "Count", main="I compartment",
+      col = "#4876ff", type="l", lwd=2)
+lines(ode_mod$time, ode_mod$I, lwd=3, lty=3)
+legend(x = 15, y = 1e5,legend=c("denim", "deSolve"), col = c("#4876ff", "black"), lty=c(1,3))
+
+# ---- Plot R compartment
+plot(x = mod$Time, y = mod$R, xlab = "Time", ylab = "Count", main="R compartment",
+     col = "#4876ff", type="l", lwd=2)
+lines(ode_mod$time, ode_mod$R, lwd=3, lty=3)
+legend(x = 15, y = 4e5,legend=c("denim", "deSolve"), col = c("#4876ff", "black"), lty=c(1,3))
 ```

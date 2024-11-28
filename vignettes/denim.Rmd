@@ -374,3 +374,29 @@ mod <- sim(transitions = transitions,
            timeStep = timeStep)
 plot(mod)
 ```
+
+```{r}
+transitions <- list(
+  "O -> S" = 100,
+  "S -> I, R" = multinomial(0.5, 0.5),
+  "S -> I" = transprob(1),
+  "S -> R" = transprob(1)
+)
+
+initialValues <- c(
+  O = 1000,
+  S = 500, 
+  I = 0, 
+  R = 0
+)
+
+simulationDuration <- 10
+timeStep <- 0.01
+
+mod <- sim(transitions = transitions, 
+           initialValues = initialValues, 
+           parameters = parameters, 
+           simulationDuration = simulationDuration, 
+           timeStep = timeStep)
+mod
+```

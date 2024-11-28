@@ -11,10 +11,11 @@ articles:
   navbar: ~
   contents:
   - denim
-- title: denim Vs deSolve
+- title: denim comparison
   navbar: ~
   contents:
   - denim_vs_deSolve
+  - denim_vs_uSEIR
         
 reference:
 - title: Transition Distribution
