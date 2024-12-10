@@ -27,6 +27,7 @@ Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
+    waldo,
     xml2,
     deSolve,
     DiagrammeR
