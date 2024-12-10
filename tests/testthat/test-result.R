@@ -26,7 +26,7 @@ test_that("Compare denim and deSolve", {
 
     # --- Simulate using both package
     mod <- sim(transitions = transitions, initialValues = initialValues, parameters = parameters, simulationDuration = simulationDuration, timeStep = timestep)
-    ode_mod <- ode(y = initialValues, times = seq(0, simulationDuration, timestep), parms = parameters, func = transition_func)
+    ode_mod <- deSolve::ode(y = initialValues, times = seq(0, simulationDuration, timestep), parms = parameters, func = transition_func)
 
 
     ode_mod <- as.data.frame(ode_mod)

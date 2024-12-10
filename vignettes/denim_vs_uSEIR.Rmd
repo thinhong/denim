@@ -1,10 +1,6 @@
 ---
 title: "denim vs uSEIR"
 output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{denim vs uSEIR}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 python:
   python_path: /opt/anaconda3/envs/bnn/bin/python
 bibliography: references.bib
@@ -197,13 +193,18 @@ def solve_uSeir(ti_shape     = 5.5,
 
 ```{python}
 import time
-start = time.time()
-df = solve_uSeir(ti_shape     = 2,  
-                   ti_scale     = 4, 
-                   tr_shape     = 2,  
-                   tr_scale     = 3,
-                   R0           = 3.5)
-end = time.time()
+
+runs = []
+for i in range(10):
+  start = time.time()
+  df = solve_uSeir(ti_shape     = 2,  
+                     ti_scale     = 4, 
+                     tr_shape     = 2,  
+                     tr_scale     = 3,
+                     R0           = 3.5)
+  end = time.time()
+  runs = runs + [end - start]
+  
 # plot_useir((df,), ('G',), T = 'uSEIR', figsize=(14,8))
 # print(f'python solve_seir call: dr = {end-start}')
 ```
@@ -224,26 +225,31 @@ import sys
 sys.path.insert(0, "../supplements")
 import useir
 import time
+from statistics import mean
 
-start = time.time()
-df = useir.csolve_uSeir(dist = "gamma",
-                  ti_shape     = 2,  
-                   ti_scale     = 4, 
-                   tr_shape     = 2,  
-                   tr_scale     = 3,
-                   R0           = 3.5
-)
-end = time.time()
+runs = []
+for i in range(10):
+  start = time.time()
+  df = useir.csolve_uSeir(dist = "gamma",
+                    ti_shape     = 2,  
+                     ti_scale     = 4, 
+                     tr_shape     = 2,  
+                     tr_scale     = 3,
+                     R0           = 3.5
+  )
+  end = time.time()
+
+  runs = runs + [end - start]
+  
+mean(runs)
 
 # convert to pyarrow table for easy conversion to R data.frames
 to_r_df = pa.Table.from_pandas(df)
-
-# plot_useir((df,), ('G',), T = 'uSEIR', figsize=(14,8))
 ```
 
 </details>
 
-Run time for Cython implementation is `~ 0.4710`
+Run time for Cython implementation is `~ 0.4140`
 
 ### Run simulation using denim
 
@@ -253,6 +259,7 @@ Run time for Cython implementation is `~ 0.4710`
 
 ```{r}
 library(denim)
+
 denim_model <- list(
   "S -> E" = "(R0/tr) * timeStepDur * S * (I/N)", # formulate according that of uSEIR method
   "E -> I" = d_gamma(scale = 4, shape = 2),
@@ -265,12 +272,25 @@ parameters <- c(R0 = 3.5,
                 tr = 3*2, # compute mean recovery time, for gamma it's scale*shape
                 N = 1e6, timeStepDur = 0.01)
 
-runtime <- system.time(
-  denim_out <- sim(transitions = denim_model, 
-                 initialValues = initialValues,
-                 parameters = parameters,
-                 simulationDuration = 210, timeStep = 0.01)
-)
+# ---- Get runtimes of 10 runs ----
+runtimes <- sapply(1:10,
+  function (i) {
+    time <- system.time(
+      sim(transitions = denim_model, 
+                     initialValues = initialValues,
+                     parameters = parameters,
+                     simulationDuration = 210, timeStep = 0.01)
+    )
+    return(time[["elapsed"]])
+  })
+
+mean(runtimes)
+
+# ---- Get output ----
+mod <- sim(transitions = denim_model, 
+                     initialValues = initialValues,
+                     parameters = parameters,
+                     simulationDuration = 210, timeStep = 0.01)
 ```
 
 </details>

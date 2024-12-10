@@ -8,6 +8,8 @@
 ^README\.Rmd$
 ^LICENSE\.md$
 ^vignettes/web_only
+^vignettes/denim_vs_uSEIR.Rmd
+^vignettes/denim_vs_deSolve.Rmd
 ^.covrignore$
 ^codecov\.yml$
 ^cran-comments\.md$

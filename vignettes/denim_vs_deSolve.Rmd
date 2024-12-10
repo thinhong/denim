@@ -149,9 +149,20 @@ transition_func <- function(t, state, param){
 
 times <- seq(0, 210, 1)
 
-runtime <- system.time(
-  ode_mod <- ode(y = initialValues, times = times, parms = parameters, func = transition_func)
+runtimes <- sapply(1:10,
+  function(i){
+    time <- system.time(
+      ode(y = initialValues, times = times, parms = parameters, func = transition_func)
+    )
+    time[["elapsed"]]
+    
+  }
+  
 )
+
+mean(runtimes)
+
+ode_mod <- ode(y = initialValues, times = times, parms = parameters, func = transition_func)
 
 # --- show output
 ode_mod <- as.data.frame(ode_mod)
@@ -178,12 +189,22 @@ parameters <- c(R0 = 3.5,
                 tr = 3*2, # compute mean recovery time, for gamma it's scale*shape
                 N = 1e6, timeStepDur = 0.01)
 
-runtime <- system.time(
-  mod <- sim(transitions = denim_model, 
-                 initialValues = initialValues,
-                 parameters = parameters,
-                 simulationDuration = 210, timeStep = 0.01)
-)
+runtimes <- sapply(1:10,
+  function (i) {
+    time <- system.time(
+      sim(transitions = denim_model, 
+                     initialValues = initialValues,
+                     parameters = parameters,
+                     simulationDuration = 210, timeStep = 0.01)
+    )
+    return(time[["elapsed"]])
+  })
+mean(runtimes)
+
+mod <- sim(transitions = denim_model, 
+                     initialValues = initialValues,
+                     parameters = parameters,
+                     simulationDuration = 210, timeStep = 0.01)
 
 # denim_out[, c("S","E", "I", "R")] <- denim_out[, c("S","E", "I", "R")]/1e6
 plot(mod)
@@ -191,7 +212,7 @@ plot(mod)
 
 </details>
 
-Runtime for denim is `~ 0.987`
+Runtime for denim is `~ 1.0548`
 
 
 ### Plot result
