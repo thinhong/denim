@@ -16,6 +16,11 @@ articles:
   contents:
   - denim_vs_deSolve
   - denim_vs_uSEIR
+- title: migrate to denim
+  navbar: migrate to denim
+  contents:
+  - deSolve_to_denim
+
         
 reference:
 - title: Transition Distribution

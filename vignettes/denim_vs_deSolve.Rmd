@@ -149,18 +149,18 @@ transition_func <- function(t, state, param){
 
 times <- seq(0, 210, 1)
 
-runtimes <- sapply(1:10,
-  function(i){
-    time <- system.time(
-      ode(y = initialValues, times = times, parms = parameters, func = transition_func)
-    )
-    time[["elapsed"]]
-    
-  }
-  
-)
-
-mean(runtimes)
+# ------ Compute mean for 10 runs ------
+# runtimes <- sapply(1:10,
+#   function(i){
+#     time <- system.time(
+#       ode(y = initialValues, times = times, parms = parameters, func = transition_func)
+#     )
+#     time[["elapsed"]]
+#     
+#   }
+#   
+# )
+# mean(runtimes)
 
 ode_mod <- ode(y = initialValues, times = times, parms = parameters, func = transition_func)
 
@@ -189,17 +189,18 @@ parameters <- c(R0 = 3.5,
                 tr = 3*2, # compute mean recovery time, for gamma it's scale*shape
                 N = 1e6, timeStepDur = 0.01)
 
-runtimes <- sapply(1:10,
-  function (i) {
-    time <- system.time(
-      sim(transitions = denim_model, 
-                     initialValues = initialValues,
-                     parameters = parameters,
-                     simulationDuration = 210, timeStep = 0.01)
-    )
-    return(time[["elapsed"]])
-  })
-mean(runtimes)
+# ------ Compute mean for 10 runs ------
+# runtimes <- sapply(1:10,
+#   function (i) {
+#     time <- system.time(
+#       sim(transitions = denim_model, 
+#                      initialValues = initialValues,
+#                      parameters = parameters,
+#                      simulationDuration = 210, timeStep = 0.01)
+#     )
+#     return(time[["elapsed"]])
+#   })
+# mean(runtimes)
 
 mod <- sim(transitions = denim_model, 
                      initialValues = initialValues,

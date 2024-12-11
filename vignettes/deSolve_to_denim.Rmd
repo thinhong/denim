@@ -54,7 +54,6 @@ User must first identify the distribution type that best describe the transition
 ```{=html}
 <details>
   <summary>Identify distribution</summary>
-</details>
 ```
 ```{r, eval=FALSE}
 # --- Model definition in deSolve
