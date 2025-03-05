@@ -52,7 +52,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/denim_vs_deSolve.html">denim vs deSolve</a>
-    <a class="dropdown-item" href="../articles/denim_vs_uSEIR.html">denim vs uSEIR</a>
+    <a class="dropdown-item" href="../articles/denim_vs_uSEIR.html">denim benchmark</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>migrate to denim</h6>
     <a class="dropdown-item" href="../articles/deSolve_to_denim.html">Migrate to denim</a>
@@ -105,31 +105,32 @@ testing</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://desolve.r-forge.r-project.org/" class="external-link">deSolve</a></span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning: package 'deSolve' was built under R version 4.3.1</span></span></code></pre>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># --- Transition def for denim</span></span>
+<code class="sourceCode R"><span><span class="co"># --- Timestep definition</span></span>
+<span><span class="va">simulationDuration</span> <span class="op">&lt;-</span> <span class="fl">300</span> </span>
+<span><span class="va">timestep</span> <span class="op">&lt;-</span> <span class="fl">0.01</span> <span class="co"># small timestep required for comparison</span></span>
+<span></span>
+<span><span class="co"># --- Transition def for denim</span></span>
 <span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_exponential.html">d_exponential</a></span><span class="op">(</span><span class="fl">0.2</span><span class="op">)</span>,</span>
+<span>  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * S * (I/N) * timestepDur"</span>,</span>
 <span>  <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">0.2</span>, scale <span class="op">=</span> <span class="fl">3</span>, shape<span class="op">=</span><span class="fl">2</span><span class="op">)</span> </span>
+<span><span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>beta <span class="op">=</span> <span class="fl">0.2</span>, scale <span class="op">=</span> <span class="fl">3</span>, shape<span class="op">=</span><span class="fl">2</span>, N<span class="op">=</span><span class="fl">1000</span>, timestepDur<span class="op">=</span><span class="va">timestep</span><span class="op">)</span> </span>
 <span><span class="va">initialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>S <span class="op">=</span> <span class="fl">999</span>, I <span class="op">=</span> <span class="fl">1</span>, I1 <span class="op">=</span> <span class="fl">1</span>, I2<span class="op">=</span><span class="fl">0</span>, R<span class="op">=</span><span class="fl">0</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># --- Transition def for deSolve</span></span>
 <span><span class="va">transition_func</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">state</span>, <span class="va">param</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">state</span>, <span class="va">param</span><span class="op">)</span> <span class="op">)</span>, <span class="op">{</span></span>
 <span>      <span class="va">gamma_rate</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="va">scale</span></span>
-<span>      <span class="va">dS</span> <span class="op">=</span> <span class="op">-</span><span class="va">rate</span><span class="op">*</span><span class="va">S</span></span>
+<span>      </span>
+<span>      <span class="va">dS</span> <span class="op">=</span> <span class="op">-</span> <span class="va">beta</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="va">I</span><span class="op">/</span><span class="va">N</span></span>
 <span>      <span class="co"># apply linear chain trick</span></span>
-<span>      <span class="va">dI1</span> <span class="op">=</span> <span class="va">rate</span><span class="op">*</span><span class="va">S</span> <span class="op">-</span> <span class="va">gamma_rate</span><span class="op">*</span><span class="va">I1</span></span>
+<span>      <span class="va">dI1</span> <span class="op">=</span> <span class="va">beta</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="va">I</span><span class="op">/</span><span class="va">N</span> <span class="op">-</span> <span class="va">gamma_rate</span><span class="op">*</span><span class="va">I1</span></span>
 <span>      <span class="va">dI2</span> <span class="op">=</span> <span class="va">gamma_rate</span><span class="op">*</span><span class="va">I1</span> <span class="op">-</span> <span class="va">gamma_rate</span><span class="op">*</span><span class="va">I2</span></span>
 <span>      <span class="va">dI</span> <span class="op">=</span>  <span class="va">dI1</span> <span class="op">+</span> <span class="va">dI2</span></span>
 <span>      <span class="va">dR</span> <span class="op">=</span> <span class="va">gamma_rate</span><span class="op">*</span><span class="va">I2</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">dS</span>, <span class="va">dI</span>, <span class="va">dI1</span>, <span class="va">dI2</span>, <span class="va">dR</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="co"># --- Timestep definition</span></span>
-<span><span class="va">simulationDuration</span> <span class="op">&lt;-</span> <span class="fl">20</span> </span>
-<span><span class="va">timestep</span> <span class="op">&lt;-</span> <span class="fl">0.01</span> <span class="co"># small timestep required for comparison</span></span></code></pre></div>
+<span><span class="op">}</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="run-simulation-with-denim">Run simulation with denim<a class="anchor" aria-label="anchor" href="#run-simulation-with-denim"></a>
 </h3>
@@ -141,12 +142,12 @@ testing</p>
 <span><span class="co"># --- show output</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">[</span><span class="va">mod</span><span class="op">$</span><span class="va">Time</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fl">1</span><span class="op">:</span><span class="va">simulationDuration</span>,<span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##     Time        S        I          R</span></span>
-<span><span class="co">## 101    1 817.9120 179.1000   2.987976</span></span>
-<span><span class="co">## 201    2 669.6497 310.9933  19.356938</span></span>
-<span><span class="co">## 301    3 548.2628 398.6234  53.113777</span></span>
-<span><span class="co">## 401    4 448.8796 448.3469 102.773515</span></span>
-<span><span class="co">## 501    5 367.5116 467.9487 164.539700</span></span>
-<span><span class="co">## 601    6 300.8930 465.0545 234.052532</span></span></code></pre>
+<span><span class="co">## 101    1 998.7825 1.169597 0.04786644</span></span>
+<span><span class="co">## 201    2 998.5358 1.296591 0.16756473</span></span>
+<span><span class="co">## 301    3 998.2665 1.399083 0.33440701</span></span>
+<span><span class="co">## 401    4 997.9783 1.487980 0.53374794</span></span>
+<span><span class="co">## 501    5 997.6732 1.569868 0.75697598</span></span>
+<span><span class="co">## 601    6 997.3521 1.648745 0.99910771</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="run-simulation-with-desolve">Run simulation with deSolve<a class="anchor" aria-label="anchor" href="#run-simulation-with-desolve"></a>
@@ -161,18 +162,18 @@ testing</p>
 <span><span class="co"># --- show output</span></span>
 <span><span class="va">ode_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">ode_mod</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ode_mod</span><span class="op">[</span><span class="va">ode_mod</span><span class="op">$</span><span class="va">time</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fl">1</span><span class="op">:</span><span class="va">simulationDuration</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time"</span>, <span class="st">"S"</span>, <span class="st">"I"</span>, <span class="st">"R"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##     time        S        I          R</span></span>
-<span><span class="co">## 101    1 817.9120 179.0585   3.029466</span></span>
-<span><span class="co">## 201    2 669.6497 310.8686  19.481654</span></span>
-<span><span class="co">## 301    3 548.2628 398.4125  53.324630</span></span>
-<span><span class="co">## 401    4 448.8796 448.0650 103.055392</span></span>
-<span><span class="co">## 501    5 367.5116 467.6172 164.871207</span></span>
-<span><span class="co">## 601    6 300.8930 464.6948 234.412204</span></span></code></pre>
+<pre><code><span><span class="co">##     time        S        I         R</span></span>
+<span><span class="co">## 101    1 998.7824 1.169731 0.0479167</span></span>
+<span><span class="co">## 201    2 998.5355 1.296752 0.1677463</span></span>
+<span><span class="co">## 301    3 998.2660 1.399189 0.3347737</span></span>
+<span><span class="co">## 401    4 997.9777 1.487967 0.5343309</span></span>
+<span><span class="co">## 501    5 997.6725 1.569688 0.7577887</span></span>
+<span><span class="co">## 601    6 997.3515 1.648357 1.0001499</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="execution-time-comparison">Execution time comparison<a class="anchor" aria-label="anchor" href="#execution-time-comparison"></a>
 </h3>
-<p><code>denim</code> takes approximately 5.36 times as long as
+<p><code>denim</code> takes approximately 4.07 times as long as
 <code>deSolve</code> to compute the result with the given specifications
 .</p>
 <p>This significant difference can be attributed to the difference in
