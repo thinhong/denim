@@ -102,19 +102,20 @@ plot.denim <- function(x, ...) {
   # Plot the first compartment
   cmd1 <- paste0("with(x, {
   plot(Time, ", comp_names[1], ", type = \"l\", lwd = 3, col = \"", col_codes[1], 
-                 "\", xlab = \"Time\", ylab = \"Number of people\")\n")
+  "\", xlab = \"Time\", ylab = \"Number of people\", ylim = c(0, max(", comp_names[1],") ) )\n")
+
   
   # Add lines of the other compartments
   cmd2 <- ""
   for (i in 2:(ncol(x) - 1)) {
     cmd2 <- paste0(cmd2, "lines(Time, ", comp_names[i], 
-                   ", col = \"", col_codes[i], "\", lwd = 3)\n")
+                   ", col = \"", col_codes[i], "\", lwd = 2)\n")
   }
   
   # Add legend
   cmd3 <- paste0("legend(\"right\", c(" , 
                  paste0("\"", comp_names, collapse = ", ", "\""), 
-                 "), col = col_codes, lty = 1, lwd = 3, bty = \"n\")")
+                 "), col = col_codes, lty = 1, lwd = 2, bty = \"n\")")
   
   cmd <- paste0(cmd1, "\n", cmd2, "})", "\n", cmd3)
   
