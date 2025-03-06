@@ -52,10 +52,10 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/denim_vs_deSolve.html">denim vs deSolve</a>
-    <a class="dropdown-item" href="../articles/denim_vs_uSEIR.html">denim benchmark</a>
+    <a class="dropdown-item" href="../articles/denim_benchmark.html">denim benchmark</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>migrate to denim</h6>
-    <a class="dropdown-item" href="../articles/deSolve_to_denim.html">Migrate to denim</a>
+    <a class="dropdown-item" href="../articles/deSolve_to_denim.html">deSolve to denim</a>
   </div>
 </li>
 <li class="nav-item">
@@ -97,9 +97,6 @@
 <div class="section level2">
 <h2 id="comparison-between-desolve-and-denim">Comparison between deSolve and denim<a class="anchor" aria-label="anchor" href="#comparison-between-desolve-and-denim"></a>
 </h2>
-<p>Using <code>deSolve</code>, we can replicate <strong>Erlang
-distribution</strong> and <strong>exponential distribution</strong> for
-testing</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://drthinhong.com/denim/" class="external-link">denim</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://desolve.r-forge.r-project.org/" class="external-link">deSolve</a></span><span class="op">)</span></span></code></pre></div>
@@ -173,7 +170,7 @@ testing</p>
 <div class="section level3">
 <h3 id="execution-time-comparison">Execution time comparison<a class="anchor" aria-label="anchor" href="#execution-time-comparison"></a>
 </h3>
-<p><code>denim</code> takes approximately 4.07 times as long as
+<p><code>denim</code> takes approximately 4.04 times as long as
 <code>deSolve</code> to compute the result with the given specifications
 .</p>
 <p>This significant difference can be attributed to the difference in
@@ -236,30 +233,17 @@ model definition and runtime using <code>deSolve</code>
 <span></span>
 <span><span class="va">times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">210</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># ------ Compute mean for 10 runs ------</span></span>
-<span><span class="co"># runtimes &lt;- sapply(1:10,</span></span>
-<span><span class="co">#   function(i){</span></span>
-<span><span class="co">#     time &lt;- system.time(</span></span>
-<span><span class="co">#       ode(y = initialValues, times = times, parms = parameters, func = transition_func)</span></span>
-<span><span class="co">#     )</span></span>
-<span><span class="co">#     time[["elapsed"]]</span></span>
-<span><span class="co">#     </span></span>
-<span><span class="co">#   }</span></span>
-<span><span class="co">#   </span></span>
-<span><span class="co"># )</span></span>
-<span><span class="co"># mean(runtimes)</span></span>
-<span></span>
 <span><span class="va">ode_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/deSolve/man/ode.html" class="external-link">ode</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">initialValues</span>, times <span class="op">=</span> <span class="va">times</span>, parms <span class="op">=</span> <span class="va">parameters</span>, func <span class="op">=</span> <span class="va">transition_func</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># --- show output</span></span>
 <span><span class="va">ode_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">ode_mod</span><span class="op">)</span></span></code></pre></div>
-</details><p>Runtime for deSolve is <code>~ 0.013</code></p>
+</details>
 </div>
 <div class="section level3">
 <h3 id="implementation-using-denim">Implementation using denim<a class="anchor" aria-label="anchor" href="#implementation-using-denim"></a>
 </h3>
 <details><summary>
-model definition and runtime using <code>denim</code>
+model definition in <code>denim</code>
 </summary><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">denim_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="st">"S -&gt; E"</span> <span class="op">=</span> <span class="st">"(R0/tr) * timeStepDur * S * (I/N)"</span>, <span class="co"># formulate according that of uSEIR method</span></span>
@@ -272,19 +256,6 @@ model definition and runtime using <code>denim</code>
 <span>                tr <span class="op">=</span> <span class="fl">3</span><span class="op">*</span><span class="fl">2</span>, <span class="co"># compute mean recovery time, for gamma it's scale*shape</span></span>
 <span>                N <span class="op">=</span> <span class="fl">1e6</span>, timeStepDur <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># ------ Compute mean for 10 runs ------</span></span>
-<span><span class="co"># runtimes &lt;- sapply(1:10,</span></span>
-<span><span class="co">#   function (i) {</span></span>
-<span><span class="co">#     time &lt;- system.time(</span></span>
-<span><span class="co">#       sim(transitions = denim_model, </span></span>
-<span><span class="co">#                      initialValues = initialValues,</span></span>
-<span><span class="co">#                      parameters = parameters,</span></span>
-<span><span class="co">#                      simulationDuration = 210, timeStep = 0.01)</span></span>
-<span><span class="co">#     )</span></span>
-<span><span class="co">#     return(time[["elapsed"]])</span></span>
-<span><span class="co">#   })</span></span>
-<span><span class="co"># mean(runtimes)</span></span>
-<span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim.html">sim</a></span><span class="op">(</span>transitions <span class="op">=</span> <span class="va">denim_model</span>, </span>
 <span>                     initialValues <span class="op">=</span> <span class="va">initialValues</span>,</span>
 <span>                     parameters <span class="op">=</span> <span class="va">parameters</span>,</span>
@@ -293,7 +264,7 @@ model definition and runtime using <code>denim</code>
 <span><span class="co"># denim_out[, c("S","E", "I", "R")] &lt;- denim_out[, c("S","E", "I", "R")]/1e6</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span></code></pre></div>
 <p><img src="denim_vs_deSolve_files/figure-html/unnamed-chunk-7-1.png" width="2187.5"></p>
-</details><p>Runtime for denim is <code>~ 1.0548</code></p>
+</details>
 </div>
 <div class="section level3">
 <h3 id="plot-result">Plot result<a class="anchor" aria-label="anchor" href="#plot-result"></a>
