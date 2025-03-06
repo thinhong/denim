@@ -123,10 +123,11 @@ mod <- sim(transitions = transitions,
              parameters = denim_parameters,
              simulationDuration = 100,
              timeStep = 0.01)
-plot(mod)
 ```
 
 ## Compare output
+
+The following plots show output from `denim` and `deSolve`
 
 ```{r, echo=FALSE, fig.width=8, fig.height=5}
 # ---- Plot S compartment

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="denim">
-<title>Migrate to denim • denim</title>
+<title>deSolve to denim • denim</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -17,7 +17,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Migrate to denim">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="deSolve to denim">
 <meta property="og:description" content="denim">
 <meta property="og:image" content="/logo.svg">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -52,10 +52,10 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/denim_vs_deSolve.html">denim vs deSolve</a>
-    <a class="dropdown-item" href="../articles/denim_vs_uSEIR.html">denim vs uSEIR</a>
+    <a class="dropdown-item" href="../articles/denim_benchmark.html">denim benchmark</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>migrate to denim</h6>
-    <a class="dropdown-item" href="../articles/deSolve_to_denim.html">Migrate to denim</a>
+    <a class="dropdown-item" href="../articles/deSolve_to_denim.html">deSolve to denim</a>
   </div>
 </li>
 <li class="nav-item">
@@ -85,7 +85,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.svg" class="logo" alt=""><h1>Migrate to denim</h1>
+      <img src="../logo.svg" class="logo" alt=""><h1>deSolve to denim</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/thinhong/denim/blob/HEAD/vignettes/deSolve_to_denim.Rmd" class="external-link"><code>vignettes/deSolve_to_denim.Rmd</code></a></small>
@@ -111,8 +111,9 @@
 <span><span class="va">transition_func</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">state</span>, <span class="va">param</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">state</span>, <span class="va">param</span><span class="op">)</span> <span class="op">)</span>, <span class="op">{</span></span>
 <span>      <span class="va">gamma_rate</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="va">scale</span></span>
-<span>      <span class="va">dS</span> <span class="op">=</span> <span class="op">-</span><span class="va">rate</span><span class="op">*</span><span class="va">S</span></span>
-<span>      <span class="va">dI1</span> <span class="op">=</span> <span class="va">rate</span><span class="op">*</span><span class="va">S</span> <span class="op">-</span> <span class="va">gamma_rate</span><span class="op">*</span><span class="va">I1</span></span>
+<span>      </span>
+<span>      <span class="va">dS</span> <span class="op">=</span> <span class="op">-</span><span class="va">beta</span><span class="op">*</span><span class="va">S</span><span class="op">*</span><span class="va">I</span><span class="op">/</span><span class="va">N</span></span>
+<span>      <span class="va">dI1</span> <span class="op">=</span> <span class="va">beta</span><span class="op">*</span><span class="va">S</span><span class="op">*</span><span class="va">I</span><span class="op">/</span><span class="va">N</span> <span class="op">-</span> <span class="va">gamma_rate</span><span class="op">*</span><span class="va">I1</span></span>
 <span>      <span class="va">dI2</span> <span class="op">=</span> <span class="va">gamma_rate</span><span class="op">*</span><span class="va">I1</span> <span class="op">-</span> <span class="va">gamma_rate</span><span class="op">*</span><span class="va">I2</span></span>
 <span>      <span class="va">dI</span> <span class="op">=</span>  <span class="va">dI1</span> <span class="op">+</span> <span class="va">dI2</span></span>
 <span>      <span class="va">dR</span> <span class="op">=</span> <span class="va">gamma_rate</span><span class="op">*</span><span class="va">I2</span></span>
@@ -121,46 +122,50 @@
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># ---- Model configuration </span></span>
-<span><span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">0.2</span>, scale <span class="op">=</span> <span class="fl">3</span>, beta <span class="op">=</span> <span class="fl">0.12</span><span class="op">)</span> </span>
-<span><span class="va">initialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>S <span class="op">=</span> <span class="fl">999</span>, I <span class="op">=</span> <span class="fl">0</span>, I1 <span class="op">=</span> <span class="fl">0</span>, I2<span class="op">=</span><span class="fl">0</span>, R<span class="op">=</span><span class="fl">0</span><span class="op">)</span></span>
+<span><span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>beta <span class="op">=</span> <span class="fl">0.3</span>, scale <span class="op">=</span> <span class="fl">3</span>, N <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span> </span>
+<span><span class="va">initialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>S <span class="op">=</span> <span class="fl">999</span>, I <span class="op">=</span> <span class="fl">1</span>, I1 <span class="op">=</span> <span class="fl">1</span>, I2<span class="op">=</span><span class="fl">0</span>, R<span class="op">=</span><span class="fl">0</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ---- Run simulation</span></span>
-<span><span class="va">times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">20</span><span class="op">)</span> <span class="co"># simulation duration</span></span>
+<span><span class="va">times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span><span class="op">)</span> <span class="co"># simulation duration</span></span>
 <span><span class="va">ode_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/deSolve/man/ode.html" class="external-link">ode</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">initialValues</span>, times <span class="op">=</span> <span class="va">times</span>, parms <span class="op">=</span> <span class="va">parameters</span>, func <span class="op">=</span> <span class="va">transition_func</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># --- show output</span></span>
 <span><span class="va">ode_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">ode_mod</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ode_mod</span><span class="op">[</span><span class="va">ode_mod</span><span class="op">$</span><span class="va">time</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fl">1</span><span class="op">:</span><span class="fl">20</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time"</span>, <span class="st">"S"</span>, <span class="st">"I"</span>, <span class="st">"R"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ode_mod</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time"</span>, <span class="st">"S"</span>, <span class="st">"I"</span>, <span class="st">"R"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   time        S        I          R</span></span>
-<span><span class="co">## 2    1 817.9120 178.1031   2.984842</span></span>
-<span><span class="co">## 3    2 669.6497 310.0129  19.337352</span></span>
-<span><span class="co">## 4    3 548.2628 397.6768  53.060395</span></span>
-<span><span class="co">## 5    4 448.8796 447.4499 102.670468</span></span>
-<span><span class="co">## 6    5 367.5116 467.1136 164.374867</span></span>
-<span><span class="co">## 7    6 300.8930 464.2888 233.818204</span></span></code></pre>
+<span><span class="co">## 2    1 998.6561 1.294182 0.04969647</span></span>
+<span><span class="co">## 3    2 998.2239 1.594547 0.18152864</span></span>
+<span><span class="co">## 4    3 997.6985 1.921416 0.38010527</span></span>
+<span><span class="co">## 5    4 997.0695 2.290735 0.63971843</span></span>
+<span><span class="co">## 6    5 996.3225 2.716551 0.96093694</span></span>
+<span><span class="co">## 7    6 995.4387 3.212577 1.34869352</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="model-definition">Model definition<a class="anchor" aria-label="anchor" href="#model-definition"></a>
 </h3>
 <p>Unlike <code>deSolve</code> where transitions between compartments
 are defined by a system of ODEs, transitions in <code>denim</code> must
-be defined explicitly using the built-in distributions.</p>
-<p>User must first identify the distribution type that best describe the
-transition in their <code>deSolve</code> model.</p>
+be defined by (i) a distribution of dwell-time, (ii) a mathematical
+expression, (iii) a fixed number or proportion.</p>
+<p>User must first identify the transitions that best describe the ones
+in their <code>deSolve</code> model.</p>
 <details><summary>Identify distribution</summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># --- Model definition in deSolve</span></span>
 <span><span class="va">transition_func</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">state</span>, <span class="va">param</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">state</span>, <span class="va">param</span><span class="op">)</span> <span class="op">)</span>, <span class="op">{</span></span>
 <span>      <span class="va">gamma_rate</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="va">scale</span></span>
 <span>      </span>
-<span>      <span class="co"># For S -&gt; I transition, constant rate is assumed --&gt; exponentially distributed dwell time</span></span>
-<span>      <span class="va">dS</span> <span class="op">=</span> <span class="op">-</span><span class="va">rate</span><span class="op">*</span><span class="va">S</span></span>
-<span>      <span class="co"># For I -&gt; R transition, linear chain trick is applied --&gt; gamma distributed dwell time </span></span>
-<span>      <span class="va">dI1</span> <span class="op">=</span> <span class="va">rate</span><span class="op">*</span><span class="va">S</span> <span class="op">-</span> <span class="va">gamma_rate</span><span class="op">*</span><span class="va">I1</span></span>
+<span>      <span class="co"># For S -&gt; I transition, since it involves parameters (beta, N), </span></span>
+<span>      <span class="co"># the best transition to describe this is using a mathematical formula</span></span>
+<span>      <span class="va">dS</span> <span class="op">=</span> <span class="op">-</span><span class="va">beta</span><span class="op">*</span><span class="va">S</span><span class="op">*</span><span class="va">I</span><span class="op">/</span><span class="va">N</span></span>
+<span>      </span>
+<span>      <span class="co"># For I -&gt; R transition, linear chain trick is applied --&gt; implies Erlang distributed dwell time</span></span>
+<span>      <span class="co"># Hence, we can use d_gamma from denim</span></span>
+<span>      <span class="va">dI1</span> <span class="op">=</span> <span class="va">beta</span><span class="op">*</span><span class="va">S</span><span class="op">*</span><span class="va">I</span><span class="op">/</span><span class="va">N</span> <span class="op">-</span> <span class="va">gamma_rate</span><span class="op">*</span><span class="va">I1</span></span>
 <span>      <span class="va">dI2</span> <span class="op">=</span> <span class="va">gamma_rate</span><span class="op">*</span><span class="va">I1</span> <span class="op">-</span> <span class="va">gamma_rate</span><span class="op">*</span><span class="va">I2</span></span>
 <span>      <span class="va">dI</span> <span class="op">=</span>  <span class="va">dI1</span> <span class="op">+</span> <span class="va">dI2</span></span>
 <span>      <span class="va">dR</span> <span class="op">=</span> <span class="va">gamma_rate</span><span class="op">*</span><span class="va">I2</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">dS</span>, <span class="va">dE</span>, <span class="va">dI</span>, <span class="va">dI1</span>, <span class="va">dI2</span>, <span class="va">dR</span><span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">dS</span>, <span class="va">dI</span>, <span class="va">dI1</span>, <span class="va">dI2</span>, <span class="va">dR</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </details><p>With the transitions identified, user can then define the model in
@@ -176,9 +181,14 @@ describe the transition</p></li>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># --- Transition def for denim</span></span>
 <span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_exponential.html">d_exponential</a></span><span class="op">(</span><span class="fl">0.2</span><span class="op">)</span>,</span>
+<span>  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * S * I/N * timestepDur"</span>,</span>
 <span>  <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span> <span class="co"># shape is 2 from number of I sub compartments</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<p>Note that when converting an ODE to a math expression, we must
+multiply the original expression with time step duration (variable
+<code>timestepDur</code> in the model definition code). This is because
+we are essentially using Euler’s method to estimate the solution for the
+ODE.</p>
 </div>
 <div class="section level3">
 <h3 id="model-configurations">Model configurations<a class="anchor" aria-label="anchor" href="#model-configurations"></a>
@@ -187,16 +197,19 @@ describe the transition</p></li>
 provide the <u>initial values</u> and any <u>additional parameters</u>
 in the form of named vectors.</p>
 <p>For the example <code>deSolve</code> code, while users can use the
-<code>initalValues</code> as is (<code>denim</code> will ignore unused
-<code>I1</code>, <code>I2</code> compartments), it is recommended to
-remove redundant compartments.</p>
+<code>initalValues</code> from the <code>deSolve</code> code as is
+(<code>denim</code> will ignore unused <code>I1</code>, <code>I2</code>
+compartments as these sub-compartments will be automatically computed
+internally), it is recommended to remove redundant compartments (in this
+example, <code>I1</code> and <code>I2</code>).</p>
 <p>For parameters, since <code>rate</code> and <code>scale</code> are
 already defined in the distribution functions, users only need to keep
-<code>beta</code> from the initial parameters vector.</p>
+<code>beta</code> and <code>N</code> from the initial parameters vector.
+We also need to specify the value for <code>timestepDur</code> here.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># remove I1, I2 compartments</span></span>
-<span><span class="va">denim_initialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>S <span class="op">=</span> <span class="fl">999</span>, I <span class="op">=</span> <span class="fl">0</span>, R<span class="op">=</span><span class="fl">0</span><span class="op">)</span></span>
-<span><span class="va">denim_parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>beta <span class="op">=</span> <span class="fl">0.12</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="va">denim_initialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>S <span class="op">=</span> <span class="fl">999</span>, I <span class="op">=</span> <span class="fl">1</span>, R<span class="op">=</span><span class="fl">0</span><span class="op">)</span></span>
+<span><span class="va">denim_parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>beta <span class="op">=</span> <span class="fl">0.3</span>, N <span class="op">=</span> <span class="fl">1000</span>, timestepDur<span class="op">=</span><span class="fl">0.01</span><span class="op">)</span> </span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="simulation">Simulation<a class="anchor" aria-label="anchor" href="#simulation"></a>
@@ -207,20 +220,20 @@ time sequence, <code>denim</code> only require the <u>simulation
 duration</u> and <u>time step.</u></p>
 <p>Since <code>denim</code> is a discrete time model, time step must be
 set to a small value for the result to closely follow that of
-<code>deSolve</code>.</p>
+<code>deSolve</code> (in this example, 0.01).</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim.html">sim</a></span><span class="op">(</span>transitions <span class="op">=</span> <span class="va">transitions</span>,</span>
 <span>             initialValues <span class="op">=</span> <span class="va">denim_initialValues</span>, </span>
 <span>             parameters <span class="op">=</span> <span class="va">denim_parameters</span>,</span>
-<span>             simulationDuration <span class="op">=</span> <span class="fl">20</span>,</span>
-<span>             timeStep <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span></code></pre></div>
-<p><img src="deSolve_to_denim_files/figure-html/unnamed-chunk-6-1.png" width="2187.5"></p>
+<span>             simulationDuration <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>             timeStep <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="compare-output">Compare output<a class="anchor" aria-label="anchor" href="#compare-output"></a>
 </h2>
+<p>The following plots show output from <code>denim</code> and
+<code>deSolve</code></p>
 <p><img src="deSolve_to_denim_files/figure-html/unnamed-chunk-7-1.png" width="2400"><img src="deSolve_to_denim_files/figure-html/unnamed-chunk-7-2.png" width="2400"><img src="deSolve_to_denim_files/figure-html/unnamed-chunk-7-3.png" width="2400"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

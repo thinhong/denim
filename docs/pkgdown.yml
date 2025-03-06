@@ -2,9 +2,9 @@ pandoc: '3.5'
 pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
+  denim_benchmark: denim_benchmark.html
   denim_vs_deSolve: denim_vs_deSolve.html
-  denim_vs_uSEIR: denim_vs_uSEIR.html
   denim: denim.html
   deSolve_to_denim: deSolve_to_denim.html
-last_built: 2025-03-05T11:16Z
+last_built: 2025-03-06T10:57Z
 
