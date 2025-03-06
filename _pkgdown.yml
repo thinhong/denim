@@ -15,7 +15,7 @@ articles:
   navbar: ~
   contents:
   - denim_vs_deSolve
-  - denim_vs_uSEIR
+  - denim_benchmark
 - title: migrate to denim
   navbar: migrate to denim
   contents:

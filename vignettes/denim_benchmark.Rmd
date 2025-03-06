@@ -1,0 +1,346 @@
+---
+title: "denim benchmark"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{denim benchmark}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+python:
+  python_path: /opt/anaconda3/envs/bnn/bin/python
+bibliography: references.bib
+---
+
+To assess denim's performance, we benchmark it against other approaches and packages.
+
+The benchmarking process was conducted on a Macbook with M2 Pro chip, 16 GBs of RAM and 10 cores (6 performance and 4 efficiency). 
+
+## Benchmark settings
+
+All approaches will simulate the following SEIR model, with the same simulation duration of 180
+
+```{r echo=FALSE}
+DiagrammeR::grViz("digraph {
+  graph [layout = dot, rankdir = LR]
+  
+  node [shape = rectangle]
+  
+  S -> E [label = '(R0/tr) * S * (I / N) * td']
+  E -> I [label = 'd_gamma(4,2)']
+  I -> R [label = 'd_gamma(3,2)']
+  }",
+  width = 700, height = "100%")
+```
+
+Each approach will be run 50 times
+
+```{r benchmark settings}
+total_runs <- 50L # number of runs
+sim_duration <- 180 # duration of simulation
+```
+
+## uSEIR
+
+Simulate model using uSEIR approach [@Hernndez2021]
+
+Source code: <https://github.com/jjgomezcadenas/useirn/blob/master/nb/uSEIR.ipynb>
+
+<details>
+
+<summary>load useir implementation in pure Python</summary>
+
+```{r}
+library(reticulate)
+# use_python("/opt/anaconda3/envs/bnn/bin/python", required = TRUE)
+use_condaenv(condaenv='bnn', required = TRUE)
+matplotlib <- import("matplotlib")
+matplotlib$use("Agg", force = TRUE)
+py_run_file("../supplements/useir_python.py")
+```
+
+</details>
+
+### Python implementation
+
+<details>
+
+<summary>Code for running uSEIR in pure Python</summary>
+
+```{python}
+#| output: false
+
+import time
+import concurrent.futures
+import pickle
+import os
+from statistics import mean
+
+python_runs = []
+
+def get_python_runtime(n):
+  start = time.time()
+  df = solve_uSeir(ti_shape     = 2,
+                     ti_scale     = 4,
+                     tr_shape     = 2,
+                     tr_scale     = 3,
+                     R0           = 3.5)
+  end = time.time()
+  return end - start
+  
+# load cached result if available instead of rerun due to long run time
+cached_python_runs = "../supplements/python_runs.pkl"
+if os.path.exists(cached_python_runs):
+  # If the file exists, load the Python list from the file
+  with open(cached_python_runs, 'rb') as f:
+    python_runs = pickle.load(f)
+else:
+  print("no cache found")
+  # multithread instead for quicker result
+  with concurrent.futures.ProcessPoolExecutor(max_workers=8) as executor:
+    python_runs = list(executor.map(get_python_runtime, range(r.total_runs)))
+  
+# mean(python_runs)
+
+# plot_useir((df,), ('G',), T = 'uSEIR', figsize=(14,8))
+# print(f'python solve_seir call: dr = {end-start}')
+```
+
+</details>
+
+Run time for uSEIR approach, Python implementation
+
+```{python}
+python_runs
+```
+
+### Cython implementation
+
+<details>
+
+<summary>Code for running uSEIR in Cython (C backend)</summary>
+
+```{python}
+#| output: false
+
+# import precompiled cython module
+import sys
+sys.path.insert(0, "../supplements")
+import useir
+import time
+import pyarrow as pa
+
+cython_runs = []
+
+# --- Get runtime ----
+for i in range(r.total_runs):
+  start = time.time()
+  df = useir.csolve_uSeir(dist = "gamma",
+                    ti_shape     = 2,
+                     ti_scale     = 4,
+                     tr_shape     = 2,
+                     tr_scale     = 3,
+                     R0           = 3.5
+  )
+  end = time.time()
+
+  cython_runs = cython_runs + [end - start]
+
+# ---- Get output for uSEIR -----
+df = useir.csolve_uSeir(dist = "gamma",
+                    ti_shape     = 2,
+                     ti_scale     = 4,
+                     tr_shape     = 2,
+                     tr_scale     = 3,
+                     R0           = 3.5
+  )
+  
+# convert to pyarrow table for easy conversion to R data.frames
+to_r_df = pa.Table.from_pandas(df)
+```
+
+</details>
+
+Run time for uSEIR approach, Cython implementation
+
+```{python}
+cython_runs
+```
+
+## deSolve
+
+```{=html}
+<details>
+  <summary>Code for running SEIR in <code>deSolve</code></summary>
+```
+```{r}
+library(deSolve)
+parameters <- c(scale_I = 4, shape_I=2,
+                scale_R = 3, shape_R = 2,
+                timeStepDur = 1, R0 = 3.5, N = 1e6) 
+initialValues <- c(S = 999999, E1 = 1,
+                   E2 = 0, E = 0, I1=0, 
+                   I2=0, I=0, R=0
+                   )
+
+# --- Transition def for deSolve
+transition_func <- function(t, state, param){
+  with(as.list( c(state, param) ), {
+      gamma_rate_I = 1/scale_I
+      gamma_rate_R = 1/scale_R
+      
+      tr = scale_R*shape_R
+      
+      dS = - (R0/tr) * S * I/N
+      # apply linear chain trick
+      dE1 = (R0/tr) * S * I/N - gamma_rate_I*E1
+      dE2 = gamma_rate_I*E1 - gamma_rate_I*E2
+      dE = dE1 + dE2
+      dI1 = gamma_rate_I*E2 - gamma_rate_R*I1
+      dI2 = gamma_rate_R*I1 - gamma_rate_R*I2
+      dI =  dI1 + dI2
+
+      dR = gamma_rate_R*I2
+      list(c(dS, dE1, dE2, dE, dI1, dI2, dI, dR))
+  })
+}
+
+times <- seq(0, sim_duration, 1)
+
+# ------ Compute run time ------
+desolve_runs <- sapply(1:total_runs,
+  function(i){
+    time <- system.time(
+      ode(y = initialValues, times = times, parms = parameters, func = transition_func)
+    )
+    time[["elapsed"]]
+
+  }
+
+)
+
+ode_mod <- ode(y = initialValues, times = times, parms = parameters, func = transition_func)
+
+ode_mod <- as.data.frame(ode_mod)
+```
+
+```{=html}
+</details>
+```
+Run time for `deSolve` implementation
+
+```{r}
+desolve_runs
+```
+
+## denim
+
+<details>
+
+<summary>Code for running SEIR in `denim`</summary>
+
+```{r}
+library(denim)
+
+denim_model <- list(
+  "S -> E" = "(R0/tr) * timeStepDur * S * (I/N)", # formulate according that of uSEIR method
+  "E -> I" = d_gamma(scale = 4, shape = 2),
+  "I -> R" = d_gamma(scale = 3, shape = 2)
+)
+
+initialValues <- c(S = 999999, E = 1, I= 0, R= 0)
+parameters <- c(R0 = 3.5, 
+                tr = 3*2, # compute mean recovery time, for gamma it's scale*shape
+                N = 1e6, timeStepDur = 0.01)
+
+# ---- Get runtimes ----
+denim_runs <- sapply(1:total_runs,
+  function (i) {
+    time <- system.time(
+      sim(transitions = denim_model,
+                     initialValues = initialValues,
+                     parameters = parameters,
+                     simulationDuration = sim_duration, timeStep = 0.01)
+    )
+    return(time[["elapsed"]])
+  })
+
+# ---- Get output ----
+denim_out <- sim(transitions = denim_model, 
+                     initialValues = initialValues,
+                     parameters = parameters,
+                     simulationDuration = sim_duration, timeStep = 0.01)
+```
+
+</details>
+
+Run time for `denim` implementation
+
+```{r}
+denim_runs
+```
+
+## Visualize output
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+library(arrow)
+library(reticulate)
+
+df <- as.data.frame(py$to_r_df)
+
+# comput prop to compare with uSEIR
+rescaled_denim <- denim_out
+rescaled_denim[, c("S","E", "I", "R")] <- denim_out[, c("S","E", "I", "R")]/1e6
+
+rescaled_desolve <- ode_mod
+rescaled_desolve[, c("S","E", "I", "R")] <- rescaled_desolve[, c("S","E", "I", "R")]/1e6
+
+useir_offset <- 6
+
+plot_seir_util <- function(df, mod_name="denim", time_col = "Time", 
+                           ylab = "Proportion",
+                           x_legend=150, y_legend=0.7){
+  plot(x = df[[time_col]], y = df[["S"]],
+       xlab = "time", ylab = "Prop", 
+       main=paste0(mod_name, " output"), col = "#4876ff", type="l", lwd=2)
+  lines(df[[time_col]], df[["E"]], lwd=2, col = "blueviolet")
+  lines(df[[time_col]], df[["I"]], lwd=2, col = "red")
+  lines(df[[time_col]], df[["R"]], lwd=2, col = "green")
+  legend(x = x_legend, y = y_legend,
+         legend=c("S", "E", "I", "R"),
+         col = c("#4876ff", "blueviolet", "red", "green"),
+         lty = 1)
+}
+
+# --- denim output -----
+plot_seir_util(rescaled_denim)
+
+# --- deSolve output ----
+plot_seir_util(rescaled_desolve, time_col = "time", mod_name = "deSolve")
+
+# --- uSEIR output ---- 
+plot_seir_util(df, time_col = "t", mod_name = "uSEIR")
+```
+
+## Compare run time
+
+The following plot shows run time for 50 runs (with horizontal line showing median run time) of each approach.
+
+```{r echo=FALSE}
+par(xpd=T, mar=par()$mar+c(0,0,0,6))
+
+plot(x = 1:total_runs, y = py$cython_runs, type = "p", col = "blueviolet",
+     ylim = c(0,1.2),
+     main = paste0("Run time for ", total_runs, " runs"),
+     xlab = "Run", ylab = "Run time (in seconds)")
+lines(x = 1:total_runs, y = rep(median(py$cython_runs), total_runs), col = "blueviolet", lty = 2)
+points(x = 1:total_runs, y = denim_runs, col = "red")
+lines(x = 1:total_runs, y = rep(median(denim_runs), total_runs), col = "red", lty = 2)
+points(x = 1:total_runs, y = desolve_runs, col = "darkgreen")
+lines(x = 1:total_runs, y = rep(median(desolve_runs), total_runs), col = "darkgreen", lty = 2)
+legend(x = 53, y = 0.9,
+       legend = c("uSEIR_cython", "denim", "deSolve"), 
+       col = c("blueviolet", "red", "darkgreen"),
+       lty = 1, cex = 0.7)
+
+# Restore default clipping rect
+par(mar=c(5, 4, 4, 2) + 0.1)
+```

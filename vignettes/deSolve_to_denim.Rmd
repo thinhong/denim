@@ -1,8 +1,8 @@
 ---
-title: "Migrate to denim"
+title: "deSolve to denim"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Migrate to denim}
+  %\VignetteIndexEntry{deSolve to denim}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -23,8 +23,9 @@ The model used for demonstrating the process of migrating code from `deSolve` to
 transition_func <- function(t, state, param){
   with(as.list( c(state, param) ), {
       gamma_rate = 1/scale
-      dS = -rate*S
-      dI1 = rate*S - gamma_rate*I1
+      
+      dS = -beta*S*I/N
+      dI1 = beta*S*I/N - gamma_rate*I1
       dI2 = gamma_rate*I1 - gamma_rate*I2
       dI =  dI1 + dI2
       dR = gamma_rate*I2
@@ -33,23 +34,23 @@ transition_func <- function(t, state, param){
 }
 
 # ---- Model configuration 
-parameters <- c(rate = 0.2, scale = 3, beta = 0.12) 
-initialValues <- c(S = 999, I = 0, I1 = 0, I2=0, R=0)
+parameters <- c(beta = 0.3, scale = 3, N = 1000) 
+initialValues <- c(S = 999, I = 1, I1 = 1, I2=0, R=0)
 
 # ---- Run simulation
-times <- seq(0, 20) # simulation duration
+times <- seq(0, 100) # simulation duration
 ode_mod <- ode(y = initialValues, times = times, parms = parameters, func = transition_func)
 
 # --- show output
 ode_mod <- as.data.frame(ode_mod)
-head(ode_mod[ode_mod$time %in% 1:20, c("time", "S", "I", "R")])
+head(ode_mod[-1, c("time", "S", "I", "R")])
 ```
 
 ### Model definition
 
-Unlike `deSolve` where transitions between compartments are defined by a system of ODEs, transitions in `denim` must be defined explicitly using the built-in distributions.
+Unlike `deSolve` where transitions between compartments are defined by a system of ODEs, transitions in `denim` must be defined by (i) a distribution of dwell-time, (ii) a mathematical expression, (iii) a fixed number or proportion.
 
-User must first identify the distribution type that best describe the transition in their `deSolve` model.
+User must first identify the transitions that best describe the ones in their `deSolve` model.
 
 ```{=html}
 <details>
@@ -61,14 +62,17 @@ transition_func <- function(t, state, param){
   with(as.list( c(state, param) ), {
       gamma_rate = 1/scale
       
-      # For S -> I transition, constant rate is assumed --> exponentially distributed dwell time
-      dS = -rate*S
-      # For I -> R transition, linear chain trick is applied --> gamma distributed dwell time 
-      dI1 = rate*S - gamma_rate*I1
+      # For S -> I transition, since it involves parameters (beta, N), 
+      # the best transition to describe this is using a mathematical formula
+      dS = -beta*S*I/N
+      
+      # For I -> R transition, linear chain trick is applied --> implies Erlang distributed dwell time
+      # Hence, we can use d_gamma from denim
+      dI1 = beta*S*I/N - gamma_rate*I1
       dI2 = gamma_rate*I1 - gamma_rate*I2
       dI =  dI1 + dI2
       dR = gamma_rate*I2
-      list(c(dS, dE, dI, dI1, dI2, dR))
+      list(c(dS, dI, dI1, dI2, dR))
   })
 }
 ```
@@ -86,36 +90,38 @@ When using `denim`, the model structure is given as a `list` of *key*-*value* pa
 ```{r}
 # --- Transition def for denim
 transitions <- list(
-  "S -> I" = d_exponential(0.2),
+  "S -> I" = "beta * S * I/N * timestepDur",
   "I -> R" = d_gamma(3, 2) # shape is 2 from number of I sub compartments
 )
 ```
+
+Note that when converting an ODE to a math expression, we must multiply the original expression with time step duration (variable `timestepDur` in the model definition code). This is because we are essentially using Euler's method to estimate the solution for the ODE.
 
 ### Model configurations
 
 Similar to `deSolve`, `denim` also ask users to provide the [initial values]{.underline} and any [additional parameters]{.underline} in the form of named vectors.
 
-For the example `deSolve` code, while users can use the `initalValues` as is (`denim` will ignore unused `I1`, `I2` compartments), it is recommended to remove redundant compartments.
+For the example `deSolve` code, while users can use the `initalValues` from the `deSolve` code as is (`denim` will ignore unused `I1`, `I2` compartments as these sub-compartments will be automatically computed internally), it is recommended to remove redundant compartments (in this example, `I1` and `I2`).
 
-For parameters, since `rate` and `scale` are already defined in the distribution functions, users only need to keep `beta` from the initial parameters vector.
+For parameters, since `rate` and `scale` are already defined in the distribution functions, users only need to keep `beta` and `N` from the initial parameters vector. We also need to specify the value for `timestepDur` here.
 
 ```{r}
 # remove I1, I2 compartments
-denim_initialValues <- c(S = 999, I = 0, R=0)
-denim_parameters <- c(beta = 0.12) 
+denim_initialValues <- c(S = 999, I = 1, R=0)
+denim_parameters <- c(beta = 0.3, N = 1000, timestepDur=0.01) 
 ```
 
 ### Simulation
 
 Lastly, users need to define the simulation duration and time step for `denim` to run. Unlike `deSolve` which takes a time sequence, `denim` only require the [simulation duration]{.underline} and [time step.]{.underline}
 
-Since `denim` is a discrete time model, time step must be set to a small value for the result to closely follow that of `deSolve`.
+Since `denim` is a discrete time model, time step must be set to a small value for the result to closely follow that of `deSolve` (in this example, 0.01).
 
 ```{r}
 mod <- sim(transitions = transitions,
              initialValues = denim_initialValues, 
              parameters = denim_parameters,
-             simulationDuration = 20,
+             simulationDuration = 100,
              timeStep = 0.01)
 plot(mod)
 ```
