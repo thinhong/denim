@@ -45,7 +45,7 @@ $$S_{t+1} - S_{t} = -\lambda S_{t} = -\frac{\beta I_{t}}{N}S_{t}$$ $$I_{t+1} - I
 -   $\beta$: the product of contact rates and transmission probability; usually we define $\lambda =\frac{\beta I_{t}}{N}$ as the force of infection
 -   $\gamma$: recovery rate
 
-Usually to solve the model easier we make an assumption that the recovery rate $\gamma$ is constant, this will leads to an exponentially distributed length of stay i.e most individuals recover after 1 day being infected.
+Usually to solve the model more easily we make an assumption that the recovery rate $\gamma$ is constant, this will leads to an exponentially distributed length of stay in the I compartment i.e. most individuals recover after 1 day being infected and a few individuals can stay in this compartment for a very long time.
 
 ```{r, echo=FALSE}
 
@@ -57,12 +57,13 @@ y3 <- dexp(x = x, rate = rates[3])
 
 col_codes <- c("#374F77", "#EF9F32", "#6ECBD7")
 plot(x, y, type = "l", col = col_codes[1], lty = 1, lwd = 3,
-     xlab = "Length of stay (days)", ylab = "", 
-     ylim = c(0, 1.5), yaxt = 'n')
+     xlab = "Length of stay (days)", ylab = "density of probability", 
+     ylim = c(0, 1.5))
 lines(x, y2, col = col_codes[2], lty = 1, lwd = 3)
 lines(x, y3, col = col_codes[3], lty = 1, lwd = 3)
-legend("right", legend = c(0.5, 1.0, 1.5), 
-       col = col_codes, lty = 1, lwd = 3, bty = "\n")
+legend("topright", legend = paste(c(0.5, 1.0, 1.5), "/day"),
+       title = expression(paste("recovery rate ", gamma)),
+       col = col_codes, lty = 1, lwd = 3, bty = "n")
 ```
 
 A more realistic length of stay distribution can look like this, of which most patients recovered after 4 days. We defined this using a gamma distribution with shape = 3 and scale = 2.
@@ -72,7 +73,7 @@ x <- seq(0, 20, 0.001)
 y <- dgamma(x = x, shape = 3, scale = 2)
 
 plot(x, y, type = "l", col = col_codes[1], lty = 1, lwd = 3,
-     xlab = "Length of stay (days)", ylab = "", yaxt = 'n')
+     xlab = "Length of stay (days)", ylab = "density of probability")
 ```
 
 The model now look like this:
@@ -219,7 +220,7 @@ For a given length of stay distribution, we identify the maximum length of stay 
 
 ## 3. Waiting time distribution
 
-Current available distribution in this package including:
+The distributions currently available in this package are:
 
 -   `d_exponential(rate)`: Discrete **exponential distribution** with parameter `rate`
 
@@ -398,5 +399,5 @@ mod <- sim(transitions = transitions,
            parameters = parameters, 
            simulationDuration = simulationDuration, 
            timeStep = timeStep)
-mod
+head(mod)
 ```
