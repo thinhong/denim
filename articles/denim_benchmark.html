@@ -165,7 +165,7 @@ Code for running uSEIR in pure Python
 <span id="cb5-32"><a href="#cb5-32" tabindex="-1"></a></span>
 <span id="cb5-33"><a href="#cb5-33" tabindex="-1"></a><span class="co"># plot_useir((df,), ('G',), T = 'uSEIR', figsize=(14,8))</span></span>
 <span id="cb5-34"><a href="#cb5-34" tabindex="-1"></a><span class="co"># print(f'python solve_seir call: dr = {end-start}')</span></span></code></pre></div>
-</details><p>Run time for uSEIR approach, Python implementation</p>
+</details><p>Run time for uSEIR approach, Python implementation (in seconds)</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>python_runs</span></code></pre></div>
 <pre><code><span><span class="co">## [54.79370188713074, 54.230366945266724, 54.618630170822144, 54.13475704193115, 54.73439383506775, 54.3592848777771, 54.4839141368866, 54.568207025527954, 53.2656729221344, 53.35437202453613, 53.4455087184906, 53.314252853393555, 53.51092195510864, 53.1987829208374, 53.92492699623108, 53.84889101982117, 54.05377793312073, 53.669222831726074, 53.65536117553711, 53.5451979637146, 53.73345422744751, 53.886900186538696, 54.239879846572876, 54.19460391998291, 53.645427942276, 53.55217409133911, 53.6606080532074, 53.67430400848389, 53.593971967697144, 53.655033826828, 54.32232093811035, 53.98363208770752, 53.53084206581116, 53.79021191596985, 53.85689187049866, 53.453129053115845, 53.61042594909668, 53.53293991088867, 54.00833296775818, 54.11179971694946, 53.94759678840637, 53.619515895843506, 53.80676245689392, 53.743643045425415, 53.68473672866821, 53.63701105117798, 53.59615421295166, 53.817927837371826, 44.74661207199097, 44.77127194404602]</span></span></code></pre>
 </div>
@@ -462,9 +462,9 @@ Code for running uSEIR in Cython (C backend)
 <div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>  </span>
 <span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co"># convert to pyarrow table for easy conversion to R data.frames</span></span>
 <span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>to_r_df <span class="op">=</span> pa.Table.from_pandas(df)</span></code></pre></div>
-</details><p>Run time for uSEIR approach, Cython implementation</p>
+</details><p>Run time for uSEIR approach, Cython implementation (in seconds)</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>cython_runs</span></code></pre></div>
-<pre><code><span><span class="co">## [0.4159088134765625, 0.4129979610443115, 0.41492509841918945, 0.41570401191711426, 0.4130539894104004, 0.41875696182250977, 0.41640806198120117, 0.4108240604400635, 0.41348981857299805, 0.4156773090362549, 0.4111309051513672, 0.4109199047088623, 0.4089820384979248, 0.4175879955291748, 0.4154832363128662, 0.4136011600494385, 0.4136052131652832, 0.4125699996948242, 0.41289782524108887, 0.4113490581512451, 0.4097609519958496, 0.411865234375, 0.4159207344055176, 0.41655588150024414, 0.4163839817047119, 0.41239190101623535, 0.4122591018676758, 0.4210398197174072, 0.4172039031982422, 0.4149150848388672, 0.4183681011199951, 0.4180469512939453, 0.4125399589538574, 0.41262316703796387, 0.4222888946533203, 0.4187641143798828, 0.41902685165405273, 0.41599106788635254, 0.41387271881103516, 0.4117238521575928, 0.4116361141204834, 0.4101450443267822, 0.41315388679504395, 0.41733384132385254, 0.4106628894805908, 0.41691112518310547, 0.4160501956939697, 0.41957688331604004, 0.41298723220825195, 0.4133877754211426]</span></span></code></pre>
+<pre><code><span><span class="co">## [0.40996623039245605, 0.4125659465789795, 0.41011977195739746, 0.40889596939086914, 0.41274404525756836, 0.40564894676208496, 0.40793800354003906, 0.40627288818359375, 0.4075357913970947, 0.41152000427246094, 0.4128100872039795, 0.4082040786743164, 0.40472984313964844, 0.4111061096191406, 0.4098081588745117, 0.4093639850616455, 0.410228967666626, 0.4102897644042969, 0.40852880477905273, 0.4078531265258789, 0.410430908203125, 0.41184329986572266, 0.41551995277404785, 0.41220808029174805, 0.4116659164428711, 0.4137148857116699, 0.41350412368774414, 0.41316890716552734, 0.4129369258880615, 0.41222500801086426, 0.41141724586486816, 0.41358089447021484, 0.4100029468536377, 0.4097621440887451, 0.40712499618530273, 0.4073171615600586, 0.41047000885009766, 0.4189000129699707, 0.4142899513244629, 0.4130129814147949, 0.41054201126098633, 0.41358304023742676, 0.4138309955596924, 0.41342997550964355, 0.4147050380706787, 0.4130539894104004, 0.4137589931488037, 0.41797685623168945, 0.41068315505981445, 0.41430187225341797]</span></span></code></pre>
 </div>
 </div>
 <div class="section level2">
@@ -507,15 +507,9 @@ Code for running uSEIR in Cython (C backend)
 <span><span class="va">times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">sim_duration</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ------ Compute run time ------</span></span>
-<span><span class="va">desolve_runs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">total_runs</span>,</span>
-<span>  <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span><span class="op">{</span></span>
-<span>    <span class="va">time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/pkg/deSolve/man/ode.html" class="external-link">ode</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">initialValues</span>, times <span class="op">=</span> <span class="va">times</span>, parms <span class="op">=</span> <span class="va">parameters</span>, func <span class="op">=</span> <span class="va">transition_func</span><span class="op">)</span></span>
-<span>    <span class="op">)</span></span>
-<span>    <span class="va">time</span><span class="op">[[</span><span class="st">"elapsed"</span><span class="op">]</span><span class="op">]</span></span>
-<span></span>
-<span>  <span class="op">}</span></span>
-<span></span>
+<span><span class="va">desolve_runs</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="https://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/deSolve/man/ode.html" class="external-link">ode</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">initialValues</span>, times <span class="op">=</span> <span class="va">times</span>, parms <span class="op">=</span> <span class="va">parameters</span>, func <span class="op">=</span> <span class="va">transition_func</span><span class="op">)</span>,</span>
+<span>  iterations <span class="op">=</span> <span class="va">total_runs</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">ode_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/deSolve/man/ode.html" class="external-link">ode</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">initialValues</span>, times <span class="op">=</span> <span class="va">times</span>, parms <span class="op">=</span> <span class="va">parameters</span>, func <span class="op">=</span> <span class="va">transition_func</span><span class="op">)</span></span>
@@ -523,12 +517,14 @@ Code for running uSEIR in Cython (C backend)
 <span><span class="va">ode_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">ode_mod</span><span class="op">)</span></span></code></pre></div>
 </details><p>Run time for <code>deSolve</code> implementation</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">desolve_runs</span></span></code></pre></div>
-<pre><code><span><span class="co">##  [1] 0.016 0.003 0.003 0.003 0.003 0.003 0.003 0.003 0.003 0.003 0.003 0.003</span></span>
-<span><span class="co">## [13] 0.003 0.003 0.003 0.004 0.003 0.003 0.003 0.003 0.003 0.003 0.003 0.003</span></span>
-<span><span class="co">## [25] 0.003 0.003 0.004 0.003 0.003 0.003 0.003 0.003 0.003 0.004 0.004 0.004</span></span>
-<span><span class="co">## [37] 0.003 0.003 0.003 0.003 0.004 0.003 0.003 0.003 0.003 0.004 0.003 0.003</span></span>
-<span><span class="co">## [49] 0.003 0.004</span></span></code></pre>
+<code class="sourceCode R"><span><span class="va">desolve_runs</span><span class="op">$</span><span class="va">time</span></span></code></pre></div>
+<pre><code><span><span class="co">## [[1]]</span></span>
+<span><span class="co">##  [1]  3.78ms  3.44ms  3.63ms  8.62ms  9.69ms  4.66ms  3.98ms  3.84ms  3.69ms</span></span>
+<span><span class="co">## [10]  3.82ms  6.56ms 10.06ms  5.54ms  4.04ms  3.8ms   3.42ms  3.44ms  3.51ms</span></span>
+<span><span class="co">## [19] 10.08ms  7.24ms  4.11ms  3.6ms   3.52ms  3.36ms  3.39ms  7.33ms  8.26ms</span></span>
+<span><span class="co">## [28]  3.9ms   3.47ms  3.38ms  3.41ms  3.37ms  5.33ms  7.7ms   4.5ms   3.62ms</span></span>
+<span><span class="co">## [37]  3.36ms  3.43ms  3.28ms  3.44ms  8.25ms  5.6ms   3.86ms  3.42ms  3.42ms</span></span>
+<span><span class="co">## [46]  3.35ms  3.66ms  7.12ms  8.21ms  4.36ms</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="denim">denim<a class="anchor" aria-label="anchor" href="#denim"></a>
@@ -550,16 +546,14 @@ Code for running SEIR in <code>denim</code>
 <span>                N <span class="op">=</span> <span class="fl">1e6</span>, timeStepDur <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ---- Get runtimes ----</span></span>
-<span><span class="va">denim_runs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">total_runs</span>,</span>
-<span>  <span class="kw">function</span> <span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span></span>
-<span>      <span class="fu"><a href="../reference/sim.html">sim</a></span><span class="op">(</span>transitions <span class="op">=</span> <span class="va">denim_model</span>,</span>
+<span><span class="va">denim_runs</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="https://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/sim.html">sim</a></span><span class="op">(</span>transitions <span class="op">=</span> <span class="va">denim_model</span>,</span>
 <span>                     initialValues <span class="op">=</span> <span class="va">initialValues</span>,</span>
 <span>                     parameters <span class="op">=</span> <span class="va">parameters</span>,</span>
-<span>                     simulationDuration <span class="op">=</span> <span class="va">sim_duration</span>, timeStep <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span>
-<span>    <span class="op">)</span></span>
-<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">time</span><span class="op">[[</span><span class="st">"elapsed"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span>  <span class="op">}</span><span class="op">)</span></span>
+<span>                     simulationDuration <span class="op">=</span> <span class="va">sim_duration</span>, timeStep <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span>,</span>
+<span>  iterations <span class="op">=</span> <span class="va">total_runs</span></span>
+<span><span class="op">)</span></span>
+<span></span>
 <span></span>
 <span><span class="co"># ---- Get output ----</span></span>
 <span><span class="va">denim_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim.html">sim</a></span><span class="op">(</span>transitions <span class="op">=</span> <span class="va">denim_model</span>, </span>
@@ -568,12 +562,13 @@ Code for running SEIR in <code>denim</code>
 <span>                     simulationDuration <span class="op">=</span> <span class="va">sim_duration</span>, timeStep <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span></code></pre></div>
 </details><p>Run time for <code>denim</code> implementation</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">denim_runs</span></span></code></pre></div>
-<pre><code><span><span class="co">##  [1] 0.856 0.854 0.843 0.852 0.835 0.839 0.835 0.833 0.827 0.828 0.829 0.830</span></span>
-<span><span class="co">## [13] 0.829 0.829 0.835 0.830 0.841 0.841 0.846 0.867 0.872 0.864 0.859 0.864</span></span>
-<span><span class="co">## [25] 0.861 0.858 0.862 0.862 0.860 0.867 0.867 0.870 0.862 0.863 0.866 0.861</span></span>
-<span><span class="co">## [37] 0.863 0.861 0.860 0.863 0.861 0.859 0.859 0.865 0.864 0.863 0.870 0.864</span></span>
-<span><span class="co">## [49] 0.863 0.868</span></span></code></pre>
+<code class="sourceCode R"><span><span class="va">denim_runs</span><span class="op">$</span><span class="va">time</span></span></code></pre></div>
+<pre><code><span><span class="co">## [[1]]</span></span>
+<span><span class="co">##  [1] 799ms 813ms 809ms 811ms 812ms 828ms 811ms 823ms 832ms 825ms 842ms 832ms</span></span>
+<span><span class="co">## [13] 842ms 843ms 843ms 829ms 843ms 845ms 838ms 825ms 812ms 832ms 831ms 829ms</span></span>
+<span><span class="co">## [25] 840ms 841ms 843ms 841ms 842ms 842ms 841ms 842ms 850ms 860ms 858ms 854ms</span></span>
+<span><span class="co">## [37] 853ms 847ms 849ms 848ms 846ms 847ms 837ms 844ms 843ms 853ms 842ms 843ms</span></span>
+<span><span class="co">## [49] 848ms 847ms</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="visualize-output">Visualize output<a class="anchor" aria-label="anchor" href="#visualize-output"></a>
