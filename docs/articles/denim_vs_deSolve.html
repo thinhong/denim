@@ -132,10 +132,13 @@
 <h3 id="run-simulation-with-denim">Run simulation with denim<a class="anchor" aria-label="anchor" href="#run-simulation-with-denim"></a>
 </h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">denim_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim.html">sim</a></span><span class="op">(</span>transitions <span class="op">=</span> <span class="va">transitions</span>, initialValues <span class="op">=</span> <span class="va">initialValues</span>, <span class="va">parameters</span>, simulationDuration <span class="op">=</span> <span class="va">simulationDuration</span>, timeStep <span class="op">=</span> <span class="va">timestep</span><span class="op">)</span></span>
-<span><span class="va">denim_end</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">denim_runtime</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="https://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/sim.html">sim</a></span><span class="op">(</span>transitions <span class="op">=</span> <span class="va">transitions</span>, initialValues <span class="op">=</span> <span class="va">initialValues</span>, <span class="va">parameters</span>, simulationDuration <span class="op">=</span> <span class="va">simulationDuration</span>, timeStep <span class="op">=</span> <span class="va">timestep</span><span class="op">)</span>,</span>
+<span>  iterations <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">denim_runtime</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">denim_runtime</span><span class="op">$</span><span class="va">total_time</span><span class="op">)</span></span>
 <span></span>
+<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim.html">sim</a></span><span class="op">(</span>transitions <span class="op">=</span> <span class="va">transitions</span>, initialValues <span class="op">=</span> <span class="va">initialValues</span>, <span class="va">parameters</span>, simulationDuration <span class="op">=</span> <span class="va">simulationDuration</span>, timeStep <span class="op">=</span> <span class="va">timestep</span><span class="op">)</span></span>
 <span><span class="co"># --- show output</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">[</span><span class="va">mod</span><span class="op">$</span><span class="va">Time</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fl">1</span><span class="op">:</span><span class="va">simulationDuration</span>,<span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##     Time        S        I          R</span></span>
@@ -152,9 +155,16 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">simulationDuration</span>, <span class="va">timestep</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">desolve_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">desolve_runtime</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="https://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/deSolve/man/ode.html" class="external-link">ode</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">initialValues</span>, times <span class="op">=</span> <span class="va">times</span>, parms <span class="op">=</span> <span class="va">parameters</span>, func <span class="op">=</span> <span class="va">transition_func</span><span class="op">)</span>,</span>
+<span>  iterations <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning: Some expressions had a GC in every iteration; so filtering is</span></span>
+<span><span class="co">## disabled.</span></span></code></pre>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">desolve_runtime</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">desolve_runtime</span><span class="op">$</span><span class="va">total_time</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">ode_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/deSolve/man/ode.html" class="external-link">ode</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">initialValues</span>, times <span class="op">=</span> <span class="va">times</span>, parms <span class="op">=</span> <span class="va">parameters</span>, func <span class="op">=</span> <span class="va">transition_func</span><span class="op">)</span></span>
-<span><span class="va">desolve_end</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># --- show output</span></span>
 <span><span class="va">ode_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">ode_mod</span><span class="op">)</span></span>
@@ -170,7 +180,7 @@
 <div class="section level3">
 <h3 id="execution-time-comparison">Execution time comparison<a class="anchor" aria-label="anchor" href="#execution-time-comparison"></a>
 </h3>
-<p><code>denim</code> takes approximately 4.04 times as long as
+<p><code>denim</code> takes approximately 4.3 times as long as
 <code>deSolve</code> to compute the result with the given specifications
 .</p>
 <p>This significant difference can be attributed to the difference in
@@ -185,7 +195,7 @@ timestep grows smaller (in <code>O(n)</code> time complexity).</p>
 <div class="section level2">
 <h2 id="plot-the-result">Plot the result<a class="anchor" aria-label="anchor" href="#plot-the-result"></a>
 </h2>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># increase timestep before plotting</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="va">mod</span><span class="op">[</span><span class="va">mod</span><span class="op">$</span><span class="va">Time</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">simulationDuration</span>, <span class="fl">0.2</span><span class="op">)</span>,<span class="op">]</span></span>
 <span><span class="va">ode_mod</span> <span class="op">&lt;-</span> <span class="va">ode_mod</span><span class="op">[</span><span class="va">ode_mod</span><span class="op">$</span><span class="va">time</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">simulationDuration</span>, <span class="fl">0.2</span><span class="op">)</span>,<span class="op">]</span></span></code></pre></div>
@@ -198,8 +208,8 @@ timestep grows smaller (in <code>O(n)</code> time complexity).</p>
 <h3 id="implementation-using-desolve">Implementation using deSolve<a class="anchor" aria-label="anchor" href="#implementation-using-desolve"></a>
 </h3>
 <details><summary>
-model definition and runtime using <code>deSolve</code>
-</summary><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+model definition <code>deSolve</code>
+</summary><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://desolve.r-forge.r-project.org/" class="external-link">deSolve</a></span><span class="op">)</span></span>
 <span><span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>scale_I <span class="op">=</span> <span class="fl">4</span>, shape_I<span class="op">=</span><span class="fl">2</span>,</span>
 <span>                scale_R <span class="op">=</span> <span class="fl">3</span>, shape_R <span class="op">=</span> <span class="fl">2</span>,</span>
@@ -244,7 +254,7 @@ model definition and runtime using <code>deSolve</code>
 </h3>
 <details><summary>
 model definition in <code>denim</code>
-</summary><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">denim_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="st">"S -&gt; E"</span> <span class="op">=</span> <span class="st">"(R0/tr) * timeStepDur * S * (I/N)"</span>, <span class="co"># formulate according that of uSEIR method</span></span>
 <span>  <span class="st">"E -&gt; I"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span>scale <span class="op">=</span> <span class="fl">4</span>, shape <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>

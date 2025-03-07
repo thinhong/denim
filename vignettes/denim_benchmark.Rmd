@@ -106,7 +106,7 @@ else:
 
 </details>
 
-Run time for uSEIR approach, Python implementation
+Run time for uSEIR approach, Python implementation (in seconds)
 
 ```{python}
 python_runs
@@ -159,7 +159,7 @@ to_r_df = pa.Table.from_pandas(df)
 
 </details>
 
-Run time for uSEIR approach, Cython implementation
+Run time for uSEIR approach, Cython implementation (in seconds)
 
 ```{python}
 cython_runs
@@ -206,15 +206,9 @@ transition_func <- function(t, state, param){
 times <- seq(0, sim_duration, 1)
 
 # ------ Compute run time ------
-desolve_runs <- sapply(1:total_runs,
-  function(i){
-    time <- system.time(
-      ode(y = initialValues, times = times, parms = parameters, func = transition_func)
-    )
-    time[["elapsed"]]
-
-  }
-
+desolve_runs <- bench::mark(
+  ode(y = initialValues, times = times, parms = parameters, func = transition_func),
+  iterations = total_runs
 )
 
 ode_mod <- ode(y = initialValues, times = times, parms = parameters, func = transition_func)
@@ -222,13 +216,12 @@ ode_mod <- ode(y = initialValues, times = times, parms = parameters, func = tran
 ode_mod <- as.data.frame(ode_mod)
 ```
 
-```{=html}
 </details>
-```
+
 Run time for `deSolve` implementation
 
 ```{r}
-desolve_runs
+desolve_runs$time
 ```
 
 ## denim
@@ -252,16 +245,14 @@ parameters <- c(R0 = 3.5,
                 N = 1e6, timeStepDur = 0.01)
 
 # ---- Get runtimes ----
-denim_runs <- sapply(1:total_runs,
-  function (i) {
-    time <- system.time(
-      sim(transitions = denim_model,
+denim_runs <- bench::mark(
+  sim(transitions = denim_model,
                      initialValues = initialValues,
                      parameters = parameters,
-                     simulationDuration = sim_duration, timeStep = 0.01)
-    )
-    return(time[["elapsed"]])
-  })
+                     simulationDuration = sim_duration, timeStep = 0.01),
+  iterations = total_runs
+)
+
 
 # ---- Get output ----
 denim_out <- sim(transitions = denim_model, 
@@ -275,7 +266,7 @@ denim_out <- sim(transitions = denim_model,
 Run time for `denim` implementation
 
 ```{r}
-denim_runs
+denim_runs$time
 ```
 
 ## Visualize output
@@ -332,10 +323,10 @@ plot(x = 1:total_runs, y = py$cython_runs, type = "p", col = "blueviolet",
      main = paste0("Run time for ", total_runs, " runs"),
      xlab = "Run", ylab = "Run time (in seconds)")
 lines(x = 1:total_runs, y = rep(median(py$cython_runs), total_runs), col = "blueviolet", lty = 2)
-points(x = 1:total_runs, y = denim_runs, col = "red")
-lines(x = 1:total_runs, y = rep(median(denim_runs), total_runs), col = "red", lty = 2)
-points(x = 1:total_runs, y = desolve_runs, col = "darkgreen")
-lines(x = 1:total_runs, y = rep(median(desolve_runs), total_runs), col = "darkgreen", lty = 2)
+points(x = 1:total_runs, y = as.numeric(denim_runs$time[[1]]), col = "red")
+lines(x = 1:total_runs, y = rep(median(denim_runs$time[[1]]), total_runs), col = "red", lty = 2)
+points(x = 1:total_runs, y = as.numeric(desolve_runs$time[[1]]), col = "darkgreen")
+lines(x = 1:total_runs, y = rep(median(desolve_runs$time[[1]]), total_runs), col = "darkgreen", lty = 2)
 legend(x = 53, y = 0.9,
        legend = c("uSEIR_cython", "denim", "deSolve"), 
        col = c("blueviolet", "red", "darkgreen"),

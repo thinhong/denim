@@ -44,10 +44,13 @@ transition_func <- function(t, state, param){
 ### Run simulation with denim
 
 ```{r}
-denim_start <- Sys.time()
-mod <- sim(transitions = transitions, initialValues = initialValues, parameters, simulationDuration = simulationDuration, timeStep = timestep)
-denim_end <- Sys.time()
+denim_runtime <- bench::mark(
+  sim(transitions = transitions, initialValues = initialValues, parameters, simulationDuration = simulationDuration, timeStep = timestep),
+  iterations = 1
+)
+denim_runtime <- as.numeric(denim_runtime$total_time)
 
+mod <- sim(transitions = transitions, initialValues = initialValues, parameters, simulationDuration = simulationDuration, timeStep = timestep)
 # --- show output
 head(mod[mod$Time %in% 1:simulationDuration,])
 ```
@@ -57,9 +60,13 @@ head(mod[mod$Time %in% 1:simulationDuration,])
 ```{r}
 times <- seq(0, simulationDuration, timestep)
 
-desolve_start <- Sys.time()
+desolve_runtime <- bench::mark(
+  ode(y = initialValues, times = times, parms = parameters, func = transition_func),
+  iterations = 1
+)
+desolve_runtime <- as.numeric(desolve_runtime$total_time)
+
 ode_mod <- ode(y = initialValues, times = times, parms = parameters, func = transition_func)
-desolve_end <- Sys.time()
 
 # --- show output
 ode_mod <- as.data.frame(ode_mod)
@@ -69,8 +76,7 @@ head(ode_mod[ode_mod$time %in% 1:simulationDuration, c("time", "S", "I", "R")])
 ### Execution time comparison
 
 ```{r include=FALSE}
-time_diff <- round(as.numeric(difftime(denim_end, denim_start, units="sec")) /
-                     as.numeric(difftime(desolve_end, desolve_start, units="sec")), digits = 2)
+time_diff <- round(denim_runtime / desolve_runtime, digits = 2)
 ```
 
 `denim` takes approximately `r time_diff` times as long as `deSolve` to compute the result with the given specifications .
@@ -113,7 +119,7 @@ legend(x = 225, y = 250,legend=c("denim", "deSolve"), col = c("#4876ff", "black"
 ### Implementation using deSolve
 
 <details>
-  <summary> model definition and runtime using `deSolve` </summary>
+  <summary> model definition `deSolve` </summary>
 ```{r }
 library(deSolve)
 parameters <- c(scale_I = 4, shape_I=2,
