@@ -48,7 +48,6 @@ $$S_{t+1} - S_{t} = -\lambda S_{t} = -\frac{\beta I_{t}}{N}S_{t}$$ $$I_{t+1} - I
 Usually to solve the model easier we make an assumption that the recovery rate $\gamma$ is constant, this will leads to an exponentially distributed length of stay i.e most individuals recover after 1 day being infected.
 
 ```{r, echo=FALSE}
-
 rates <- c(0.5, 1, 1.5)
 x <- seq(0, 5, 0.001)
 y <- dexp(x = x, rate = rates[1])
@@ -188,7 +187,7 @@ DiagrammeR::grViz("digraph {
 
 We want the recovery rate of individuals who had been infected for 1 day differ from the recovery rate of 2-day infected patients. So rather than using one compartment for infected (I), we define multiple infected sub-compartments. The number of sub-compartments depends on the maximum day we expect all infected individuals would be recovered.
 
-For example, if we expect a disease with a maximum 4 days of infection, we will end up with 4 sub-compartments. Each sub-compartment has its own recovery rate $\gamma_{1}$, $\gamma_{2}$, $\gamma_{3}$, $\gamma_{4}$. At day 4 it is certain that the patient will recover (because we assume that this disease has a maximum 4 days of infection), $\gamma_{4} = 1$.
+For example, if we expect a disease with a maximum 4 days of infection, we will end up with 4 sub-compartments. Each sub-compartment has its own recovery rate $\gamma_{1}$, $\gamma_{2}$, $\gamma_{3}$, $\gamma_{4}$. At day 4 it is certain that the patient will recover (because we assume that this disease has a maximum 4 days of infection), $\gamma_{4} = 1$. Note that the initial population is always assigned to the first compartment (for example, if the initial value for I compartment is `I = 1`, denim will initialize `I1 = 1` while `I2 = I3 = I4 = 0`).
 
 <center>
 

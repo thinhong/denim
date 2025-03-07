@@ -111,6 +111,8 @@ denim_initialValues <- c(S = 999, I = 1, R=0)
 denim_parameters <- c(beta = 0.3, N = 1000, timestepDur=0.01) 
 ```
 
+***Initialization of sub-compartments*****:** when there are multiple sub-compartments (e.g., compartment `I` consist of `I1` and `I2` sub-compartments), the initial population is always assigned to the first sub-compartment. In our example, since `I = 1`, denim will assign `I1 = 1` and `I2 = 0`.
+
 ### Simulation
 
 Lastly, users need to define the simulation duration and time step for `denim` to run. Unlike `deSolve` which takes a time sequence, `denim` only require the [simulation duration]{.underline} and [time step.]{.underline}
