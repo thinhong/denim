@@ -210,6 +210,12 @@ We also need to specify the value for <code>timestepDur</code> here.</p>
 <code class="sourceCode R"><span><span class="co"># remove I1, I2 compartments</span></span>
 <span><span class="va">denim_initialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>S <span class="op">=</span> <span class="fl">999</span>, I <span class="op">=</span> <span class="fl">1</span>, R<span class="op">=</span><span class="fl">0</span><span class="op">)</span></span>
 <span><span class="va">denim_parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>beta <span class="op">=</span> <span class="fl">0.3</span>, N <span class="op">=</span> <span class="fl">1000</span>, timestepDur<span class="op">=</span><span class="fl">0.01</span><span class="op">)</span> </span></code></pre></div>
+<p><strong><em>Initialization of sub-compartments</em>:</strong> when
+there are multiple sub-compartments (e.g., compartment <code>I</code>
+consist of <code>I1</code> and <code>I2</code> sub-compartments), the
+initial population is always assigned to the first sub-compartment. In
+our example, since <code>I = 1</code>, denim will assign
+<code>I1 = 1</code> and <code>I2 = 0</code>.</p>
 </div>
 <div class="section level3">
 <h3 id="simulation">Simulation<a class="anchor" aria-label="anchor" href="#simulation"></a>
