@@ -24,6 +24,12 @@ An R package for building and simulating deterministic discrete-time compartment
 
 ## Installation
 
+You can install `denim` from [CRAN](https://cran.r-project.org) with:
+
+``` r
+install.packages("denim")
+```
+
 You can install the development version of denim from [GitHub](https://github.com/) with:
 
 ``` r
@@ -33,7 +39,7 @@ devtools::install_github("thinhong/denim")
 
 ## Example
 
-This is a basic example to illustrate the specification of a simple SIR model, which contains three compartments susceptible (S), infected (I) and recovered (R). The recovery probabilities of infected individuals are gamma distributed in this example:
+This is a basic example to illustrate the specification of a simple SIR epidemiological model, which contains three compartments: susceptible (S), infected (I) and recovered (R). The durations spent in the I compartment are gamma distributed and this is specified on the `I -> R` transition:
 
 ```{r example}
 library(denim)
