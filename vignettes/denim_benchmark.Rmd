@@ -108,9 +108,11 @@ else:
 
 Run time for uSEIR approach, Python implementation (in seconds)
 
-```{python}
-python_runs
+```{r}
+py$python_runs
 ```
+
+Median run time for uSEIR approach, Python implementation: `r median(py$python_runs)` seconds
 
 ### Cython implementation
 
@@ -161,21 +163,26 @@ to_r_df = pa.Table.from_pandas(df)
 
 Run time for uSEIR approach, Cython implementation (in seconds)
 
-```{python}
-cython_runs
+```{r}
+py$cython_runs
 ```
 
+Median run time for uSEIR approach, Cython implementation: `r median(py$cython_runs)` seconds
+
 ## deSolve
+
+### Model in R
 
 ```{=html}
 <details>
   <summary>Code for running SEIR in <code>deSolve</code></summary>
 ```
+
 ```{r}
 library(deSolve)
 parameters <- c(scale_I = 4, shape_I=2,
                 scale_R = 3, shape_R = 2,
-                timeStepDur = 1, R0 = 3.5, N = 1e6) 
+                R0 = 3.5, N = 1e6) 
 initialValues <- c(S = 999999, E1 = 1,
                    E2 = 0, E = 0, I1=0, 
                    I2=0, I=0, R=0
@@ -222,7 +229,87 @@ Run time for `deSolve` implementation
 
 ```{r}
 desolve_runs$time
+
 ```
+Median run time for deSolve, with model defined in R: `r desolve_runs$median` seconds
+
+### Model in C
+
+```{=html}
+<details>
+  <summary>Code for running model defined in C</summary>
+```
+```{r}
+# compile model
+# system("R CMD SHLIB supplements/desolve_mod/benchmark_mod.c")
+
+# compiled file on Windows will have .dll extension instead of .so
+dyn.load("../supplements/desolve_mod/benchmark_mod.so")
+
+initialValues <- c(S = 999999, E1 = 1,
+                   E2 = 0, E = 0, I1=0, 
+                   I2=0, I=0, R=0
+                   )
+
+parameters <- c(R0 = 3.5, scale_I = 4, shape_I=2,
+                scale_R = 3, shape_R = 2, N = 1e6) 
+
+deSolve_c_runs <- bench::mark(
+  # run model defined in C
+  ode(initialValues, times, func = "derivs", parms = parameters,
+  dllname = "benchmark_mod", initfunc = "initmod"),
+  iterations = total_runs
+)
+
+dyn.unload("../supplements/desolve_mod/benchmark_mod.so")
+```
+
+</details>
+
+Run time for `deSolve` with model defined in C
+
+```{r}
+deSolve_c_runs$time
+```
+Median run time for deSolve, with model defined in C: `r deSolve_c_runs$median` seconds
+
+### Model in Fortran
+
+```{=html}
+<details>
+  <summary>Code for running model defined in C</summary>
+```
+```{r}
+# compile model in fortran
+# system("R CMD SHLIB supplements/desolve_mod/benchmark_mod_fortran.f")
+
+dyn.load("../supplements/desolve_mod/benchmark_mod_fortran.so")
+
+initialValues <- c(S = 999999, E1 = 1,
+                   E2 = 0, E = 0, I1=0, 
+                   I2=0, I=0, R=0
+                   )
+
+parameters <- c(R0 = 3.5, scale_I = 4, shape_I=2,
+                scale_R = 3, shape_R = 2, N = 1e6) 
+
+deSolve_fortran_runs <- bench::mark(
+  # run model defined in C
+  ode(initialValues, times, func = "derivs", parms = parameters,
+  dllname = "benchmark_mod_fortran", initfunc = "initmod"),
+  iterations = total_runs
+)
+
+dyn.unload("../supplements/desolve_mod/benchmark_mod_fortran.so")
+```
+
+```{=html}
+</details>
+```
+```{r}
+deSolve_fortran_runs$time
+```
+Median run time for deSolve, with model defined in Fortran: `r deSolve_fortran_runs$median` seconds
 
 ## denim
 
@@ -269,6 +356,8 @@ Run time for `denim` implementation
 denim_runs$time
 ```
 
+Median run time for denim: `r denim_runs$median` seconds
+
 ## Visualize output
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
@@ -281,6 +370,7 @@ df <- as.data.frame(py$to_r_df)
 rescaled_denim <- denim_out
 rescaled_denim[, c("S","E", "I", "R")] <- denim_out[, c("S","E", "I", "R")]/1e6
 
+# compute prop for deSolve output as well
 rescaled_desolve <- ode_mod
 rescaled_desolve[, c("S","E", "I", "R")] <- rescaled_desolve[, c("S","E", "I", "R")]/1e6
 
@@ -290,7 +380,7 @@ plot_seir_util <- function(df, mod_name="denim", time_col = "Time",
                            ylab = "Proportion",
                            x_legend=150, y_legend=0.7){
   plot(x = df[[time_col]], y = df[["S"]],
-       xlab = "time", ylab = "Prop", 
+       xlab = "time", ylab = "Prop", ylim = c(0, 1),
        main=paste0(mod_name, " output"), col = "#4876ff", type="l", lwd=2)
   lines(df[[time_col]], df[["E"]], lwd=2, col = "blueviolet")
   lines(df[[time_col]], df[["I"]], lwd=2, col = "red")
@@ -316,7 +406,7 @@ plot_seir_util(df, time_col = "t", mod_name = "uSEIR")
 The following plot shows run time for 50 runs (with horizontal line showing median run time) of each approach.
 
 ```{r echo=FALSE}
-par(xpd=T, mar=par()$mar+c(0,0,0,6))
+par(xpd=T, mar=par()$mar+c(0,0,0,6.5))
 
 plot(x = 1:total_runs, y = py$cython_runs, type = "p", col = "blueviolet",
      ylim = c(0,1.2),
@@ -328,7 +418,7 @@ lines(x = 1:total_runs, y = rep(median(denim_runs$time[[1]]), total_runs), col =
 points(x = 1:total_runs, y = as.numeric(desolve_runs$time[[1]]), col = "darkgreen")
 lines(x = 1:total_runs, y = rep(median(desolve_runs$time[[1]]), total_runs), col = "darkgreen", lty = 2)
 legend(x = 53, y = 0.9,
-       legend = c("uSEIR_cython", "denim", "deSolve"), 
+       legend = c("uSEIR (Cython)", "denim", "deSolve (model in R)"), 
        col = c("blueviolet", "red", "darkgreen"),
        lty = 1, cex = 0.7)
 

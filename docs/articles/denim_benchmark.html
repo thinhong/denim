@@ -119,7 +119,7 @@ et al. 2021)</span></p>
 load useir implementation in pure Python
 </summary><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a></span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning: package 'reticulate' was built under R version 4.3.1</span></span></code></pre>
+<pre><code><span><span class="co">## Warning: package 'reticulate' was built under R version 4.3.3</span></span></code></pre>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># use_python("/opt/anaconda3/envs/bnn/bin/python", required = TRUE)</span></span>
 <span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/use_python.html" class="external-link">use_condaenv</a></span><span class="op">(</span>condaenv<span class="op">=</span><span class="st">'bnn'</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -166,8 +166,17 @@ Code for running uSEIR in pure Python
 <span id="cb5-33"><a href="#cb5-33" tabindex="-1"></a><span class="co"># plot_useir((df,), ('G',), T = 'uSEIR', figsize=(14,8))</span></span>
 <span id="cb5-34"><a href="#cb5-34" tabindex="-1"></a><span class="co"># print(f'python solve_seir call: dr = {end-start}')</span></span></code></pre></div>
 </details><p>Run time for uSEIR approach, Python implementation (in seconds)</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>python_runs</span></code></pre></div>
-<pre><code><span><span class="co">## [54.79370188713074, 54.230366945266724, 54.618630170822144, 54.13475704193115, 54.73439383506775, 54.3592848777771, 54.4839141368866, 54.568207025527954, 53.2656729221344, 53.35437202453613, 53.4455087184906, 53.314252853393555, 53.51092195510864, 53.1987829208374, 53.92492699623108, 53.84889101982117, 54.05377793312073, 53.669222831726074, 53.65536117553711, 53.5451979637146, 53.73345422744751, 53.886900186538696, 54.239879846572876, 54.19460391998291, 53.645427942276, 53.55217409133911, 53.6606080532074, 53.67430400848389, 53.593971967697144, 53.655033826828, 54.32232093811035, 53.98363208770752, 53.53084206581116, 53.79021191596985, 53.85689187049866, 53.453129053115845, 53.61042594909668, 53.53293991088867, 54.00833296775818, 54.11179971694946, 53.94759678840637, 53.619515895843506, 53.80676245689392, 53.743643045425415, 53.68473672866821, 53.63701105117798, 53.59615421295166, 53.817927837371826, 44.74661207199097, 44.77127194404602]</span></span></code></pre>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">py</span><span class="op">$</span><span class="va">python_runs</span></span></code></pre></div>
+<pre><code><span><span class="co">##  [1] 54.79370 54.23037 54.61863 54.13476 54.73439 54.35928 54.48391 54.56821</span></span>
+<span><span class="co">##  [9] 53.26567 53.35437 53.44551 53.31425 53.51092 53.19878 53.92493 53.84889</span></span>
+<span><span class="co">## [17] 54.05378 53.66922 53.65536 53.54520 53.73345 53.88690 54.23988 54.19460</span></span>
+<span><span class="co">## [25] 53.64543 53.55217 53.66061 53.67430 53.59397 53.65503 54.32232 53.98363</span></span>
+<span><span class="co">## [33] 53.53084 53.79021 53.85689 53.45313 53.61043 53.53294 54.00833 54.11180</span></span>
+<span><span class="co">## [41] 53.94760 53.61952 53.80676 53.74364 53.68474 53.63701 53.59615 53.81793</span></span>
+<span><span class="co">## [49] 44.74661 44.77127</span></span></code></pre>
+<p>Median run time for uSEIR approach, Python implementation: 53.7090955
+seconds</p>
 </div>
 <div class="section level3">
 <h3 id="cython-implementation">Cython implementation<a class="anchor" aria-label="anchor" href="#cython-implementation"></a>
@@ -463,20 +472,33 @@ Code for running uSEIR in Cython (C backend)
 <span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co"># convert to pyarrow table for easy conversion to R data.frames</span></span>
 <span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>to_r_df <span class="op">=</span> pa.Table.from_pandas(df)</span></code></pre></div>
 </details><p>Run time for uSEIR approach, Cython implementation (in seconds)</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>cython_runs</span></code></pre></div>
-<pre><code><span><span class="co">## [0.40996623039245605, 0.4125659465789795, 0.41011977195739746, 0.40889596939086914, 0.41274404525756836, 0.40564894676208496, 0.40793800354003906, 0.40627288818359375, 0.4075357913970947, 0.41152000427246094, 0.4128100872039795, 0.4082040786743164, 0.40472984313964844, 0.4111061096191406, 0.4098081588745117, 0.4093639850616455, 0.410228967666626, 0.4102897644042969, 0.40852880477905273, 0.4078531265258789, 0.410430908203125, 0.41184329986572266, 0.41551995277404785, 0.41220808029174805, 0.4116659164428711, 0.4137148857116699, 0.41350412368774414, 0.41316890716552734, 0.4129369258880615, 0.41222500801086426, 0.41141724586486816, 0.41358089447021484, 0.4100029468536377, 0.4097621440887451, 0.40712499618530273, 0.4073171615600586, 0.41047000885009766, 0.4189000129699707, 0.4142899513244629, 0.4130129814147949, 0.41054201126098633, 0.41358304023742676, 0.4138309955596924, 0.41342997550964355, 0.4147050380706787, 0.4130539894104004, 0.4137589931488037, 0.41797685623168945, 0.41068315505981445, 0.41430187225341797]</span></span></code></pre>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">py</span><span class="op">$</span><span class="va">cython_runs</span></span></code></pre></div>
+<pre><code><span><span class="co">##  [1] 0.4081547 0.4145248 0.4115663 0.4107938 0.4103262 0.4193149 0.4170411</span></span>
+<span><span class="co">##  [8] 0.4241791 0.4211700 0.4172759 0.4152267 0.4141960 0.4105721 0.4113030</span></span>
+<span><span class="co">## [15] 0.4091239 0.4162629 0.4119470 0.4095368 0.4096603 0.4062281 0.4068928</span></span>
+<span><span class="co">## [22] 0.4074152 0.4069958 0.4032819 0.4009092 0.4018691 0.4033310 0.4028161</span></span>
+<span><span class="co">## [29] 0.4023368 0.4104071 0.4114213 0.4117439 0.4253800 0.4138129 0.4080679</span></span>
+<span><span class="co">## [36] 0.4227841 0.4102170 0.4109051 0.4219439 0.4190531 0.4230320 0.4170420</span></span>
+<span><span class="co">## [43] 0.4159870 0.4140022 0.4180233 0.4103088 0.4142401 0.4103670 0.4150410</span></span>
+<span><span class="co">## [50] 0.4198253</span></span></code></pre>
+<p>Median run time for uSEIR approach, Cython implementation: 0.4114938
+seconds</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="desolve">deSolve<a class="anchor" aria-label="anchor" href="#desolve"></a>
 </h2>
+<div class="section level3">
+<h3 id="model-in-r">Model in R<a class="anchor" aria-label="anchor" href="#model-in-r"></a>
+</h3>
 <details><summary>Code for running SEIR in <code>deSolve</code></summary><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://desolve.r-forge.r-project.org/" class="external-link">deSolve</a></span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning: package 'deSolve' was built under R version 4.3.1</span></span></code></pre>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>scale_I <span class="op">=</span> <span class="fl">4</span>, shape_I<span class="op">=</span><span class="fl">2</span>,</span>
 <span>                scale_R <span class="op">=</span> <span class="fl">3</span>, shape_R <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>                timeStepDur <span class="op">=</span> <span class="fl">1</span>, R0 <span class="op">=</span> <span class="fl">3.5</span>, N <span class="op">=</span> <span class="fl">1e6</span><span class="op">)</span> </span>
+<span>                R0 <span class="op">=</span> <span class="fl">3.5</span>, N <span class="op">=</span> <span class="fl">1e6</span><span class="op">)</span> </span>
 <span><span class="va">initialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>S <span class="op">=</span> <span class="fl">999999</span>, E1 <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                   E2 <span class="op">=</span> <span class="fl">0</span>, E <span class="op">=</span> <span class="fl">0</span>, I1<span class="op">=</span><span class="fl">0</span>, </span>
 <span>                   I2<span class="op">=</span><span class="fl">0</span>, I<span class="op">=</span><span class="fl">0</span>, R<span class="op">=</span><span class="fl">0</span></span>
@@ -519,19 +541,96 @@ Code for running uSEIR in Cython (C backend)
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">desolve_runs</span><span class="op">$</span><span class="va">time</span></span></code></pre></div>
 <pre><code><span><span class="co">## [[1]]</span></span>
-<span><span class="co">##  [1]  3.78ms  3.44ms  3.63ms  8.62ms  9.69ms  4.66ms  3.98ms  3.84ms  3.69ms</span></span>
-<span><span class="co">## [10]  3.82ms  6.56ms 10.06ms  5.54ms  4.04ms  3.8ms   3.42ms  3.44ms  3.51ms</span></span>
-<span><span class="co">## [19] 10.08ms  7.24ms  4.11ms  3.6ms   3.52ms  3.36ms  3.39ms  7.33ms  8.26ms</span></span>
-<span><span class="co">## [28]  3.9ms   3.47ms  3.38ms  3.41ms  3.37ms  5.33ms  7.7ms   4.5ms   3.62ms</span></span>
-<span><span class="co">## [37]  3.36ms  3.43ms  3.28ms  3.44ms  8.25ms  5.6ms   3.86ms  3.42ms  3.42ms</span></span>
-<span><span class="co">## [46]  3.35ms  3.66ms  7.12ms  8.21ms  4.36ms</span></span></code></pre>
+<span><span class="co">##  [1]  3.33ms  3.17ms  3.36ms  3.28ms  5.43ms  3.18ms  3.13ms  3.08ms  3.09ms</span></span>
+<span><span class="co">## [10]  3.08ms  3.14ms  3.22ms  3.16ms  4.71ms  3.12ms  3.05ms  3.03ms  3.06ms</span></span>
+<span><span class="co">## [19]  3.05ms  3.06ms  3.07ms  3.08ms  4.57ms  3.1ms   3.1ms   3.07ms  3.06ms</span></span>
+<span><span class="co">## [28]  3.06ms  3.08ms  3.1ms   3.11ms  4.55ms  3.07ms  3.06ms  3.05ms  3.08ms</span></span>
+<span><span class="co">## [37]  3.1ms   3.15ms  3.11ms  3.1ms  23.66ms  3.21ms  3.13ms  3.14ms  3.2ms </span></span>
+<span><span class="co">## [46]  3.14ms  3.13ms  3.19ms  3.21ms  4.99ms</span></span></code></pre>
+<p>Median run time for deSolve, with model defined in R: 0.0031036
+seconds</p>
+</div>
+<div class="section level3">
+<h3 id="model-in-c">Model in C<a class="anchor" aria-label="anchor" href="#model-in-c"></a>
+</h3>
+<details><summary>Code for running model defined in C</summary><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># compile model</span></span>
+<span><span class="co"># system("R CMD SHLIB supplements/desolve_mod/benchmark_mod.c")</span></span>
+<span></span>
+<span><span class="co"># compiled file on Windows will have .dll extension instead of .so</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dynload.html" class="external-link">dyn.load</a></span><span class="op">(</span><span class="st">"../supplements/desolve_mod/benchmark_mod.so"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">initialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>S <span class="op">=</span> <span class="fl">999999</span>, E1 <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                   E2 <span class="op">=</span> <span class="fl">0</span>, E <span class="op">=</span> <span class="fl">0</span>, I1<span class="op">=</span><span class="fl">0</span>, </span>
+<span>                   I2<span class="op">=</span><span class="fl">0</span>, I<span class="op">=</span><span class="fl">0</span>, R<span class="op">=</span><span class="fl">0</span></span>
+<span>                   <span class="op">)</span></span>
+<span></span>
+<span><span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>R0 <span class="op">=</span> <span class="fl">3.5</span>, scale_I <span class="op">=</span> <span class="fl">4</span>, shape_I<span class="op">=</span><span class="fl">2</span>,</span>
+<span>                scale_R <span class="op">=</span> <span class="fl">3</span>, shape_R <span class="op">=</span> <span class="fl">2</span>, N <span class="op">=</span> <span class="fl">1e6</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="va">deSolve_c_runs</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="https://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span></span>
+<span>  <span class="co"># run model defined in C</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/deSolve/man/ode.html" class="external-link">ode</a></span><span class="op">(</span><span class="va">initialValues</span>, <span class="va">times</span>, func <span class="op">=</span> <span class="st">"derivs"</span>, parms <span class="op">=</span> <span class="va">parameters</span>,</span>
+<span>  dllname <span class="op">=</span> <span class="st">"benchmark_mod"</span>, initfunc <span class="op">=</span> <span class="st">"initmod"</span><span class="op">)</span>,</span>
+<span>  iterations <span class="op">=</span> <span class="va">total_runs</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dynload.html" class="external-link">dyn.unload</a></span><span class="op">(</span><span class="st">"../supplements/desolve_mod/benchmark_mod.so"</span><span class="op">)</span></span></code></pre></div>
+</details><p>Run time for <code>deSolve</code> with model defined in C</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">deSolve_c_runs</span><span class="op">$</span><span class="va">time</span></span></code></pre></div>
+<pre><code><span><span class="co">## [[1]]</span></span>
+<span><span class="co">##  [1] 164µs 200µs 140µs 174µs 137µs 134µs 156µs 127µs 151µs 127µs 132µs 156µs</span></span>
+<span><span class="co">## [13] 130µs 149µs 125µs 125µs 147µs 119µs 141µs 120µs 122µs 142µs 120µs 142µs</span></span>
+<span><span class="co">## [25] 120µs 121µs 144µs 120µs 143µs 123µs 123µs 146µs 120µs 143µs 125µs 120µs</span></span>
+<span><span class="co">## [37] 144µs 120µs 148µs 122µs 122µs 143µs 119µs 146µs 119µs 119µs 145µs 128µs</span></span>
+<span><span class="co">## [49] 143µs 122µs</span></span></code></pre>
+<p>Median run time for deSolve, with model defined in C: 1.30626^{-4}
+seconds</p>
+</div>
+<div class="section level3">
+<h3 id="model-in-fortran">Model in Fortran<a class="anchor" aria-label="anchor" href="#model-in-fortran"></a>
+</h3>
+<details><summary>Code for running model defined in C</summary><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># compile model in fortran</span></span>
+<span><span class="co"># system("R CMD SHLIB supplements/desolve_mod/benchmark_mod_fortran.f")</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dynload.html" class="external-link">dyn.load</a></span><span class="op">(</span><span class="st">"../supplements/desolve_mod/benchmark_mod_fortran.so"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">initialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>S <span class="op">=</span> <span class="fl">999999</span>, E1 <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                   E2 <span class="op">=</span> <span class="fl">0</span>, E <span class="op">=</span> <span class="fl">0</span>, I1<span class="op">=</span><span class="fl">0</span>, </span>
+<span>                   I2<span class="op">=</span><span class="fl">0</span>, I<span class="op">=</span><span class="fl">0</span>, R<span class="op">=</span><span class="fl">0</span></span>
+<span>                   <span class="op">)</span></span>
+<span></span>
+<span><span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>R0 <span class="op">=</span> <span class="fl">3.5</span>, scale_I <span class="op">=</span> <span class="fl">4</span>, shape_I<span class="op">=</span><span class="fl">2</span>,</span>
+<span>                scale_R <span class="op">=</span> <span class="fl">3</span>, shape_R <span class="op">=</span> <span class="fl">2</span>, N <span class="op">=</span> <span class="fl">1e6</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="va">deSolve_fortran_runs</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="https://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span></span>
+<span>  <span class="co"># run model defined in C</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/deSolve/man/ode.html" class="external-link">ode</a></span><span class="op">(</span><span class="va">initialValues</span>, <span class="va">times</span>, func <span class="op">=</span> <span class="st">"derivs"</span>, parms <span class="op">=</span> <span class="va">parameters</span>,</span>
+<span>  dllname <span class="op">=</span> <span class="st">"benchmark_mod_fortran"</span>, initfunc <span class="op">=</span> <span class="st">"initmod"</span><span class="op">)</span>,</span>
+<span>  iterations <span class="op">=</span> <span class="va">total_runs</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dynload.html" class="external-link">dyn.unload</a></span><span class="op">(</span><span class="st">"../supplements/desolve_mod/benchmark_mod_fortran.so"</span><span class="op">)</span></span></code></pre></div>
+</details><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">deSolve_fortran_runs</span><span class="op">$</span><span class="va">time</span></span></code></pre></div>
+<pre><code><span><span class="co">## [[1]]</span></span>
+<span><span class="co">##  [1] 366µs 195µs 218µs 179µs 177µs 204µs 172µs 190µs 170µs 174µs 191µs 173µs</span></span>
+<span><span class="co">## [13] 191µs 170µs 171µs 188µs 171µs 189µs 168µs 172µs 194µs 169µs 190µs 168µs</span></span>
+<span><span class="co">## [25] 168µs 190µs 165µs 196µs 165µs 168µs 190µs 174µs 189µs 167µs 168µs 188µs</span></span>
+<span><span class="co">## [37] 171µs 189µs 171µs 168µs 199µs 166µs 197µs 169µs 162µs 183µs 168µs 183µs</span></span>
+<span><span class="co">## [49] 163µs 162µs</span></span></code></pre>
+<p>Median run time for deSolve, with model defined in Fortran:
+1.734505^{-4} seconds</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="denim">denim<a class="anchor" aria-label="anchor" href="#denim"></a>
 </h2>
 <details><summary>
 Code for running SEIR in <code>denim</code>
-</summary><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://drthinhong.com/denim/" class="external-link">denim</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">denim_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -561,26 +660,27 @@ Code for running SEIR in <code>denim</code>
 <span>                     parameters <span class="op">=</span> <span class="va">parameters</span>,</span>
 <span>                     simulationDuration <span class="op">=</span> <span class="va">sim_duration</span>, timeStep <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span></code></pre></div>
 </details><p>Run time for <code>denim</code> implementation</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">denim_runs</span><span class="op">$</span><span class="va">time</span></span></code></pre></div>
 <pre><code><span><span class="co">## [[1]]</span></span>
-<span><span class="co">##  [1] 799ms 813ms 809ms 811ms 812ms 828ms 811ms 823ms 832ms 825ms 842ms 832ms</span></span>
-<span><span class="co">## [13] 842ms 843ms 843ms 829ms 843ms 845ms 838ms 825ms 812ms 832ms 831ms 829ms</span></span>
-<span><span class="co">## [25] 840ms 841ms 843ms 841ms 842ms 842ms 841ms 842ms 850ms 860ms 858ms 854ms</span></span>
-<span><span class="co">## [37] 853ms 847ms 849ms 848ms 846ms 847ms 837ms 844ms 843ms 853ms 842ms 843ms</span></span>
-<span><span class="co">## [49] 848ms 847ms</span></span></code></pre>
+<span><span class="co">##  [1] 819ms 810ms 821ms 820ms 818ms 827ms 818ms 820ms 821ms 812ms 808ms 815ms</span></span>
+<span><span class="co">## [13] 805ms 814ms 819ms 819ms 815ms 817ms 795ms 818ms 818ms 812ms 821ms 821ms</span></span>
+<span><span class="co">## [25] 817ms 803ms 817ms 817ms 816ms 818ms 808ms 819ms 826ms 806ms 815ms 808ms</span></span>
+<span><span class="co">## [37] 805ms 809ms 813ms 823ms 827ms 811ms 847ms 820ms 826ms 834ms 825ms 819ms</span></span>
+<span><span class="co">## [49] 819ms 830ms</span></span></code></pre>
+<p>Median run time for denim: 0.8180356 seconds</p>
 </div>
 <div class="section level2">
 <h2 id="visualize-output">Visualize output<a class="anchor" aria-label="anchor" href="#visualize-output"></a>
 </h2>
-<p><img src="denim_benchmark_files/figure-html/unnamed-chunk-11-1.png" width="2187.5"><img src="denim_benchmark_files/figure-html/unnamed-chunk-11-2.png" width="2187.5"><img src="denim_benchmark_files/figure-html/unnamed-chunk-11-3.png" width="2187.5"></p>
+<p><img src="denim_benchmark_files/figure-html/unnamed-chunk-15-1.png" width="2187.5"><img src="denim_benchmark_files/figure-html/unnamed-chunk-15-2.png" width="2187.5"><img src="denim_benchmark_files/figure-html/unnamed-chunk-15-3.png" width="2187.5"></p>
 </div>
 <div class="section level2">
 <h2 id="compare-run-time">Compare run time<a class="anchor" aria-label="anchor" href="#compare-run-time"></a>
 </h2>
 <p>The following plot shows run time for 50 runs (with horizontal line
 showing median run time) of each approach.</p>
-<p><img src="denim_benchmark_files/figure-html/unnamed-chunk-12-1.png" width="2187.5"></p>
+<p><img src="denim_benchmark_files/figure-html/unnamed-chunk-16-1.png" width="2187.5"></p>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-Hernndez2021" class="csl-entry">
 Hernández, Pilar, Carlos Pena, Alberto Ramos, and Juan José
