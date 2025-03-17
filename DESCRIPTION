@@ -1,7 +1,7 @@
 Package: denim
 Type: Package
 Title: Generate and Simulate Deterministic Discrete-Time Compartmental Models
-Version: 1.0.0.9000
+Version: 1.0.1
 Date: 2024-05-28
 Authors@R: c(
     person("Thinh", "Ong", , "thinhop@oucru.org", role = c("aut", "cph"),
