@@ -1,7 +1,6 @@
 ## Resubmission
 This is a resubmission. In this version I have:
-* Ommit duplicated entry on Author's list 
-* Remove single quotes in DESCRIPTION and add () after function names
+* Fixed deprecated syntax which triggered WARNING
 
 ## R CMD check results
 Duration: 1m 4.5s
