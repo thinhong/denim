@@ -72,6 +72,15 @@ public:
      * Update compTotal value for current iteration
     */
     void initCompTotal(size_t iter);
+    // TODO: 
+    // Function to normalize outWeight 
+    // used in modelJSON (so for model initialization step only) 
+    void normalizeOutWeights();
+    // TODO: 
+    // Function to distribute initValue of a compartment based on the computed probability distribution 
+    // (instead of initValue all in the fist sub-compartment)
+    // This function will also be used modelJSON only
+    // void distributeInitVal();
 
     // subCompartments and outTotals are set after adding all distributions
     void setLengthSubCompartment();

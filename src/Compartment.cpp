@@ -40,6 +40,16 @@ void Compartment::initCompTotal(size_t iter){
     this -> compTotal[iter] = this -> compTotal[iter - 1];
 }
 
+// TODO: test this
+void Compartment::normalizeOutWeights(){
+    double totalWeigth = std::accumulate(this -> outWeights.begin(), this -> outWeights.end(), (double) 0);
+    
+    for ( size_t pos = 0; pos < outWeights.size(); pos++ ){
+        this -> outWeights[pos] = this -> outWeights[pos]/totalWeigth;
+    }
+}
+
+
 // Define list of getters
 std::string Compartment::getCompName() {
     return compName;
