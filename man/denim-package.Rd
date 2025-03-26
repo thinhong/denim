@@ -21,7 +21,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Anh Phan \email{anhptq@oucru.org}
+\strong{Maintainer}: Anh Phan \email{anhptq@oucru.org} (\href{https://orcid.org/0009-0000-2129-435X}{ORCID})
 
 Authors:
 \itemize{

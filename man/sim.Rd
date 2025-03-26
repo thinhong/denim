@@ -40,7 +40,7 @@ Simulation function that call the C++ simulator
 \examples{
 transitions <- list(
    "S -> I" = "beta * S * I / N",
-   "I -> R" = d_gamma(3, 2)
+   "I -> R" = d_gamma(1/3, 2)
 )
 
 initialValues <- c(

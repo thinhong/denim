@@ -15,6 +15,7 @@ private:
 
     // The length of subCompartments is the maximum length of vector transitionProb in outDistributions
     // store population in each sub compartment
+    // TODO: separate subCompartment chains for each out compartment
     std::vector<double> subCompartments;
 
     // total: the sum of all subCompartments (i.e. population of this compartment) per iteration/timestep
@@ -72,7 +73,6 @@ public:
      * Update compTotal value for current iteration
     */
     void initCompTotal(size_t iter);
-    // TODO: 
     // Function to normalize outWeight 
     // used in modelJSON (so for model initialization step only) 
     void normalizeOutWeights();

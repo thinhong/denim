@@ -63,8 +63,8 @@ context("Gamma distribution") {
     expect_true(distr.getTransitionProb(4) == Approx(0.4764).margin(0.01));
   }
   
-  test_that("getScale") {
-    expect_true(distr.getScale() == Approx(1).margin(0.01));
+  test_that("getRate") {
+    expect_true(distr.getRate() == Approx(1).margin(0.01));
   }
   
   test_that("getShape") {
@@ -168,7 +168,7 @@ context("Testing multinomial transition"){
 
 
 context("Testing distributions in model"){
-  nlohmann::ordered_json j = nlohmann::ordered_json::parse("{  \"simulationDuration\": 10,\"errorTolerance\": 0.001,  \"timeStep\": 1,  \"initialValues\": {\"S\": 999, \"I\": 1, \"R\": 0, \"V\": 0, \"D\": 0},  \"parameters\": {\"N\": 1000},  \"transitions\": {  \"S -> I\": {\"distribution\": \"nonparametric\", \"waitingTime\": [0.1, 0.2, 0.5, 0.2]},  \"S -> V\": {\"distribution\": \"constant\", \"constant\": 2},  \"0.1 * I -> D\": {\"distribution\": \"lognormal\", \"mu\": 2, \"sigma\": 0.5},  \"0.9 * I -> R\": {\"distribution\": \"gamma\", \"scale\": 3, \"shape\": 2}}}");
+  nlohmann::ordered_json j = nlohmann::ordered_json::parse("{  \"simulationDuration\": 10,\"errorTolerance\": 0.001,  \"timeStep\": 1,  \"initialValues\": {\"S\": 999, \"I\": 1, \"R\": 0, \"V\": 0, \"D\": 0},  \"parameters\": {\"N\": 1000},  \"transitions\": {  \"S -> I\": {\"distribution\": \"nonparametric\", \"waitingTime\": [0.1, 0.2, 0.5, 0.2]},  \"S -> V\": {\"distribution\": \"constant\", \"constant\": 2},  \"0.1 * I -> D\": {\"distribution\": \"lognormal\", \"mu\": 2, \"sigma\": 0.5},  \"0.9 * I -> R\": {\"distribution\": \"gamma\", \"rate\": 1/3, \"shape\": 2}}}");
 
 
   ModelJSON modeljson(j["initialValues"], j["parameters"], j["transitions"]);
@@ -225,7 +225,7 @@ context("Testing distributions in model"){
 
 
 context("Model JSON conversion") {
-    nlohmann::ordered_json j = nlohmann::ordered_json::parse("{  \"simulationDuration\": 10,\"errorTolerance\": 0.001,  \"timeStep\": 0.01,  \"initialValues\": {\"S\": 999, \"I\": 1, \"R\": 0},  \"parameters\": {\"beta\": 0.12, \"N\": 1000},  \"transitions\": {  \"S -> I\": {\"distribution\": \"mathExpression\", \"expression\": \"beta * S * I / N\"},  \"I -> R\": {\"distribution\": \"gamma\", \"scale\": 3, \"shape\": 2}}}");
+    nlohmann::ordered_json j = nlohmann::ordered_json::parse("{  \"simulationDuration\": 10,\"errorTolerance\": 0.001,  \"timeStep\": 0.01,  \"initialValues\": {\"S\": 999, \"I\": 1, \"R\": 0},  \"parameters\": {\"beta\": 0.12, \"N\": 1000},  \"transitions\": {  \"S -> I\": {\"distribution\": \"mathExpression\", \"expression\": \"beta * S * I / N\"},  \"I -> R\": {\"distribution\": \"gamma\", \"rate\": 1/3, \"shape\": 2}}}");
 
     ModelJSON modeljson(j["initialValues"], j["parameters"], j["transitions"]);
     auto model = modeljson.getModel();

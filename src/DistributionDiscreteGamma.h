@@ -9,14 +9,15 @@
 
 class DistributionDiscreteGamma: public DistributionParametric {
 private:
-    double scale {0};
+    // TODO: change scale to rate 
+    double rate {0};
     double shape {0};
     std::vector<double> transitionProb;
 public:
-    DistributionDiscreteGamma(double scale, double shape);
+    DistributionDiscreteGamma(double rate, double shape);
     // explicit DistributionDiscreteGamma(std::vector<double>& cumulativeProb);
     DistributionDiscreteGamma() = default;
-    double getScale();
+    double getRate();
     double getShape();
 };
 

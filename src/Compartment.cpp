@@ -40,7 +40,7 @@ void Compartment::initCompTotal(size_t iter){
     this -> compTotal[iter] = this -> compTotal[iter - 1];
 }
 
-// TODO: test this
+// Helper function to normalize outWeights, to be called at initialization, after defining outCompartments only
 void Compartment::normalizeOutWeights(){
     double totalWeigth = std::accumulate(this -> outWeights.begin(), this -> outWeights.end(), (double) 0);
     

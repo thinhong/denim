@@ -25,8 +25,8 @@ DiagrammeR::grViz("digraph {
   node [shape = rectangle]
   
   S -> E [label = '(R0/tr) * S * (I / N) * td']
-  E -> I [label = 'd_gamma(4,2)']
-  I -> R [label = 'd_gamma(3,2)']
+  E -> I [label = 'd_gamma(1/4,2)']
+  I -> R [label = 'd_gamma(1/3,2)']
   }",
   width = 700, height = "100%")
 ```
@@ -180,8 +180,8 @@ Median run time for uSEIR approach, Cython implementation: `r median(py$cython_r
 
 ```{r}
 library(deSolve)
-parameters <- c(scale_I = 4, shape_I=2,
-                scale_R = 3, shape_R = 2,
+parameters <- c(gamma_rate_I = 1/4, shape_I=2,
+                gamma_rate_R = 1/3, shape_R = 2,
                 R0 = 3.5, N = 1e6) 
 initialValues <- c(S = 999999, E1 = 1,
                    E2 = 0, E = 0, I1=0, 
@@ -191,10 +191,7 @@ initialValues <- c(S = 999999, E1 = 1,
 # --- Transition def for deSolve
 transition_func <- function(t, state, param){
   with(as.list( c(state, param) ), {
-      gamma_rate_I = 1/scale_I
-      gamma_rate_R = 1/scale_R
-      
-      tr = scale_R*shape_R
+      tr = shape_R*(1/gamma_rate_R)
       
       dS = - (R0/tr) * S * I/N
       # apply linear chain trick
@@ -229,7 +226,6 @@ Run time for `deSolve` implementation
 
 ```{r}
 desolve_runs$time
-
 ```
 Median run time for deSolve, with model defined in R: `r desolve_runs$median` seconds
 
@@ -322,8 +318,8 @@ library(denim)
 
 denim_model <- list(
   "S -> E" = "(R0/tr) * timeStepDur * S * (I/N)", # formulate according that of uSEIR method
-  "E -> I" = d_gamma(scale = 4, shape = 2),
-  "I -> R" = d_gamma(scale = 3, shape = 2)
+  "E -> I" = d_gamma(rate = 1/4, shape = 2),
+  "I -> R" = d_gamma(rate = 1/3, shape = 2)
 )
 
 initialValues <- c(S = 999999, E = 1, I= 0, R= 0)

@@ -139,11 +139,11 @@ ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_js
                 prob *= Distribution::timeStep;
                 distribution = std::make_shared<DistributionTransitionProb>(prob);
             }
-                // Gamma distribution: parameters are "scale" and "shape"
+                // Gamma distribution: parameters are "rate" and "shape"
             else if (distributionConfig["distribution"] == "gamma") {
-                double scale = distributionConfig["scale"];
+                double rate = distributionConfig["rate"];
                 double shape = distributionConfig["shape"];
-                distribution = std::make_shared<DistributionDiscreteGamma>(scale, shape);
+                distribution = std::make_shared<DistributionDiscreteGamma>(rate, shape);
             }
                 // Weibull distribution: parameters are "scale" and "shape"
             else if (distributionConfig["distribution"] == "weibull") {
@@ -202,11 +202,11 @@ ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_js
             comp->addOutWeight(1);
         }
 
-        // TODO: normalize outweight here
-        // probably make a function to normalize outWeight for Compartment class and call it here
-        // re-compile and test
+        // normalize outWeight in case weights does not sum up to 1
+        // also add outWeight in scenarios where outweight is not explicitly defined 
         comp->normalizeOutWeights();
         // TODO: also distribute starting value based on specified distribution
+        // TODO: in case of multinomial, create separate chains of subcompartments
 
         comp->setLengthSubCompartment();
         comp->setOutValues();

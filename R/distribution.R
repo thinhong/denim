@@ -2,19 +2,18 @@
 
 #' Discrete gamma distribution
 #' 
-#' @param scale scale parameter of a gamma distribution
+#' @param rate rate parameter of a gamma distribution
 #' @param shape shape parameter of a gamma distribution
 #' @return a Distribution object for simulator
 #' 
 #' @examples
-#' transitions <- list("S -> I" = d_gamma(1, 5))
+#' transitions <- list("S -> I" = d_gamma(rate = 1, shape = 5))
 #' @export
-d_gamma <- function(scale, shape) {
+d_gamma <- function(rate, shape) {
   distr <- list(
     distribution = "gamma",
-    scale = scale,
+    rate = rate,
     shape = shape)
-  
   class(distr) <- c("Distribution", class(distr))
   distr
 }
@@ -167,17 +166,16 @@ nonparametric <- function(...) {
 #' Define a set of probabilities of transition from one compartment to multiple
 #' compartments
 #' ```
-#' "I -> R, D" = multinomial(0.9, 0.1),
-#' "I -> R" = d_gamma(3, 2),
+#' "I -> R" = d_gamma(1/3, 2),
 #' "I -> D" = d_lognormal(2, 0.5)
 #' ```
 #' is equal to
 #' ```
-#' "0.9 * I -> R" = d_gamma(3, 2),
-#' "0.1 * I -> D" = d_lognormal(2, 0.5)
+#' "0.5 * I -> R" = d_gamma(1/3, 2),
+#' "0.5 * I -> D" = d_lognormal(2, 0.5)
 #' ```
 #'
-#' @param ... a vector of probabilities, must add up to 1
+#' @param ... a vector of probabilities. Vector is automatically rescaled to sum to 1. 
 #' @return a Distribution object for simulator
 #'
 #' @export
@@ -195,9 +193,12 @@ print.Distribution <- function(x, ...) {
   # Print the name of this distribution
   if (x$distribution %in% c("gamma", "weibull", "exponential")) {
     cat("Discretized", x$distribution, "distribution\n")
-    if (x$distribution %in% c("gamma", "weibull")) {
+    if (x$distribution == "weibull") {
       cat("Scale = ", x$scale, ", Shape = ", x$shape, sep = "")
     } 
+    else if (x$distribution == "gamma"){
+      cat("Rate = ", x$rate, ", Shape = ", x$shape, sep = "")
+    }
     else if (x$distribution == "exponential") {
       cat("Rate = ", x$rate, sep = "")
     }

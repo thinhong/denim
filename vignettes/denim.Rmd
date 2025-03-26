@@ -64,11 +64,11 @@ legend("right", legend = c(0.5, 1.0, 1.5),
        col = col_codes, lty = 1, lwd = 3, bty = "\n")
 ```
 
-A more realistic length of stay distribution can look like this, of which most patients recovered after 4 days. We defined this using a gamma distribution with shape = 3 and scale = 2.
+A more realistic length of stay distribution can look like this, of which most patients recovered after 4 days. We defined this using a gamma distribution with shape = 3 and rate = 1/2.
 
 ```{r, echo=FALSE}
 x <- seq(0, 20, 0.001)
-y <- dgamma(x = x, shape = 3, scale = 2)
+y <- dgamma(x = x, shape = 3, rate = 1/2)
 
 plot(x, y, type = "l", col = col_codes[1], lty = 1, lwd = 3,
      xlab = "Length of stay (days)", ylab = "", yaxt = 'n')
@@ -222,7 +222,7 @@ Current available distribution in this package including:
 
 -   `d_exponential(rate)`: Discrete **exponential distribution** with parameter `rate`
 
--   `d_gamma(scale, shape)`: Discrete **gamma distribution** with parameters `scale` and `shape`
+-   `d_gamma(rate, shape)`: Discrete **gamma distribution** with parameters `rate` and `shape`
 
 -   `d_weibull(scale, shape)`: Discrete **Weibull distribution** with parameters `scale` and `shape`
 

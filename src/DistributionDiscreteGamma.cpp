@@ -6,8 +6,9 @@
 #include "DistributionDiscreteGamma.h"
 #include <iostream>
 
-DistributionDiscreteGamma::DistributionDiscreteGamma(double scale, double shape) {
-    this->scale = scale;
+DistributionDiscreteGamma::DistributionDiscreteGamma(double rate, double shape) {
+    // TODO: change scale to rate 
+    this->rate = rate;
     this->shape = shape;
 
     // https://people.sc.fsu.edu/~jburkardt/cpp_src/prob/prob.cpp
@@ -15,7 +16,7 @@ DistributionDiscreteGamma::DistributionDiscreteGamma(double scale, double shape)
     // B is the "scale" parameter; 0.0 < B, and is often 1.0.
     // C is the "shape" parameter; 0.0 < C, and is often 1.0.
     calcTransitionProb(
-        [scale, shape](double timestep) {return gamma_cdf(timestep, 0, scale, shape);}
+        [rate, shape](double timestep) {return gamma_cdf(timestep, 0, 1/rate, shape);}
         );
     this->distName = "gamma";
 }
@@ -26,8 +27,8 @@ DistributionDiscreteGamma::DistributionDiscreteGamma(double scale, double shape)
 //     this->distName = "gamma";
 // }
 
-double DistributionDiscreteGamma::getScale() {
-    return scale;
+double DistributionDiscreteGamma::getRate() {
+    return rate;
 }
 
 double DistributionDiscreteGamma::getShape() {

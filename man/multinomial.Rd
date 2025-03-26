@@ -7,7 +7,7 @@
 multinomial(...)
 }
 \arguments{
-\item{...}{a vector of probabilities, must add up to 1}
+\item{...}{a vector of probabilities. Vector is automatically rescaled to sum to 1.}
 }
 \value{
 a Distribution object for simulator
@@ -16,14 +16,13 @@ a Distribution object for simulator
 Define a set of probabilities of transition from one compartment to multiple
 compartments
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{"I -> R, D" = multinomial(0.9, 0.1),
-"I -> R" = d_gamma(3, 2),
+\if{html}{\out{<div class="sourceCode">}}\preformatted{"I -> R" = d_gamma(1/3, 2),
 "I -> D" = d_lognormal(2, 0.5)
 }\if{html}{\out{</div>}}
 
 is equal to
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{"0.9 * I -> R" = d_gamma(3, 2),
-"0.1 * I -> D" = d_lognormal(2, 0.5)
+\if{html}{\out{<div class="sourceCode">}}\preformatted{"0.5 * I -> R" = d_gamma(1/3, 2),
+"0.5 * I -> D" = d_lognormal(2, 0.5)
 }\if{html}{\out{</div>}}
 }
