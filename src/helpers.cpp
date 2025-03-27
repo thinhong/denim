@@ -62,7 +62,11 @@ void viewModelUpdate(std::shared_ptr<Model> model, long iter) {
     for (auto& comp: model->getComps()) {
         Rcpp::Rcout << "Compartment " << comp->getCompName() << "\n";
         for (size_t k {0}; k < comp->getSubCompartmentValues().size(); ++k) {
-            Rcpp::Rcout << comp->getSubCompartmentValues()[k] << " ";
+            Rcpp::Rcout << "SubCompartment for out Compartment " << comp->getOutCompartments()[k].lock() -> getCompName() << "\n";
+            
+            for (size_t i{0}; i < comp->getSubCompartmentValues()[k].size(); ++i){
+                Rcpp::Rcout << comp->getSubCompartmentValues()[k][i] << " ";
+            }
         }
         Rcpp::Rcout << "\n";
         for (size_t j {0}; j < comp->getOutCompartments().size(); ++j) {

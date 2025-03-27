@@ -15,8 +15,10 @@ private:
 
     // The length of subCompartments is the maximum length of vector transitionProb in outDistributions
     // store population in each sub compartment
-    // TODO: separate subCompartment chains for each out compartment
-    std::vector<double> subCompartments;
+    // TODO:
+    // - make subcomartments a nested double array, with dim [nOutCompartments, nMaxDwelltime]
+    // - instantiate population for subCompartments based on outDistribution
+    std::vector<std::vector<double>> subCompartments;
 
     // total: the sum of all subCompartments (i.e. population of this compartment) per iteration/timestep
     std::vector<double> compTotal;
@@ -34,6 +36,7 @@ private:
     
     // store population that move out of each sub compartment in the current iteration
     // values will be reset to 0 then updated while iterating through each out compartment
+    // TODO: update length to be the max length of subCompartments (i.e, max of nMaxDwelltime)
     std::vector<double> outSubCompartments;
     // out population corresponding to each outCompartment in current iteration (sum over all outSubCompartment of that out compartment)
     // values will be reset to 0 then updated while iterating through each timestep
@@ -59,7 +62,7 @@ public:
     std::vector<std::shared_ptr<Distribution>> getOutDistributions();
     std::vector<double> getOutWeights();
 
-    std::vector<double> getSubCompartmentValues() {return subCompartments;};
+    std::vector<std::vector<double>> getSubCompartmentValues() {return subCompartments;};
     std::vector<double> getOutValues() {return outTotals;};
     std::vector<double> getOutSubCompartments() {return outSubCompartments;};
 

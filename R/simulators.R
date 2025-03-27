@@ -79,6 +79,9 @@ sim <- function(transitions, initialValues, parameters=NULL,
   # First check their inputs
   # checkInitsTransitions(initialValues, transitions)
   
+  # provide timeStep as parameters as well
+  parameters[["timeStep"]] <- timeStep
+  
   # Generate model object
   mod <- newModel(simulationDuration, errorTolerance, initialValues, parameters, transitions, timeStep)
   modJson <- modelToJson(mod)

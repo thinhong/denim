@@ -85,7 +85,7 @@ DiagrammeR::grViz("digraph {
   node [shape = rectangle]
   
   S -> I [label = '&#946;SI/N']
-  I -> R [label = 'd_gamma(3, 2)']
+  I -> R [label = 'd_gamma(1/3, 2)']
   }",
   width = 400, height = "100%")
 ```
@@ -105,7 +105,7 @@ DiagrammeR::grViz("digraph {
   node [shape = rectangle]
   
   S -> I [label = '&#946;SI/N']
-  I -> R [label = 'd_gamma(3, 2)']
+  I -> R [label = 'd_gamma(1/3, 2)']
   }",
   width = 400, height = "100%")
 ```
@@ -117,7 +117,7 @@ We have two transitions `S -> I` and `I -> R` in this case. The transitions are 
 ```{r}
 transitions <- list(
   "S -> I" = "beta * S * I / N",
-  "I -> R" = d_gamma(3, 2)
+  "I -> R" = d_gamma(rate = 1/3, 2)
 )
 ```
 
@@ -238,7 +238,7 @@ You can define other type of transitions such as:
 
 -   `nonparametric(waitingTimes...)`: A **vector of values**, could be numbers, percentages, density of the length of stay based on real data, `denim` will convert it into a distribution
 
--   `multinomial(probabilities)`: A convenient way to define **several probabilities** of a compartment transit to many compartments, may or may not in a time step. For example, `"V -> VA, VS, VH" = multinomial(0.6, 0.3, 0.1)` means 60% of `V` will become `VA`, 30% become `VS` and 10% become `VH`. If we continue to define the length of stay distribution for these transitions e.g `"V -> VA" = d_gamma(3, 2)`, probabilities defined with `multinomial()` is not the percentage of the left compartment transit in each time step, but the percentage of individuals move to `VA` at the equilibrium state. If we do not define further length of stay distribution, `"V -> VA, VS, VH" = multinomial(0.6, 0.3, 0.1)` is the percentage of `V` transit to the right compartments per time step similar to a `transprob()` function. See more detailed explanations in the ***Multiple transitions from a compartment*** section.
+-   `multinomial(probabilities)`: A convenient way to define **several probabilities** of a compartment transit to many compartments, may or may not in a time step. For example, `"V -> VA, VS, VH" = multinomial(0.6, 0.3, 0.1)` means 60% of `V` will become `VA`, 30% become `VS` and 10% become `VH`. If we continue to define the length of stay distribution for these transitions e.g `"V -> VA" = d_gamma(1/3, 2)`, probabilities defined with `multinomial()` is not the percentage of the left compartment transit in each time step, but the percentage of individuals move to `VA` at the equilibrium state. If we do not define further length of stay distribution, `"V -> VA, VS, VH" = multinomial(0.6, 0.3, 0.1)` is the percentage of `V` transit to the right compartments per time step similar to a `transprob()` function. See more detailed explanations in the ***Multiple transitions from a compartment*** section.
 
 ## 4. Multiple transitions from a compartment
 
@@ -254,7 +254,7 @@ DiagrammeR::grViz("digraph {
   
   S -> I [label = '&#946;SI/N']
   S -> V [label = '5']
-  I -> R [label = '0.9 -> d_gamma(3, 2)']
+  I -> R [label = '0.9 -> d_gamma(1/3, 2)']
   I -> D [label = '0.1 -> d_lognormal(2, 0.5)']
   }",
   width = 500, height = "100%")
@@ -274,7 +274,7 @@ We can define the model for this example as follows:
 transitions <- list(
   "S -> I" = "beta * S * I / N",
   "S -> V" = 7,
-  "0.9 * I -> R" = d_gamma(3, 2),
+  "0.9 * I -> R" = d_gamma(1/3, 2),
   "0.1 * I -> D" = d_lognormal(2, 0.5)
 )
 
@@ -305,7 +305,7 @@ plot(mod)
 **Tips**: Instead of writing:
 
 ```         
-"0.9 * I -> R" = d_gamma(3, 2),
+"0.9 * I -> R" = d_gamma(1/3, 2),
 "0.1 * I -> D" = d_lognormal(2, 0.5)
 ```
 
@@ -313,7 +313,7 @@ You can also use the `multinomial()`, then define the length of stay distributio
 
 ```         
 "I -> R, D" = multinomial(0.9, 0.1),
-"I -> R" = d_gamma(3, 2),
+"I -> R" = d_gamma(1/3, 2),
 "I -> D" = d_lognormal(2, 0.5)
 ```
 
@@ -330,7 +330,7 @@ DiagrammeR::grViz("digraph {
   S -> I [label = '&#946;S(I + IV)/N']
   S -> V [label = '2']
   I -> D [label = '0.1 -> d_lognormal(2, 0.5)']
-  I -> R [label = '0.9 -> d_gamma(3, 2)']
+  I -> R [label = '0.9 -> d_gamma(1/3, 2)']
   V -> IV [label = '0.1 * &#946;V(I + IV)/N']
   IV -> R [label = 'd_exponential(2)']
   }",
@@ -344,7 +344,7 @@ transitions <- list(
   "S -> I" = "beta * S * (I + IV) / N",
   "S -> V" = 2,
   "0.1 * I -> D" = d_lognormal(2, 0.5),
-  "0.9 * I -> R" = d_gamma(3, 2),
+  "0.9 * I -> R" = d_gamma(rate = 1/3, shape = 2),
   "V -> IV" = "0.1 * beta * V * (I + IV) / N",
   "IV -> R" = d_exponential(2)
 )
