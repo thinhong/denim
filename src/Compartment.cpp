@@ -179,8 +179,12 @@ void Compartment::updateCompartment(size_t iter, std::vector<std::string>& param
                 updateSubCompByMath(iter, outIndex, paramNames, paramValues, comps);
             }
 
-            // update the initial value to
-            // TODO: test this
+            // shift subCompartments for next iteration
+            for (size_t i_subComp {subCompartments[outIndex].size() - 1}; i_subComp > 0; --i_subComp) {
+                subCompartments[outIndex][i_subComp] = subCompartments[outIndex][i_subComp - 1];
+
+            }
+            // update the initial subComp population to be incoming population
             subCompartments[outIndex][0] = outWeights[outIndex]*inValue;
         }
     }
