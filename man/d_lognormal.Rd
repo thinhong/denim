@@ -4,12 +4,14 @@
 \alias{d_lognormal}
 \title{Discrete log-normal distribution}
 \usage{
-d_lognormal(mu, sigma)
+d_lognormal(mu, sigma, dist_init = FALSE)
 }
 \arguments{
 \item{mu}{location parameter or the ln mean}
 
 \item{sigma}{scale parameter or ln standard deviation}
+
+\item{dist_init}{whether to distribute initial value across subcompartments following this distribution. (default to FALSE, meaning init value is always in the first compartment)}
 }
 \value{
 a Distribution object for simulator

@@ -4,12 +4,14 @@
 \alias{d_weibull}
 \title{Discrete Weibull distribution}
 \usage{
-d_weibull(scale, shape)
+d_weibull(scale, shape, dist_init = FALSE)
 }
 \arguments{
 \item{scale}{scale parameter of a Weibull distribution}
 
 \item{shape}{shape parameter of a Weibull distribution}
+
+\item{dist_init}{whether to distribute initial value across subcompartments following this distribution. (default to FALSE, meaning init value is always in the first compartment)}
 }
 \value{
 a Distribution object for simulator

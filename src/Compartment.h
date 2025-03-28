@@ -31,6 +31,8 @@ private:
     std::vector<std::weak_ptr<Compartment>> outCompartments;
     // out distribution corresponding to each outCompartment
     std::vector<std::shared_ptr<Distribution>> outDistributions; 
+    // whether to distribute initial value across subcompartment, same length as outDistributions
+    std::vector<bool> distSubCompInit;
     // out weight corresponding to each outCompartment
     std::vector<double> outWeights;
     
@@ -67,11 +69,11 @@ public:
     std::vector<double> getOutSubCompartments() {return outSubCompartments;};
 
     // Setters
-    void addOutDistribution(std::shared_ptr<Distribution>& dist);
+    void addOutDistribution(std::shared_ptr<Distribution>& dist, bool distInit = false);
     void addOutWeight(double weight);
     void addInCompartment(std::weak_ptr<Compartment>& linkedCompIn);
     void addOutCompartment(std::weak_ptr<Compartment>& linkedCompOut);
-    void editOutDistribution(std::string outName, std::shared_ptr<Distribution>& dist);
+    void editOutDistribution(std::string outName, std::shared_ptr<Distribution>& dist, bool distInit = false);
     /**
      * Update compTotal value for current iteration
     */

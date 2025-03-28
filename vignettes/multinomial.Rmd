@@ -49,9 +49,8 @@ dD = 0.1*ID
 \end{cases}
 $$
 
-```{=html}
 </details>
-```
+
 ### Proportion normalization
 
 `denim` will automatically normalize the proportions if they don't sum up to 1.

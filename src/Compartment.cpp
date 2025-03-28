@@ -7,13 +7,15 @@ Compartment::Compartment(std::string compName, double initVal) {
     compTotal[0] = initVal;
 }
 
-void Compartment::addOutDistribution(std::shared_ptr<Distribution>& dist) {
+void Compartment::addOutDistribution(std::shared_ptr<Distribution>& dist, bool distInit) {
     this->outDistributions.push_back(dist);
+    this->distSubCompInit.push_back(distInit);
 }
 
-void Compartment::editOutDistribution(std::string outName, std::shared_ptr<Distribution> &dist) {
+void Compartment::editOutDistribution(std::string outName, std::shared_ptr<Distribution> &dist, bool distInit) {
     size_t pos = findOutCompPosition(outName);
     outDistributions[pos] = dist;
+    this->distSubCompInit[pos] = distInit;
 }
 
 void Compartment::setOutValues() {
@@ -45,7 +47,16 @@ void Compartment::setLengthSubCompartment() {
 
         // TODO: probably also handle the allocation for initial values here
         // For now just initialize at first subCompartment
-        this -> subCompartments[pos][0] = compTotal[0]*outWeights[pos];
+        if (!distSubCompInit[pos]){
+            // if user specify to not distribute initial value, simply initalize in firs subcompartment
+            this -> subCompartments[pos][0] = compTotal[0]*outWeights[pos];
+        }else{
+            // distribute based on specified outDistribution
+            for(size_t i {0}; i<currLength; ++i){
+                this-> subCompartments[pos][i] = compTotal[0]*outWeights[pos]*outDistributions[pos]->getProbDist(i);
+            }
+        }
+        
     }
     
     // subCompartments.resize(maxLength);

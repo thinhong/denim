@@ -4,16 +4,19 @@
 #' 
 #' @param rate rate parameter of a gamma distribution
 #' @param shape shape parameter of a gamma distribution
+#' @param dist_init whether to distribute initial value across subcompartments following this distribution.
 #' @return a Distribution object for simulator
 #' 
 #' @examples
 #' transitions <- list("S -> I" = d_gamma(rate = 1, shape = 5))
 #' @export
-d_gamma <- function(rate, shape) {
+d_gamma <- function(rate, shape, dist_init = FALSE) {
   distr <- list(
     distribution = "gamma",
     rate = rate,
-    shape = shape)
+    shape = shape, 
+    dist_init = as.numeric(dist_init)
+    )
   class(distr) <- c("Distribution", class(distr))
   distr
 }
@@ -23,16 +26,19 @@ d_gamma <- function(rate, shape) {
 #' 
 #' @param scale scale parameter of a Weibull distribution
 #' @param shape shape parameter of a Weibull distribution
+#' @param dist_init whether to distribute initial value across subcompartments following this distribution. (default to FALSE, meaning init value is always in the first compartment)
 #' @return a Distribution object for simulator
 #' 
 #' @examples
 #' transitions <- list("I -> D" = d_weibull(0.6, 2))
 #' @export
-d_weibull <- function(scale, shape) {
+d_weibull <- function(scale, shape, dist_init = FALSE) {
   distr <- list(
     distribution = "weibull",
     scale = scale,
-    shape = shape)
+    shape = shape,
+    dist_init = as.numeric(dist_init)
+    )
   
   class(distr) <- c("Distribution", class(distr))
   distr
@@ -41,6 +47,7 @@ d_weibull <- function(scale, shape) {
 #' Discrete exponential distribution
 #' 
 #' @param rate rate parameter of an exponential distribution
+#' @param dist_init whether to distribute initial value across subcompartments following this distribution. (default to FALSE, meaning init value is always in the first compartment)
 #' @return a Distribution object for simulator
 #' 
 #' @examples
@@ -48,10 +55,12 @@ d_weibull <- function(scale, shape) {
 #' 
 #'
 #' @export
-d_exponential <- function(rate) {
+d_exponential <- function(rate, dist_init = FALSE) {
   distr <- list(
     distribution = "exponential",
-    rate = rate)
+    rate = rate,
+    dist_init = as.numeric(dist_init)
+  )
   
   class(distr) <- c("Distribution", class(distr))
   distr
@@ -61,16 +70,19 @@ d_exponential <- function(rate) {
 #' 
 #' @param mu location parameter or the ln mean
 #' @param sigma scale parameter or ln standard deviation
+#' @param dist_init whether to distribute initial value across subcompartments following this distribution. (default to FALSE, meaning init value is always in the first compartment)
 #' @return a Distribution object for simulator
 #' 
 #' @examples
 #' transitions <- list("I -> D" = d_lognormal(3, 0.6))
 #' @export
-d_lognormal <- function(mu, sigma) {
+d_lognormal <- function(mu, sigma, dist_init = FALSE) {
   distr <- list(
     distribution = "lognormal",
     mu = mu,
-    sigma = sigma)
+    sigma = sigma,
+    dist_init = as.numeric(dist_init)
+    )
   
   class(distr) <- c("Distribution", class(distr))
   distr

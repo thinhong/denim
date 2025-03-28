@@ -132,6 +132,8 @@ ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_js
 
             std::shared_ptr<Distribution> distribution;
 
+            bool dist_init = false;
+
             // Set distribution for the inCompartment
             // If outCompartment is not added, then add the distribution, if it has been added then edit the distribution
             if (distributionConfig["distribution"] == "transitionProb") {
@@ -144,23 +146,35 @@ ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_js
                 double rate = distributionConfig["rate"];
                 double shape = distributionConfig["shape"];
                 distribution = std::make_shared<DistributionDiscreteGamma>(rate, shape);
+                // work around json type cast exception, don't remove
+                double tmp_init_config = distributionConfig["dist_init"];
+                dist_init = (bool) tmp_init_config;
             }
                 // Weibull distribution: parameters are "scale" and "shape"
             else if (distributionConfig["distribution"] == "weibull") {
                 double scale = distributionConfig["scale"];
                 double shape = distributionConfig["shape"];
                 distribution = std::make_shared<DistributionDiscreteWeibull>(scale, shape);
+                // work around json type cast exception, don't remove
+                double tmp_init_config = distributionConfig["dist_init"];
+                dist_init = (bool) tmp_init_config;
             }
                 // Exponential distribution: parameter is "rate"
             else if (distributionConfig["distribution"] == "exponential") {
                 double rate = distributionConfig["rate"];
                 distribution = std::make_shared<DistributionDiscreteExponential>(rate);
+                // work around json type cast exception, don't remove
+                double tmp_init_config = distributionConfig["dist_init"];
+                dist_init = (bool) tmp_init_config;
             }
             else if (distributionConfig["distribution"] == "lognormal") {
                 double mu = distributionConfig["mu"];
                 double sigma = distributionConfig["sigma"];
-                
+            
                 distribution = std::make_shared<DistributionLogNormal>(mu, sigma);
+                // work around json type cast exception, don't remove
+                double tmp_init_config = distributionConfig["dist_init"];
+                dist_init = (bool) tmp_init_config;
             }
                 // Values distribution: parameter is a vector "waitingTime"
             else if (distributionConfig["distribution"] == "nonparametric") {
@@ -179,9 +193,11 @@ ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_js
             // Set distribution for the inCompartment
             // If outCompartment is not added, then add the distribution, if it has been added then edit the distribution
             if (inComp.lock()->isOutCompAdded(outCompName) == false) {
-                inComp.lock()->addOutDistribution(distribution);
+                // TODO: adjust setting whether to distribute initial value here
+                inComp.lock()->addOutDistribution(distribution, dist_init);
             } else {
-                inComp.lock()->editOutDistribution(outCompName, distribution);
+                // TODO: also adjust setting whether to distribute initial value here
+                inComp.lock()->editOutDistribution(outCompName, distribution, dist_init);
             }
 
             // If outCompartment has not been added: set linked compartment in, out, outName, weight
