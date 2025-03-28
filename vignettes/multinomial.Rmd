@@ -1,0 +1,210 @@
+---
+title: "multinomial transition in denim"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{multinomial transition in denim}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+library(deSolve)
+library(denim)
+```
+
+## Modeling multinomial transition in denim
+
+Modelers may encounter many situations where individuals can transition from one compartment to multiple others, such as the SIRD model. There are 2 main approaches to handle this:
+
+-   Model as competing risk
+
+-   **Model as multinomial transition (outgoing population is split by a fixed proportion to transition to new compartments)**
+
+For modeling simplicity, `denim`'s implementation follows the multinomial approach.
+
+***Example:*** An SIRD model where 90% of infected can recover while the remaining 10% will pass away.
+
+```{r}
+transitions <- list(
+  "S -> I" = "beta * S * (I / N) * timeStep",
+  "0.9 * I -> R" = d_gamma(1/3, 2),
+  "0.1 * I -> D" = d_exponential(0.1)
+)
+```
+
+```{=html}
+<details>
+  <summary>
+    Mathematical formulation for the model
+  </summary>
+```
+$$
+\begin{cases}
+dS = -\beta S \frac{I}{N} \\
+dIR_1 = 0.9 *\beta S \frac{I}{N} -\frac{1}{3}IR_1 \\
+dIR_2 = \frac{1}{3}IR_1 - \frac{1}{3}IR_2 \\
+dID = 0.1*\beta S \frac{I}{N} - 0.1*ID \\
+dR = \frac{1}{3}IR_2 \\
+dD = 0.1*ID 
+\end{cases}
+$$
+
+```{=html}
+</details>
+```
+### Proportion normalization
+
+`denim` will automatically normalize the proportions if they don't sum up to 1.
+
+***Example 2:*** The following model definition is equivalent to the one in ***Example 1***
+
+```{r}
+transitions <- list(
+  "S -> I" = "beta * S * (I / N) * timeStep",
+  "36 * I -> R" = d_gamma(1/3, 2),
+  "4 * I -> D" = d_exponential(0.1)
+)
+```
+
+### Implicit multinomial
+
+If proportion is not given, denim will automatically distribute outgoing population to each transition uniformly
+
+***Example 3:*** The following 2 models are equivalent
+
+```{r}
+transitions <- list(
+  "S -> I" = "beta * S * (I / N) * timeStep",
+  "I -> R" = d_gamma(1/3, 2),
+  "I -> D" = d_exponential(0.1)
+)
+
+transitions <- list(
+  "S -> I" = "beta * S * (I / N) * timeStep",
+  "0.5 * I -> R" = d_gamma(1/3, 2),
+  "0.5 * I -> D" = d_exponential(0.1)
+)
+```
+
+## Example model
+
+To further demonstrate the implementation of multinomial in `denim`, we provide the equivalent model implemented in `deSolve` and compare the output of 2 implementations.
+
+### Model definition in denim
+
+```{r}
+# model in denim
+transitions <- list(
+  "S -> I" = "beta * S * (I / N) * timeStep",
+  "0.9 * I -> R" = d_gamma(1/3, 2),
+  "0.1 * I -> D" = d_exponential(0.1)
+)
+
+denimInitialValues <- c(
+  S = 999, 
+  I = 1, 
+  R = 0,
+  D = 0
+)
+```
+
+### Equivalent model definition in deSolve
+
+```{r}
+# model in deSolve
+transition_func <- function(t, state, param){
+  with(as.list( c(state, param) ), {
+
+      dS = - beta * S * (IR1 + IR2 + ID)/N
+      # apply linear chain trick for I -> R transition
+      # 0.9 * to specify prop of I that goes to I->R transition
+      dIR1 = 0.9 * beta * S * (IR1 + IR2 + ID)/N - rate*IR1
+      dIR2 = rate*IR1 - rate*IR2
+      dR = rate*IR2 
+      
+      # handle I -> D transition
+      # 0.1 * to specify prop of I that goes to I->D transition
+      dID = 0.1 * beta * S * (IR1 + IR2 + ID)/N - exp_rate*ID
+      dD = exp_rate*ID
+      list(c(dS, dIR1, dIR2, dID, dR, dD))
+  })
+}
+
+desolveInitialValues <- c(
+  S = 999, 
+  # note that internally, denim also allocate initial value based on specified proportion
+  IR1 = 0.9,
+  IR2 = 0,
+  ID = 0.1, 
+  R = 0,
+  D = 0
+)
+```
+
+### Run simulation and compare
+
+<details>
+
+<summary>Model settings</summary>
+
+```{r}
+parameters <- c(
+  beta = 0.2,
+  N = 1000,
+  rate = 1/3,
+  exp_rate = 0.1
+)
+
+simulationDuration <- 200
+timeStep <- 0.05
+```
+
+</details>
+
+<details>
+
+<summary>Run model</summary>
+
+```{r}
+# --- run denim model ---- 
+mod <- sim(transitions = transitions, 
+           initialValues = denimInitialValues, 
+           parameters = parameters, 
+           simulationDuration = simulationDuration, 
+           timeStep = timeStep)
+
+# run deSolve model
+times <- seq(0, simulationDuration)
+ode_mod <- ode(y = desolveInitialValues, times = times, parms = parameters, func = transition_func) |> as.data.frame()
+ode_mod$I<- rowSums(ode_mod[, c("IR1", "IR2", "ID")])
+```
+
+</details>
+
+Output Comparison
+
+```{r}
+# ---- Plot S compartment
+plot(x = mod$Time, y = mod$S,xlab = "Time", ylab = "Count", main="S compartment",
+     col = "#4876ff", type="l", lwd=3)
+lines(ode_mod$time, ode_mod$S, lwd=3, lty=3)
+legend(x = 15, y = 4e5,legend=c("denim", "deSolve"), col = c("#4876ff", "black"), lty=c(1,3))
+
+# ---- Plot I compartment
+plot(x = mod$Time, y = mod$I, xlab = "Time", ylab = "Count", main="I compartment",
+      col = "#4876ff", type="l", lwd=2)
+lines(ode_mod$time, ode_mod$I, lwd=3, lty=3)
+legend(x = 15, y = 1e5,legend=c("denim", "deSolve"), col = c("#4876ff", "black"), lty=c(1,3))
+
+# ---- Plot R compartment
+plot(x = mod$Time, y = mod$R, xlab = "Time", ylab = "Count", main="R compartment",
+      col = "#4876ff", type="l", lwd=2)
+lines(ode_mod$time, ode_mod$R, lwd=3, lty=3)
+legend(x = 15, y = 1e5,legend=c("denim", "deSolve"), col = c("#4876ff", "black"), lty=c(1,3))
+
+# ---- Plot D compartment
+plot(x = mod$Time, y = mod$D, xlab = "Time", ylab = "Count", main="D compartment",
+     col = "#4876ff", type="l", lwd=2)
+lines(ode_mod$time, ode_mod$D, lwd=3, lty=3)
+legend(x = 15, y = 4e5,legend=c("denim", "deSolve"), col = c("#4876ff", "black"), lty=c(1,3))
+```
