@@ -83,7 +83,7 @@ time_diff <- round(denim_runtime / desolve_runtime, digits = 2)
 
 This significant difference can be attributed to the difference in approaches: `deSolve` solves a system of ODEs while `denim` iterates through each timestep and updates the population in each compartment
 
-While the approach in `denim` allow more flexibility in types of dwell time distributions, the computation time scales up as timestep grows smaller (in `O(n)` time complexity).
+While the approach in `denim` allow more flexibility in types of dwell time distributions, the computation time scales up exponentially as timestep grows smaller.
 
 ## Plot the result
 

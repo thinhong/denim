@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">denim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,6 +51,9 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/multinomial.html">multinomial transition in denim</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>denim comparison</h6>
     <a class="dropdown-item" href="../articles/denim_vs_deSolve.html">denim vs deSolve</a>
     <a class="dropdown-item" href="../articles/denim_benchmark.html">denim benchmark</a>
     <div class="dropdown-divider"></div>
@@ -128,18 +131,18 @@ individuals recover after 1 day being infected.</p>
 <p><img src="denim_files/figure-html/unnamed-chunk-2-1.png" width="2187.5" style="display: block; margin: auto;"></p>
 <p>A more realistic length of stay distribution can look like this, of
 which most patients recovered after 4 days. We defined this using a
-gamma distribution with shape = 3 and scale = 2.</p>
+gamma distribution with shape = 3 and rate = 1/2.</p>
 <p><img src="denim_files/figure-html/unnamed-chunk-3-1.png" width="2187.5" style="display: block; margin: auto;"></p>
 <p>The model now look like this:</p>
 <center>
 <div id="htmlwidget-e5c8c404fe174e4c81bd" style="width:400px;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-e5c8c404fe174e4c81bd">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"d_gamma(3, 2)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-e5c8c404fe174e4c81bd">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"d_gamma(1/2, 3)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </center>
 <p><strong>Model specification</strong></p>
 <p><em>Model transition</em></p>
 <center>
 <div id="htmlwidget-36aa3d2a04d42bbc2145" style="width:400px;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-36aa3d2a04d42bbc2145">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"d_gamma(3, 2)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-36aa3d2a04d42bbc2145">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"d_gamma(1/2, 3)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </center>
 <p>We have two transitions <code>S -&gt; I</code> and
 <code>I -&gt; R</code> in this case. The transitions are specified in a
@@ -149,7 +152,7 @@ distribution.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * S * I / N"</span>,</span>
-<span>  <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><em>Initial state</em></p>
 <p>Use a vector to define the compartments with their assigned names and
@@ -187,11 +190,11 @@ The default interval (time step) is 1 if not declared explicitly.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   Time        S        I            R</span></span>
 <span><span class="co">#&gt; 1 0.00 999.0000 1.000000 0.000000e+00</span></span>
-<span><span class="co">#&gt; 2 0.01 998.9880 1.011982 5.543225e-06</span></span>
-<span><span class="co">#&gt; 3 0.02 998.9759 1.024097 2.219016e-05</span></span>
-<span><span class="co">#&gt; 4 0.03 998.9636 1.036346 5.000038e-05</span></span>
-<span><span class="co">#&gt; 5 0.04 998.9512 1.048730 8.903457e-05</span></span>
-<span><span class="co">#&gt; 6 0.05 998.9386 1.061252 1.393545e-04</span></span>
+<span><span class="co">#&gt; 2 0.01 998.9880 1.011988 2.075536e-08</span></span>
+<span><span class="co">#&gt; 3 0.02 998.9759 1.024119 1.656705e-07</span></span>
+<span><span class="co">#&gt; 4 0.03 998.9636 1.036396 5.584446e-07</span></span>
+<span><span class="co">#&gt; 5 0.04 998.9512 1.048819 1.322422e-06</span></span>
+<span><span class="co">#&gt; 6 0.05 998.9386 1.061390 2.580606e-06</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span></code></pre></div>
 <p><img src="denim_files/figure-html/unnamed-chunk-10-1.png" width="1800" style="display: block; margin: auto;"></p>
 </div>
@@ -214,10 +217,7 @@ infection, we will end up with 4 sub-compartments. Each sub-compartment
 has its own recovery rate <span class="math inline">\(\gamma_{1}\)</span>, <span class="math inline">\(\gamma_{2}\)</span>, <span class="math inline">\(\gamma_{3}\)</span>, <span class="math inline">\(\gamma_{4}\)</span>. At day 4 it is certain that
 the patient will recover (because we assume that this disease has a
 maximum 4 days of infection), <span class="math inline">\(\gamma_{4} =
-1\)</span>. Note that the initial population is always assigned to the
-first compartment (for example, if the initial value for I compartment
-is <code>I = 1</code>, denim will initialize <code>I1 = 1</code> while
-<code>I2 = I3 = I4 = 0</code>).</p>
+1\)</span>.</p>
 <center>
 <div id="htmlwidget-1fb4450895fe099f74a1" style="width:100%;height:100%;" class="grViz html-widget"></div>
 <script type="application/json" data-for="htmlwidget-1fb4450895fe099f74a1">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I1 [label = <&#946;S(I<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT> + I<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT> + I<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT> + I<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>)/N>]\n  I1 -> R1 [label = <&#947;<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>I<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>]\n  I2 -> R2 [label = <&#947;<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>I<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>]\n  I3 -> R3 [label = <&#947;<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>I<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>]\n  I4 -> R4 [label = <I<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>>]\n  I1 -> I2 [label = <(1-&#947;<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>)I<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>]\n  I2 -> I3 [label = <(1-&#947;<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>)I<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>]\n  I3 -> I4 [label = <(1-&#947;<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>)I<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
@@ -241,16 +241,35 @@ by the argument <code>errorTolerance = 0.001</code>). The time when
 cumulative probability = 0.999 will be set as the maximum length of stay
 of the compartment. Default <code>errorTolerance</code> of
 <code>denim</code> is set at <code>0.001</code>.</p>
+<p><em>Initialize population in sub-compartments</em></p>
+<p>By default, the initial population is always assigned to the first
+sub-compartment (for example, if the initial value for I compartment is
+<code>I = 1</code>, denim will initialize <code>I1 = 1</code> while
+<code>I2 = I3 = I4 = 0</code>).</p>
+<p>User can also choose to distribute initial population across
+sub-compartments based on the specified distribution, i.e. with initial
+population <code>I = n</code>, then denim will initialize
+<code>I1 = n*p1</code>, <code>I2 = n*p2</code>, <code>I3 = n*p3</code>,
+<code>I4 = n*p4</code>. To set up the initial population in this way,
+simply specify the parameter <code>dist_init = TRUE</code> (only
+applicable for distribution transitions).</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * S * I / N"</span>,</span>
+<span>  <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span>, <span class="fl">3</span>, dist_init<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="waiting-time-distribution">3. Waiting time distribution<a class="anchor" aria-label="anchor" href="#waiting-time-distribution"></a>
 </h2>
-<p>Current available distribution in this package including:</p>
+<p><code>denim</code> offers 2 main ways to define a transition: either
+by a waiting time distribution, or a mathematical expression.</p>
+<p>Current available distributions in this package including:</p>
 <ul>
 <li><p><code>d_exponential(rate)</code>: Discrete <strong>exponential
 distribution</strong> with parameter <code>rate</code></p></li>
-<li><p><code>d_gamma(scale, shape)</code>: Discrete <strong>gamma
-distribution</strong> with parameters <code>scale</code> and
+<li><p><code>d_gamma(rate, shape)</code>: Discrete <strong>gamma
+distribution</strong> with parameters <code>rate</code> and
 <code>shape</code></p></li>
 <li><p><code>d_weibull(scale, shape)</code>: Discrete <strong>Weibull
 distribution</strong> with parameters <code>scale</code> and
@@ -258,57 +277,31 @@ distribution</strong> with parameters <code>scale</code> and
 <li><p><code>d_lognormal(mu, sigma)</code>: Discrete <strong>log-normal
 distribution</strong> with parameters <code>mu</code> and
 <code>sigma</code></p></li>
-</ul>
-<p>You can define other type of transitions such as:</p>
-<ul>
-<li><p>Mathematical expression: Transition defined with a string value
-such as <code>"beta * S * I / N"</code> will be converted to a
-mathematical expression. You will need to define parameters that are not
-compartment names in the <code>parameters</code> argument</p></li>
-<li><p>Constant: Transition defined with a numerical value such as
-<code>1</code>, <code>2</code> will be converted to a constant. This is
-to define the number of individuals moving in a time step.</p></li>
-<li><p><code>transprob(x)</code>: Every time step a <strong>fixed
-percentage</strong> of the left compartment transit to the right
-compartment, this is also a convenient way to define <span class="math inline">\(R_t - R_{t-1} = \gamma I\)</span> which we can
-input <code>"I -&gt; R" = transprob(gamma)</code></p></li>
 <li><p><code>nonparametric(waitingTimes...)</code>: A <strong>vector of
 values</strong>, could be numbers, percentages, density of the length of
 stay based on real data, <code>denim</code> will convert it into a
 distribution</p></li>
-<li><p><code>multinomial(probabilities)</code>: A convenient way to
-define <strong>several probabilities</strong> of a compartment transit
-to many compartments, may or may not in a time step. For example,
-<code>"V -&gt; VA, VS, VH" = multinomial(0.6, 0.3, 0.1)</code> means 60%
-of <code>V</code> will become <code>VA</code>, 30% become
-<code>VS</code> and 10% become <code>VH</code>. If we continue to define
-the length of stay distribution for these transitions e.g
-<code>"V -&gt; VA" = d_gamma(3, 2)</code>, probabilities defined with
-<code><a href="../reference/multinomial.html">multinomial()</a></code> is not the percentage of the left compartment
-transit in each time step, but the percentage of individuals move to
-<code>VA</code> at the equilibrium state. If we do not define further
-length of stay distribution,
-<code>"V -&gt; VA, VS, VH" = multinomial(0.6, 0.3, 0.1)</code> is the
-percentage of <code>V</code> transit to the right compartments per time
-step similar to a <code><a href="../reference/transprob.html">transprob()</a></code> function. See more detailed
-explanations in the <strong><em>Multiple transitions from a
-compartment</em></strong> section.</p></li>
 </ul>
+<p>Mathematical expression: Transition defined with a string value such
+as <code>"beta * S * I / N"</code> will be converted to a mathematical
+expression. You will need to define parameters that are not compartment
+names in the <code>parameters</code> argument</p>
 </div>
 <div class="section level2">
 <h2 id="multiple-transitions-from-a-compartment">4. Multiple transitions from a compartment<a class="anchor" aria-label="anchor" href="#multiple-transitions-from-a-compartment"></a>
 </h2>
-<p>We have many ways to define the type of transition when there are two
-or more transitions from a compartment. Consider this example:</p>
+<p>In <code>denim</code>, transitions between one compartment to
+multiple compartments are modeled as multinomial transition.</p>
+<p>Consider this example:</p>
 <center>
 <div id="htmlwidget-10b3b7155e8045a1b2ad" style="width:500px;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-10b3b7155e8045a1b2ad">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  S -> V [label = \"5\"]\n  I -> R [label = \"0.9 -> d_gamma(3, 2)\"]\n  I -> D [label = \"0.1 -> d_lognormal(2, 0.5)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-10b3b7155e8045a1b2ad">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  S -> V [label = \"5\"]\n  I -> R [label = \"0.9 -> d_gamma(1/3, 2)\"]\n  I -> D [label = \"0.1 -> d_lognormal(2, 0.5)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </center>
 <p>There are two scenarios in this example:</p>
 <ul>
 <li><p>Susceptible individuals can be infected or vaccinated. The
-assumption here is they will be infected first (<code>S -&gt; I</code>),
-and then the rest of them who were not infected will get vaccinated
+underlying assumption here is 50% of susceptible will be infected
+(<code>S -&gt; I</code>), and the remaining 50% will get vaccinated
 (<code>S -&gt; V</code>).</p></li>
 <li><p>Infected individuals can recover or die. If the mortality
 probability is known, we can implement it into the model, for example by
@@ -319,11 +312,11 @@ length of stay of individuals at the infected state before recover or
 die follows gamma or log-normal distribution, respectively.</p></li>
 </ul>
 <p>We can define the model for this example as follows:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * S * I / N"</span>,</span>
-<span>  <span class="st">"S -&gt; V"</span> <span class="op">=</span> <span class="fl">7</span>,</span>
-<span>  <span class="st">"0.9 * I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  <span class="st">"S -&gt; V"</span> <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  <span class="st">"0.9 * I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>  <span class="st">"0.1 * I -&gt; D"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_lognormal.html">d_lognormal</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">0.5</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -348,30 +341,33 @@ die follows gamma or log-normal distribution, respectively.</p></li>
 <span>           parameters <span class="op">=</span> <span class="va">parameters</span>, </span>
 <span>           simulationDuration <span class="op">=</span> <span class="va">simulationDuration</span>, </span>
 <span>           timeStep <span class="op">=</span> <span class="va">timeStep</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   Time        S        I  V            R            D</span></span>
+<span><span class="co">#&gt; 1 0.00 999.0000 1.000000  0 0.000000e+00 0.000000e+00</span></span>
+<span><span class="co">#&gt; 2 0.01 993.8801 1.119875  5 4.988903e-06 0.000000e+00</span></span>
+<span><span class="co">#&gt; 3 0.02 988.7466 1.253422 10 2.050940e-05 1.466074e-33</span></span>
+<span><span class="co">#&gt; 4 0.03 983.5978 1.402113 15 4.775442e-05 1.651901e-29</span></span>
+<span><span class="co">#&gt; 5 0.04 978.4323 1.567566 20 8.805255e-05 8.337600e-27</span></span>
+<span><span class="co">#&gt; 6 0.05 973.2483 1.751562 25 1.428825e-04 8.315472e-25</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span></code></pre></div>
-<p><img src="denim_files/figure-html/unnamed-chunk-14-1.png" width="1500" style="display: block; margin: auto;"></p>
-<p><strong>Tips</strong>: Instead of writing:</p>
-<pre><code>"0.9 * I -&gt; R" = d_gamma(3, 2),
-"0.1 * I -&gt; D" = d_lognormal(2, 0.5)</code></pre>
-<p>You can also use the <code><a href="../reference/multinomial.html">multinomial()</a></code>, then define the
-length of stay distribution and obtain the same result:</p>
-<pre><code>"I -&gt; R, D" = multinomial(0.9, 0.1),
-"I -&gt; R" = d_gamma(3, 2),
-"I -&gt; D" = d_lognormal(2, 0.5)</code></pre>
+<p><img src="denim_files/figure-html/unnamed-chunk-15-1.png" width="1500" style="display: block; margin: auto;"></p>
+<p>For a more detailed explanation for multinomial transition, refer to
+<a href="./multinomial.html">this article</a></p>
 </div>
 <div class="section level2">
 <h2 id="another-example">5. Another example<a class="anchor" aria-label="anchor" href="#another-example"></a>
 </h2>
 <center>
 <div id="htmlwidget-4018eef1a407a0df6b52" style="width:700px;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-4018eef1a407a0df6b52">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;S(I + IV)/N\"]\n  S -> V [label = \"2\"]\n  I -> D [label = \"0.1 -> d_lognormal(2, 0.5)\"]\n  I -> R [label = \"0.9 -> d_gamma(3, 2)\"]\n  V -> IV [label = \"0.1 * &#946;V(I + IV)/N\"]\n  IV -> R [label = \"d_exponential(2)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-4018eef1a407a0df6b52">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;S(I + IV)/N\"]\n  S -> V [label = \"2\"]\n  I -> D [label = \"0.1 -> d_lognormal(2, 0.5)\"]\n  I -> R [label = \"0.9 -> d_gamma(1/3, 2)\"]\n  V -> IV [label = \"0.1 * &#946;V(I + IV)/N\"]\n  IV -> R [label = \"d_exponential(2)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </center>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * S * (I + IV) / N"</span>,</span>
 <span>  <span class="st">"S -&gt; V"</span> <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  <span class="st">"0.1 * I -&gt; D"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_lognormal.html">d_lognormal</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">0.5</span><span class="op">)</span>,</span>
-<span>  <span class="st">"0.9 * I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  <span class="st">"0.9 * I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, shape <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
 <span>  <span class="st">"V -&gt; IV"</span> <span class="op">=</span> <span class="st">"0.1 * beta * V * (I + IV) / N"</span>,</span>
 <span>  <span class="st">"IV -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_exponential.html">d_exponential</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -399,17 +395,16 @@ length of stay distribution and obtain the same result:</p>
 <span>           simulationDuration <span class="op">=</span> <span class="va">simulationDuration</span>, </span>
 <span>           timeStep <span class="op">=</span> <span class="va">timeStep</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span></code></pre></div>
-<p><img src="denim_files/figure-html/unnamed-chunk-16-1.png" width="1500" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<p><img src="denim_files/figure-html/unnamed-chunk-17-1.png" width="1500" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  <span class="st">"O -&gt; S"</span> <span class="op">=</span> <span class="fl">100</span>,</span>
-<span>  <span class="st">"S -&gt; I, R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/multinomial.html">multinomial</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span>,</span>
+<span>  <span class="st">"M -&gt; S"</span> <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="fu"><a href="../reference/transprob.html">transprob</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,</span>
 <span>  <span class="st">"S -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/transprob.html">transprob</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">initialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>  O <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  M <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>  S <span class="op">=</span> <span class="fl">500</span>, </span>
 <span>  I <span class="op">=</span> <span class="fl">0</span>, </span>
 <span>  R <span class="op">=</span> <span class="fl">0</span></span>
@@ -423,1009 +418,14 @@ length of stay distribution and obtain the same result:</p>
 <span>           parameters <span class="op">=</span> <span class="va">parameters</span>, </span>
 <span>           simulationDuration <span class="op">=</span> <span class="va">simulationDuration</span>, </span>
 <span>           timeStep <span class="op">=</span> <span class="va">timeStep</span><span class="op">)</span></span>
-<span><span class="va">mod</span></span>
-<span><span class="co">#&gt;       Time    O            S         I         R</span></span>
-<span><span class="co">#&gt; 1     0.00 1000 5.000000e+02   0.00000   0.00000</span></span>
-<span><span class="co">#&gt; 2     0.01  900 5.950000e+02   2.50000   2.50000</span></span>
-<span><span class="co">#&gt; 3     0.02  800 6.890500e+02   5.47500   5.47500</span></span>
-<span><span class="co">#&gt; 4     0.03  700 7.821595e+02   8.92025   8.92025</span></span>
-<span><span class="co">#&gt; 5     0.04  600 8.743379e+02  12.83105  12.83105</span></span>
-<span><span class="co">#&gt; 6     0.05  500 9.655945e+02  17.20274  17.20274</span></span>
-<span><span class="co">#&gt; 7     0.06  400 1.055939e+03  22.03071  22.03071</span></span>
-<span><span class="co">#&gt; 8     0.07  300 1.145379e+03  27.31040  27.31040</span></span>
-<span><span class="co">#&gt; 9     0.08  200 1.233925e+03  33.03730  33.03730</span></span>
-<span><span class="co">#&gt; 10    0.09  100 1.321586e+03  39.20693  39.20693</span></span>
-<span><span class="co">#&gt; 11    0.10    0 1.408370e+03  45.81486  45.81486</span></span>
-<span><span class="co">#&gt; 12    0.11    0 1.394287e+03  52.85671  52.85671</span></span>
-<span><span class="co">#&gt; 13    0.12    0 1.380344e+03  59.82814  59.82814</span></span>
-<span><span class="co">#&gt; 14    0.13    0 1.366540e+03  66.72986  66.72986</span></span>
-<span><span class="co">#&gt; 15    0.14    0 1.352875e+03  73.56256  73.56256</span></span>
-<span><span class="co">#&gt; 16    0.15    0 1.339346e+03  80.32694  80.32694</span></span>
-<span><span class="co">#&gt; 17    0.16    0 1.325953e+03  87.02367  87.02367</span></span>
-<span><span class="co">#&gt; 18    0.17    0 1.312693e+03  93.65343  93.65343</span></span>
-<span><span class="co">#&gt; 19    0.18    0 1.299566e+03 100.21689 100.21689</span></span>
-<span><span class="co">#&gt; 20    0.19    0 1.286571e+03 106.71473 106.71473</span></span>
-<span><span class="co">#&gt; 21    0.20    0 1.273705e+03 113.14758 113.14758</span></span>
-<span><span class="co">#&gt; 22    0.21    0 1.260968e+03 119.51610 119.51610</span></span>
-<span><span class="co">#&gt; 23    0.22    0 1.248358e+03 125.82094 125.82094</span></span>
-<span><span class="co">#&gt; 24    0.23    0 1.235875e+03 132.06273 132.06273</span></span>
-<span><span class="co">#&gt; 25    0.24    0 1.223516e+03 138.24210 138.24210</span></span>
-<span><span class="co">#&gt; 26    0.25    0 1.211281e+03 144.35968 144.35968</span></span>
-<span><span class="co">#&gt; 27    0.26    0 1.199168e+03 150.41609 150.41609</span></span>
-<span><span class="co">#&gt; 28    0.27    0 1.187176e+03 156.41193 156.41193</span></span>
-<span><span class="co">#&gt; 29    0.28    0 1.175304e+03 162.34781 162.34781</span></span>
-<span><span class="co">#&gt; 30    0.29    0 1.163551e+03 168.22433 168.22433</span></span>
-<span><span class="co">#&gt; 31    0.30    0 1.151916e+03 174.04209 174.04209</span></span>
-<span><span class="co">#&gt; 32    0.31    0 1.140397e+03 179.80166 179.80166</span></span>
-<span><span class="co">#&gt; 33    0.32    0 1.128993e+03 185.50365 185.50365</span></span>
-<span><span class="co">#&gt; 34    0.33    0 1.117703e+03 191.14861 191.14861</span></span>
-<span><span class="co">#&gt; 35    0.34    0 1.106526e+03 196.73713 196.73713</span></span>
-<span><span class="co">#&gt; 36    0.35    0 1.095460e+03 202.26975 202.26975</span></span>
-<span><span class="co">#&gt; 37    0.36    0 1.084506e+03 207.74706 207.74706</span></span>
-<span><span class="co">#&gt; 38    0.37    0 1.073661e+03 213.16959 213.16959</span></span>
-<span><span class="co">#&gt; 39    0.38    0 1.062924e+03 218.53789 218.53789</span></span>
-<span><span class="co">#&gt; 40    0.39    0 1.052295e+03 223.85251 223.85251</span></span>
-<span><span class="co">#&gt; 41    0.40    0 1.041772e+03 229.11399 229.11399</span></span>
-<span><span class="co">#&gt; 42    0.41    0 1.031354e+03 234.32285 234.32285</span></span>
-<span><span class="co">#&gt; 43    0.42    0 1.021041e+03 239.47962 239.47962</span></span>
-<span><span class="co">#&gt; 44    0.43    0 1.010830e+03 244.58482 244.58482</span></span>
-<span><span class="co">#&gt; 45    0.44    0 1.000722e+03 249.63897 249.63897</span></span>
-<span><span class="co">#&gt; 46    0.45    0 9.907148e+02 254.64258 254.64258</span></span>
-<span><span class="co">#&gt; 47    0.46    0 9.808077e+02 259.59616 259.59616</span></span>
-<span><span class="co">#&gt; 48    0.47    0 9.709996e+02 264.50020 264.50020</span></span>
-<span><span class="co">#&gt; 49    0.48    0 9.612896e+02 269.35519 269.35519</span></span>
-<span><span class="co">#&gt; 50    0.49    0 9.516767e+02 274.16164 274.16164</span></span>
-<span><span class="co">#&gt; 51    0.50    0 9.421599e+02 278.92003 278.92003</span></span>
-<span><span class="co">#&gt; 52    0.51    0 9.327383e+02 283.63083 283.63083</span></span>
-<span><span class="co">#&gt; 53    0.52    0 9.234110e+02 288.29452 288.29452</span></span>
-<span><span class="co">#&gt; 54    0.53    0 9.141769e+02 292.91157 292.91157</span></span>
-<span><span class="co">#&gt; 55    0.54    0 9.050351e+02 297.48246 297.48246</span></span>
-<span><span class="co">#&gt; 56    0.55    0 8.959847e+02 302.00763 302.00763</span></span>
-<span><span class="co">#&gt; 57    0.56    0 8.870249e+02 306.48756 306.48756</span></span>
-<span><span class="co">#&gt; 58    0.57    0 8.781546e+02 310.92268 310.92268</span></span>
-<span><span class="co">#&gt; 59    0.58    0 8.693731e+02 315.31345 315.31345</span></span>
-<span><span class="co">#&gt; 60    0.59    0 8.606794e+02 319.66032 319.66032</span></span>
-<span><span class="co">#&gt; 61    0.60    0 8.520726e+02 323.96372 323.96372</span></span>
-<span><span class="co">#&gt; 62    0.61    0 8.435518e+02 328.22408 328.22408</span></span>
-<span><span class="co">#&gt; 63    0.62    0 8.351163e+02 332.44184 332.44184</span></span>
-<span><span class="co">#&gt; 64    0.63    0 8.267652e+02 336.61742 336.61742</span></span>
-<span><span class="co">#&gt; 65    0.64    0 8.184975e+02 340.75125 340.75125</span></span>
-<span><span class="co">#&gt; 66    0.65    0 8.103125e+02 344.84373 344.84373</span></span>
-<span><span class="co">#&gt; 67    0.66    0 8.022094e+02 348.89530 348.89530</span></span>
-<span><span class="co">#&gt; 68    0.67    0 7.941873e+02 352.90634 352.90634</span></span>
-<span><span class="co">#&gt; 69    0.68    0 7.862454e+02 356.87728 356.87728</span></span>
-<span><span class="co">#&gt; 70    0.69    0 7.783830e+02 360.80851 360.80851</span></span>
-<span><span class="co">#&gt; 71    0.70    0 7.705992e+02 364.70042 364.70042</span></span>
-<span><span class="co">#&gt; 72    0.71    0 7.628932e+02 368.55342 368.55342</span></span>
-<span><span class="co">#&gt; 73    0.72    0 7.552642e+02 372.36788 372.36788</span></span>
-<span><span class="co">#&gt; 74    0.73    0 7.477116e+02 376.14420 376.14420</span></span>
-<span><span class="co">#&gt; 75    0.74    0 7.402345e+02 379.88276 379.88276</span></span>
-<span><span class="co">#&gt; 76    0.75    0 7.328321e+02 383.58393 383.58393</span></span>
-<span><span class="co">#&gt; 77    0.76    0 7.255038e+02 387.24809 387.24809</span></span>
-<span><span class="co">#&gt; 78    0.77    0 7.182488e+02 390.87561 390.87561</span></span>
-<span><span class="co">#&gt; 79    0.78    0 7.110663e+02 394.46686 394.46686</span></span>
-<span><span class="co">#&gt; 80    0.79    0 7.039556e+02 398.02219 398.02219</span></span>
-<span><span class="co">#&gt; 81    0.80    0 6.969161e+02 401.54197 401.54197</span></span>
-<span><span class="co">#&gt; 82    0.81    0 6.899469e+02 405.02655 405.02655</span></span>
-<span><span class="co">#&gt; 83    0.82    0 6.830474e+02 408.47628 408.47628</span></span>
-<span><span class="co">#&gt; 84    0.83    0 6.762170e+02 411.89152 411.89152</span></span>
-<span><span class="co">#&gt; 85    0.84    0 6.694548e+02 415.27260 415.27260</span></span>
-<span><span class="co">#&gt; 86    0.85    0 6.627602e+02 418.61988 418.61988</span></span>
-<span><span class="co">#&gt; 87    0.86    0 6.561326e+02 421.93368 421.93368</span></span>
-<span><span class="co">#&gt; 88    0.87    0 6.495713e+02 425.21434 425.21434</span></span>
-<span><span class="co">#&gt; 89    0.88    0 6.430756e+02 428.46220 428.46220</span></span>
-<span><span class="co">#&gt; 90    0.89    0 6.366448e+02 431.67758 431.67758</span></span>
-<span><span class="co">#&gt; 91    0.90    0 6.302784e+02 434.86080 434.86080</span></span>
-<span><span class="co">#&gt; 92    0.91    0 6.239756e+02 438.01219 438.01219</span></span>
-<span><span class="co">#&gt; 93    0.92    0 6.177359e+02 441.13207 441.13207</span></span>
-<span><span class="co">#&gt; 94    0.93    0 6.115585e+02 444.22075 444.22075</span></span>
-<span><span class="co">#&gt; 95    0.94    0 6.054429e+02 447.27854 447.27854</span></span>
-<span><span class="co">#&gt; 96    0.95    0 5.993885e+02 450.30576 450.30576</span></span>
-<span><span class="co">#&gt; 97    0.96    0 5.933946e+02 453.30270 453.30270</span></span>
-<span><span class="co">#&gt; 98    0.97    0 5.874607e+02 456.26967 456.26967</span></span>
-<span><span class="co">#&gt; 99    0.98    0 5.815860e+02 459.20698 459.20698</span></span>
-<span><span class="co">#&gt; 100   0.99    0 5.757702e+02 462.11491 462.11491</span></span>
-<span><span class="co">#&gt; 101   1.00    0 5.700125e+02 464.99376 464.99376</span></span>
-<span><span class="co">#&gt; 102   1.01    0 5.643124e+02 467.84382 467.84382</span></span>
-<span><span class="co">#&gt; 103   1.02    0 5.586692e+02 470.66538 470.66538</span></span>
-<span><span class="co">#&gt; 104   1.03    0 5.530825e+02 473.45873 473.45873</span></span>
-<span><span class="co">#&gt; 105   1.04    0 5.475517e+02 476.22414 476.22414</span></span>
-<span><span class="co">#&gt; 106   1.05    0 5.420762e+02 478.96190 478.96190</span></span>
-<span><span class="co">#&gt; 107   1.06    0 5.366554e+02 481.67228 481.67228</span></span>
-<span><span class="co">#&gt; 108   1.07    0 5.312889e+02 484.35556 484.35556</span></span>
-<span><span class="co">#&gt; 109   1.08    0 5.259760e+02 487.01200 487.01200</span></span>
-<span><span class="co">#&gt; 110   1.09    0 5.207162e+02 489.64188 489.64188</span></span>
-<span><span class="co">#&gt; 111   1.10    0 5.155091e+02 492.24546 492.24546</span></span>
-<span><span class="co">#&gt; 112   1.11    0 5.103540e+02 494.82301 494.82301</span></span>
-<span><span class="co">#&gt; 113   1.12    0 5.052504e+02 497.37478 497.37478</span></span>
-<span><span class="co">#&gt; 114   1.13    0 5.001979e+02 499.90103 499.90103</span></span>
-<span><span class="co">#&gt; 115   1.14    0 4.951960e+02 502.40202 502.40202</span></span>
-<span><span class="co">#&gt; 116   1.15    0 4.902440e+02 504.87800 504.87800</span></span>
-<span><span class="co">#&gt; 117   1.16    0 4.853416e+02 507.32922 507.32922</span></span>
-<span><span class="co">#&gt; 118   1.17    0 4.804881e+02 509.75593 509.75593</span></span>
-<span><span class="co">#&gt; 119   1.18    0 4.756833e+02 512.15837 512.15837</span></span>
-<span><span class="co">#&gt; 120   1.19    0 4.709264e+02 514.53678 514.53678</span></span>
-<span><span class="co">#&gt; 121   1.20    0 4.662172e+02 516.89142 516.89142</span></span>
-<span><span class="co">#&gt; 122   1.21    0 4.615550e+02 519.22250 519.22250</span></span>
-<span><span class="co">#&gt; 123   1.22    0 4.569394e+02 521.53028 521.53028</span></span>
-<span><span class="co">#&gt; 124   1.23    0 4.523700e+02 523.81498 523.81498</span></span>
-<span><span class="co">#&gt; 125   1.24    0 4.478463e+02 526.07683 526.07683</span></span>
-<span><span class="co">#&gt; 126   1.25    0 4.433679e+02 528.31606 528.31606</span></span>
-<span><span class="co">#&gt; 127   1.26    0 4.389342e+02 530.53290 530.53290</span></span>
-<span><span class="co">#&gt; 128   1.27    0 4.345449e+02 532.72757 532.72757</span></span>
-<span><span class="co">#&gt; 129   1.28    0 4.301994e+02 534.90029 534.90029</span></span>
-<span><span class="co">#&gt; 130   1.29    0 4.258974e+02 537.05129 537.05129</span></span>
-<span><span class="co">#&gt; 131   1.30    0 4.216384e+02 539.18078 539.18078</span></span>
-<span><span class="co">#&gt; 132   1.31    0 4.174221e+02 541.28897 541.28897</span></span>
-<span><span class="co">#&gt; 133   1.32    0 4.132478e+02 543.37608 543.37608</span></span>
-<span><span class="co">#&gt; 134   1.33    0 4.091154e+02 545.44232 545.44232</span></span>
-<span><span class="co">#&gt; 135   1.34    0 4.050242e+02 547.48789 547.48789</span></span>
-<span><span class="co">#&gt; 136   1.35    0 4.009740e+02 549.51302 549.51302</span></span>
-<span><span class="co">#&gt; 137   1.36    0 3.969642e+02 551.51789 551.51789</span></span>
-<span><span class="co">#&gt; 138   1.37    0 3.929946e+02 553.50271 553.50271</span></span>
-<span><span class="co">#&gt; 139   1.38    0 3.890646e+02 555.46768 555.46768</span></span>
-<span><span class="co">#&gt; 140   1.39    0 3.851740e+02 557.41300 557.41300</span></span>
-<span><span class="co">#&gt; 141   1.40    0 3.813223e+02 559.33887 559.33887</span></span>
-<span><span class="co">#&gt; 142   1.41    0 3.775090e+02 561.24548 561.24548</span></span>
-<span><span class="co">#&gt; 143   1.42    0 3.737339e+02 563.13303 563.13303</span></span>
-<span><span class="co">#&gt; 144   1.43    0 3.699966e+02 565.00170 565.00170</span></span>
-<span><span class="co">#&gt; 145   1.44    0 3.662966e+02 566.85168 566.85168</span></span>
-<span><span class="co">#&gt; 146   1.45    0 3.626337e+02 568.68317 568.68317</span></span>
-<span><span class="co">#&gt; 147   1.46    0 3.590073e+02 570.49633 570.49633</span></span>
-<span><span class="co">#&gt; 148   1.47    0 3.554173e+02 572.29137 572.29137</span></span>
-<span><span class="co">#&gt; 149   1.48    0 3.518631e+02 574.06846 574.06846</span></span>
-<span><span class="co">#&gt; 150   1.49    0 3.483445e+02 575.82777 575.82777</span></span>
-<span><span class="co">#&gt; 151   1.50    0 3.448610e+02 577.56949 577.56949</span></span>
-<span><span class="co">#&gt; 152   1.51    0 3.414124e+02 579.29380 579.29380</span></span>
-<span><span class="co">#&gt; 153   1.52    0 3.379983e+02 581.00086 581.00086</span></span>
-<span><span class="co">#&gt; 154   1.53    0 3.346183e+02 582.69085 582.69085</span></span>
-<span><span class="co">#&gt; 155   1.54    0 3.312721e+02 584.36394 584.36394</span></span>
-<span><span class="co">#&gt; 156   1.55    0 3.279594e+02 586.02030 586.02030</span></span>
-<span><span class="co">#&gt; 157   1.56    0 3.246798e+02 587.66010 587.66010</span></span>
-<span><span class="co">#&gt; 158   1.57    0 3.214330e+02 589.28350 589.28350</span></span>
-<span><span class="co">#&gt; 159   1.58    0 3.182187e+02 590.89067 590.89067</span></span>
-<span><span class="co">#&gt; 160   1.59    0 3.150365e+02 592.48176 592.48176</span></span>
-<span><span class="co">#&gt; 161   1.60    0 3.118861e+02 594.05694 594.05694</span></span>
-<span><span class="co">#&gt; 162   1.61    0 3.087673e+02 595.61637 595.61637</span></span>
-<span><span class="co">#&gt; 163   1.62    0 3.056796e+02 597.16021 597.16021</span></span>
-<span><span class="co">#&gt; 164   1.63    0 3.026228e+02 598.68861 598.68861</span></span>
-<span><span class="co">#&gt; 165   1.64    0 2.995966e+02 600.20172 600.20172</span></span>
-<span><span class="co">#&gt; 166   1.65    0 2.966006e+02 601.69970 601.69970</span></span>
-<span><span class="co">#&gt; 167   1.66    0 2.936346e+02 603.18271 603.18271</span></span>
-<span><span class="co">#&gt; 168   1.67    0 2.906982e+02 604.65088 604.65088</span></span>
-<span><span class="co">#&gt; 169   1.68    0 2.877913e+02 606.10437 606.10437</span></span>
-<span><span class="co">#&gt; 170   1.69    0 2.849133e+02 607.54333 607.54333</span></span>
-<span><span class="co">#&gt; 171   1.70    0 2.820642e+02 608.96789 608.96789</span></span>
-<span><span class="co">#&gt; 172   1.71    0 2.792436e+02 610.37821 610.37821</span></span>
-<span><span class="co">#&gt; 173   1.72    0 2.764511e+02 611.77443 611.77443</span></span>
-<span><span class="co">#&gt; 174   1.73    0 2.736866e+02 613.15669 613.15669</span></span>
-<span><span class="co">#&gt; 175   1.74    0 2.709498e+02 614.52512 614.52512</span></span>
-<span><span class="co">#&gt; 176   1.75    0 2.682403e+02 615.87987 615.87987</span></span>
-<span><span class="co">#&gt; 177   1.76    0 2.655579e+02 617.22107 617.22107</span></span>
-<span><span class="co">#&gt; 178   1.77    0 2.629023e+02 618.54886 618.54886</span></span>
-<span><span class="co">#&gt; 179   1.78    0 2.602733e+02 619.86337 619.86337</span></span>
-<span><span class="co">#&gt; 180   1.79    0 2.576705e+02 621.16474 621.16474</span></span>
-<span><span class="co">#&gt; 181   1.80    0 2.550938e+02 622.45309 622.45309</span></span>
-<span><span class="co">#&gt; 182   1.81    0 2.525429e+02 623.72856 623.72856</span></span>
-<span><span class="co">#&gt; 183   1.82    0 2.500175e+02 624.99127 624.99127</span></span>
-<span><span class="co">#&gt; 184   1.83    0 2.475173e+02 626.24136 626.24136</span></span>
-<span><span class="co">#&gt; 185   1.84    0 2.450421e+02 627.47895 627.47895</span></span>
-<span><span class="co">#&gt; 186   1.85    0 2.425917e+02 628.70416 628.70416</span></span>
-<span><span class="co">#&gt; 187   1.86    0 2.401658e+02 629.91712 629.91712</span></span>
-<span><span class="co">#&gt; 188   1.87    0 2.377641e+02 631.11795 631.11795</span></span>
-<span><span class="co">#&gt; 189   1.88    0 2.353865e+02 632.30677 632.30677</span></span>
-<span><span class="co">#&gt; 190   1.89    0 2.330326e+02 633.48370 633.48370</span></span>
-<span><span class="co">#&gt; 191   1.90    0 2.307023e+02 634.64886 634.64886</span></span>
-<span><span class="co">#&gt; 192   1.91    0 2.283953e+02 635.80237 635.80237</span></span>
-<span><span class="co">#&gt; 193   1.92    0 2.261113e+02 636.94435 636.94435</span></span>
-<span><span class="co">#&gt; 194   1.93    0 2.238502e+02 638.07491 638.07491</span></span>
-<span><span class="co">#&gt; 195   1.94    0 2.216117e+02 639.19416 639.19416</span></span>
-<span><span class="co">#&gt; 196   1.95    0 2.193956e+02 640.30221 640.30221</span></span>
-<span><span class="co">#&gt; 197   1.96    0 2.172016e+02 641.39919 641.39919</span></span>
-<span><span class="co">#&gt; 198   1.97    0 2.150296e+02 642.48520 642.48520</span></span>
-<span><span class="co">#&gt; 199   1.98    0 2.128793e+02 643.56035 643.56035</span></span>
-<span><span class="co">#&gt; 200   1.99    0 2.107505e+02 644.62475 644.62475</span></span>
-<span><span class="co">#&gt; 201   2.00    0 2.086430e+02 645.67850 645.67850</span></span>
-<span><span class="co">#&gt; 202   2.01    0 2.065566e+02 646.72171 646.72171</span></span>
-<span><span class="co">#&gt; 203   2.02    0 2.044910e+02 647.75450 647.75450</span></span>
-<span><span class="co">#&gt; 204   2.03    0 2.024461e+02 648.77695 648.77695</span></span>
-<span><span class="co">#&gt; 205   2.04    0 2.004216e+02 649.78918 649.78918</span></span>
-<span><span class="co">#&gt; 206   2.05    0 1.984174e+02 650.79129 650.79129</span></span>
-<span><span class="co">#&gt; 207   2.06    0 1.964332e+02 651.78338 651.78338</span></span>
-<span><span class="co">#&gt; 208   2.07    0 1.944689e+02 652.76554 652.76554</span></span>
-<span><span class="co">#&gt; 209   2.08    0 1.925242e+02 653.73789 653.73789</span></span>
-<span><span class="co">#&gt; 210   2.09    0 1.905990e+02 654.70051 654.70051</span></span>
-<span><span class="co">#&gt; 211   2.10    0 1.886930e+02 655.65350 655.65350</span></span>
-<span><span class="co">#&gt; 212   2.11    0 1.868061e+02 656.59697 656.59697</span></span>
-<span><span class="co">#&gt; 213   2.12    0 1.849380e+02 657.53100 657.53100</span></span>
-<span><span class="co">#&gt; 214   2.13    0 1.830886e+02 658.45569 658.45569</span></span>
-<span><span class="co">#&gt; 215   2.14    0 1.812577e+02 659.37113 659.37113</span></span>
-<span><span class="co">#&gt; 216   2.15    0 1.794452e+02 660.27742 660.27742</span></span>
-<span><span class="co">#&gt; 217   2.16    0 1.776507e+02 661.17465 661.17465</span></span>
-<span><span class="co">#&gt; 218   2.17    0 1.758742e+02 662.06290 662.06290</span></span>
-<span><span class="co">#&gt; 219   2.18    0 1.741155e+02 662.94227 662.94227</span></span>
-<span><span class="co">#&gt; 220   2.19    0 1.723743e+02 663.81285 663.81285</span></span>
-<span><span class="co">#&gt; 221   2.20    0 1.706506e+02 664.67472 664.67472</span></span>
-<span><span class="co">#&gt; 222   2.21    0 1.689441e+02 665.52797 665.52797</span></span>
-<span><span class="co">#&gt; 223   2.22    0 1.672546e+02 666.37269 666.37269</span></span>
-<span><span class="co">#&gt; 224   2.23    0 1.655821e+02 667.20897 667.20897</span></span>
-<span><span class="co">#&gt; 225   2.24    0 1.639262e+02 668.03688 668.03688</span></span>
-<span><span class="co">#&gt; 226   2.25    0 1.622870e+02 668.85651 668.85651</span></span>
-<span><span class="co">#&gt; 227   2.26    0 1.606641e+02 669.66794 669.66794</span></span>
-<span><span class="co">#&gt; 228   2.27    0 1.590575e+02 670.47126 670.47126</span></span>
-<span><span class="co">#&gt; 229   2.28    0 1.574669e+02 671.26655 671.26655</span></span>
-<span><span class="co">#&gt; 230   2.29    0 1.558922e+02 672.05388 672.05388</span></span>
-<span><span class="co">#&gt; 231   2.30    0 1.543333e+02 672.83335 672.83335</span></span>
-<span><span class="co">#&gt; 232   2.31    0 1.527900e+02 673.60501 673.60501</span></span>
-<span><span class="co">#&gt; 233   2.32    0 1.512621e+02 674.36896 674.36896</span></span>
-<span><span class="co">#&gt; 234   2.33    0 1.497495e+02 675.12527 675.12527</span></span>
-<span><span class="co">#&gt; 235   2.34    0 1.482520e+02 675.87402 675.87402</span></span>
-<span><span class="co">#&gt; 236   2.35    0 1.467694e+02 676.61528 676.61528</span></span>
-<span><span class="co">#&gt; 237   2.36    0 1.453017e+02 677.34913 677.34913</span></span>
-<span><span class="co">#&gt; 238   2.37    0 1.438487e+02 678.07564 678.07564</span></span>
-<span><span class="co">#&gt; 239   2.38    0 1.424102e+02 678.79488 678.79488</span></span>
-<span><span class="co">#&gt; 240   2.39    0 1.409861e+02 679.50693 679.50693</span></span>
-<span><span class="co">#&gt; 241   2.40    0 1.395763e+02 680.21186 680.21186</span></span>
-<span><span class="co">#&gt; 242   2.41    0 1.381805e+02 680.90974 680.90974</span></span>
-<span><span class="co">#&gt; 243   2.42    0 1.367987e+02 681.60065 681.60065</span></span>
-<span><span class="co">#&gt; 244   2.43    0 1.354307e+02 682.28464 682.28464</span></span>
-<span><span class="co">#&gt; 245   2.44    0 1.340764e+02 682.96179 682.96179</span></span>
-<span><span class="co">#&gt; 246   2.45    0 1.327357e+02 683.63217 683.63217</span></span>
-<span><span class="co">#&gt; 247   2.46    0 1.314083e+02 684.29585 684.29585</span></span>
-<span><span class="co">#&gt; 248   2.47    0 1.300942e+02 684.95289 684.95289</span></span>
-<span><span class="co">#&gt; 249   2.48    0 1.287933e+02 685.60337 685.60337</span></span>
-<span><span class="co">#&gt; 250   2.49    0 1.275053e+02 686.24733 686.24733</span></span>
-<span><span class="co">#&gt; 251   2.50    0 1.262303e+02 686.88486 686.88486</span></span>
-<span><span class="co">#&gt; 252   2.51    0 1.249680e+02 687.51601 687.51601</span></span>
-<span><span class="co">#&gt; 253   2.52    0 1.237183e+02 688.14085 688.14085</span></span>
-<span><span class="co">#&gt; 254   2.53    0 1.224811e+02 688.75944 688.75944</span></span>
-<span><span class="co">#&gt; 255   2.54    0 1.212563e+02 689.37185 689.37185</span></span>
-<span><span class="co">#&gt; 256   2.55    0 1.200437e+02 689.97813 689.97813</span></span>
-<span><span class="co">#&gt; 257   2.56    0 1.188433e+02 690.57835 690.57835</span></span>
-<span><span class="co">#&gt; 258   2.57    0 1.176549e+02 691.17256 691.17256</span></span>
-<span><span class="co">#&gt; 259   2.58    0 1.164783e+02 691.76084 691.76084</span></span>
-<span><span class="co">#&gt; 260   2.59    0 1.153135e+02 692.34323 692.34323</span></span>
-<span><span class="co">#&gt; 261   2.60    0 1.141604e+02 692.91980 692.91980</span></span>
-<span><span class="co">#&gt; 262   2.61    0 1.130188e+02 693.49060 693.49060</span></span>
-<span><span class="co">#&gt; 263   2.62    0 1.118886e+02 694.05569 694.05569</span></span>
-<span><span class="co">#&gt; 264   2.63    0 1.107697e+02 694.61514 694.61514</span></span>
-<span><span class="co">#&gt; 265   2.64    0 1.096620e+02 695.16898 695.16898</span></span>
-<span><span class="co">#&gt; 266   2.65    0 1.085654e+02 695.71730 695.71730</span></span>
-<span><span class="co">#&gt; 267   2.66    0 1.074798e+02 696.26012 696.26012</span></span>
-<span><span class="co">#&gt; 268   2.67    0 1.064050e+02 696.79752 696.79752</span></span>
-<span><span class="co">#&gt; 269   2.68    0 1.053409e+02 697.32955 697.32955</span></span>
-<span><span class="co">#&gt; 270   2.69    0 1.042875e+02 697.85625 697.85625</span></span>
-<span><span class="co">#&gt; 271   2.70    0 1.032446e+02 698.37769 698.37769</span></span>
-<span><span class="co">#&gt; 272   2.71    0 1.022122e+02 698.89391 698.89391</span></span>
-<span><span class="co">#&gt; 273   2.72    0 1.011901e+02 699.40497 699.40497</span></span>
-<span><span class="co">#&gt; 274   2.73    0 1.001782e+02 699.91092 699.91092</span></span>
-<span><span class="co">#&gt; 275   2.74    0 9.917637e+01 700.41181 700.41181</span></span>
-<span><span class="co">#&gt; 276   2.75    0 9.818461e+01 700.90769 700.90769</span></span>
-<span><span class="co">#&gt; 277   2.76    0 9.720276e+01 701.39862 701.39862</span></span>
-<span><span class="co">#&gt; 278   2.77    0 9.623074e+01 701.88463 701.88463</span></span>
-<span><span class="co">#&gt; 279   2.78    0 9.526843e+01 702.36579 702.36579</span></span>
-<span><span class="co">#&gt; 280   2.79    0 9.431575e+01 702.84213 702.84213</span></span>
-<span><span class="co">#&gt; 281   2.80    0 9.337259e+01 703.31371 703.31371</span></span>
-<span><span class="co">#&gt; 282   2.81    0 9.243886e+01 703.78057 703.78057</span></span>
-<span><span class="co">#&gt; 283   2.82    0 9.151447e+01 704.24276 704.24276</span></span>
-<span><span class="co">#&gt; 284   2.83    0 9.059933e+01 704.70034 704.70034</span></span>
-<span><span class="co">#&gt; 285   2.84    0 8.969334e+01 705.15333 705.15333</span></span>
-<span><span class="co">#&gt; 286   2.85    0 8.879640e+01 705.60180 705.60180</span></span>
-<span><span class="co">#&gt; 287   2.86    0 8.790844e+01 706.04578 706.04578</span></span>
-<span><span class="co">#&gt; 288   2.87    0 8.702935e+01 706.48532 706.48532</span></span>
-<span><span class="co">#&gt; 289   2.88    0 8.615906e+01 706.92047 706.92047</span></span>
-<span><span class="co">#&gt; 290   2.89    0 8.529747e+01 707.35127 707.35127</span></span>
-<span><span class="co">#&gt; 291   2.90    0 8.444449e+01 707.77775 707.77775</span></span>
-<span><span class="co">#&gt; 292   2.91    0 8.360005e+01 708.19998 708.19998</span></span>
-<span><span class="co">#&gt; 293   2.92    0 8.276405e+01 708.61798 708.61798</span></span>
-<span><span class="co">#&gt; 294   2.93    0 8.193641e+01 709.03180 709.03180</span></span>
-<span><span class="co">#&gt; 295   2.94    0 8.111704e+01 709.44148 709.44148</span></span>
-<span><span class="co">#&gt; 296   2.95    0 8.030587e+01 709.84706 709.84706</span></span>
-<span><span class="co">#&gt; 297   2.96    0 7.950282e+01 710.24859 710.24859</span></span>
-<span><span class="co">#&gt; 298   2.97    0 7.870779e+01 710.64611 710.64611</span></span>
-<span><span class="co">#&gt; 299   2.98    0 7.792071e+01 711.03965 711.03965</span></span>
-<span><span class="co">#&gt; 300   2.99    0 7.714150e+01 711.42925 711.42925</span></span>
-<span><span class="co">#&gt; 301   3.00    0 7.637009e+01 711.81496 711.81496</span></span>
-<span><span class="co">#&gt; 302   3.01    0 7.560639e+01 712.19681 712.19681</span></span>
-<span><span class="co">#&gt; 303   3.02    0 7.485032e+01 712.57484 712.57484</span></span>
-<span><span class="co">#&gt; 304   3.03    0 7.410182e+01 712.94909 712.94909</span></span>
-<span><span class="co">#&gt; 305   3.04    0 7.336080e+01 713.31960 713.31960</span></span>
-<span><span class="co">#&gt; 306   3.05    0 7.262719e+01 713.68640 713.68640</span></span>
-<span><span class="co">#&gt; 307   3.06    0 7.190092e+01 714.04954 714.04954</span></span>
-<span><span class="co">#&gt; 308   3.07    0 7.118191e+01 714.40904 714.40904</span></span>
-<span><span class="co">#&gt; 309   3.08    0 7.047009e+01 714.76495 714.76495</span></span>
-<span><span class="co">#&gt; 310   3.09    0 6.976539e+01 715.11730 715.11730</span></span>
-<span><span class="co">#&gt; 311   3.10    0 6.906774e+01 715.46613 715.46613</span></span>
-<span><span class="co">#&gt; 312   3.11    0 6.837706e+01 715.81147 715.81147</span></span>
-<span><span class="co">#&gt; 313   3.12    0 6.769329e+01 716.15335 716.15335</span></span>
-<span><span class="co">#&gt; 314   3.13    0 6.701636e+01 716.49182 716.49182</span></span>
-<span><span class="co">#&gt; 315   3.14    0 6.634619e+01 716.82690 716.82690</span></span>
-<span><span class="co">#&gt; 316   3.15    0 6.568273e+01 717.15863 717.15863</span></span>
-<span><span class="co">#&gt; 317   3.16    0 6.502590e+01 717.48705 717.48705</span></span>
-<span><span class="co">#&gt; 318   3.17    0 6.437565e+01 717.81218 717.81218</span></span>
-<span><span class="co">#&gt; 319   3.18    0 6.373189e+01 718.13406 718.13406</span></span>
-<span><span class="co">#&gt; 320   3.19    0 6.309457e+01 718.45272 718.45272</span></span>
-<span><span class="co">#&gt; 321   3.20    0 6.246362e+01 718.76819 718.76819</span></span>
-<span><span class="co">#&gt; 322   3.21    0 6.183899e+01 719.08051 719.08051</span></span>
-<span><span class="co">#&gt; 323   3.22    0 6.122060e+01 719.38970 719.38970</span></span>
-<span><span class="co">#&gt; 324   3.23    0 6.060839e+01 719.69580 719.69580</span></span>
-<span><span class="co">#&gt; 325   3.24    0 6.000231e+01 719.99885 719.99885</span></span>
-<span><span class="co">#&gt; 326   3.25    0 5.940229e+01 720.29886 720.29886</span></span>
-<span><span class="co">#&gt; 327   3.26    0 5.880826e+01 720.59587 720.59587</span></span>
-<span><span class="co">#&gt; 328   3.27    0 5.822018e+01 720.88991 720.88991</span></span>
-<span><span class="co">#&gt; 329   3.28    0 5.763798e+01 721.18101 721.18101</span></span>
-<span><span class="co">#&gt; 330   3.29    0 5.706160e+01 721.46920 721.46920</span></span>
-<span><span class="co">#&gt; 331   3.30    0 5.649098e+01 721.75451 721.75451</span></span>
-<span><span class="co">#&gt; 332   3.31    0 5.592607e+01 722.03696 722.03696</span></span>
-<span><span class="co">#&gt; 333   3.32    0 5.536681e+01 722.31659 722.31659</span></span>
-<span><span class="co">#&gt; 334   3.33    0 5.481314e+01 722.59343 722.59343</span></span>
-<span><span class="co">#&gt; 335   3.34    0 5.426501e+01 722.86749 722.86749</span></span>
-<span><span class="co">#&gt; 336   3.35    0 5.372236e+01 723.13882 723.13882</span></span>
-<span><span class="co">#&gt; 337   3.36    0 5.318514e+01 723.40743 723.40743</span></span>
-<span><span class="co">#&gt; 338   3.37    0 5.265329e+01 723.67336 723.67336</span></span>
-<span><span class="co">#&gt; 339   3.38    0 5.212675e+01 723.93662 723.93662</span></span>
-<span><span class="co">#&gt; 340   3.39    0 5.160549e+01 724.19726 724.19726</span></span>
-<span><span class="co">#&gt; 341   3.40    0 5.108943e+01 724.45528 724.45528</span></span>
-<span><span class="co">#&gt; 342   3.41    0 5.057854e+01 724.71073 724.71073</span></span>
-<span><span class="co">#&gt; 343   3.42    0 5.007275e+01 724.96362 724.96362</span></span>
-<span><span class="co">#&gt; 344   3.43    0 4.957202e+01 725.21399 725.21399</span></span>
-<span><span class="co">#&gt; 345   3.44    0 4.907630e+01 725.46185 725.46185</span></span>
-<span><span class="co">#&gt; 346   3.45    0 4.858554e+01 725.70723 725.70723</span></span>
-<span><span class="co">#&gt; 347   3.46    0 4.809969e+01 725.95016 725.95016</span></span>
-<span><span class="co">#&gt; 348   3.47    0 4.761869e+01 726.19066 726.19066</span></span>
-<span><span class="co">#&gt; 349   3.48    0 4.714250e+01 726.42875 726.42875</span></span>
-<span><span class="co">#&gt; 350   3.49    0 4.667108e+01 726.66446 726.66446</span></span>
-<span><span class="co">#&gt; 351   3.50    0 4.620437e+01 726.89782 726.89782</span></span>
-<span><span class="co">#&gt; 352   3.51    0 4.574232e+01 727.12884 727.12884</span></span>
-<span><span class="co">#&gt; 353   3.52    0 4.528490e+01 727.35755 727.35755</span></span>
-<span><span class="co">#&gt; 354   3.53    0 4.483205e+01 727.58397 727.58397</span></span>
-<span><span class="co">#&gt; 355   3.54    0 4.438373e+01 727.80814 727.80814</span></span>
-<span><span class="co">#&gt; 356   3.55    0 4.393989e+01 728.03005 728.03005</span></span>
-<span><span class="co">#&gt; 357   3.56    0 4.350049e+01 728.24975 728.24975</span></span>
-<span><span class="co">#&gt; 358   3.57    0 4.306549e+01 728.46726 728.46726</span></span>
-<span><span class="co">#&gt; 359   3.58    0 4.263483e+01 728.68258 728.68258</span></span>
-<span><span class="co">#&gt; 360   3.59    0 4.220849e+01 728.89576 728.89576</span></span>
-<span><span class="co">#&gt; 361   3.60    0 4.178640e+01 729.10680 729.10680</span></span>
-<span><span class="co">#&gt; 362   3.61    0 4.136854e+01 729.31573 729.31573</span></span>
-<span><span class="co">#&gt; 363   3.62    0 4.095485e+01 729.52257 729.52257</span></span>
-<span><span class="co">#&gt; 364   3.63    0 4.054530e+01 729.72735 729.72735</span></span>
-<span><span class="co">#&gt; 365   3.64    0 4.013985e+01 729.93008 729.93008</span></span>
-<span><span class="co">#&gt; 366   3.65    0 3.973845e+01 730.13077 730.13077</span></span>
-<span><span class="co">#&gt; 367   3.66    0 3.934107e+01 730.32947 730.32947</span></span>
-<span><span class="co">#&gt; 368   3.67    0 3.894766e+01 730.52617 730.52617</span></span>
-<span><span class="co">#&gt; 369   3.68    0 3.855818e+01 730.72091 730.72091</span></span>
-<span><span class="co">#&gt; 370   3.69    0 3.817260e+01 730.91370 730.91370</span></span>
-<span><span class="co">#&gt; 371   3.70    0 3.779087e+01 731.10456 731.10456</span></span>
-<span><span class="co">#&gt; 372   3.71    0 3.741296e+01 731.29352 731.29352</span></span>
-<span><span class="co">#&gt; 373   3.72    0 3.703883e+01 731.48058 731.48058</span></span>
-<span><span class="co">#&gt; 374   3.73    0 3.666844e+01 731.66578 731.66578</span></span>
-<span><span class="co">#&gt; 375   3.74    0 3.630176e+01 731.84912 731.84912</span></span>
-<span><span class="co">#&gt; 376   3.75    0 3.593874e+01 732.03063 732.03063</span></span>
-<span><span class="co">#&gt; 377   3.76    0 3.557936e+01 732.21032 732.21032</span></span>
-<span><span class="co">#&gt; 378   3.77    0 3.522356e+01 732.38822 732.38822</span></span>
-<span><span class="co">#&gt; 379   3.78    0 3.487133e+01 732.56434 732.56434</span></span>
-<span><span class="co">#&gt; 380   3.79    0 3.452261e+01 732.73869 732.73869</span></span>
-<span><span class="co">#&gt; 381   3.80    0 3.417739e+01 732.91131 732.91131</span></span>
-<span><span class="co">#&gt; 382   3.81    0 3.383561e+01 733.08219 733.08219</span></span>
-<span><span class="co">#&gt; 383   3.82    0 3.349726e+01 733.25137 733.25137</span></span>
-<span><span class="co">#&gt; 384   3.83    0 3.316228e+01 733.41886 733.41886</span></span>
-<span><span class="co">#&gt; 385   3.84    0 3.283066e+01 733.58467 733.58467</span></span>
-<span><span class="co">#&gt; 386   3.85    0 3.250235e+01 733.74882 733.74882</span></span>
-<span><span class="co">#&gt; 387   3.86    0 3.217733e+01 733.91133 733.91133</span></span>
-<span><span class="co">#&gt; 388   3.87    0 3.185556e+01 734.07222 734.07222</span></span>
-<span><span class="co">#&gt; 389   3.88    0 3.153700e+01 734.23150 734.23150</span></span>
-<span><span class="co">#&gt; 390   3.89    0 3.122163e+01 734.38918 734.38918</span></span>
-<span><span class="co">#&gt; 391   3.90    0 3.090942e+01 734.54529 734.54529</span></span>
-<span><span class="co">#&gt; 392   3.91    0 3.060032e+01 734.69984 734.69984</span></span>
-<span><span class="co">#&gt; 393   3.92    0 3.029432e+01 734.85284 734.85284</span></span>
-<span><span class="co">#&gt; 394   3.93    0 2.999138e+01 735.00431 735.00431</span></span>
-<span><span class="co">#&gt; 395   3.94    0 2.969146e+01 735.15427 735.15427</span></span>
-<span><span class="co">#&gt; 396   3.95    0 2.939455e+01 735.30273 735.30273</span></span>
-<span><span class="co">#&gt; 397   3.96    0 2.910060e+01 735.44970 735.44970</span></span>
-<span><span class="co">#&gt; 398   3.97    0 2.880960e+01 735.59520 735.59520</span></span>
-<span><span class="co">#&gt; 399   3.98    0 2.852150e+01 735.73925 735.73925</span></span>
-<span><span class="co">#&gt; 400   3.99    0 2.823628e+01 735.88186 735.88186</span></span>
-<span><span class="co">#&gt; 401   4.00    0 2.795392e+01 736.02304 736.02304</span></span>
-<span><span class="co">#&gt; 402   4.01    0 2.767438e+01 736.16281 736.16281</span></span>
-<span><span class="co">#&gt; 403   4.02    0 2.739764e+01 736.30118 736.30118</span></span>
-<span><span class="co">#&gt; 404   4.03    0 2.712366e+01 736.43817 736.43817</span></span>
-<span><span class="co">#&gt; 405   4.04    0 2.685243e+01 736.57379 736.57379</span></span>
-<span><span class="co">#&gt; 406   4.05    0 2.658390e+01 736.70805 736.70805</span></span>
-<span><span class="co">#&gt; 407   4.06    0 2.631806e+01 736.84097 736.84097</span></span>
-<span><span class="co">#&gt; 408   4.07    0 2.605488e+01 736.97256 736.97256</span></span>
-<span><span class="co">#&gt; 409   4.08    0 2.579433e+01 737.10283 737.10283</span></span>
-<span><span class="co">#&gt; 410   4.09    0 2.553639e+01 737.23181 737.23181</span></span>
-<span><span class="co">#&gt; 411   4.10    0 2.528103e+01 737.35949 737.35949</span></span>
-<span><span class="co">#&gt; 412   4.11    0 2.502822e+01 737.48589 737.48589</span></span>
-<span><span class="co">#&gt; 413   4.12    0 2.477793e+01 737.61103 737.61103</span></span>
-<span><span class="co">#&gt; 414   4.13    0 2.453015e+01 737.73492 737.73492</span></span>
-<span><span class="co">#&gt; 415   4.14    0 2.428485e+01 737.85757 737.85757</span></span>
-<span><span class="co">#&gt; 416   4.15    0 2.404200e+01 737.97900 737.97900</span></span>
-<span><span class="co">#&gt; 417   4.16    0 2.380158e+01 738.09921 738.09921</span></span>
-<span><span class="co">#&gt; 418   4.17    0 2.356357e+01 738.21822 738.21822</span></span>
-<span><span class="co">#&gt; 419   4.18    0 2.332793e+01 738.33603 738.33603</span></span>
-<span><span class="co">#&gt; 420   4.19    0 2.309465e+01 738.45267 738.45267</span></span>
-<span><span class="co">#&gt; 421   4.20    0 2.286371e+01 738.56815 738.56815</span></span>
-<span><span class="co">#&gt; 422   4.21    0 2.263507e+01 738.68247 738.68247</span></span>
-<span><span class="co">#&gt; 423   4.22    0 2.240872e+01 738.79564 738.79564</span></span>
-<span><span class="co">#&gt; 424   4.23    0 2.218463e+01 738.90768 738.90768</span></span>
-<span><span class="co">#&gt; 425   4.24    0 2.196279e+01 739.01861 739.01861</span></span>
-<span><span class="co">#&gt; 426   4.25    0 2.174316e+01 739.12842 739.12842</span></span>
-<span><span class="co">#&gt; 427   4.26    0 2.152573e+01 739.23714 739.23714</span></span>
-<span><span class="co">#&gt; 428   4.27    0 2.131047e+01 739.34477 739.34477</span></span>
-<span><span class="co">#&gt; 429   4.28    0 2.109736e+01 739.45132 739.45132</span></span>
-<span><span class="co">#&gt; 430   4.29    0 2.088639e+01 739.55680 739.55680</span></span>
-<span><span class="co">#&gt; 431   4.30    0 2.067753e+01 739.66124 739.66124</span></span>
-<span><span class="co">#&gt; 432   4.31    0 2.047075e+01 739.76462 739.76462</span></span>
-<span><span class="co">#&gt; 433   4.32    0 2.026604e+01 739.86698 739.86698</span></span>
-<span><span class="co">#&gt; 434   4.33    0 2.006338e+01 739.96831 739.96831</span></span>
-<span><span class="co">#&gt; 435   4.34    0 1.986275e+01 740.06863 740.06863</span></span>
-<span><span class="co">#&gt; 436   4.35    0 1.966412e+01 740.16794 740.16794</span></span>
-<span><span class="co">#&gt; 437   4.36    0 1.946748e+01 740.26626 740.26626</span></span>
-<span><span class="co">#&gt; 438   4.37    0 1.927281e+01 740.36360 740.36360</span></span>
-<span><span class="co">#&gt; 439   4.38    0 1.908008e+01 740.45996 740.45996</span></span>
-<span><span class="co">#&gt; 440   4.39    0 1.888928e+01 740.55536 740.55536</span></span>
-<span><span class="co">#&gt; 441   4.40    0 1.870038e+01 740.64981 740.64981</span></span>
-<span><span class="co">#&gt; 442   4.41    0 1.851338e+01 740.74331 740.74331</span></span>
-<span><span class="co">#&gt; 443   4.42    0 1.832825e+01 740.83588 740.83588</span></span>
-<span><span class="co">#&gt; 444   4.43    0 1.814496e+01 740.92752 740.92752</span></span>
-<span><span class="co">#&gt; 445   4.44    0 1.796351e+01 741.01824 741.01824</span></span>
-<span><span class="co">#&gt; 446   4.45    0 1.778388e+01 741.10806 741.10806</span></span>
-<span><span class="co">#&gt; 447   4.46    0 1.760604e+01 741.19698 741.19698</span></span>
-<span><span class="co">#&gt; 448   4.47    0 1.742998e+01 741.28501 741.28501</span></span>
-<span><span class="co">#&gt; 449   4.48    0 1.725568e+01 741.37216 741.37216</span></span>
-<span><span class="co">#&gt; 450   4.49    0 1.708312e+01 741.45844 741.45844</span></span>
-<span><span class="co">#&gt; 451   4.50    0 1.691229e+01 741.54385 741.54385</span></span>
-<span><span class="co">#&gt; 452   4.51    0 1.674317e+01 741.62842 741.62842</span></span>
-<span><span class="co">#&gt; 453   4.52    0 1.657574e+01 741.71213 741.71213</span></span>
-<span><span class="co">#&gt; 454   4.53    0 1.640998e+01 741.79501 741.79501</span></span>
-<span><span class="co">#&gt; 455   4.54    0 1.624588e+01 741.87706 741.87706</span></span>
-<span><span class="co">#&gt; 456   4.55    0 1.608342e+01 741.95829 741.95829</span></span>
-<span><span class="co">#&gt; 457   4.56    0 1.592259e+01 742.03871 742.03871</span></span>
-<span><span class="co">#&gt; 458   4.57    0 1.576336e+01 742.11832 742.11832</span></span>
-<span><span class="co">#&gt; 459   4.58    0 1.560573e+01 742.19714 742.19714</span></span>
-<span><span class="co">#&gt; 460   4.59    0 1.544967e+01 742.27516 742.27516</span></span>
-<span><span class="co">#&gt; 461   4.60    0 1.529517e+01 742.35241 742.35241</span></span>
-<span><span class="co">#&gt; 462   4.61    0 1.514222e+01 742.42889 742.42889</span></span>
-<span><span class="co">#&gt; 463   4.62    0 1.499080e+01 742.50460 742.50460</span></span>
-<span><span class="co">#&gt; 464   4.63    0 1.484089e+01 742.57955 742.57955</span></span>
-<span><span class="co">#&gt; 465   4.64    0 1.469248e+01 742.65376 742.65376</span></span>
-<span><span class="co">#&gt; 466   4.65    0 1.454556e+01 742.72722 742.72722</span></span>
-<span><span class="co">#&gt; 467   4.66    0 1.440010e+01 742.79995 742.79995</span></span>
-<span><span class="co">#&gt; 468   4.67    0 1.425610e+01 742.87195 742.87195</span></span>
-<span><span class="co">#&gt; 469   4.68    0 1.411354e+01 742.94323 742.94323</span></span>
-<span><span class="co">#&gt; 470   4.69    0 1.397241e+01 743.01380 743.01380</span></span>
-<span><span class="co">#&gt; 471   4.70    0 1.383268e+01 743.08366 743.08366</span></span>
-<span><span class="co">#&gt; 472   4.71    0 1.369435e+01 743.15282 743.15282</span></span>
-<span><span class="co">#&gt; 473   4.72    0 1.355741e+01 743.22129 743.22129</span></span>
-<span><span class="co">#&gt; 474   4.73    0 1.342184e+01 743.28908 743.28908</span></span>
-<span><span class="co">#&gt; 475   4.74    0 1.328762e+01 743.35619 743.35619</span></span>
-<span><span class="co">#&gt; 476   4.75    0 1.315474e+01 743.42263 743.42263</span></span>
-<span><span class="co">#&gt; 477   4.76    0 1.302319e+01 743.48840 743.48840</span></span>
-<span><span class="co">#&gt; 478   4.77    0 1.289296e+01 743.55352 743.55352</span></span>
-<span><span class="co">#&gt; 479   4.78    0 1.276403e+01 743.61798 743.61798</span></span>
-<span><span class="co">#&gt; 480   4.79    0 1.263639e+01 743.68180 743.68180</span></span>
-<span><span class="co">#&gt; 481   4.80    0 1.251003e+01 743.74499 743.74499</span></span>
-<span><span class="co">#&gt; 482   4.81    0 1.238493e+01 743.80754 743.80754</span></span>
-<span><span class="co">#&gt; 483   4.82    0 1.226108e+01 743.86946 743.86946</span></span>
-<span><span class="co">#&gt; 484   4.83    0 1.213847e+01 743.93077 743.93077</span></span>
-<span><span class="co">#&gt; 485   4.84    0 1.201708e+01 743.99146 743.99146</span></span>
-<span><span class="co">#&gt; 486   4.85    0 1.189691e+01 744.05154 744.05154</span></span>
-<span><span class="co">#&gt; 487   4.86    0 1.177794e+01 744.11103 744.11103</span></span>
-<span><span class="co">#&gt; 488   4.87    0 1.166016e+01 744.16992 744.16992</span></span>
-<span><span class="co">#&gt; 489   4.88    0 1.154356e+01 744.22822 744.22822</span></span>
-<span><span class="co">#&gt; 490   4.89    0 1.142813e+01 744.28594 744.28594</span></span>
-<span><span class="co">#&gt; 491   4.90    0 1.131385e+01 744.34308 744.34308</span></span>
-<span><span class="co">#&gt; 492   4.91    0 1.120071e+01 744.39965 744.39965</span></span>
-<span><span class="co">#&gt; 493   4.92    0 1.108870e+01 744.45565 744.45565</span></span>
-<span><span class="co">#&gt; 494   4.93    0 1.097781e+01 744.51109 744.51109</span></span>
-<span><span class="co">#&gt; 495   4.94    0 1.086804e+01 744.56598 744.56598</span></span>
-<span><span class="co">#&gt; 496   4.95    0 1.075935e+01 744.62032 744.62032</span></span>
-<span><span class="co">#&gt; 497   4.96    0 1.065176e+01 744.67412 744.67412</span></span>
-<span><span class="co">#&gt; 498   4.97    0 1.054524e+01 744.72738 744.72738</span></span>
-<span><span class="co">#&gt; 499   4.98    0 1.043979e+01 744.78010 744.78010</span></span>
-<span><span class="co">#&gt; 500   4.99    0 1.033539e+01 744.83230 744.83230</span></span>
-<span><span class="co">#&gt; 501   5.00    0 1.023204e+01 744.88398 744.88398</span></span>
-<span><span class="co">#&gt; 502   5.01    0 1.012972e+01 744.93514 744.93514</span></span>
-<span><span class="co">#&gt; 503   5.02    0 1.002842e+01 744.98579 744.98579</span></span>
-<span><span class="co">#&gt; 504   5.03    0 9.928138e+00 745.03593 745.03593</span></span>
-<span><span class="co">#&gt; 505   5.04    0 9.828856e+00 745.08557 745.08557</span></span>
-<span><span class="co">#&gt; 506   5.05    0 9.730568e+00 745.13472 745.13472</span></span>
-<span><span class="co">#&gt; 507   5.06    0 9.633262e+00 745.18337 745.18337</span></span>
-<span><span class="co">#&gt; 508   5.07    0 9.536929e+00 745.23154 745.23154</span></span>
-<span><span class="co">#&gt; 509   5.08    0 9.441560e+00 745.27922 745.27922</span></span>
-<span><span class="co">#&gt; 510   5.09    0 9.347145e+00 745.32643 745.32643</span></span>
-<span><span class="co">#&gt; 511   5.10    0 9.253673e+00 745.37316 745.37316</span></span>
-<span><span class="co">#&gt; 512   5.11    0 9.161136e+00 745.41943 745.41943</span></span>
-<span><span class="co">#&gt; 513   5.12    0 9.069525e+00 745.46524 745.46524</span></span>
-<span><span class="co">#&gt; 514   5.13    0 8.978830e+00 745.51059 745.51059</span></span>
-<span><span class="co">#&gt; 515   5.14    0 8.889041e+00 745.55548 745.55548</span></span>
-<span><span class="co">#&gt; 516   5.15    0 8.800151e+00 745.59992 745.59992</span></span>
-<span><span class="co">#&gt; 517   5.16    0 8.712150e+00 745.64393 745.64393</span></span>
-<span><span class="co">#&gt; 518   5.17    0 8.625028e+00 745.68749 745.68749</span></span>
-<span><span class="co">#&gt; 519   5.18    0 8.538778e+00 745.73061 745.73061</span></span>
-<span><span class="co">#&gt; 520   5.19    0 8.453390e+00 745.77331 745.77331</span></span>
-<span><span class="co">#&gt; 521   5.20    0 8.368856e+00 745.81557 745.81557</span></span>
-<span><span class="co">#&gt; 522   5.21    0 8.285168e+00 745.85742 745.85742</span></span>
-<span><span class="co">#&gt; 523   5.22    0 8.202316e+00 745.89884 745.89884</span></span>
-<span><span class="co">#&gt; 524   5.23    0 8.120293e+00 745.93985 745.93985</span></span>
-<span><span class="co">#&gt; 525   5.24    0 8.039090e+00 745.98046 745.98046</span></span>
-<span><span class="co">#&gt; 526   5.25    0 7.958699e+00 746.02065 746.02065</span></span>
-<span><span class="co">#&gt; 527   5.26    0 7.879112e+00 746.06044 746.06044</span></span>
-<span><span class="co">#&gt; 528   5.27    0 7.800321e+00 746.09984 746.09984</span></span>
-<span><span class="co">#&gt; 529   5.28    0 7.722318e+00 746.13884 746.13884</span></span>
-<span><span class="co">#&gt; 530   5.29    0 7.645094e+00 746.17745 746.17745</span></span>
-<span><span class="co">#&gt; 531   5.30    0 7.568643e+00 746.21568 746.21568</span></span>
-<span><span class="co">#&gt; 532   5.31    0 7.492957e+00 746.25352 746.25352</span></span>
-<span><span class="co">#&gt; 533   5.32    0 7.418027e+00 746.29099 746.29099</span></span>
-<span><span class="co">#&gt; 534   5.33    0 7.343847e+00 746.32808 746.32808</span></span>
-<span><span class="co">#&gt; 535   5.34    0 7.270409e+00 746.36480 746.36480</span></span>
-<span><span class="co">#&gt; 536   5.35    0 7.197705e+00 746.40115 746.40115</span></span>
-<span><span class="co">#&gt; 537   5.36    0 7.125728e+00 746.43714 746.43714</span></span>
-<span><span class="co">#&gt; 538   5.37    0 7.054470e+00 746.47276 746.47276</span></span>
-<span><span class="co">#&gt; 539   5.38    0 6.983926e+00 746.50804 746.50804</span></span>
-<span><span class="co">#&gt; 540   5.39    0 6.914086e+00 746.54296 746.54296</span></span>
-<span><span class="co">#&gt; 541   5.40    0 6.844945e+00 746.57753 746.57753</span></span>
-<span><span class="co">#&gt; 542   5.41    0 6.776496e+00 746.61175 746.61175</span></span>
-<span><span class="co">#&gt; 543   5.42    0 6.708731e+00 746.64563 746.64563</span></span>
-<span><span class="co">#&gt; 544   5.43    0 6.641644e+00 746.67918 746.67918</span></span>
-<span><span class="co">#&gt; 545   5.44    0 6.575227e+00 746.71239 746.71239</span></span>
-<span><span class="co">#&gt; 546   5.45    0 6.509475e+00 746.74526 746.74526</span></span>
-<span><span class="co">#&gt; 547   5.46    0 6.444380e+00 746.77781 746.77781</span></span>
-<span><span class="co">#&gt; 548   5.47    0 6.379936e+00 746.81003 746.81003</span></span>
-<span><span class="co">#&gt; 549   5.48    0 6.316137e+00 746.84193 746.84193</span></span>
-<span><span class="co">#&gt; 550   5.49    0 6.252976e+00 746.87351 746.87351</span></span>
-<span><span class="co">#&gt; 551   5.50    0 6.190446e+00 746.90478 746.90478</span></span>
-<span><span class="co">#&gt; 552   5.51    0 6.128542e+00 746.93573 746.93573</span></span>
-<span><span class="co">#&gt; 553   5.52    0 6.067256e+00 746.96637 746.96637</span></span>
-<span><span class="co">#&gt; 554   5.53    0 6.006584e+00 746.99671 746.99671</span></span>
-<span><span class="co">#&gt; 555   5.54    0 5.946518e+00 747.02674 747.02674</span></span>
-<span><span class="co">#&gt; 556   5.55    0 5.887053e+00 747.05647 747.05647</span></span>
-<span><span class="co">#&gt; 557   5.56    0 5.828182e+00 747.08591 747.08591</span></span>
-<span><span class="co">#&gt; 558   5.57    0 5.769900e+00 747.11505 747.11505</span></span>
-<span><span class="co">#&gt; 559   5.58    0 5.712201e+00 747.14390 747.14390</span></span>
-<span><span class="co">#&gt; 560   5.59    0 5.655079e+00 747.17246 747.17246</span></span>
-<span><span class="co">#&gt; 561   5.60    0 5.598528e+00 747.20074 747.20074</span></span>
-<span><span class="co">#&gt; 562   5.61    0 5.542543e+00 747.22873 747.22873</span></span>
-<span><span class="co">#&gt; 563   5.62    0 5.487118e+00 747.25644 747.25644</span></span>
-<span><span class="co">#&gt; 564   5.63    0 5.432246e+00 747.28388 747.28388</span></span>
-<span><span class="co">#&gt; 565   5.64    0 5.377924e+00 747.31104 747.31104</span></span>
-<span><span class="co">#&gt; 566   5.65    0 5.324145e+00 747.33793 747.33793</span></span>
-<span><span class="co">#&gt; 567   5.66    0 5.270903e+00 747.36455 747.36455</span></span>
-<span><span class="co">#&gt; 568   5.67    0 5.218194e+00 747.39090 747.39090</span></span>
-<span><span class="co">#&gt; 569   5.68    0 5.166012e+00 747.41699 747.41699</span></span>
-<span><span class="co">#&gt; 570   5.69    0 5.114352e+00 747.44282 747.44282</span></span>
-<span><span class="co">#&gt; 571   5.70    0 5.063209e+00 747.46840 747.46840</span></span>
-<span><span class="co">#&gt; 572   5.71    0 5.012577e+00 747.49371 747.49371</span></span>
-<span><span class="co">#&gt; 573   5.72    0 4.962451e+00 747.51877 747.51877</span></span>
-<span><span class="co">#&gt; 574   5.73    0 4.912826e+00 747.54359 747.54359</span></span>
-<span><span class="co">#&gt; 575   5.74    0 4.863698e+00 747.56815 747.56815</span></span>
-<span><span class="co">#&gt; 576   5.75    0 4.815061e+00 747.59247 747.59247</span></span>
-<span><span class="co">#&gt; 577   5.76    0 4.766910e+00 747.61654 747.61654</span></span>
-<span><span class="co">#&gt; 578   5.77    0 4.719241e+00 747.64038 747.64038</span></span>
-<span><span class="co">#&gt; 579   5.78    0 4.672049e+00 747.66398 747.66398</span></span>
-<span><span class="co">#&gt; 580   5.79    0 4.625328e+00 747.68734 747.68734</span></span>
-<span><span class="co">#&gt; 581   5.80    0 4.579075e+00 747.71046 747.71046</span></span>
-<span><span class="co">#&gt; 582   5.81    0 4.533284e+00 747.73336 747.73336</span></span>
-<span><span class="co">#&gt; 583   5.82    0 4.487952e+00 747.75602 747.75602</span></span>
-<span><span class="co">#&gt; 584   5.83    0 4.443072e+00 747.77846 747.77846</span></span>
-<span><span class="co">#&gt; 585   5.84    0 4.398641e+00 747.80068 747.80068</span></span>
-<span><span class="co">#&gt; 586   5.85    0 4.354655e+00 747.82267 747.82267</span></span>
-<span><span class="co">#&gt; 587   5.86    0 4.311108e+00 747.84445 747.84445</span></span>
-<span><span class="co">#&gt; 588   5.87    0 4.267997e+00 747.86600 747.86600</span></span>
-<span><span class="co">#&gt; 589   5.88    0 4.225317e+00 747.88734 747.88734</span></span>
-<span><span class="co">#&gt; 590   5.89    0 4.183064e+00 747.90847 747.90847</span></span>
-<span><span class="co">#&gt; 591   5.90    0 4.141234e+00 747.92938 747.92938</span></span>
-<span><span class="co">#&gt; 592   5.91    0 4.099821e+00 747.95009 747.95009</span></span>
-<span><span class="co">#&gt; 593   5.92    0 4.058823e+00 747.97059 747.97059</span></span>
-<span><span class="co">#&gt; 594   5.93    0 4.018235e+00 747.99088 747.99088</span></span>
-<span><span class="co">#&gt; 595   5.94    0 3.978052e+00 748.01097 748.01097</span></span>
-<span><span class="co">#&gt; 596   5.95    0 3.938272e+00 748.03086 748.03086</span></span>
-<span><span class="co">#&gt; 597   5.96    0 3.898889e+00 748.05056 748.05056</span></span>
-<span><span class="co">#&gt; 598   5.97    0 3.859900e+00 748.07005 748.07005</span></span>
-<span><span class="co">#&gt; 599   5.98    0 3.821301e+00 748.08935 748.08935</span></span>
-<span><span class="co">#&gt; 600   5.99    0 3.783088e+00 748.10846 748.10846</span></span>
-<span><span class="co">#&gt; 601   6.00    0 3.745257e+00 748.12737 748.12737</span></span>
-<span><span class="co">#&gt; 602   6.01    0 3.707805e+00 748.14610 748.14610</span></span>
-<span><span class="co">#&gt; 603   6.02    0 3.670727e+00 748.16464 748.16464</span></span>
-<span><span class="co">#&gt; 604   6.03    0 3.634019e+00 748.18299 748.18299</span></span>
-<span><span class="co">#&gt; 605   6.04    0 3.597679e+00 748.20116 748.20116</span></span>
-<span><span class="co">#&gt; 606   6.05    0 3.561702e+00 748.21915 748.21915</span></span>
-<span><span class="co">#&gt; 607   6.06    0 3.526085e+00 748.23696 748.23696</span></span>
-<span><span class="co">#&gt; 608   6.07    0 3.490825e+00 748.25459 748.25459</span></span>
-<span><span class="co">#&gt; 609   6.08    0 3.455916e+00 748.27204 748.27204</span></span>
-<span><span class="co">#&gt; 610   6.09    0 3.421357e+00 748.28932 748.28932</span></span>
-<span><span class="co">#&gt; 611   6.10    0 3.387144e+00 748.30643 748.30643</span></span>
-<span><span class="co">#&gt; 612   6.11    0 3.353272e+00 748.32336 748.32336</span></span>
-<span><span class="co">#&gt; 613   6.12    0 3.319739e+00 748.34013 748.34013</span></span>
-<span><span class="co">#&gt; 614   6.13    0 3.286542e+00 748.35673 748.35673</span></span>
-<span><span class="co">#&gt; 615   6.14    0 3.253677e+00 748.37316 748.37316</span></span>
-<span><span class="co">#&gt; 616   6.15    0 3.221140e+00 748.38943 748.38943</span></span>
-<span><span class="co">#&gt; 617   6.16    0 3.188928e+00 748.40554 748.40554</span></span>
-<span><span class="co">#&gt; 618   6.17    0 3.157039e+00 748.42148 748.42148</span></span>
-<span><span class="co">#&gt; 619   6.18    0 3.125469e+00 748.43727 748.43727</span></span>
-<span><span class="co">#&gt; 620   6.19    0 3.094214e+00 748.45289 748.45289</span></span>
-<span><span class="co">#&gt; 621   6.20    0 3.063272e+00 748.46836 748.46836</span></span>
-<span><span class="co">#&gt; 622   6.21    0 3.032639e+00 748.48368 748.48368</span></span>
-<span><span class="co">#&gt; 623   6.22    0 3.002313e+00 748.49884 748.49884</span></span>
-<span><span class="co">#&gt; 624   6.23    0 2.972290e+00 748.51386 748.51386</span></span>
-<span><span class="co">#&gt; 625   6.24    0 2.942567e+00 748.52872 748.52872</span></span>
-<span><span class="co">#&gt; 626   6.25    0 2.913141e+00 748.54343 748.54343</span></span>
-<span><span class="co">#&gt; 627   6.26    0 2.884010e+00 748.55800 748.55800</span></span>
-<span><span class="co">#&gt; 628   6.27    0 2.855170e+00 748.57242 748.57242</span></span>
-<span><span class="co">#&gt; 629   6.28    0 2.826618e+00 748.58669 748.58669</span></span>
-<span><span class="co">#&gt; 630   6.29    0 2.798352e+00 748.60082 748.60082</span></span>
-<span><span class="co">#&gt; 631   6.30    0 2.770368e+00 748.61482 748.61482</span></span>
-<span><span class="co">#&gt; 632   6.31    0 2.742665e+00 748.62867 748.62867</span></span>
-<span><span class="co">#&gt; 633   6.32    0 2.715238e+00 748.64238 748.64238</span></span>
-<span><span class="co">#&gt; 634   6.33    0 2.688086e+00 748.65596 748.65596</span></span>
-<span><span class="co">#&gt; 635   6.34    0 2.661205e+00 748.66940 748.66940</span></span>
-<span><span class="co">#&gt; 636   6.35    0 2.634593e+00 748.68270 748.68270</span></span>
-<span><span class="co">#&gt; 637   6.36    0 2.608247e+00 748.69588 748.69588</span></span>
-<span><span class="co">#&gt; 638   6.37    0 2.582164e+00 748.70892 748.70892</span></span>
-<span><span class="co">#&gt; 639   6.38    0 2.556343e+00 748.72183 748.72183</span></span>
-<span><span class="co">#&gt; 640   6.39    0 2.530779e+00 748.73461 748.73461</span></span>
-<span><span class="co">#&gt; 641   6.40    0 2.505471e+00 748.74726 748.74726</span></span>
-<span><span class="co">#&gt; 642   6.41    0 2.480417e+00 748.75979 748.75979</span></span>
-<span><span class="co">#&gt; 643   6.42    0 2.455613e+00 748.77219 748.77219</span></span>
-<span><span class="co">#&gt; 644   6.43    0 2.431056e+00 748.78447 748.78447</span></span>
-<span><span class="co">#&gt; 645   6.44    0 2.406746e+00 748.79663 748.79663</span></span>
-<span><span class="co">#&gt; 646   6.45    0 2.382678e+00 748.80866 748.80866</span></span>
-<span><span class="co">#&gt; 647   6.46    0 2.358852e+00 748.82057 748.82057</span></span>
-<span><span class="co">#&gt; 648   6.47    0 2.335263e+00 748.83237 748.83237</span></span>
-<span><span class="co">#&gt; 649   6.48    0 2.311910e+00 748.84404 748.84404</span></span>
-<span><span class="co">#&gt; 650   6.49    0 2.288791e+00 748.85560 748.85560</span></span>
-<span><span class="co">#&gt; 651   6.50    0 2.265903e+00 748.86705 748.86705</span></span>
-<span><span class="co">#&gt; 652   6.51    0 2.243244e+00 748.87838 748.87838</span></span>
-<span><span class="co">#&gt; 653   6.52    0 2.220812e+00 748.88959 748.88959</span></span>
-<span><span class="co">#&gt; 654   6.53    0 2.198604e+00 748.90070 748.90070</span></span>
-<span><span class="co">#&gt; 655   6.54    0 2.176618e+00 748.91169 748.91169</span></span>
-<span><span class="co">#&gt; 656   6.55    0 2.154852e+00 748.92257 748.92257</span></span>
-<span><span class="co">#&gt; 657   6.56    0 2.133303e+00 748.93335 748.93335</span></span>
-<span><span class="co">#&gt; 658   6.57    0 2.111970e+00 748.94401 748.94401</span></span>
-<span><span class="co">#&gt; 659   6.58    0 2.090850e+00 748.95457 748.95457</span></span>
-<span><span class="co">#&gt; 660   6.59    0 2.069942e+00 748.96503 748.96503</span></span>
-<span><span class="co">#&gt; 661   6.60    0 2.049242e+00 748.97538 748.97538</span></span>
-<span><span class="co">#&gt; 662   6.61    0 2.028750e+00 748.98562 748.98562</span></span>
-<span><span class="co">#&gt; 663   6.62    0 2.008463e+00 748.99577 748.99577</span></span>
-<span><span class="co">#&gt; 664   6.63    0 1.988378e+00 749.00581 749.00581</span></span>
-<span><span class="co">#&gt; 665   6.64    0 1.968494e+00 749.01575 749.01575</span></span>
-<span><span class="co">#&gt; 666   6.65    0 1.948809e+00 749.02560 749.02560</span></span>
-<span><span class="co">#&gt; 667   6.66    0 1.929321e+00 749.03534 749.03534</span></span>
-<span><span class="co">#&gt; 668   6.67    0 1.910028e+00 749.04499 749.04499</span></span>
-<span><span class="co">#&gt; 669   6.68    0 1.890928e+00 749.05454 749.05454</span></span>
-<span><span class="co">#&gt; 670   6.69    0 1.872018e+00 749.06399 749.06399</span></span>
-<span><span class="co">#&gt; 671   6.70    0 1.853298e+00 749.07335 749.07335</span></span>
-<span><span class="co">#&gt; 672   6.71    0 1.834765e+00 749.08262 749.08262</span></span>
-<span><span class="co">#&gt; 673   6.72    0 1.816418e+00 749.09179 749.09179</span></span>
-<span><span class="co">#&gt; 674   6.73    0 1.798253e+00 749.10087 749.10087</span></span>
-<span><span class="co">#&gt; 675   6.74    0 1.780271e+00 749.10986 749.10986</span></span>
-<span><span class="co">#&gt; 676   6.75    0 1.762468e+00 749.11877 749.11877</span></span>
-<span><span class="co">#&gt; 677   6.76    0 1.744843e+00 749.12758 749.12758</span></span>
-<span><span class="co">#&gt; 678   6.77    0 1.727395e+00 749.13630 749.13630</span></span>
-<span><span class="co">#&gt; 679   6.78    0 1.710121e+00 749.14494 749.14494</span></span>
-<span><span class="co">#&gt; 680   6.79    0 1.693020e+00 749.15349 749.15349</span></span>
-<span><span class="co">#&gt; 681   6.80    0 1.676090e+00 749.16196 749.16196</span></span>
-<span><span class="co">#&gt; 682   6.81    0 1.659329e+00 749.17034 749.17034</span></span>
-<span><span class="co">#&gt; 683   6.82    0 1.642735e+00 749.17863 749.17863</span></span>
-<span><span class="co">#&gt; 684   6.83    0 1.626308e+00 749.18685 749.18685</span></span>
-<span><span class="co">#&gt; 685   6.84    0 1.610045e+00 749.19498 749.19498</span></span>
-<span><span class="co">#&gt; 686   6.85    0 1.593945e+00 749.20303 749.20303</span></span>
-<span><span class="co">#&gt; 687   6.86    0 1.578005e+00 749.21100 749.21100</span></span>
-<span><span class="co">#&gt; 688   6.87    0 1.562225e+00 749.21889 749.21889</span></span>
-<span><span class="co">#&gt; 689   6.88    0 1.546603e+00 749.22670 749.22670</span></span>
-<span><span class="co">#&gt; 690   6.89    0 1.531137e+00 749.23443 749.23443</span></span>
-<span><span class="co">#&gt; 691   6.90    0 1.515825e+00 749.24209 749.24209</span></span>
-<span><span class="co">#&gt; 692   6.91    0 1.500667e+00 749.24967 749.24967</span></span>
-<span><span class="co">#&gt; 693   6.92    0 1.485660e+00 749.25717 749.25717</span></span>
-<span><span class="co">#&gt; 694   6.93    0 1.470804e+00 749.26460 749.26460</span></span>
-<span><span class="co">#&gt; 695   6.94    0 1.456096e+00 749.27195 749.27195</span></span>
-<span><span class="co">#&gt; 696   6.95    0 1.441535e+00 749.27923 749.27923</span></span>
-<span><span class="co">#&gt; 697   6.96    0 1.427120e+00 749.28644 749.28644</span></span>
-<span><span class="co">#&gt; 698   6.97    0 1.412848e+00 749.29358 749.29358</span></span>
-<span><span class="co">#&gt; 699   6.98    0 1.398720e+00 749.30064 749.30064</span></span>
-<span><span class="co">#&gt; 700   6.99    0 1.384733e+00 749.30763 749.30763</span></span>
-<span><span class="co">#&gt; 701   7.00    0 1.370885e+00 749.31456 749.31456</span></span>
-<span><span class="co">#&gt; 702   7.01    0 1.357176e+00 749.32141 749.32141</span></span>
-<span><span class="co">#&gt; 703   7.02    0 1.343605e+00 749.32820 749.32820</span></span>
-<span><span class="co">#&gt; 704   7.03    0 1.330169e+00 749.33492 749.33492</span></span>
-<span><span class="co">#&gt; 705   7.04    0 1.316867e+00 749.34157 749.34157</span></span>
-<span><span class="co">#&gt; 706   7.05    0 1.303698e+00 749.34815 749.34815</span></span>
-<span><span class="co">#&gt; 707   7.06    0 1.290661e+00 749.35467 749.35467</span></span>
-<span><span class="co">#&gt; 708   7.07    0 1.277755e+00 749.36112 749.36112</span></span>
-<span><span class="co">#&gt; 709   7.08    0 1.264977e+00 749.36751 749.36751</span></span>
-<span><span class="co">#&gt; 710   7.09    0 1.252327e+00 749.37384 749.37384</span></span>
-<span><span class="co">#&gt; 711   7.10    0 1.239804e+00 749.38010 749.38010</span></span>
-<span><span class="co">#&gt; 712   7.11    0 1.227406e+00 749.38630 749.38630</span></span>
-<span><span class="co">#&gt; 713   7.12    0 1.215132e+00 749.39243 749.39243</span></span>
-<span><span class="co">#&gt; 714   7.13    0 1.202981e+00 749.39851 749.39851</span></span>
-<span><span class="co">#&gt; 715   7.14    0 1.190951e+00 749.40452 749.40452</span></span>
-<span><span class="co">#&gt; 716   7.15    0 1.179041e+00 749.41048 749.41048</span></span>
-<span><span class="co">#&gt; 717   7.16    0 1.167251e+00 749.41637 749.41637</span></span>
-<span><span class="co">#&gt; 718   7.17    0 1.155578e+00 749.42221 749.42221</span></span>
-<span><span class="co">#&gt; 719   7.18    0 1.144023e+00 749.42799 749.42799</span></span>
-<span><span class="co">#&gt; 720   7.19    0 1.132582e+00 749.43371 749.43371</span></span>
-<span><span class="co">#&gt; 721   7.20    0 1.121257e+00 749.43937 749.43937</span></span>
-<span><span class="co">#&gt; 722   7.21    0 1.110044e+00 749.44498 749.44498</span></span>
-<span><span class="co">#&gt; 723   7.22    0 1.098944e+00 749.45053 749.45053</span></span>
-<span><span class="co">#&gt; 724   7.23    0 1.087954e+00 749.45602 749.45602</span></span>
-<span><span class="co">#&gt; 725   7.24    0 1.077075e+00 749.46146 749.46146</span></span>
-<span><span class="co">#&gt; 726   7.25    0 1.066304e+00 749.46685 749.46685</span></span>
-<span><span class="co">#&gt; 727   7.26    0 1.055641e+00 749.47218 749.47218</span></span>
-<span><span class="co">#&gt; 728   7.27    0 1.045084e+00 749.47746 749.47746</span></span>
-<span><span class="co">#&gt; 729   7.28    0 1.034634e+00 749.48268 749.48268</span></span>
-<span><span class="co">#&gt; 730   7.29    0 1.024287e+00 749.48786 749.48786</span></span>
-<span><span class="co">#&gt; 731   7.30    0 1.014044e+00 749.49298 749.49298</span></span>
-<span><span class="co">#&gt; 732   7.31    0 1.003904e+00 749.49805 749.49805</span></span>
-<span><span class="co">#&gt; 733   7.32    0 9.938649e-01 749.50307 749.50307</span></span>
-<span><span class="co">#&gt; 734   7.33    0 9.839263e-01 749.50804 749.50804</span></span>
-<span><span class="co">#&gt; 735   7.34    0 9.740870e-01 749.51296 749.51296</span></span>
-<span><span class="co">#&gt; 736   7.35    0 9.643461e-01 749.51783 749.51783</span></span>
-<span><span class="co">#&gt; 737   7.36    0 9.547027e-01 749.52265 749.52265</span></span>
-<span><span class="co">#&gt; 738   7.37    0 9.451556e-01 749.52742 749.52742</span></span>
-<span><span class="co">#&gt; 739   7.38    0 9.357041e-01 749.53215 749.53215</span></span>
-<span><span class="co">#&gt; 740   7.39    0 9.263470e-01 749.53683 749.53683</span></span>
-<span><span class="co">#&gt; 741   7.40    0 9.170836e-01 749.54146 749.54146</span></span>
-<span><span class="co">#&gt; 742   7.41    0 9.079127e-01 749.54604 749.54604</span></span>
-<span><span class="co">#&gt; 743   7.42    0 8.988336e-01 749.55058 749.55058</span></span>
-<span><span class="co">#&gt; 744   7.43    0 8.898453e-01 749.55508 749.55508</span></span>
-<span><span class="co">#&gt; 745   7.44    0 8.809468e-01 749.55953 749.55953</span></span>
-<span><span class="co">#&gt; 746   7.45    0 8.721373e-01 749.56393 749.56393</span></span>
-<span><span class="co">#&gt; 747   7.46    0 8.634160e-01 749.56829 749.56829</span></span>
-<span><span class="co">#&gt; 748   7.47    0 8.547818e-01 749.57261 749.57261</span></span>
-<span><span class="co">#&gt; 749   7.48    0 8.462340e-01 749.57688 749.57688</span></span>
-<span><span class="co">#&gt; 750   7.49    0 8.377717e-01 749.58111 749.58111</span></span>
-<span><span class="co">#&gt; 751   7.50    0 8.293939e-01 749.58530 749.58530</span></span>
-<span><span class="co">#&gt; 752   7.51    0 8.211000e-01 749.58945 749.58945</span></span>
-<span><span class="co">#&gt; 753   7.52    0 8.128890e-01 749.59356 749.59356</span></span>
-<span><span class="co">#&gt; 754   7.53    0 8.047601e-01 749.59762 749.59762</span></span>
-<span><span class="co">#&gt; 755   7.54    0 7.967125e-01 749.60164 749.60164</span></span>
-<span><span class="co">#&gt; 756   7.55    0 7.887454e-01 749.60563 749.60563</span></span>
-<span><span class="co">#&gt; 757   7.56    0 7.808579e-01 749.60957 749.60957</span></span>
-<span><span class="co">#&gt; 758   7.57    0 7.730493e-01 749.61348 749.61348</span></span>
-<span><span class="co">#&gt; 759   7.58    0 7.653189e-01 749.61734 749.61734</span></span>
-<span><span class="co">#&gt; 760   7.59    0 7.576657e-01 749.62117 749.62117</span></span>
-<span><span class="co">#&gt; 761   7.60    0 7.500890e-01 749.62496 749.62496</span></span>
-<span><span class="co">#&gt; 762   7.61    0 7.425881e-01 749.62871 749.62871</span></span>
-<span><span class="co">#&gt; 763   7.62    0 7.351622e-01 749.63242 749.63242</span></span>
-<span><span class="co">#&gt; 764   7.63    0 7.278106e-01 749.63609 749.63609</span></span>
-<span><span class="co">#&gt; 765   7.64    0 7.205325e-01 749.63973 749.63973</span></span>
-<span><span class="co">#&gt; 766   7.65    0 7.133272e-01 749.64334 749.64334</span></span>
-<span><span class="co">#&gt; 767   7.66    0 7.061939e-01 749.64690 749.64690</span></span>
-<span><span class="co">#&gt; 768   7.67    0 6.991320e-01 749.65043 749.65043</span></span>
-<span><span class="co">#&gt; 769   7.68    0 6.921407e-01 749.65393 749.65393</span></span>
-<span><span class="co">#&gt; 770   7.69    0 6.852192e-01 749.65739 749.65739</span></span>
-<span><span class="co">#&gt; 771   7.70    0 6.783671e-01 749.66082 749.66082</span></span>
-<span><span class="co">#&gt; 772   7.71    0 6.715834e-01 749.66421 749.66421</span></span>
-<span><span class="co">#&gt; 773   7.72    0 6.648676e-01 749.66757 749.66757</span></span>
-<span><span class="co">#&gt; 774   7.73    0 6.582189e-01 749.67089 749.67089</span></span>
-<span><span class="co">#&gt; 775   7.74    0 6.516367e-01 749.67418 749.67418</span></span>
-<span><span class="co">#&gt; 776   7.75    0 6.451203e-01 749.67744 749.67744</span></span>
-<span><span class="co">#&gt; 777   7.76    0 6.386691e-01 749.68067 749.68067</span></span>
-<span><span class="co">#&gt; 778   7.77    0 6.322824e-01 749.68386 749.68386</span></span>
-<span><span class="co">#&gt; 779   7.78    0 6.259596e-01 749.68702 749.68702</span></span>
-<span><span class="co">#&gt; 780   7.79    0 6.197000e-01 749.69015 749.69015</span></span>
-<span><span class="co">#&gt; 781   7.80    0 6.135030e-01 749.69325 749.69325</span></span>
-<span><span class="co">#&gt; 782   7.81    0 6.073680e-01 749.69632 749.69632</span></span>
-<span><span class="co">#&gt; 783   7.82    0 6.012943e-01 749.69935 749.69935</span></span>
-<span><span class="co">#&gt; 784   7.83    0 5.952814e-01 749.70236 749.70236</span></span>
-<span><span class="co">#&gt; 785   7.84    0 5.893285e-01 749.70534 749.70534</span></span>
-<span><span class="co">#&gt; 786   7.85    0 5.834353e-01 749.70828 749.70828</span></span>
-<span><span class="co">#&gt; 787   7.86    0 5.776009e-01 749.71120 749.71120</span></span>
-<span><span class="co">#&gt; 788   7.87    0 5.718249e-01 749.71409 749.71409</span></span>
-<span><span class="co">#&gt; 789   7.88    0 5.661066e-01 749.71695 749.71695</span></span>
-<span><span class="co">#&gt; 790   7.89    0 5.604456e-01 749.71978 749.71978</span></span>
-<span><span class="co">#&gt; 791   7.90    0 5.548411e-01 749.72258 749.72258</span></span>
-<span><span class="co">#&gt; 792   7.91    0 5.492927e-01 749.72535 749.72535</span></span>
-<span><span class="co">#&gt; 793   7.92    0 5.437998e-01 749.72810 749.72810</span></span>
-<span><span class="co">#&gt; 794   7.93    0 5.383618e-01 749.73082 749.73082</span></span>
-<span><span class="co">#&gt; 795   7.94    0 5.329782e-01 749.73351 749.73351</span></span>
-<span><span class="co">#&gt; 796   7.95    0 5.276484e-01 749.73618 749.73618</span></span>
-<span><span class="co">#&gt; 797   7.96    0 5.223719e-01 749.73881 749.73881</span></span>
-<span><span class="co">#&gt; 798   7.97    0 5.171482e-01 749.74143 749.74143</span></span>
-<span><span class="co">#&gt; 799   7.98    0 5.119767e-01 749.74401 749.74401</span></span>
-<span><span class="co">#&gt; 800   7.99    0 5.068569e-01 749.74657 749.74657</span></span>
-<span><span class="co">#&gt; 801   8.00    0 5.017884e-01 749.74911 749.74911</span></span>
-<span><span class="co">#&gt; 802   8.01    0 4.967705e-01 749.75161 749.75161</span></span>
-<span><span class="co">#&gt; 803   8.02    0 4.918028e-01 749.75410 749.75410</span></span>
-<span><span class="co">#&gt; 804   8.03    0 4.868847e-01 749.75656 749.75656</span></span>
-<span><span class="co">#&gt; 805   8.04    0 4.820159e-01 749.75899 749.75899</span></span>
-<span><span class="co">#&gt; 806   8.05    0 4.771957e-01 749.76140 749.76140</span></span>
-<span><span class="co">#&gt; 807   8.06    0 4.724238e-01 749.76379 749.76379</span></span>
-<span><span class="co">#&gt; 808   8.07    0 4.676995e-01 749.76615 749.76615</span></span>
-<span><span class="co">#&gt; 809   8.08    0 4.630226e-01 749.76849 749.76849</span></span>
-<span><span class="co">#&gt; 810   8.09    0 4.583923e-01 749.77080 749.77080</span></span>
-<span><span class="co">#&gt; 811   8.10    0 4.538084e-01 749.77310 749.77310</span></span>
-<span><span class="co">#&gt; 812   8.11    0 4.492703e-01 749.77536 749.77536</span></span>
-<span><span class="co">#&gt; 813   8.12    0 4.447776e-01 749.77761 749.77761</span></span>
-<span><span class="co">#&gt; 814   8.13    0 4.403298e-01 749.77984 749.77984</span></span>
-<span><span class="co">#&gt; 815   8.14    0 4.359265e-01 749.78204 749.78204</span></span>
-<span><span class="co">#&gt; 816   8.15    0 4.315673e-01 749.78422 749.78422</span></span>
-<span><span class="co">#&gt; 817   8.16    0 4.272516e-01 749.78637 749.78637</span></span>
-<span><span class="co">#&gt; 818   8.17    0 4.229791e-01 749.78851 749.78851</span></span>
-<span><span class="co">#&gt; 819   8.18    0 4.187493e-01 749.79063 749.79063</span></span>
-<span><span class="co">#&gt; 820   8.19    0 4.145618e-01 749.79272 749.79272</span></span>
-<span><span class="co">#&gt; 821   8.20    0 4.104162e-01 749.79479 749.79479</span></span>
-<span><span class="co">#&gt; 822   8.21    0 4.063120e-01 749.79684 749.79684</span></span>
-<span><span class="co">#&gt; 823   8.22    0 4.022489e-01 749.79888 749.79888</span></span>
-<span><span class="co">#&gt; 824   8.23    0 3.982264e-01 749.80089 749.80089</span></span>
-<span><span class="co">#&gt; 825   8.24    0 3.942441e-01 749.80288 749.80288</span></span>
-<span><span class="co">#&gt; 826   8.25    0 3.903017e-01 749.80485 749.80485</span></span>
-<span><span class="co">#&gt; 827   8.26    0 3.863987e-01 749.80680 749.80680</span></span>
-<span><span class="co">#&gt; 828   8.27    0 3.825347e-01 749.80873 749.80873</span></span>
-<span><span class="co">#&gt; 829   8.28    0 3.787094e-01 749.81065 749.81065</span></span>
-<span><span class="co">#&gt; 830   8.29    0 3.749223e-01 749.81254 749.81254</span></span>
-<span><span class="co">#&gt; 831   8.30    0 3.711730e-01 749.81441 749.81441</span></span>
-<span><span class="co">#&gt; 832   8.31    0 3.674613e-01 749.81627 749.81627</span></span>
-<span><span class="co">#&gt; 833   8.32    0 3.637867e-01 749.81811 749.81811</span></span>
-<span><span class="co">#&gt; 834   8.33    0 3.601488e-01 749.81993 749.81993</span></span>
-<span><span class="co">#&gt; 835   8.34    0 3.565473e-01 749.82173 749.82173</span></span>
-<span><span class="co">#&gt; 836   8.35    0 3.529819e-01 749.82351 749.82351</span></span>
-<span><span class="co">#&gt; 837   8.36    0 3.494520e-01 749.82527 749.82527</span></span>
-<span><span class="co">#&gt; 838   8.37    0 3.459575e-01 749.82702 749.82702</span></span>
-<span><span class="co">#&gt; 839   8.38    0 3.424980e-01 749.82875 749.82875</span></span>
-<span><span class="co">#&gt; 840   8.39    0 3.390730e-01 749.83046 749.83046</span></span>
-<span><span class="co">#&gt; 841   8.40    0 3.356822e-01 749.83216 749.83216</span></span>
-<span><span class="co">#&gt; 842   8.41    0 3.323254e-01 749.83384 749.83384</span></span>
-<span><span class="co">#&gt; 843   8.42    0 3.290022e-01 749.83550 749.83550</span></span>
-<span><span class="co">#&gt; 844   8.43    0 3.257121e-01 749.83714 749.83714</span></span>
-<span><span class="co">#&gt; 845   8.44    0 3.224550e-01 749.83877 749.83877</span></span>
-<span><span class="co">#&gt; 846   8.45    0 3.192305e-01 749.84038 749.84038</span></span>
-<span><span class="co">#&gt; 847   8.46    0 3.160382e-01 749.84198 749.84198</span></span>
-<span><span class="co">#&gt; 848   8.47    0 3.128778e-01 749.84356 749.84356</span></span>
-<span><span class="co">#&gt; 849   8.48    0 3.097490e-01 749.84513 749.84513</span></span>
-<span><span class="co">#&gt; 850   8.49    0 3.066515e-01 749.84667 749.84667</span></span>
-<span><span class="co">#&gt; 851   8.50    0 3.035850e-01 749.84821 749.84821</span></span>
-<span><span class="co">#&gt; 852   8.51    0 3.005492e-01 749.84973 749.84973</span></span>
-<span><span class="co">#&gt; 853   8.52    0 2.975437e-01 749.85123 749.85123</span></span>
-<span><span class="co">#&gt; 854   8.53    0 2.945682e-01 749.85272 749.85272</span></span>
-<span><span class="co">#&gt; 855   8.54    0 2.916225e-01 749.85419 749.85419</span></span>
-<span><span class="co">#&gt; 856   8.55    0 2.887063e-01 749.85565 749.85565</span></span>
-<span><span class="co">#&gt; 857   8.56    0 2.858193e-01 749.85709 749.85709</span></span>
-<span><span class="co">#&gt; 858   8.57    0 2.829611e-01 749.85852 749.85852</span></span>
-<span><span class="co">#&gt; 859   8.58    0 2.801315e-01 749.85993 749.85993</span></span>
-<span><span class="co">#&gt; 860   8.59    0 2.773301e-01 749.86133 749.86133</span></span>
-<span><span class="co">#&gt; 861   8.60    0 2.745568e-01 749.86272 749.86272</span></span>
-<span><span class="co">#&gt; 862   8.61    0 2.718113e-01 749.86409 749.86409</span></span>
-<span><span class="co">#&gt; 863   8.62    0 2.690932e-01 749.86545 749.86545</span></span>
-<span><span class="co">#&gt; 864   8.63    0 2.664022e-01 749.86680 749.86680</span></span>
-<span><span class="co">#&gt; 865   8.64    0 2.637382e-01 749.86813 749.86813</span></span>
-<span><span class="co">#&gt; 866   8.65    0 2.611008e-01 749.86945 749.86945</span></span>
-<span><span class="co">#&gt; 867   8.66    0 2.584898e-01 749.87076 749.87076</span></span>
-<span><span class="co">#&gt; 868   8.67    0 2.559049e-01 749.87205 749.87205</span></span>
-<span><span class="co">#&gt; 869   8.68    0 2.533459e-01 749.87333 749.87333</span></span>
-<span><span class="co">#&gt; 870   8.69    0 2.508124e-01 749.87459 749.87459</span></span>
-<span><span class="co">#&gt; 871   8.70    0 2.483043e-01 749.87585 749.87585</span></span>
-<span><span class="co">#&gt; 872   8.71    0 2.458212e-01 749.87709 749.87709</span></span>
-<span><span class="co">#&gt; 873   8.72    0 2.433630e-01 749.87832 749.87832</span></span>
-<span><span class="co">#&gt; 874   8.73    0 2.409294e-01 749.87954 749.87954</span></span>
-<span><span class="co">#&gt; 875   8.74    0 2.385201e-01 749.88074 749.88074</span></span>
-<span><span class="co">#&gt; 876   8.75    0 2.361349e-01 749.88193 749.88193</span></span>
-<span><span class="co">#&gt; 877   8.76    0 2.337736e-01 749.88311 749.88311</span></span>
-<span><span class="co">#&gt; 878   8.77    0 2.314358e-01 749.88428 749.88428</span></span>
-<span><span class="co">#&gt; 879   8.78    0 2.291215e-01 749.88544 749.88544</span></span>
-<span><span class="co">#&gt; 880   8.79    0 2.268302e-01 749.88658 749.88658</span></span>
-<span><span class="co">#&gt; 881   8.80    0 2.245619e-01 749.88772 749.88772</span></span>
-<span><span class="co">#&gt; 882   8.81    0 2.223163e-01 749.88884 749.88884</span></span>
-<span><span class="co">#&gt; 883   8.82    0 2.200932e-01 749.88995 749.88995</span></span>
-<span><span class="co">#&gt; 884   8.83    0 2.178922e-01 749.89105 749.89105</span></span>
-<span><span class="co">#&gt; 885   8.84    0 2.157133e-01 749.89214 749.89214</span></span>
-<span><span class="co">#&gt; 886   8.85    0 2.135562e-01 749.89322 749.89322</span></span>
-<span><span class="co">#&gt; 887   8.86    0 2.114206e-01 749.89429 749.89429</span></span>
-<span><span class="co">#&gt; 888   8.87    0 2.093064e-01 749.89535 749.89535</span></span>
-<span><span class="co">#&gt; 889   8.88    0 2.072133e-01 749.89639 749.89639</span></span>
-<span><span class="co">#&gt; 890   8.89    0 2.051412e-01 749.89743 749.89743</span></span>
-<span><span class="co">#&gt; 891   8.90    0 2.030898e-01 749.89846 749.89846</span></span>
-<span><span class="co">#&gt; 892   8.91    0 2.010589e-01 749.89947 749.89947</span></span>
-<span><span class="co">#&gt; 893   8.92    0 1.990483e-01 749.90048 749.90048</span></span>
-<span><span class="co">#&gt; 894   8.93    0 1.970578e-01 749.90147 749.90147</span></span>
-<span><span class="co">#&gt; 895   8.94    0 1.950872e-01 749.90246 749.90246</span></span>
-<span><span class="co">#&gt; 896   8.95    0 1.931364e-01 749.90343 749.90343</span></span>
-<span><span class="co">#&gt; 897   8.96    0 1.912050e-01 749.90440 749.90440</span></span>
-<span><span class="co">#&gt; 898   8.97    0 1.892930e-01 749.90535 749.90535</span></span>
-<span><span class="co">#&gt; 899   8.98    0 1.874000e-01 749.90630 749.90630</span></span>
-<span><span class="co">#&gt; 900   8.99    0 1.855260e-01 749.90724 749.90724</span></span>
-<span><span class="co">#&gt; 901   9.00    0 1.836708e-01 749.90816 749.90816</span></span>
-<span><span class="co">#&gt; 902   9.01    0 1.818341e-01 749.90908 749.90908</span></span>
-<span><span class="co">#&gt; 903   9.02    0 1.800157e-01 749.90999 749.90999</span></span>
-<span><span class="co">#&gt; 904   9.03    0 1.782156e-01 749.91089 749.91089</span></span>
-<span><span class="co">#&gt; 905   9.04    0 1.764334e-01 749.91178 749.91178</span></span>
-<span><span class="co">#&gt; 906   9.05    0 1.746691e-01 749.91267 749.91267</span></span>
-<span><span class="co">#&gt; 907   9.06    0 1.729224e-01 749.91354 749.91354</span></span>
-<span><span class="co">#&gt; 908   9.07    0 1.711932e-01 749.91440 749.91440</span></span>
-<span><span class="co">#&gt; 909   9.08    0 1.694812e-01 749.91526 749.91526</span></span>
-<span><span class="co">#&gt; 910   9.09    0 1.677864e-01 749.91611 749.91611</span></span>
-<span><span class="co">#&gt; 911   9.10    0 1.661086e-01 749.91695 749.91695</span></span>
-<span><span class="co">#&gt; 912   9.11    0 1.644475e-01 749.91778 749.91778</span></span>
-<span><span class="co">#&gt; 913   9.12    0 1.628030e-01 749.91860 749.91860</span></span>
-<span><span class="co">#&gt; 914   9.13    0 1.611750e-01 749.91941 749.91941</span></span>
-<span><span class="co">#&gt; 915   9.14    0 1.595632e-01 749.92022 749.92022</span></span>
-<span><span class="co">#&gt; 916   9.15    0 1.579676e-01 749.92102 749.92102</span></span>
-<span><span class="co">#&gt; 917   9.16    0 1.563879e-01 749.92181 749.92181</span></span>
-<span><span class="co">#&gt; 918   9.17    0 1.548240e-01 749.92259 749.92259</span></span>
-<span><span class="co">#&gt; 919   9.18    0 1.532758e-01 749.92336 749.92336</span></span>
-<span><span class="co">#&gt; 920   9.19    0 1.517430e-01 749.92413 749.92413</span></span>
-<span><span class="co">#&gt; 921   9.20    0 1.502256e-01 749.92489 749.92489</span></span>
-<span><span class="co">#&gt; 922   9.21    0 1.487233e-01 749.92564 749.92564</span></span>
-<span><span class="co">#&gt; 923   9.22    0 1.472361e-01 749.92638 749.92638</span></span>
-<span><span class="co">#&gt; 924   9.23    0 1.457637e-01 749.92712 749.92712</span></span>
-<span><span class="co">#&gt; 925   9.24    0 1.443061e-01 749.92785 749.92785</span></span>
-<span><span class="co">#&gt; 926   9.25    0 1.428630e-01 749.92857 749.92857</span></span>
-<span><span class="co">#&gt; 927   9.26    0 1.414344e-01 749.92928 749.92928</span></span>
-<span><span class="co">#&gt; 928   9.27    0 1.400201e-01 749.92999 749.92999</span></span>
-<span><span class="co">#&gt; 929   9.28    0 1.386199e-01 749.93069 749.93069</span></span>
-<span><span class="co">#&gt; 930   9.29    0 1.372337e-01 749.93138 749.93138</span></span>
-<span><span class="co">#&gt; 931   9.30    0 1.358613e-01 749.93207 749.93207</span></span>
-<span><span class="co">#&gt; 932   9.31    0 1.345027e-01 749.93275 749.93275</span></span>
-<span><span class="co">#&gt; 933   9.32    0 1.331577e-01 749.93342 749.93342</span></span>
-<span><span class="co">#&gt; 934   9.33    0 1.318261e-01 749.93409 749.93409</span></span>
-<span><span class="co">#&gt; 935   9.34    0 1.305079e-01 749.93475 749.93475</span></span>
-<span><span class="co">#&gt; 936   9.35    0 1.292028e-01 749.93540 749.93540</span></span>
-<span><span class="co">#&gt; 937   9.36    0 1.279108e-01 749.93604 749.93604</span></span>
-<span><span class="co">#&gt; 938   9.37    0 1.266316e-01 749.93668 749.93668</span></span>
-<span><span class="co">#&gt; 939   9.38    0 1.253653e-01 749.93732 749.93732</span></span>
-<span><span class="co">#&gt; 940   9.39    0 1.241117e-01 749.93794 749.93794</span></span>
-<span><span class="co">#&gt; 941   9.40    0 1.228706e-01 749.93856 749.93856</span></span>
-<span><span class="co">#&gt; 942   9.41    0 1.216419e-01 749.93918 749.93918</span></span>
-<span><span class="co">#&gt; 943   9.42    0 1.204254e-01 749.93979 749.93979</span></span>
-<span><span class="co">#&gt; 944   9.43    0 1.192212e-01 749.94039 749.94039</span></span>
-<span><span class="co">#&gt; 945   9.44    0 1.180290e-01 749.94099 749.94099</span></span>
-<span><span class="co">#&gt; 946   9.45    0 1.168487e-01 749.94158 749.94158</span></span>
-<span><span class="co">#&gt; 947   9.46    0 1.156802e-01 749.94216 749.94216</span></span>
-<span><span class="co">#&gt; 948   9.47    0 1.145234e-01 749.94274 749.94274</span></span>
-<span><span class="co">#&gt; 949   9.48    0 1.133782e-01 749.94331 749.94331</span></span>
-<span><span class="co">#&gt; 950   9.49    0 1.122444e-01 749.94388 749.94388</span></span>
-<span><span class="co">#&gt; 951   9.50    0 1.111219e-01 749.94444 749.94444</span></span>
-<span><span class="co">#&gt; 952   9.51    0 1.100107e-01 749.94499 749.94499</span></span>
-<span><span class="co">#&gt; 953   9.52    0 1.089106e-01 749.94554 749.94554</span></span>
-<span><span class="co">#&gt; 954   9.53    0 1.078215e-01 749.94609 749.94609</span></span>
-<span><span class="co">#&gt; 955   9.54    0 1.067433e-01 749.94663 749.94663</span></span>
-<span><span class="co">#&gt; 956   9.55    0 1.056758e-01 749.94716 749.94716</span></span>
-<span><span class="co">#&gt; 957   9.56    0 1.046191e-01 749.94769 749.94769</span></span>
-<span><span class="co">#&gt; 958   9.57    0 1.035729e-01 749.94821 749.94821</span></span>
-<span><span class="co">#&gt; 959   9.58    0 1.025372e-01 749.94873 749.94873</span></span>
-<span><span class="co">#&gt; 960   9.59    0 1.015118e-01 749.94924 749.94924</span></span>
-<span><span class="co">#&gt; 961   9.60    0 1.004967e-01 749.94975 749.94975</span></span>
-<span><span class="co">#&gt; 962   9.61    0 9.949171e-02 749.95025 749.95025</span></span>
-<span><span class="co">#&gt; 963   9.62    0 9.849680e-02 749.95075 749.95075</span></span>
-<span><span class="co">#&gt; 964   9.63    0 9.751183e-02 749.95124 749.95124</span></span>
-<span><span class="co">#&gt; 965   9.64    0 9.653671e-02 749.95173 749.95173</span></span>
-<span><span class="co">#&gt; 966   9.65    0 9.557134e-02 749.95221 749.95221</span></span>
-<span><span class="co">#&gt; 967   9.66    0 9.461563e-02 749.95269 749.95269</span></span>
-<span><span class="co">#&gt; 968   9.67    0 9.366947e-02 749.95317 749.95317</span></span>
-<span><span class="co">#&gt; 969   9.68    0 9.273278e-02 749.95363 749.95363</span></span>
-<span><span class="co">#&gt; 970   9.69    0 9.180545e-02 749.95410 749.95410</span></span>
-<span><span class="co">#&gt; 971   9.70    0 9.088740e-02 749.95456 749.95456</span></span>
-<span><span class="co">#&gt; 972   9.71    0 8.997852e-02 749.95501 749.95501</span></span>
-<span><span class="co">#&gt; 973   9.72    0 8.907874e-02 749.95546 749.95546</span></span>
-<span><span class="co">#&gt; 974   9.73    0 8.818795e-02 749.95591 749.95591</span></span>
-<span><span class="co">#&gt; 975   9.74    0 8.730607e-02 749.95635 749.95635</span></span>
-<span><span class="co">#&gt; 976   9.75    0 8.643301e-02 749.95678 749.95678</span></span>
-<span><span class="co">#&gt; 977   9.76    0 8.556868e-02 749.95722 749.95722</span></span>
-<span><span class="co">#&gt; 978   9.77    0 8.471299e-02 749.95764 749.95764</span></span>
-<span><span class="co">#&gt; 979   9.78    0 8.386586e-02 749.95807 749.95807</span></span>
-<span><span class="co">#&gt; 980   9.79    0 8.302721e-02 749.95849 749.95849</span></span>
-<span><span class="co">#&gt; 981   9.80    0 8.219693e-02 749.95890 749.95890</span></span>
-<span><span class="co">#&gt; 982   9.81    0 8.137496e-02 749.95931 749.95931</span></span>
-<span><span class="co">#&gt; 983   9.82    0 8.056121e-02 749.95972 749.95972</span></span>
-<span><span class="co">#&gt; 984   9.83    0 7.975560e-02 749.96012 749.96012</span></span>
-<span><span class="co">#&gt; 985   9.84    0 7.895805e-02 749.96052 749.96052</span></span>
-<span><span class="co">#&gt; 986   9.85    0 7.816847e-02 749.96092 749.96092</span></span>
-<span><span class="co">#&gt; 987   9.86    0 7.738678e-02 749.96131 749.96131</span></span>
-<span><span class="co">#&gt; 988   9.87    0 7.661291e-02 749.96169 749.96169</span></span>
-<span><span class="co">#&gt; 989   9.88    0 7.584678e-02 749.96208 749.96208</span></span>
-<span><span class="co">#&gt; 990   9.89    0 7.508832e-02 749.96246 749.96246</span></span>
-<span><span class="co">#&gt; 991   9.90    0 7.433743e-02 749.96283 749.96283</span></span>
-<span><span class="co">#&gt; 992   9.91    0 7.359406e-02 749.96320 749.96320</span></span>
-<span><span class="co">#&gt; 993   9.92    0 7.285812e-02 749.96357 749.96357</span></span>
-<span><span class="co">#&gt; 994   9.93    0 7.212954e-02 749.96394 749.96394</span></span>
-<span><span class="co">#&gt; 995   9.94    0 7.140824e-02 749.96430 749.96430</span></span>
-<span><span class="co">#&gt; 996   9.95    0 7.069416e-02 749.96465 749.96465</span></span>
-<span><span class="co">#&gt; 997   9.96    0 6.998722e-02 749.96501 749.96501</span></span>
-<span><span class="co">#&gt; 998   9.97    0 6.928735e-02 749.96536 749.96536</span></span>
-<span><span class="co">#&gt; 999   9.98    0 6.859447e-02 749.96570 749.96570</span></span>
-<span><span class="co">#&gt; 1000  9.99    0 6.790853e-02 749.96605 749.96605</span></span>
-<span><span class="co">#&gt; 1001 10.00    0 6.722944e-02 749.96639 749.96639</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   Time    M   S   I   R</span></span>
+<span><span class="co">#&gt; 1 0.00 1000 500 0.0 0.0</span></span>
+<span><span class="co">#&gt; 2 0.01  900 595 2.5 2.5</span></span>
+<span><span class="co">#&gt; 3 0.02  800 694 3.0 3.0</span></span>
+<span><span class="co">#&gt; 4 0.03  700 793 3.5 3.5</span></span>
+<span><span class="co">#&gt; 5 0.04  600 892 4.0 4.0</span></span>
+<span><span class="co">#&gt; 6 0.05  500 991 4.5 4.5</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

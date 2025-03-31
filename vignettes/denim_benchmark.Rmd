@@ -317,7 +317,7 @@ Median run time for deSolve, with model defined in Fortran: `r deSolve_fortran_r
 library(denim)
 
 denim_model <- list(
-  "S -> E" = "(R0/tr) * timeStepDur * S * (I/N)", # formulate according that of uSEIR method
+  "S -> E" = "(R0/tr) * timeStep * S * (I/N)", # formulate according that of uSEIR method
   "E -> I" = d_gamma(rate = 1/4, shape = 2),
   "I -> R" = d_gamma(rate = 1/3, shape = 2)
 )
@@ -325,14 +325,14 @@ denim_model <- list(
 initialValues <- c(S = 999999, E = 1, I= 0, R= 0)
 parameters <- c(R0 = 3.5, 
                 tr = 3*2, # compute mean recovery time, for gamma it's scale*shape
-                N = 1e6, timeStepDur = 0.01)
+                N = 1e6)
 
 # ---- Get runtimes ----
 denim_runs <- bench::mark(
   sim(transitions = denim_model,
                      initialValues = initialValues,
                      parameters = parameters,
-                     simulationDuration = sim_duration, timeStep = 0.01),
+                     simulationDuration = sim_duration, timeStep = 0.05),
   iterations = total_runs
 )
 
@@ -341,7 +341,7 @@ denim_runs <- bench::mark(
 denim_out <- sim(transitions = denim_model, 
                      initialValues = initialValues,
                      parameters = parameters,
-                     simulationDuration = sim_duration, timeStep = 0.01)
+                     simulationDuration = sim_duration, timeStep = 0.05)
 ```
 
 </details>
@@ -421,3 +421,38 @@ legend(x = 53, y = 0.9,
 # Restore default clipping rect
 par(mar=c(5, 4, 4, 2) + 0.1)
 ```
+
+
+## Run time scaling in denim
+It is worth noting that runtime for denim is also dependent on duration of time step (`timeStep` parameter for `sim`). 
+
+The following plot demonstrates how run time changes as value for timeStep changes, using the same model for benchmarking. The values for timeStep being evaluated are `[0.01, 0.02, 0.05, 0.1, 0.25, 0.5, 1]`.
+
+```{r echo=FALSE}
+timeStepDurations <- c(0.01, 0.02, 0.05, 0.1, 0.25, 0.5, 1)
+runtime_scaling <- lapply(timeStepDurations, 
+     \(x){
+       time <- bench::mark(
+         sim(transitions = denim_model,
+                   initialValues = initialValues,
+                   parameters = parameters,
+                   simulationDuration = sim_duration, timeStep = x)
+       )
+       
+       time$median
+     }
+   )
+```
+```{r echo=FALSE}
+plot(x = timeStepDurations, y = runtime_scaling, col = "cornflowerblue",
+     xlab = "Time step duration",
+     ylab = "Median run time (in seconds)")
+lines(x = timeStepDurations, y = runtime_scaling, col = "cornflowerblue",
+     xlab = "Time step duration",
+     ylab = "Median run time (in seconds)")
+abline(v = 0.05, col = "red", lty = 2, lwd = 2)  
+abline(v = 1, col = "blueviolet", lty = 2, lwd = 2)  
+text(x = 0.05, y = max(unlist(runtime_scaling)), labels = "timeStep for benchmarking", col = "red", pos = 4)
+text(x = 1, y = max(unlist(runtime_scaling)), labels = "default timeStep", col = "blueviolet", pos = 2)
+```
+

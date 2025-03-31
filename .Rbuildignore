@@ -18,3 +18,4 @@
 ^CRAN-SUBMISSION$
 ^supplements$
 ^extra_benchmark$
+^\.vscode$

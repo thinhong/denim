@@ -7,22 +7,22 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r}
+```{r message=FALSE}
 library(deSolve)
 library(denim)
 ```
 
-## Modeling multinomial transition in denim
+## 1. Modeling multinomial transition in denim
 
 Modelers may encounter many situations where individuals can transition from one compartment to multiple others, such as the SIRD model. There are 2 main approaches to handle this:
 
--   Model as competing risk
+-   Model transitions as competing risks
 
 -   **Model as multinomial transition (outgoing population is split by a fixed proportion to transition to new compartments)**
 
 For modeling simplicity, `denim`'s implementation follows the multinomial approach.
 
-***Example:*** An SIRD model where 90% of infected can recover while the remaining 10% will pass away.
+***Example:*** An SIRD model where 90% of infected can recover while the remaining 10% will die.
 
 ```{r}
 transitions <- list(
@@ -85,7 +85,7 @@ transitions <- list(
 )
 ```
 
-## Example model
+## 2. Example model
 
 To further demonstrate the implementation of multinomial in `denim`, we provide the equivalent model implemented in `deSolve` and compare the output of 2 implementations.
 
@@ -174,7 +174,8 @@ mod <- sim(transitions = transitions,
 
 # run deSolve model
 times <- seq(0, simulationDuration)
-ode_mod <- ode(y = desolveInitialValues, times = times, parms = parameters, func = transition_func) |> as.data.frame()
+ode_mod <- ode(y = desolveInitialValues, times = times, parms = parameters, func = transition_func) 
+ode_mod <- as.data.frame(ode_mod)
 ode_mod$I<- rowSums(ode_mod[, c("IR1", "IR2", "ID")])
 ```
 
@@ -187,23 +188,23 @@ Output Comparison
 plot(x = mod$Time, y = mod$S,xlab = "Time", ylab = "Count", main="S compartment",
      col = "#4876ff", type="l", lwd=3)
 lines(ode_mod$time, ode_mod$S, lwd=3, lty=3)
-legend(x = 15, y = 4e5,legend=c("denim", "deSolve"), col = c("#4876ff", "black"), lty=c(1,3))
+legend(x = 150, y = 850,legend=c("denim", "deSolve"), col = c("#4876ff", "black"), lty=c(1,3))
 
 # ---- Plot I compartment
 plot(x = mod$Time, y = mod$I, xlab = "Time", ylab = "Count", main="I compartment",
       col = "#4876ff", type="l", lwd=2)
 lines(ode_mod$time, ode_mod$I, lwd=3, lty=3)
-legend(x = 15, y = 1e5,legend=c("denim", "deSolve"), col = c("#4876ff", "black"), lty=c(1,3))
+legend(x = 150, y = 25,legend=c("denim", "deSolve"), col = c("#4876ff", "black"), lty=c(1,3))
 
 # ---- Plot R compartment
 plot(x = mod$Time, y = mod$R, xlab = "Time", ylab = "Count", main="R compartment",
       col = "#4876ff", type="l", lwd=2)
 lines(ode_mod$time, ode_mod$R, lwd=3, lty=3)
-legend(x = 15, y = 1e5,legend=c("denim", "deSolve"), col = c("#4876ff", "black"), lty=c(1,3))
+legend(x = 150, y = 250,legend=c("denim", "deSolve"), col = c("#4876ff", "black"), lty=c(1,3))
 
 # ---- Plot D compartment
 plot(x = mod$Time, y = mod$D, xlab = "Time", ylab = "Count", main="D compartment",
      col = "#4876ff", type="l", lwd=2)
 lines(ode_mod$time, ode_mod$D, lwd=3, lty=3)
-legend(x = 15, y = 4e5,legend=c("denim", "deSolve"), col = c("#4876ff", "black"), lty=c(1,3))
+legend(x = 150, y = 25,legend=c("denim", "deSolve"), col = c("#4876ff", "black"), lty=c(1,3))
 ```

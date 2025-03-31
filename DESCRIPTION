@@ -22,7 +22,8 @@ URL: https://drthinhong.com/denim/,
 BugReports: https://github.com/thinhong/denim/issues
 Imports:
     Rcpp (>= 1.0.6),
-    viridisLite
+    viridisLite,
+    rlang
 Suggests:
     covr,
     knitr,

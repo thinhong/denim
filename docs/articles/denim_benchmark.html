@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">denim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,6 +51,9 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/multinomial.html">multinomial transition in denim</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>denim comparison</h6>
     <a class="dropdown-item" href="../articles/denim_vs_deSolve.html">denim vs deSolve</a>
     <a class="dropdown-item" href="../articles/denim_benchmark.html">denim benchmark</a>
     <div class="dropdown-divider"></div>
@@ -104,7 +107,7 @@ approaches and packages.</p>
 <p>All approaches will simulate the following SEIR model, with the same
 simulation duration of 180</p>
 <div id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:700px;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> E [label = \"(R0/tr) * S * (I / N) * td\"]\n  E -> I [label = \"d_gamma(4,2)\"]\n  I -> R [label = \"d_gamma(3,2)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Each approach will be run 50 times</p>
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> E [label = \"(R0/tr) * S * (I / N) * td\"]\n  E -> I [label = \"d_gamma(1/4,2)\"]\n  I -> R [label = \"d_gamma(1/3,2)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Each approach will be run 50 times</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">total_runs</span> <span class="op">&lt;-</span> <span class="fl">50L</span> <span class="co"># number of runs</span></span>
 <span><span class="va">sim_duration</span> <span class="op">&lt;-</span> <span class="fl">180</span> <span class="co"># duration of simulation</span></span></code></pre></div>
@@ -474,15 +477,15 @@ Code for running uSEIR in Cython (C backend)
 </details><p>Run time for uSEIR approach, Cython implementation (in seconds)</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">py</span><span class="op">$</span><span class="va">cython_runs</span></span></code></pre></div>
-<pre><code><span><span class="co">##  [1] 0.4081547 0.4145248 0.4115663 0.4107938 0.4103262 0.4193149 0.4170411</span></span>
-<span><span class="co">##  [8] 0.4241791 0.4211700 0.4172759 0.4152267 0.4141960 0.4105721 0.4113030</span></span>
-<span><span class="co">## [15] 0.4091239 0.4162629 0.4119470 0.4095368 0.4096603 0.4062281 0.4068928</span></span>
-<span><span class="co">## [22] 0.4074152 0.4069958 0.4032819 0.4009092 0.4018691 0.4033310 0.4028161</span></span>
-<span><span class="co">## [29] 0.4023368 0.4104071 0.4114213 0.4117439 0.4253800 0.4138129 0.4080679</span></span>
-<span><span class="co">## [36] 0.4227841 0.4102170 0.4109051 0.4219439 0.4190531 0.4230320 0.4170420</span></span>
-<span><span class="co">## [43] 0.4159870 0.4140022 0.4180233 0.4103088 0.4142401 0.4103670 0.4150410</span></span>
-<span><span class="co">## [50] 0.4198253</span></span></code></pre>
-<p>Median run time for uSEIR approach, Cython implementation: 0.4114938
+<pre><code><span><span class="co">##  [1] 0.4023190 0.4008489 0.3996522 0.4021759 0.3954298 0.3997641 0.4049480</span></span>
+<span><span class="co">##  [8] 0.3938949 0.4050941 0.3948798 0.3939130 0.3927512 0.3971188 0.4034030</span></span>
+<span><span class="co">## [15] 0.3942008 0.4020801 0.3934939 0.4020162 0.4203770 0.4100389 0.4032271</span></span>
+<span><span class="co">## [22] 0.3963428 0.3941231 0.4065132 0.4022820 0.4152899 0.4040892 0.4039760</span></span>
+<span><span class="co">## [29] 0.4112580 0.4038100 0.4072459 0.3957858 0.3960719 0.3979449 0.4026759</span></span>
+<span><span class="co">## [36] 0.4030762 0.4009969 0.4145489 0.4091511 0.4061022 0.3969009 0.4102721</span></span>
+<span><span class="co">## [43] 0.4054501 0.4031701 0.4024730 0.4103858 0.4159880 0.4060838 0.4022591</span></span>
+<span><span class="co">## [50] 0.4051421</span></span></code></pre>
+<p>Median run time for uSEIR approach, Cython implementation: 0.4025744
 seconds</p>
 </div>
 </div>
@@ -496,8 +499,8 @@ seconds</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://desolve.r-forge.r-project.org/" class="external-link">deSolve</a></span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning: package 'deSolve' was built under R version 4.3.1</span></span></code></pre>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>scale_I <span class="op">=</span> <span class="fl">4</span>, shape_I<span class="op">=</span><span class="fl">2</span>,</span>
-<span>                scale_R <span class="op">=</span> <span class="fl">3</span>, shape_R <span class="op">=</span> <span class="fl">2</span>,</span>
+<code class="sourceCode R"><span><span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>gamma_rate_I <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span>, shape_I<span class="op">=</span><span class="fl">2</span>,</span>
+<span>                gamma_rate_R <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, shape_R <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>                R0 <span class="op">=</span> <span class="fl">3.5</span>, N <span class="op">=</span> <span class="fl">1e6</span><span class="op">)</span> </span>
 <span><span class="va">initialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>S <span class="op">=</span> <span class="fl">999999</span>, E1 <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                   E2 <span class="op">=</span> <span class="fl">0</span>, E <span class="op">=</span> <span class="fl">0</span>, I1<span class="op">=</span><span class="fl">0</span>, </span>
@@ -507,10 +510,7 @@ seconds</p>
 <span><span class="co"># --- Transition def for deSolve</span></span>
 <span><span class="va">transition_func</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">state</span>, <span class="va">param</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">state</span>, <span class="va">param</span><span class="op">)</span> <span class="op">)</span>, <span class="op">{</span></span>
-<span>      <span class="va">gamma_rate_I</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="va">scale_I</span></span>
-<span>      <span class="va">gamma_rate_R</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="va">scale_R</span></span>
-<span>      </span>
-<span>      <span class="va">tr</span> <span class="op">=</span> <span class="va">scale_R</span><span class="op">*</span><span class="va">shape_R</span></span>
+<span>      <span class="va">tr</span> <span class="op">=</span> <span class="va">shape_R</span><span class="op">*</span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="va">gamma_rate_R</span><span class="op">)</span></span>
 <span>      </span>
 <span>      <span class="va">dS</span> <span class="op">=</span> <span class="op">-</span> <span class="op">(</span><span class="va">R0</span><span class="op">/</span><span class="va">tr</span><span class="op">)</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="va">I</span><span class="op">/</span><span class="va">N</span></span>
 <span>      <span class="co"># apply linear chain trick</span></span>
@@ -541,13 +541,13 @@ seconds</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">desolve_runs</span><span class="op">$</span><span class="va">time</span></span></code></pre></div>
 <pre><code><span><span class="co">## [[1]]</span></span>
-<span><span class="co">##  [1]  3.33ms  3.17ms  3.36ms  3.28ms  5.43ms  3.18ms  3.13ms  3.08ms  3.09ms</span></span>
-<span><span class="co">## [10]  3.08ms  3.14ms  3.22ms  3.16ms  4.71ms  3.12ms  3.05ms  3.03ms  3.06ms</span></span>
-<span><span class="co">## [19]  3.05ms  3.06ms  3.07ms  3.08ms  4.57ms  3.1ms   3.1ms   3.07ms  3.06ms</span></span>
-<span><span class="co">## [28]  3.06ms  3.08ms  3.1ms   3.11ms  4.55ms  3.07ms  3.06ms  3.05ms  3.08ms</span></span>
-<span><span class="co">## [37]  3.1ms   3.15ms  3.11ms  3.1ms  23.66ms  3.21ms  3.13ms  3.14ms  3.2ms </span></span>
-<span><span class="co">## [46]  3.14ms  3.13ms  3.19ms  3.21ms  4.99ms</span></span></code></pre>
-<p>Median run time for deSolve, with model defined in R: 0.0031036
+<span><span class="co">##  [1]  3.52ms  3.25ms  3.5ms   3.37ms  6.18ms  3.4ms   3.19ms  3.44ms  3.31ms</span></span>
+<span><span class="co">## [10]  3.32ms  3.22ms  3.36ms  3.3ms   3.37ms  5.06ms  3.11ms  3.25ms  3.3ms </span></span>
+<span><span class="co">## [19]  3.34ms  3.26ms  3.15ms  3.28ms  3.17ms  5.14ms  3.35ms  3.42ms  3.31ms</span></span>
+<span><span class="co">## [28]  3.18ms  3.24ms  3.13ms  3.33ms  3.36ms  5.65ms  3.2ms   3.25ms  3.28ms</span></span>
+<span><span class="co">## [37]  3.23ms  3.24ms  3.23ms  3.27ms  3.25ms 26.9ms   3.26ms  3.36ms  3.39ms</span></span>
+<span><span class="co">## [46]  3.46ms  3.36ms  3.31ms  3.2ms   3.14ms</span></span></code></pre>
+<p>Median run time for deSolve, with model defined in R: 0.0032842
 seconds</p>
 </div>
 <div class="section level3">
@@ -580,12 +580,12 @@ seconds</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">deSolve_c_runs</span><span class="op">$</span><span class="va">time</span></span></code></pre></div>
 <pre><code><span><span class="co">## [[1]]</span></span>
-<span><span class="co">##  [1] 164µs 200µs 140µs 174µs 137µs 134µs 156µs 127µs 151µs 127µs 132µs 156µs</span></span>
-<span><span class="co">## [13] 130µs 149µs 125µs 125µs 147µs 119µs 141µs 120µs 122µs 142µs 120µs 142µs</span></span>
-<span><span class="co">## [25] 120µs 121µs 144µs 120µs 143µs 123µs 123µs 146µs 120µs 143µs 125µs 120µs</span></span>
-<span><span class="co">## [37] 144µs 120µs 148µs 122µs 122µs 143µs 119µs 146µs 119µs 119µs 145µs 128µs</span></span>
-<span><span class="co">## [49] 143µs 122µs</span></span></code></pre>
-<p>Median run time for deSolve, with model defined in C: 1.30626^{-4}
+<span><span class="co">##  [1] 165µs 204µs 138µs 165µs 131µs 129µs 155µs 130µs 147µs 122µs 123µs 146µs</span></span>
+<span><span class="co">## [13] 126µs 144µs 122µs 124µs 145µs 123µs 145µs 124µs 123µs 151µs 124µs 147µs</span></span>
+<span><span class="co">## [25] 123µs 120µs 140µs 117µs 138µs 119µs 117µs 138µs 118µs 140µs 116µs 116µs</span></span>
+<span><span class="co">## [37] 143µs 117µs 138µs 116µs 117µs 137µs 117µs 139µs 116µs 121µs 144µs 120µs</span></span>
+<span><span class="co">## [49] 142µs 120µs</span></span></code></pre>
+<p>Median run time for deSolve, with model defined in C: 1.2757155^{-4}
 seconds</p>
 </div>
 <div class="section level3">
@@ -616,13 +616,13 @@ seconds</p>
 </details><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">deSolve_fortran_runs</span><span class="op">$</span><span class="va">time</span></span></code></pre></div>
 <pre><code><span><span class="co">## [[1]]</span></span>
-<span><span class="co">##  [1] 366µs 195µs 218µs 179µs 177µs 204µs 172µs 190µs 170µs 174µs 191µs 173µs</span></span>
-<span><span class="co">## [13] 191µs 170µs 171µs 188µs 171µs 189µs 168µs 172µs 194µs 169µs 190µs 168µs</span></span>
-<span><span class="co">## [25] 168µs 190µs 165µs 196µs 165µs 168µs 190µs 174µs 189µs 167µs 168µs 188µs</span></span>
-<span><span class="co">## [37] 171µs 189µs 171µs 168µs 199µs 166µs 197µs 169µs 162µs 183µs 168µs 183µs</span></span>
-<span><span class="co">## [49] 163µs 162µs</span></span></code></pre>
+<span><span class="co">##  [1] 393µs 202µs 224µs 178µs 177µs 203µs 173µs 198µs 164µs 172µs 196µs 176µs</span></span>
+<span><span class="co">## [13] 192µs 167µs 171µs 196µs 171µs 186µs 174µs 171µs 190µs 175µs 183µs 164µs</span></span>
+<span><span class="co">## [25] 175µs 192µs 171µs 206µs 167µs 165µs 192µs 173µs 187µs 167µs 167µs 186µs</span></span>
+<span><span class="co">## [37] 169µs 188µs 177µs 169µs 187µs 173µs 187µs 173µs 175µs 192µs 168µs 198µs</span></span>
+<span><span class="co">## [49] 175µs 179µs</span></span></code></pre>
 <p>Median run time for deSolve, with model defined in Fortran:
-1.734505^{-4} seconds</p>
+1.7679203^{-4} seconds</p>
 </div>
 </div>
 <div class="section level2">
@@ -634,22 +634,22 @@ Code for running SEIR in <code>denim</code>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://drthinhong.com/denim/" class="external-link">denim</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">denim_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  <span class="st">"S -&gt; E"</span> <span class="op">=</span> <span class="st">"(R0/tr) * timeStepDur * S * (I/N)"</span>, <span class="co"># formulate according that of uSEIR method</span></span>
-<span>  <span class="st">"E -&gt; I"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span>scale <span class="op">=</span> <span class="fl">4</span>, shape <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
-<span>  <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span>scale <span class="op">=</span> <span class="fl">3</span>, shape <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="st">"S -&gt; E"</span> <span class="op">=</span> <span class="st">"(R0/tr) * timeStep * S * (I/N)"</span>, <span class="co"># formulate according that of uSEIR method</span></span>
+<span>  <span class="st">"E -&gt; I"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span>, shape <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, shape <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">initialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>S <span class="op">=</span> <span class="fl">999999</span>, E <span class="op">=</span> <span class="fl">1</span>, I<span class="op">=</span> <span class="fl">0</span>, R<span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>R0 <span class="op">=</span> <span class="fl">3.5</span>, </span>
 <span>                tr <span class="op">=</span> <span class="fl">3</span><span class="op">*</span><span class="fl">2</span>, <span class="co"># compute mean recovery time, for gamma it's scale*shape</span></span>
-<span>                N <span class="op">=</span> <span class="fl">1e6</span>, timeStepDur <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span>
+<span>                N <span class="op">=</span> <span class="fl">1e6</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ---- Get runtimes ----</span></span>
 <span><span class="va">denim_runs</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="https://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/sim.html">sim</a></span><span class="op">(</span>transitions <span class="op">=</span> <span class="va">denim_model</span>,</span>
 <span>                     initialValues <span class="op">=</span> <span class="va">initialValues</span>,</span>
 <span>                     parameters <span class="op">=</span> <span class="va">parameters</span>,</span>
-<span>                     simulationDuration <span class="op">=</span> <span class="va">sim_duration</span>, timeStep <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span>,</span>
+<span>                     simulationDuration <span class="op">=</span> <span class="va">sim_duration</span>, timeStep <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span>,</span>
 <span>  iterations <span class="op">=</span> <span class="va">total_runs</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -658,17 +658,17 @@ Code for running SEIR in <code>denim</code>
 <span><span class="va">denim_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim.html">sim</a></span><span class="op">(</span>transitions <span class="op">=</span> <span class="va">denim_model</span>, </span>
 <span>                     initialValues <span class="op">=</span> <span class="va">initialValues</span>,</span>
 <span>                     parameters <span class="op">=</span> <span class="va">parameters</span>,</span>
-<span>                     simulationDuration <span class="op">=</span> <span class="va">sim_duration</span>, timeStep <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span></code></pre></div>
+<span>                     simulationDuration <span class="op">=</span> <span class="va">sim_duration</span>, timeStep <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
 </details><p>Run time for <code>denim</code> implementation</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">denim_runs</span><span class="op">$</span><span class="va">time</span></span></code></pre></div>
 <pre><code><span><span class="co">## [[1]]</span></span>
-<span><span class="co">##  [1] 819ms 810ms 821ms 820ms 818ms 827ms 818ms 820ms 821ms 812ms 808ms 815ms</span></span>
-<span><span class="co">## [13] 805ms 814ms 819ms 819ms 815ms 817ms 795ms 818ms 818ms 812ms 821ms 821ms</span></span>
-<span><span class="co">## [25] 817ms 803ms 817ms 817ms 816ms 818ms 808ms 819ms 826ms 806ms 815ms 808ms</span></span>
-<span><span class="co">## [37] 805ms 809ms 813ms 823ms 827ms 811ms 847ms 820ms 826ms 834ms 825ms 819ms</span></span>
-<span><span class="co">## [49] 819ms 830ms</span></span></code></pre>
-<p>Median run time for denim: 0.8180356 seconds</p>
+<span><span class="co">##  [1] 713ms 712ms 718ms 716ms 717ms 733ms 733ms 727ms 719ms 712ms 708ms 711ms</span></span>
+<span><span class="co">## [13] 717ms 719ms 713ms 716ms 723ms 714ms 725ms 726ms 719ms 714ms 727ms 732ms</span></span>
+<span><span class="co">## [25] 718ms 713ms 713ms 716ms 716ms 713ms 715ms 711ms 714ms 713ms 714ms 715ms</span></span>
+<span><span class="co">## [37] 713ms 719ms 728ms 719ms 719ms 718ms 718ms 717ms 718ms 718ms 717ms 717ms</span></span>
+<span><span class="co">## [49] 718ms 717ms</span></span></code></pre>
+<p>Median run time for denim: 0.7171607 seconds</p>
 </div>
 <div class="section level2">
 <h2 id="visualize-output">Visualize output<a class="anchor" aria-label="anchor" href="#visualize-output"></a>
@@ -681,6 +681,18 @@ Code for running SEIR in <code>denim</code>
 <p>The following plot shows run time for 50 runs (with horizontal line
 showing median run time) of each approach.</p>
 <p><img src="denim_benchmark_files/figure-html/unnamed-chunk-16-1.png" width="2187.5"></p>
+</div>
+<div class="section level2">
+<h2 id="run-time-scaling-in-denim">Run time scaling in denim<a class="anchor" aria-label="anchor" href="#run-time-scaling-in-denim"></a>
+</h2>
+<p>It is worth noting that runtime for denim is also dependent on
+duration of time step (<code>timeStep</code> parameter for
+<code>sim</code>).</p>
+<p>The following plot demonstrates how run time changes as value for
+timeStep changes, using the same model for benchmarking. The values for
+timeStep being evaluated are
+<code>[0.01, 0.02, 0.05, 0.1, 0.25, 0.5, 1]</code>.</p>
+<p><img src="denim_benchmark_files/figure-html/unnamed-chunk-18-1.png" width="2187.5"></p>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-Hernndez2021" class="csl-entry">
 Hernández, Pilar, Carlos Pena, Alberto Ramos, and Juan José

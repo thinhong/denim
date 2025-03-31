@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">denim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,6 +51,9 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/multinomial.html">multinomial transition in denim</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>denim comparison</h6>
     <a class="dropdown-item" href="../articles/denim_vs_deSolve.html">denim vs deSolve</a>
     <a class="dropdown-item" href="../articles/denim_benchmark.html">denim benchmark</a>
     <div class="dropdown-divider"></div>
@@ -110,19 +113,17 @@
 <code class="sourceCode R"><span><span class="co"># --- Model definition in deSolve</span></span>
 <span><span class="va">transition_func</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">state</span>, <span class="va">param</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">state</span>, <span class="va">param</span><span class="op">)</span> <span class="op">)</span>, <span class="op">{</span></span>
-<span>      <span class="va">gamma_rate</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="va">scale</span></span>
-<span>      </span>
 <span>      <span class="va">dS</span> <span class="op">=</span> <span class="op">-</span><span class="va">beta</span><span class="op">*</span><span class="va">S</span><span class="op">*</span><span class="va">I</span><span class="op">/</span><span class="va">N</span></span>
-<span>      <span class="va">dI1</span> <span class="op">=</span> <span class="va">beta</span><span class="op">*</span><span class="va">S</span><span class="op">*</span><span class="va">I</span><span class="op">/</span><span class="va">N</span> <span class="op">-</span> <span class="va">gamma_rate</span><span class="op">*</span><span class="va">I1</span></span>
-<span>      <span class="va">dI2</span> <span class="op">=</span> <span class="va">gamma_rate</span><span class="op">*</span><span class="va">I1</span> <span class="op">-</span> <span class="va">gamma_rate</span><span class="op">*</span><span class="va">I2</span></span>
+<span>      <span class="va">dI1</span> <span class="op">=</span> <span class="va">beta</span><span class="op">*</span><span class="va">S</span><span class="op">*</span><span class="va">I</span><span class="op">/</span><span class="va">N</span> <span class="op">-</span> <span class="va">rate</span><span class="op">*</span><span class="va">I1</span></span>
+<span>      <span class="va">dI2</span> <span class="op">=</span> <span class="va">rate</span><span class="op">*</span><span class="va">I1</span> <span class="op">-</span> <span class="va">rate</span><span class="op">*</span><span class="va">I2</span></span>
 <span>      <span class="va">dI</span> <span class="op">=</span>  <span class="va">dI1</span> <span class="op">+</span> <span class="va">dI2</span></span>
-<span>      <span class="va">dR</span> <span class="op">=</span> <span class="va">gamma_rate</span><span class="op">*</span><span class="va">I2</span></span>
+<span>      <span class="va">dR</span> <span class="op">=</span> <span class="va">rate</span><span class="op">*</span><span class="va">I2</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">dS</span>, <span class="va">dI</span>, <span class="va">dI1</span>, <span class="va">dI2</span>, <span class="va">dR</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># ---- Model configuration </span></span>
-<span><span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>beta <span class="op">=</span> <span class="fl">0.3</span>, scale <span class="op">=</span> <span class="fl">3</span>, N <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span> </span>
+<span><span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>beta <span class="op">=</span> <span class="fl">0.3</span>, rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, N <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span> </span>
 <span><span class="va">initialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>S <span class="op">=</span> <span class="fl">999</span>, I <span class="op">=</span> <span class="fl">1</span>, I1 <span class="op">=</span> <span class="fl">1</span>, I2<span class="op">=</span><span class="fl">0</span>, R<span class="op">=</span><span class="fl">0</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ---- Run simulation</span></span>
@@ -153,7 +154,6 @@ in their <code>deSolve</code> model.</p>
 <code class="sourceCode R"><span><span class="co"># --- Model definition in deSolve</span></span>
 <span><span class="va">transition_func</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">state</span>, <span class="va">param</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">state</span>, <span class="va">param</span><span class="op">)</span> <span class="op">)</span>, <span class="op">{</span></span>
-<span>      <span class="va">gamma_rate</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="va">scale</span></span>
 <span>      </span>
 <span>      <span class="co"># For S -&gt; I transition, since it involves parameters (beta, N), </span></span>
 <span>      <span class="co"># the best transition to describe this is using a mathematical formula</span></span>
@@ -161,10 +161,10 @@ in their <code>deSolve</code> model.</p>
 <span>      </span>
 <span>      <span class="co"># For I -&gt; R transition, linear chain trick is applied --&gt; implies Erlang distributed dwell time</span></span>
 <span>      <span class="co"># Hence, we can use d_gamma from denim</span></span>
-<span>      <span class="va">dI1</span> <span class="op">=</span> <span class="va">beta</span><span class="op">*</span><span class="va">S</span><span class="op">*</span><span class="va">I</span><span class="op">/</span><span class="va">N</span> <span class="op">-</span> <span class="va">gamma_rate</span><span class="op">*</span><span class="va">I1</span></span>
-<span>      <span class="va">dI2</span> <span class="op">=</span> <span class="va">gamma_rate</span><span class="op">*</span><span class="va">I1</span> <span class="op">-</span> <span class="va">gamma_rate</span><span class="op">*</span><span class="va">I2</span></span>
+<span>      <span class="va">dI1</span> <span class="op">=</span> <span class="va">beta</span><span class="op">*</span><span class="va">S</span><span class="op">*</span><span class="va">I</span><span class="op">/</span><span class="va">N</span> <span class="op">-</span> <span class="va">rate</span><span class="op">*</span><span class="va">I1</span></span>
+<span>      <span class="va">dI2</span> <span class="op">=</span> <span class="va">rate</span><span class="op">*</span><span class="va">I1</span> <span class="op">-</span> <span class="va">rate</span><span class="op">*</span><span class="va">I2</span></span>
 <span>      <span class="va">dI</span> <span class="op">=</span>  <span class="va">dI1</span> <span class="op">+</span> <span class="va">dI2</span></span>
-<span>      <span class="va">dR</span> <span class="op">=</span> <span class="va">gamma_rate</span><span class="op">*</span><span class="va">I2</span></span>
+<span>      <span class="va">dR</span> <span class="op">=</span> <span class="va">rate</span><span class="op">*</span><span class="va">I2</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">dS</span>, <span class="va">dI</span>, <span class="va">dI1</span>, <span class="va">dI2</span>, <span class="va">dR</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
@@ -182,7 +182,7 @@ describe the transition</p></li>
 <code class="sourceCode R"><span><span class="co"># --- Transition def for denim</span></span>
 <span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * S * I/N * timestepDur"</span>,</span>
-<span>  <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span> <span class="co"># shape is 2 from number of I sub compartments</span></span>
+<span>  <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, shape <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="co"># shape is 2 from number of I sub compartments</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Note that when converting an ODE to a math expression, we must
 multiply the original expression with time step duration (variable
@@ -202,10 +202,10 @@ in the form of named vectors.</p>
 compartments as these sub-compartments will be automatically computed
 internally), it is recommended to remove redundant compartments (in this
 example, <code>I1</code> and <code>I2</code>).</p>
-<p>For parameters, since <code>rate</code> and <code>scale</code> are
-already defined in the distribution functions, users only need to keep
-<code>beta</code> and <code>N</code> from the initial parameters vector.
-We also need to specify the value for <code>timestepDur</code> here.</p>
+<p>For parameters, since <code>rate</code> is already defined in the
+distribution functions, users only need to keep <code>beta</code> and
+<code>N</code> from the initial parameters vector. We also need to
+specify the value for <code>timestepDur</code> here.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># remove I1, I2 compartments</span></span>
 <span><span class="va">denim_initialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>S <span class="op">=</span> <span class="fl">999</span>, I <span class="op">=</span> <span class="fl">1</span>, R<span class="op">=</span><span class="fl">0</span><span class="op">)</span></span>
@@ -232,7 +232,16 @@ set to a small value for the result to closely follow that of
 <span>             initialValues <span class="op">=</span> <span class="va">denim_initialValues</span>, </span>
 <span>             parameters <span class="op">=</span> <span class="va">denim_parameters</span>,</span>
 <span>             simulationDuration <span class="op">=</span> <span class="fl">100</span>,</span>
-<span>             timeStep <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span></code></pre></div>
+<span>             timeStep <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">[</span><span class="va">mod</span><span class="op">$</span><span class="va">Time</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%%</a></span> <span class="fl">1</span> <span class="op">==</span> <span class="fl">0</span>, <span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##     Time        S        I          R</span></span>
+<span><span class="co">## 1      0 999.0000 1.000000 0.00000000</span></span>
+<span><span class="co">## 101    1 998.6566 1.293759 0.04961535</span></span>
+<span><span class="co">## 201    2 998.2251 1.593725 0.18121212</span></span>
+<span><span class="co">## 301    3 997.7004 1.920189 0.37940195</span></span>
+<span><span class="co">## 401    4 997.0725 2.289061 0.63848007</span></span>
+<span><span class="co">## 501    5 996.3266 2.714365 0.95900520</span></span></code></pre>
 </div>
 </div>
 <div class="section level2">
