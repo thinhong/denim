@@ -111,7 +111,7 @@ denim_transitions <- function(...) {
     # Otherwise (e.g., a call to d_gamma or d_exponential) leave it as an expression.
     rhs_val <- if (is.call(rhs_expr)) {
       fn <- as.character(rhs_expr[[1]])
-      if (grepl("^d_", fn)) {
+      if (grepl("^d_", fn) | grepl("^nonparametric", fn)) {
         # If the call is to a function starting with "d_", leave it as an expression.
         rhs_expr
       } else {

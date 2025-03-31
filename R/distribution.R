@@ -163,10 +163,11 @@ transprob <- function(x) {
 #' @examples
 #' transitions <- list("S->I"=nonparametric(0.1, 0.2, 0.5, 0.2))
 #' @export
-nonparametric <- function(...) {
+nonparametric <- function(..., dist_init = FALSE) {
   distr <- list(
     distribution = "nonparametric",
-    waitingTime = c(...))
+    waitingTime = c(...),
+    dist_init = as.numeric(dist_init))
   
   class(distr) <- c("Distribution", class(distr))
   distr
@@ -259,7 +260,8 @@ distributionToJson <- function(distribution) {
   if (distribution$distribution == "nonparametric") {
     dn <- newJsonKeyPair(key = "distribution", value = "nonparametric")
     wt <- newJsonKeyPair(key = "waitingTime", value = newJsonArray(distribution$waitingTime))
-    contents <- c(dn, wt)
+    kp <- newJsonKeyPair(key = "dist_init", value = distribution$dist_init)
+    contents <- c(dn, wt, kp)
   } 
   else if (distribution$distribution == "multinomial") {
     dn <- newJsonKeyPair(key = "distribution", value = "multinomial")

@@ -46,6 +46,14 @@ double DistributionNonparametric::getTransitionProb(size_t index) {
     }
 }
 
+double DistributionNonparametric::getProbDist(size_t index){
+    if (index >= waitingTime.size()) {
+        return 0;
+    }else{
+        return this -> waitingTime[index];
+    } 
+}
+
 
 std::vector<double> DistributionNonparametric::getWaitingTime() {
     return waitingTime;

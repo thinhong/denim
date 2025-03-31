@@ -180,6 +180,9 @@ ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_js
             else if (distributionConfig["distribution"] == "nonparametric") {
                 std::vector<double> waitingTime = distributionConfig["waitingTime"];
                 distribution = std::make_shared<DistributionNonparametric>(waitingTime);
+                // work around json type cast exception, don't remove
+                double tmp_init_config = distributionConfig["dist_init"];
+                dist_init = (bool) tmp_init_config;
             }
             else if (distributionConfig["distribution"] == "mathExpression") {
                 std::string expression = distributionConfig["expression"];
