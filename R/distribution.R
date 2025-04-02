@@ -111,46 +111,25 @@ mathexpr <- function(expr) {
 }
 
 
-#' Fixed transition
-#' 
-#' Define a fixed number of individuals of the left compartment transit to the 
-#' right compartment at every time step
-#'
-#' @param x number of individuals who move from one compartment to another
-#' @return a Distribution object for simulator
-#' 
-#' @examples
-#' transitions <- list("S->I" = constant(10))
-#' @export
+#Fixed transition
 constant <- function(x) {
   distr <- list(
     distribution = "constant",
     constant = x)
-  
+
   class(distr) <- c("Distribution", class(distr))
   distr
 }
 
 
-#' Transition probability
-#' 
-#' A fixed percentage of the left compartment transit to the right compartment 
-#' at every time step
-#' 
-#' @param x a float number between 0 to 1
-#' @return a Distribution object for simulator
-#' 
-#' @examples
-#' transitions <- list("S->I"=transprob(0.8))
-#' @export
-transprob <- function(x) {
-  distr <- list(
-    distribution = "transitionProb",
-    transitionProb = x)
-  
-  class(distr) <- c("Distribution", class(distr))
-  distr
-}
+# transprob <- function(x) {
+#   distr <- list(
+#     distribution = "transitionProb",
+#     transitionProb = x)
+# 
+#   class(distr) <- c("Distribution", class(distr))
+#   distr
+# }
 
 
 #' Nonparametric distribution
@@ -174,32 +153,15 @@ nonparametric <- function(..., dist_init = FALSE) {
 }
 
 
-#' Multinomial
-#' 
-#' Define a set of probabilities of transition from one compartment to multiple
-#' compartments
-#' ```
-#' "I -> R" = d_gamma(1/3, 2),
-#' "I -> D" = d_lognormal(2, 0.5)
-#' ```
-#' is equal to
-#' ```
-#' "0.5 * I -> R" = d_gamma(1/3, 2),
-#' "0.5 * I -> D" = d_lognormal(2, 0.5)
-#' ```
-#'
-#' @param ... a vector of probabilities. Vector is automatically rescaled to sum to 1. 
-#' @return a Distribution object for simulator
-#'
-#' @export
-multinomial <- function(...) {
-  distr <- list(
-    distribution = "multinomial",
-    probabilities = c(...))
-  
-  class(distr) <- c("Distribution", class(distr))
-  distr
-}
+# multinomial <- function(...) {
+#   distr <- list(
+#     distribution = "multinomial",
+#     probabilities = c(...))
+#   
+#   class(distr) <- c("Distribution", class(distr))
+#   distr
+# }
+
 
 #' @export
 print.Distribution <- function(x, ...) {

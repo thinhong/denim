@@ -35,19 +35,19 @@ reference:
 - subtitle: Non-parametric distribution
   contents:
   - nonparametric
-- subtitle: Fixed percentage
-  contents:
-  - transprob
-- subtitle: Fixed transition
-  contents:
-  - constant
+# - subtitle: Fixed percentage
+#   contents:
+#   - transprob
+# - subtitle: Fixed transition
+#   contents:
+#   - constant
 - subtitle: Math Expression
   contents:
   - mathexpr
-- title: Multinomial
-  desc: Define a set of probabilities of transition from one compartment to multiple compartments
-  contents: 
-  - multinomial
+# - title: Multinomial
+#   desc: Define a set of probabilities of transition from one compartment to multiple compartments
+#   contents: 
+#   - multinomial
 - title: Simulator
   contents:
   - sim

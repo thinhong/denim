@@ -5,6 +5,7 @@ Compartment::Compartment(std::string compName, double initVal) {
     this->compName = compName;
     compTotal.resize(timesFollowUp);
     compTotal[0] = initVal;
+    this->competingRisks = true;
 }
 
 void Compartment::addOutDistribution(std::shared_ptr<Distribution>& dist, bool distInit) {
@@ -25,42 +26,53 @@ void Compartment::setOutValues() {
 // TODO: set length for nested subCompartment
 void Compartment::setLengthSubCompartment() {
     size_t maxLength {0};
-    // for (auto& outDist: outDistributions) {
-    //     if (outDist->getMaxDay() > maxLength) {
-    //         maxLength = outDist->getMaxDay();
-    //     }
-    // }
+    // TODO: if competitive risk -> same subCompartment chain
+    // ignore option to distribute initial values 
 
-    // set first dim for subCompartments
-    this -> subCompartments.resize(outDistributions.size());
+    
+    if(this->competingRisks){
+        //  --- use same subcompartment chain for competing risks ---- 
+        // also uses outSubcompartments to keep track of changes before update the subCompartment
+        this -> subCompartments.resize((size_t) 1);
+        for (size_t pos = 0; pos < outDistributions.size(); pos++){
+            size_t currLength = outDistributions[pos]->getMaxDay();
 
-    for (size_t pos = 0; pos < outDistributions.size(); pos++){
-        size_t currLength = outDistributions[pos]->getMaxDay();
-
-        // update maxLength, which is used as length for outSubcompartment
-        if (currLength > maxLength) {
-            maxLength = currLength;
-        }
-
-        // update length for subCompartment chain for compartment at i
-        this -> subCompartments[pos].resize(currLength, 0);
-
-        // TODO: probably also handle the allocation for initial values here
-        // For now just initialize at first subCompartment
-        if (!distSubCompInit[pos]){
-            // if user specify to not distribute initial value, simply initalize in firs subcompartment
-            this -> subCompartments[pos][0] = compTotal[0]*outWeights[pos];
-        }else{
-            // distribute based on specified outDistribution
-            for(size_t i {0}; i<currLength; ++i){
-                this-> subCompartments[pos][i] = compTotal[0]*outWeights[pos]*outDistributions[pos]->getProbDist(i);
+            // update maxLength, which is used as length for outSubcompartment
+            if (currLength > maxLength) {
+                maxLength = currLength;
             }
         }
-        
+        // update length for subCompartment chain
+        this -> subCompartments[0].resize(maxLength, 0);
+        // if competing risk, ignore the option to distribute initial population
+        this -> subCompartments[0][0] = compTotal[0];
+    }else{
+        //  --- Initialize subCompartment chains for multinomial case ---
+        // set first dim for subCompartments
+        this -> subCompartments.resize(outDistributions.size());
+        for (size_t pos = 0; pos < outDistributions.size(); pos++){
+            size_t currLength = outDistributions[pos]->getMaxDay();
+
+            // update maxLength, which is used as length for outSubcompartment
+            if (currLength > maxLength) {
+                maxLength = currLength;
+            }
+
+            // update length for subCompartment chain for compartment at i
+            this -> subCompartments[pos].resize(currLength, 0);
+
+            if (!distSubCompInit[pos]){
+                // if user specify to not distribute initial value, simply initalize in firs subcompartment
+                this -> subCompartments[pos][0] = compTotal[0]*outWeights[pos];
+            }else{
+                // distribute based on specified outDistribution
+                for(size_t i {0}; i<currLength; ++i){
+                    this-> subCompartments[pos][i] = compTotal[0]*outWeights[pos]*outDistributions[pos]->getProbDist(i);
+                }
+            }
+            
+        }
     }
-    
-    // subCompartments.resize(maxLength);
-    // subCompartments[0] = compTotal[0];
 
     // outSubCompartment is the maximum length of subCompartment
     outSubCompartments.resize(maxLength);
@@ -75,10 +87,22 @@ void Compartment::initCompTotal(size_t iter){
 
 // Helper function to normalize outWeights, to be called at initialization, after defining outCompartments only
 void Compartment::normalizeOutWeights(){
-    double totalWeight = std::accumulate(this -> outWeights.begin(), this -> outWeights.end(), (double) 0);
-    
+    // only normalize weight when there is weight specified i.e. !(all weight is 1)
+    // if no weight is specified, treat it as competitive risk instead of multinomial transition
+    double totalWeight = 0;
+
     for ( size_t pos = 0; pos < outWeights.size(); pos++ ){
-        this -> outWeights[pos] = this -> outWeights[pos]/totalWeight;
+        if (this -> outWeights[pos] != 1.0){
+            this->competingRisks = false;
+        }
+        totalWeight += this -> outWeights[pos];
+    }
+    
+    // if this is not competingRisks (i.e. multinomial) -> normalize outWeights
+    if(!this->competingRisks){
+        for ( size_t pos = 0; pos < outWeights.size(); pos++ ){
+            this -> outWeights[pos] = this -> outWeights[pos]/totalWeight;
+        }
     }
 }
 
@@ -156,6 +180,8 @@ size_t Compartment::findOutCompPosition(std::string nameOutComp) {
 void Compartment::updateCompartment(size_t iter, std::vector<std::string>& paramNames, std::vector<double>& paramValues, std::vector<std::shared_ptr<Compartment>> &comps) {
     // reset out values 
     std::fill(outTotals.begin(), outTotals.end(), 0);
+    // reset outSubCompartment for each interation
+    std::fill(outSubCompartments.begin(), outSubCompartments.end(), 0);
 
     // Compute total in value of this compartment (later distributed to first subcompartment of each subcompartments chain)
     double inValue {0};
@@ -174,9 +200,7 @@ void Compartment::updateCompartment(size_t iter, std::vector<std::string>& param
         // loop through each out compartment 
         // update out values and compTotal
         for (size_t outIndex {0}; outIndex < outCompartments.size(); ++outIndex) {
-            // reset outSubCompartment for each subCompartment chain
-            std::fill(outSubCompartments.begin(), outSubCompartments.end(), 0);
-
+            
             if (outDistributions[outIndex]->getDistName() == "gamma" ||
                 outDistributions[outIndex]->getDistName() == "weibull" ||
                 outDistributions[outIndex]->getDistName() == "exponential" ||
@@ -189,15 +213,33 @@ void Compartment::updateCompartment(size_t iter, std::vector<std::string>& param
             } else {
                 updateSubCompByMath(iter, outIndex, paramNames, paramValues, comps);
             }
-
-            // shift subCompartments for next iteration
-            for (size_t i_subComp {subCompartments[outIndex].size() - 1}; i_subComp > 0; --i_subComp) {
-                subCompartments[outIndex][i_subComp] = subCompartments[outIndex][i_subComp - 1];
-
+ 
+            // only update chains of subCompartments in multinomial case
+            if(!this->competingRisks){
+                // shift subCompartments for next iteration
+                for (size_t i_subComp {subCompartments[outIndex].size() - 1}; i_subComp > 0; --i_subComp) {
+                    subCompartments[outIndex][i_subComp] = subCompartments[outIndex][i_subComp - 1];
+                }
+                // update the initial subComp population to be incoming population
+                subCompartments[outIndex][0] = outWeights[outIndex]*inValue;
             }
-            // update the initial subComp population to be incoming population
-            subCompartments[outIndex][0] = outWeights[outIndex]*inValue;
         }
+    }
+
+    // in competing risks case, update subChain compartments after finishing updating outSubCompartments
+    if(this->competingRisks){
+        if(subCompartments[0].size() == (size_t) 1){
+            subCompartments[0][0] -= outSubCompartments[0];
+        }
+        else{
+            // shift subCompartments for next iteration
+            for (size_t i_subComp {subCompartments[0].size() - 1}; i_subComp > 0; --i_subComp) {
+                subCompartments[0][i_subComp] = subCompartments[0][i_subComp - 1] - outSubCompartments[i_subComp-1];
+            }
+            subCompartments[0][0] = 0;
+        }
+        // update the initial subComp population to be incoming population
+        subCompartments[0][0] += inValue;
     }
 
     this -> compTotal[iter] += inValue;
@@ -211,12 +253,20 @@ void Compartment::updateSubCompByDist(size_t iter, size_t outIndex) {
     // This startIndex is to reduce the number of calculations
 
     size_t startIndex {0};
-    startIndex = std::min(iter, subCompartments[outIndex].size() - 1);
-    for (size_t i {0}; i <= startIndex; ++i) {
-        // subCompartments[outIndex][startIndex - i] -= outSubCompartments[startIndex - i];
-        // update out total 
-        outTotals[outIndex] += subCompartments[outIndex][startIndex - i] * outDistributions[outIndex]->getTransitionProb(startIndex - i);
-        subCompartments[outIndex][startIndex - i] *= (1 - outDistributions[outIndex] -> getTransitionProb(startIndex - i));
+
+    if(this->competingRisks){
+        startIndex = std::min(iter, subCompartments[0].size() - 1);
+        for (size_t i {0}; i <= startIndex; ++i) { 
+            outTotals[outIndex] += subCompartments[0][startIndex - i] * outDistributions[outIndex]->getTransitionProb(startIndex - i);
+            // if competing risks, update outSubCompartment instead
+            outSubCompartments[startIndex - i] += subCompartments[0][startIndex - i] * outDistributions[outIndex]->getTransitionProb(startIndex - i);
+        }
+    }else{
+        startIndex = std::min(iter, subCompartments[outIndex].size() - 1);
+        for (size_t i {0}; i <= startIndex; ++i) { 
+            outTotals[outIndex] += subCompartments[outIndex][startIndex - i] * outDistributions[outIndex]->getTransitionProb(startIndex - i);
+            subCompartments[outIndex][startIndex - i] *= (1 - outDistributions[outIndex] -> getTransitionProb(startIndex - i));
+        }
     }
 
     // Update compTotal after finish this outSubComp
@@ -240,7 +290,12 @@ void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<
     }
     // Add current population in each compartment 
     for (auto &comp: comps){
-        parser.DefineConst(comp->getCompName(), comp->getCompTotal()[iter]);
+        // consider cases when referring to this compartment, take outWeight into account
+        if (comp->getCompName() == this->compName){
+            parser.DefineConst(comp->getCompName(), comp->getCompTotal()[iter - 1] * this->outWeights[outIndex]);
+        }else{
+            parser.DefineConst(comp->getCompName(), comp->getCompTotal()[iter - 1]);
+        }
     }
 
     // The result of this math expression is the outTotals of this outIndex
@@ -258,14 +313,23 @@ void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<
     }
 
     // Calculate how many people remain in each subCompartment
-    double sumSubComp = std::accumulate(this -> subCompartments[outIndex].begin(), this -> subCompartments[outIndex].end(), (double) 0);
-    if (sumSubComp > 0) {
-        double remainPct = (sumSubComp - outTotals[outIndex]) / sumSubComp;
-        for (size_t i_subComp {0}; i_subComp < subCompartments[outIndex].size(); ++i_subComp) {
-            subCompartments[outIndex][i_subComp] *= remainPct;
+    if(this->competingRisks){
+        double sumSubComp = std::accumulate(this -> subCompartments[0].begin(), this -> subCompartments[0].end(), (double) 0);
+        if (sumSubComp > 0) {
+            double remainPct = (sumSubComp - outTotals[outIndex]) / sumSubComp;
+            for (size_t i_subComp {0}; i_subComp < subCompartments[0].size(); ++i_subComp) {
+                outSubCompartments[i_subComp] += subCompartments[0][i_subComp] * (1-remainPct);
+            }
+        }
+    }else{
+        double sumSubComp = std::accumulate(this -> subCompartments[outIndex].begin(), this -> subCompartments[outIndex].end(), (double) 0);
+        if (sumSubComp > 0) {
+            double remainPct = (sumSubComp - outTotals[outIndex]) / sumSubComp;
+            for (size_t i_subComp {0}; i_subComp < subCompartments[outIndex].size(); ++i_subComp) {
+                subCompartments[outIndex][i_subComp] *= remainPct;
+            }
         }
     }
-
     // Update compTotal after finish this outSubComp
     this -> compTotal[iter] -= outTotals[outIndex];
 }
@@ -287,12 +351,21 @@ void Compartment::updateSubCompByConst(size_t iter, size_t outIndex) {
 
 
     // Calculate how many people remain in each subCompartment
-    double sumSubComp = std::accumulate(this->subCompartments[outIndex].begin(), this->subCompartments[outIndex].end(), (double) 0);
-
-    if (sumSubComp > 0) {
-        double remainPct = (sumSubComp - outTotals[outIndex]) / sumSubComp;
-        for (size_t i_subComp {0}; i_subComp < subCompartments[outIndex].size(); ++i_subComp) {
-            subCompartments[outIndex][i_subComp] *= remainPct;
+    if(this->competingRisks){
+        double sumSubComp = std::accumulate(this -> subCompartments[0].begin(), this -> subCompartments[0].end(), (double) 0);
+        if (sumSubComp > 0) {
+            double remainPct = (sumSubComp - outTotals[outIndex]) / sumSubComp;
+            for (size_t i_subComp {0}; i_subComp < subCompartments[0].size(); ++i_subComp) {
+                outSubCompartments[i_subComp] += subCompartments[0][i_subComp] * (1-remainPct);
+            }
+        }
+    }else{
+        double sumSubComp = std::accumulate(this -> subCompartments[outIndex].begin(), this -> subCompartments[outIndex].end(), (double) 0);
+        if (sumSubComp > 0) {
+            double remainPct = (sumSubComp - outTotals[outIndex]) / sumSubComp;
+            for (size_t i_subComp {0}; i_subComp < subCompartments[outIndex].size(); ++i_subComp) {
+                subCompartments[outIndex][i_subComp] *= remainPct;
+            }
         }
     }
 

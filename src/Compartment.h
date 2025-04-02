@@ -12,6 +12,7 @@
 class Compartment {
 private:
     std::string compName;
+    bool competingRisks; // keep track whether current compartment handles outgoing transitions as competing risk
 
     // The length of subCompartments is the maximum length of vector transitionProb in outDistributions
     // store population in each sub compartment

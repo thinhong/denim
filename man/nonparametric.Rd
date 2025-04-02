@@ -4,7 +4,7 @@
 \alias{nonparametric}
 \title{Nonparametric distribution}
 \usage{
-nonparametric(...)
+nonparametric(..., dist_init = FALSE)
 }
 \arguments{
 \item{...}{a vector of values}
