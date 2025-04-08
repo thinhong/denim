@@ -51,7 +51,7 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/multinomial.html">multinomial transition in denim</a>
+    <a class="dropdown-item" href="../articles/multinomial.html">transition to multiple states</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>denim comparison</h6>
     <a class="dropdown-item" href="../articles/denim_vs_deSolve.html">denim vs deSolve</a>
@@ -477,15 +477,15 @@ Code for running uSEIR in Cython (C backend)
 </details><p>Run time for uSEIR approach, Cython implementation (in seconds)</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">py</span><span class="op">$</span><span class="va">cython_runs</span></span></code></pre></div>
-<pre><code><span><span class="co">##  [1] 0.4023190 0.4008489 0.3996522 0.4021759 0.3954298 0.3997641 0.4049480</span></span>
-<span><span class="co">##  [8] 0.3938949 0.4050941 0.3948798 0.3939130 0.3927512 0.3971188 0.4034030</span></span>
-<span><span class="co">## [15] 0.3942008 0.4020801 0.3934939 0.4020162 0.4203770 0.4100389 0.4032271</span></span>
-<span><span class="co">## [22] 0.3963428 0.3941231 0.4065132 0.4022820 0.4152899 0.4040892 0.4039760</span></span>
-<span><span class="co">## [29] 0.4112580 0.4038100 0.4072459 0.3957858 0.3960719 0.3979449 0.4026759</span></span>
-<span><span class="co">## [36] 0.4030762 0.4009969 0.4145489 0.4091511 0.4061022 0.3969009 0.4102721</span></span>
-<span><span class="co">## [43] 0.4054501 0.4031701 0.4024730 0.4103858 0.4159880 0.4060838 0.4022591</span></span>
-<span><span class="co">## [50] 0.4051421</span></span></code></pre>
-<p>Median run time for uSEIR approach, Cython implementation: 0.4025744
+<pre><code><span><span class="co">##  [1] 0.4328158 0.4209082 0.4165211 0.4202340 0.4179151 0.4203529 0.4190061</span></span>
+<span><span class="co">##  [8] 0.4168942 0.4185841 0.4197209 0.4189498 0.4236379 0.4127688 0.4139111</span></span>
+<span><span class="co">## [15] 0.4181099 0.4183521 0.4147227 0.4145312 0.4178381 0.4199111 0.4184237</span></span>
+<span><span class="co">## [22] 0.4207149 0.4301481 0.4186049 0.4203861 0.4183500 0.4208729 0.4145517</span></span>
+<span><span class="co">## [29] 0.4195142 0.4158289 0.4160469 0.4149702 0.4235260 0.4173398 0.4147599</span></span>
+<span><span class="co">## [36] 0.4106388 0.4167600 0.4149818 0.4157410 0.4163742 0.4092381 0.4133878</span></span>
+<span><span class="co">## [43] 0.4142311 0.4147809 0.4304650 0.4268229 0.4245021 0.4136519 0.4157870</span></span>
+<span><span class="co">## [50] 0.4107401</span></span></code></pre>
+<p>Median run time for uSEIR approach, Cython implementation: 0.4178766
 seconds</p>
 </div>
 </div>
@@ -541,13 +541,13 @@ seconds</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">desolve_runs</span><span class="op">$</span><span class="va">time</span></span></code></pre></div>
 <pre><code><span><span class="co">## [[1]]</span></span>
-<span><span class="co">##  [1]  3.52ms  3.25ms  3.5ms   3.37ms  6.18ms  3.4ms   3.19ms  3.44ms  3.31ms</span></span>
-<span><span class="co">## [10]  3.32ms  3.22ms  3.36ms  3.3ms   3.37ms  5.06ms  3.11ms  3.25ms  3.3ms </span></span>
-<span><span class="co">## [19]  3.34ms  3.26ms  3.15ms  3.28ms  3.17ms  5.14ms  3.35ms  3.42ms  3.31ms</span></span>
-<span><span class="co">## [28]  3.18ms  3.24ms  3.13ms  3.33ms  3.36ms  5.65ms  3.2ms   3.25ms  3.28ms</span></span>
-<span><span class="co">## [37]  3.23ms  3.24ms  3.23ms  3.27ms  3.25ms 26.9ms   3.26ms  3.36ms  3.39ms</span></span>
-<span><span class="co">## [46]  3.46ms  3.36ms  3.31ms  3.2ms   3.14ms</span></span></code></pre>
-<p>Median run time for deSolve, with model defined in R: 0.0032842
+<span><span class="co">##  [1]  3.25ms  3.14ms  3.18ms  3.22ms  3.27ms  5.05ms  3.12ms  3.08ms  3.09ms</span></span>
+<span><span class="co">## [10]  3.08ms  3.08ms  3.21ms  3.18ms  3.16ms  4.66ms  3.09ms  3.02ms  3.03ms</span></span>
+<span><span class="co">## [19]  3.07ms  3.08ms  3.06ms  3.1ms   3.04ms  4.59ms  3.1ms   3.09ms  3.05ms</span></span>
+<span><span class="co">## [28]  3.12ms  3.12ms  3.07ms  3.04ms  3.05ms  4.46ms  3.08ms  3.05ms  3.04ms</span></span>
+<span><span class="co">## [37]  3.09ms  3.12ms  3.11ms  3.12ms  3.12ms 23.25ms  3.26ms  3.1ms   3.1ms </span></span>
+<span><span class="co">## [46]  3.11ms  3.13ms  3.14ms  3.13ms  3.13ms</span></span></code></pre>
+<p>Median run time for deSolve, with model defined in R: 0.0031037
 seconds</p>
 </div>
 <div class="section level3">
@@ -580,12 +580,12 @@ seconds</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">deSolve_c_runs</span><span class="op">$</span><span class="va">time</span></span></code></pre></div>
 <pre><code><span><span class="co">## [[1]]</span></span>
-<span><span class="co">##  [1] 165µs 204µs 138µs 165µs 131µs 129µs 155µs 130µs 147µs 122µs 123µs 146µs</span></span>
-<span><span class="co">## [13] 126µs 144µs 122µs 124µs 145µs 123µs 145µs 124µs 123µs 151µs 124µs 147µs</span></span>
-<span><span class="co">## [25] 123µs 120µs 140µs 117µs 138µs 119µs 117µs 138µs 118µs 140µs 116µs 116µs</span></span>
-<span><span class="co">## [37] 143µs 117µs 138µs 116µs 117µs 137µs 117µs 139µs 116µs 121µs 144µs 120µs</span></span>
-<span><span class="co">## [49] 142µs 120µs</span></span></code></pre>
-<p>Median run time for deSolve, with model defined in C: 1.2757155^{-4}
+<span><span class="co">##  [1] 166µs 200µs 138µs 168µs 133µs 138µs 151µs 126µs 148µs 128µs 124µs 146µs</span></span>
+<span><span class="co">## [13] 125µs 149µs 135µs 126µs 145µs 124µs 148µs 124µs 128µs 145µs 138µs 147µs</span></span>
+<span><span class="co">## [25] 135µs 125µs 146µs 128µs 144µs 118µs 118µs 140µs 121µs 141µs 119µs 119µs</span></span>
+<span><span class="co">## [37] 142µs 119µs 142µs 119µs 120µs 145µs 118µs 141µs 119µs 119µs 142µs 118µs</span></span>
+<span><span class="co">## [49] 145µs 118µs</span></span></code></pre>
+<p>Median run time for deSolve, with model defined in C: 1.351155^{-4}
 seconds</p>
 </div>
 <div class="section level3">
@@ -616,13 +616,13 @@ seconds</p>
 </details><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">deSolve_fortran_runs</span><span class="op">$</span><span class="va">time</span></span></code></pre></div>
 <pre><code><span><span class="co">## [[1]]</span></span>
-<span><span class="co">##  [1] 393µs 202µs 224µs 178µs 177µs 203µs 173µs 198µs 164µs 172µs 196µs 176µs</span></span>
-<span><span class="co">## [13] 192µs 167µs 171µs 196µs 171µs 186µs 174µs 171µs 190µs 175µs 183µs 164µs</span></span>
-<span><span class="co">## [25] 175µs 192µs 171µs 206µs 167µs 165µs 192µs 173µs 187µs 167µs 167µs 186µs</span></span>
-<span><span class="co">## [37] 169µs 188µs 177µs 169µs 187µs 173µs 187µs 173µs 175µs 192µs 168µs 198µs</span></span>
-<span><span class="co">## [49] 175µs 179µs</span></span></code></pre>
+<span><span class="co">##  [1] 419µs 204µs 236µs 193µs 180µs 202µs 192µs 199µs 179µs 184µs 199µs 179µs</span></span>
+<span><span class="co">## [13] 202µs 183µs 185µs 211µs 179µs 214µs 173µs 175µs 196µs 175µs 196µs 175µs</span></span>
+<span><span class="co">## [25] 174µs 205µs 177µs 194µs 182µs 176µs 191µs 166µs 192µs 162µs 172µs 190µs</span></span>
+<span><span class="co">## [37] 161µs 182µs 160µs 161µs 194µs 164µs 191µs 165µs 167µs 192µs 161µs 182µs</span></span>
+<span><span class="co">## [49] 161µs 165µs</span></span></code></pre>
 <p>Median run time for deSolve, with model defined in Fortran:
-1.7679203^{-4} seconds</p>
+1.822245^{-4} seconds</p>
 </div>
 </div>
 <div class="section level2">
@@ -663,12 +663,12 @@ Code for running SEIR in <code>denim</code>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">denim_runs</span><span class="op">$</span><span class="va">time</span></span></code></pre></div>
 <pre><code><span><span class="co">## [[1]]</span></span>
-<span><span class="co">##  [1] 713ms 712ms 718ms 716ms 717ms 733ms 733ms 727ms 719ms 712ms 708ms 711ms</span></span>
-<span><span class="co">## [13] 717ms 719ms 713ms 716ms 723ms 714ms 725ms 726ms 719ms 714ms 727ms 732ms</span></span>
-<span><span class="co">## [25] 718ms 713ms 713ms 716ms 716ms 713ms 715ms 711ms 714ms 713ms 714ms 715ms</span></span>
-<span><span class="co">## [37] 713ms 719ms 728ms 719ms 719ms 718ms 718ms 717ms 718ms 718ms 717ms 717ms</span></span>
-<span><span class="co">## [49] 718ms 717ms</span></span></code></pre>
-<p>Median run time for denim: 0.7171607 seconds</p>
+<span><span class="co">##  [1] 795ms 769ms 726ms 733ms 747ms 722ms 754ms 731ms 729ms 712ms 716ms 733ms</span></span>
+<span><span class="co">## [13] 737ms 722ms 717ms 717ms 719ms 740ms 712ms 723ms 714ms 713ms 714ms 718ms</span></span>
+<span><span class="co">## [25] 726ms 719ms 719ms 719ms 722ms 717ms 716ms 732ms 725ms 739ms 714ms 717ms</span></span>
+<span><span class="co">## [37] 713ms 724ms 731ms 718ms 717ms 716ms 718ms 724ms 728ms 721ms 718ms 714ms</span></span>
+<span><span class="co">## [49] 725ms 720ms</span></span></code></pre>
+<p>Median run time for denim: 0.7201528 seconds</p>
 </div>
 <div class="section level2">
 <h2 id="visualize-output">Visualize output<a class="anchor" aria-label="anchor" href="#visualize-output"></a>

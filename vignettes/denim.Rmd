@@ -249,7 +249,7 @@ Mathematical expression: Transition defined with a string value such as `"beta *
 
 ## 4. Multiple transitions from a compartment
 
-In `denim`, transitions between one compartment to multiple compartments are modeled as multinomial transition.
+In `denim`, transitions between one compartment to multiple compartments are modeled as either (i) multinomial transition or (ii) competing risks.
 
 Consider this example:
 
@@ -273,7 +273,7 @@ DiagrammeR::grViz("digraph {
 
 There are two scenarios in this example:
 
--   Susceptible individuals can be infected or vaccinated. The underlying assumption here is 50% of susceptible will be infected (`S -> I`), and the remaining 50% will get vaccinated (`S -> V`).
+-   Susceptible individuals can be infected or vaccinated. The assumption here is they will be infected first (`S -> I`), and then the rest of them who were not infected will get vaccinated (`S -> V`).
 
 -   Infected individuals can recover or die. If the mortality probability is known, we can implement it into the model, for example by defining `0.9 * I -> R` (90% individuals will recover) and then `0.1 * I -> D` (10% of them die). By doing so, we ensure that the mortality probability is 10%, while also define the length of stay of individuals at the infected state before recover or die follows gamma or log-normal distribution, respectively.
 
@@ -313,7 +313,7 @@ head(mod)
 plot(mod)
 ```
 
-For a more detailed explanation for multinomial transition, refer to [this article](./multinomial.html)
+For a more detailed explanation for transitions to multiple states, refer to [this article](./multinomial.html)
 
 ## 5. Another example
 

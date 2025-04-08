@@ -51,7 +51,7 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/multinomial.html">multinomial transition in denim</a>
+    <a class="dropdown-item" href="../articles/multinomial.html">transition to multiple states</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>denim comparison</h6>
     <a class="dropdown-item" href="../articles/denim_vs_deSolve.html">denim vs deSolve</a>
@@ -146,8 +146,8 @@
 </h3>
 <p>Unlike <code>deSolve</code> where transitions between compartments
 are defined by a system of ODEs, transitions in <code>denim</code> must
-be defined by (i) a distribution of dwell-time, (ii) a mathematical
-expression, (iii) a fixed number or proportion.</p>
+be defined by (i) a distribution of dwell-time (either parametric or
+non-parametric) or (ii) a mathematical expression.</p>
 <p>User must first identify the transitions that best describe the ones
 in their <code>deSolve</code> model.</p>
 <details><summary>Identify distribution</summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -181,13 +181,13 @@ describe the transition</p></li>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># --- Transition def for denim</span></span>
 <span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * S * I/N * timestepDur"</span>,</span>
+<span>  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * S * I/N * timeStep"</span>,</span>
 <span>  <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, shape <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="co"># shape is 2 from number of I sub compartments</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Note that when converting an ODE to a math expression, we must
 multiply the original expression with time step duration (variable
-<code>timestepDur</code> in the model definition code). This is because
-we are essentially using Euler’s method to estimate the solution for the
+<code>timeStep</code> in the model definition code). This is because we
+are essentially using Euler’s method to estimate the solution for the
 ODE.</p>
 </div>
 <div class="section level3">
@@ -204,12 +204,13 @@ internally), it is recommended to remove redundant compartments (in this
 example, <code>I1</code> and <code>I2</code>).</p>
 <p>For parameters, since <code>rate</code> is already defined in the
 distribution functions, users only need to keep <code>beta</code> and
-<code>N</code> from the initial parameters vector. We also need to
-specify the value for <code>timestepDur</code> here.</p>
+<code>N</code> from the initial parameters vector. We do not need to
+specify the value for <code>timeStep</code> variable as this is a
+special variable in denim and will be defined later on.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># remove I1, I2 compartments</span></span>
 <span><span class="va">denim_initialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>S <span class="op">=</span> <span class="fl">999</span>, I <span class="op">=</span> <span class="fl">1</span>, R<span class="op">=</span><span class="fl">0</span><span class="op">)</span></span>
-<span><span class="va">denim_parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>beta <span class="op">=</span> <span class="fl">0.3</span>, N <span class="op">=</span> <span class="fl">1000</span>, timestepDur<span class="op">=</span><span class="fl">0.01</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="va">denim_parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>beta <span class="op">=</span> <span class="fl">0.3</span>, N <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span> </span></code></pre></div>
 <p><strong><em>Initialization of sub-compartments</em>:</strong> when
 there are multiple sub-compartments (e.g., compartment <code>I</code>
 consist of <code>I1</code> and <code>I2</code> sub-compartments), the
@@ -227,6 +228,9 @@ duration</u> and <u>time step.</u></p>
 <p>Since <code>denim</code> is a discrete time model, time step must be
 set to a small value for the result to closely follow that of
 <code>deSolve</code> (in this example, 0.01).</p>
+<p>Note that the value for parameter <code>timeStep</code> is also the
+value for variable <code>timeStep</code> in the mathematical
+equation.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim.html">sim</a></span><span class="op">(</span>transitions <span class="op">=</span> <span class="va">transitions</span>,</span>
 <span>             initialValues <span class="op">=</span> <span class="va">denim_initialValues</span>, </span>
