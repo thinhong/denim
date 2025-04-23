@@ -138,6 +138,7 @@ constant <- function(x) {
 #' 
 #' @param ... a vector of values
 #' @return a Distribution object for simulator
+#' @param dist_init whether to distribute initial value across subcompartments following this distribution. (default to FALSE, meaning init value is always in the first compartment))
 #' 
 #' @examples
 #' transitions <- list("S->I"=nonparametric(0.1, 0.2, 0.5, 0.2))
