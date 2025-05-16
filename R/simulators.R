@@ -95,18 +95,20 @@ sim <- function(transitions, initialValues, parameters=NULL,
 }
 
 # Overloaded plot function for denim object
+#' @importFrom scales hue_pal
 #' @export
 plot.denim <- function(x, ...) {
   
   # Set color codes and compartment names
   col_codes <- viridisLite::viridis(ncol(x) - 1)
+  # Test different color scale to be discrete instead of continuous
+  # col_codes <- hue_pal(l = 65, c = 70)(ncol(x) - 1)
   comp_names <- colnames(x)[-1]
   
   # Plot the first compartment
   cmd1 <- paste0("with(x, {
   plot(Time, ", comp_names[1], ", type = \"l\", lwd = 3, col = \"", col_codes[1], 
   "\", xlab = \"Time\", ylab = \"Number of people\", ... )\n")
-
   
   # Add lines of the other compartments
   cmd2 <- ""

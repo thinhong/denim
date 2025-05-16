@@ -23,6 +23,7 @@ BugReports: https://github.com/thinhong/denim/issues
 Imports:
     Rcpp (>= 1.0.6),
     viridisLite,
+    scales,
     rlang
 Suggests:
     covr,

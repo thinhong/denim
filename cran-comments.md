@@ -1,6 +1,9 @@
 ## Resubmission
 This is a resubmission. In this version I have:
-* Fixed deprecated syntax which triggered WARNING
+* Change parameter scale of d_gamma to rate
+* Fix bug in multinomial and competing risks modeling
+* Add the functionality to distribute the initial values according to the specified distribution
+
 
 ## R CMD check results
 Duration: 1m 4.5s
