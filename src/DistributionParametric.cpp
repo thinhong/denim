@@ -14,6 +14,14 @@ double DistributionParametric::getTransitionProb(size_t index) {
     }
 }
 
+double DistributionParametric::getProbDist(size_t index) {
+    if (index >= probDist.size()) {
+        return 0;
+    }else{
+        return this -> probDist[index];
+    }
+}
+
 void DistributionParametric::calcTransitionProb(std::function<double(double)> cdf_func) {
     // current cumulative prob
     double tempProb {0};
@@ -34,6 +42,7 @@ void DistributionParametric::calcTransitionProb(std::function<double(double)> cd
             // Transition prob = curr prob / (1 - previous cumulative prob) (i.e. gamma_i = p_i / (1 - cdf(i - 1)) )
             currTransitionProb = (tempProb - prevProb) / (1 - prevProb);
             this -> transitionProb.push_back(currTransitionProb);
+            this -> probDist.push_back(tempProb - prevProb);
             prevProb = tempProb;
         }
 

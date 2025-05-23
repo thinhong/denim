@@ -2,15 +2,14 @@ test_that("Compare denim and deSolve", {
     # --- Transition def for denim
     transitions <- list(
     "S -> I" = d_exponential(0.2),
-    "I -> R" = d_gamma(3, 2)
+    "I -> R" = d_gamma(1/3, 2)
     )
-    parameters <- c(rate = 0.2, scale = 3, shape=2) 
+    parameters <- c(rate = 0.2, gamma_rate = 1/3, shape=2) 
     initialValues <- c(S = 999, I = 1, I1 = 1, I2=0, R=0)
 
     # --- Transition def for deSolve
     transition_func <- function(t, state, param){
     with(as.list( c(state, param) ), {
-        gamma_rate = 1/scale
         dS = -rate*S
         dI1 = rate*S - gamma_rate*I1
         dI2 = gamma_rate*I1 - gamma_rate*I2

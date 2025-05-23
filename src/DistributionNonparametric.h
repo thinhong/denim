@@ -17,6 +17,7 @@ private:
 public:
     explicit DistributionNonparametric(std::vector<double> waitingTime);
     double getTransitionProb(size_t index) override;
+    double getProbDist(size_t index) override;
     std::vector<double> getWaitingTime();
 };
 

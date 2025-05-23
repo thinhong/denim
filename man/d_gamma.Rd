@@ -4,12 +4,14 @@
 \alias{d_gamma}
 \title{Discrete gamma distribution}
 \usage{
-d_gamma(scale, shape)
+d_gamma(rate, shape, dist_init = FALSE)
 }
 \arguments{
-\item{scale}{scale parameter of a gamma distribution}
+\item{rate}{rate parameter of a gamma distribution}
 
 \item{shape}{shape parameter of a gamma distribution}
+
+\item{dist_init}{whether to distribute initial value across subcompartments following this distribution.}
 }
 \value{
 a Distribution object for simulator
@@ -18,5 +20,5 @@ a Distribution object for simulator
 Discrete gamma distribution
 }
 \examples{
-transitions <- list("S -> I" = d_gamma(1, 5))
+transitions <- list("S -> I" = d_gamma(rate = 1, shape = 5))
 }

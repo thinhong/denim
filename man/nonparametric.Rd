@@ -4,10 +4,12 @@
 \alias{nonparametric}
 \title{Nonparametric distribution}
 \usage{
-nonparametric(...)
+nonparametric(..., dist_init = FALSE)
 }
 \arguments{
 \item{...}{a vector of values}
+
+\item{dist_init}{whether to distribute initial value across subcompartments following this distribution. (default to FALSE, meaning init value is always in the first compartment))}
 }
 \value{
 a Distribution object for simulator

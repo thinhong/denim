@@ -25,8 +25,8 @@ DiagrammeR::grViz("digraph {
   node [shape = rectangle]
   
   S -> E [label = '(R0/tr) * S * (I / N) * td']
-  E -> I [label = 'd_gamma(4,2)']
-  I -> R [label = 'd_gamma(3,2)']
+  E -> I [label = 'd_gamma(1/4,2)']
+  I -> R [label = 'd_gamma(1/3,2)']
   }",
   width = 700, height = "100%")
 ```
@@ -180,8 +180,8 @@ Median run time for uSEIR approach, Cython implementation: `r median(py$cython_r
 
 ```{r}
 library(deSolve)
-parameters <- c(scale_I = 4, shape_I=2,
-                scale_R = 3, shape_R = 2,
+parameters <- c(gamma_rate_I = 1/4, shape_I=2,
+                gamma_rate_R = 1/3, shape_R = 2,
                 R0 = 3.5, N = 1e6) 
 initialValues <- c(S = 999999, E1 = 1,
                    E2 = 0, E = 0, I1=0, 
@@ -191,10 +191,7 @@ initialValues <- c(S = 999999, E1 = 1,
 # --- Transition def for deSolve
 transition_func <- function(t, state, param){
   with(as.list( c(state, param) ), {
-      gamma_rate_I = 1/scale_I
-      gamma_rate_R = 1/scale_R
-      
-      tr = scale_R*shape_R
+      tr = shape_R*(1/gamma_rate_R)
       
       dS = - (R0/tr) * S * I/N
       # apply linear chain trick
@@ -229,7 +226,6 @@ Run time for `deSolve` implementation
 
 ```{r}
 desolve_runs$time
-
 ```
 Median run time for deSolve, with model defined in R: `r desolve_runs$median` seconds
 
@@ -318,25 +314,27 @@ Median run time for deSolve, with model defined in Fortran: `r deSolve_fortran_r
 <summary>Code for running SEIR in `denim`</summary>
 
 ```{r}
+timeStep <- 0.01
+
 library(denim)
 
 denim_model <- list(
-  "S -> E" = "(R0/tr) * timeStepDur * S * (I/N)", # formulate according that of uSEIR method
-  "E -> I" = d_gamma(scale = 4, shape = 2),
-  "I -> R" = d_gamma(scale = 3, shape = 2)
+  "S -> E" = "(R0/tr) * timeStep * S * (I/N)", # formulate according that of uSEIR method
+  "E -> I" = d_gamma(rate = 1/4, shape = 2),
+  "I -> R" = d_gamma(rate = 1/3, shape = 2)
 )
 
 initialValues <- c(S = 999999, E = 1, I= 0, R= 0)
 parameters <- c(R0 = 3.5, 
                 tr = 3*2, # compute mean recovery time, for gamma it's scale*shape
-                N = 1e6, timeStepDur = 0.01)
+                N = 1e6)
 
 # ---- Get runtimes ----
 denim_runs <- bench::mark(
   sim(transitions = denim_model,
                      initialValues = initialValues,
                      parameters = parameters,
-                     simulationDuration = sim_duration, timeStep = 0.01),
+                     simulationDuration = sim_duration, timeStep = timeStep),
   iterations = total_runs
 )
 
@@ -345,7 +343,7 @@ denim_runs <- bench::mark(
 denim_out <- sim(transitions = denim_model, 
                      initialValues = initialValues,
                      parameters = parameters,
-                     simulationDuration = sim_duration, timeStep = 0.01)
+                     simulationDuration = sim_duration, timeStep = timeStep)
 ```
 
 </details>
@@ -425,3 +423,38 @@ legend(x = 53, y = 0.9,
 # Restore default clipping rect
 par(mar=c(5, 4, 4, 2) + 0.1)
 ```
+
+
+## Run time scaling in denim
+It is worth noting that runtime for denim is also dependent on duration of time step (`timeStep` parameter for `sim`). 
+
+The following plot demonstrates how run time changes as value for timeStep changes, using the same model for benchmarking. The values for timeStep being evaluated are `[0.01, 0.02, 0.05, 0.1, 0.25, 0.5, 1]`.
+
+```{r echo=FALSE}
+timeStepDurations <- c(0.01, 0.02, 0.05, 0.1, 0.25, 0.5, 1)
+runtime_scaling <- lapply(timeStepDurations, 
+     \(x){
+       time <- bench::mark(
+         sim(transitions = denim_model,
+                   initialValues = initialValues,
+                   parameters = parameters,
+                   simulationDuration = sim_duration, timeStep = x)
+       )
+       
+       time$median
+     }
+   )
+```
+```{r echo=FALSE}
+plot(x = timeStepDurations, y = runtime_scaling, col = "cornflowerblue",
+     xlab = "Time step duration",
+     ylab = "Median run time (in seconds)")
+lines(x = timeStepDurations, y = runtime_scaling, col = "cornflowerblue",
+     xlab = "Time step duration",
+     ylab = "Median run time (in seconds)")
+abline(v = timeStep, col = "red", lty = 2, lwd = 2)  
+abline(v = 1, col = "blueviolet", lty = 2, lwd = 2)  
+text(x = timeStep, y = max(unlist(runtime_scaling)), labels = "timeStep for benchmarking", col = "red", pos = 4)
+text(x = 1, y = max(unlist(runtime_scaling)), labels = "default timeStep", col = "blueviolet", pos = 2)
+```
+

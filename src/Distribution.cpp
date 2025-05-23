@@ -27,6 +27,10 @@ std::string Distribution::getDistName(){
     return this->distName;
 };
 
+double Distribution::getProbDist(size_t index){
+    return 1;
+}; 
+
 size_t Distribution::getMaxDay(){
     return this->maxDay;
 }

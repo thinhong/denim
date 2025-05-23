@@ -17,6 +17,7 @@ public:
     static inline double errorTolerance {0.001};
     static inline double timeStep {1};
     std::string getDistName();
+    virtual double getProbDist(size_t index); //get probability distribution, used for distributing initial value
     size_t getMaxDay();
     virtual double getTransitionProb(size_t index) = 0;
     /**

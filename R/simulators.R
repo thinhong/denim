@@ -51,7 +51,7 @@
 #' @examples 
 #' transitions <- list(
 #'    "S -> I" = "beta * S * I / N",
-#'    "I -> R" = d_gamma(3, 2)
+#'    "I -> R" = d_gamma(1/3, 2)
 #' )
 #' 
 #' initialValues <- c(
@@ -79,6 +79,9 @@ sim <- function(transitions, initialValues, parameters=NULL,
   # First check their inputs
   # checkInitsTransitions(initialValues, transitions)
   
+  # provide timeStep as parameters as well
+  parameters[["timeStep"]] <- timeStep
+  
   # Generate model object
   mod <- newModel(simulationDuration, errorTolerance, initialValues, parameters, transitions, timeStep)
   modJson <- modelToJson(mod)
@@ -97,13 +100,14 @@ plot.denim <- function(x, ...) {
   
   # Set color codes and compartment names
   col_codes <- viridisLite::viridis(ncol(x) - 1)
+  # Test different color scale to be discrete instead of continuous
+  # col_codes <- hue_pal(l = 65, c = 70)(ncol(x) - 1)
   comp_names <- colnames(x)[-1]
   
   # Plot the first compartment
   cmd1 <- paste0("with(x, {
   plot(Time, ", comp_names[1], ", type = \"l\", lwd = 3, col = \"", col_codes[1], 
   "\", xlab = \"Time\", ylab = \"Number of people\", ... )\n")
-
   
   # Add lines of the other compartments
   cmd2 <- ""

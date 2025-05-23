@@ -1,12 +1,13 @@
 Package: denim
 Type: Package
 Title: Generate and Simulate Deterministic Discrete-Time Compartmental Models
-Version: 1.0.1
-Date: 2024-05-28
+Version: 1.1.0
+Date: 2025-05-16
 Authors@R: c(
     person("Thinh", "Ong", , "thinhop@oucru.org", role = c("aut", "cph"),
            comment = c(ORCID = "0000-0001-6772-9291")),
-    person("Anh", "Phan", , "anhptq@oucru.org", role = c("aut", "cre")),
+    person("Anh", "Phan", , "anhptq@oucru.org", role = c("aut", "cre"),
+           comment = c(ORCID = "0009-0000-2129-435X")),
     person("Marc", "Choisy", , "mchoisy@oucru.org", role = "aut",
            comment = c(ORCID = "0000-0002-5187-6390")),
     person("Niels", "Lohman", ,role = "ctb"),
@@ -36,6 +37,6 @@ LinkingTo:
     testthat
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 VignetteBuilder: knitr
 Config/testthat/edition: 3

@@ -11,8 +11,12 @@ articles:
   navbar: ~
   contents:
   - denim
-- title: denim comparison
+- title: denim features
   navbar: ~
+  contents:
+  - multinomial
+- title: denim comparison
+  navbar: denim comparison
   contents:
   - denim_vs_deSolve
   - denim_benchmark
@@ -31,19 +35,19 @@ reference:
 - subtitle: Non-parametric distribution
   contents:
   - nonparametric
-- subtitle: Fixed percentage
-  contents:
-  - transprob
-- subtitle: Fixed transition
-  contents:
-  - constant
+# - subtitle: Fixed percentage
+#   contents:
+#   - transprob
+# - subtitle: Fixed transition
+#   contents:
+#   - constant
 - subtitle: Math Expression
   contents:
   - mathexpr
-- title: Multinomial
-  desc: Define a set of probabilities of transition from one compartment to multiple compartments
-  contents: 
-  - multinomial
+# - title: Multinomial
+#   desc: Define a set of probabilities of transition from one compartment to multiple compartments
+#   contents: 
+#   - multinomial
 - title: Simulator
   contents:
   - sim
