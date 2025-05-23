@@ -86,25 +86,26 @@ modelToJson <- function(mod) {
   
 }
 
-# NOTE: experimental 
+
+# experimental DSL
 # TODO: test across various test case
 # denim_transitions <- function(...) {
 #   exprs <- enexprs(...)
 #   transitions <- list()
-#   
+# 
 #   for (expr in exprs) {
 #     # Each DSL argument should be an assignment (i.e. a call to `=`)
 #     if (!is_call(expr, "=")) {
 #       stop("Each argument must be an assignment using '='.")
 #     }
-#     
+# 
 #     # Extract lhs and rhs of the assignment
 #     lhs_expr <- expr[[2]]
 #     rhs_expr <- expr[[3]]
-#     
+# 
 #     # Convert the LHS to a string (e.g., "S -> I" or "36 * I -> R")
 #     lhs_str <- paste(deparse(lhs_expr), collapse = " ")
-#     
+# 
 #     # Check whether rhs is mathematical formula or call to d_* function
 #     # If the rhs is a math formula, deparse it into a string.
 #     # Otherwise (e.g., a call to d_gamma or d_exponential) leave it as an expression.
@@ -121,9 +122,9 @@ modelToJson <- function(mod) {
 #       # For non-call objects (names, numbers), deparse them to a string.
 #       paste(deparse(rhs_expr), collapse = " ")
 #     }
-#     
+# 
 #     transitions[[lhs_str]] <- rhs_val
 #   }
-#   
+# 
 #   class(transitions) <- "denim_transition"
 # }

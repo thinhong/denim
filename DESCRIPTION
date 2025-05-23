@@ -2,7 +2,7 @@ Package: denim
 Type: Package
 Title: Generate and Simulate Deterministic Discrete-Time Compartmental Models
 Version: 1.1.0
-Date: 2025-03-17
+Date: 2025-05-16
 Authors@R: c(
     person("Thinh", "Ong", , "thinhop@oucru.org", role = c("aut", "cph"),
            comment = c(ORCID = "0000-0001-6772-9291")),
@@ -22,9 +22,7 @@ URL: https://drthinhong.com/denim/,
 BugReports: https://github.com/thinhong/denim/issues
 Imports:
     Rcpp (>= 1.0.6),
-    viridisLite,
-    scales,
-    rlang
+    viridisLite
 Suggests:
     covr,
     knitr,

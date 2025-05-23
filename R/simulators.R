@@ -95,7 +95,6 @@ sim <- function(transitions, initialValues, parameters=NULL,
 }
 
 # Overloaded plot function for denim object
-#' @importFrom scales hue_pal
 #' @export
 plot.denim <- function(x, ...) {
   
