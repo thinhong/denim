@@ -1,4 +1,15 @@
 # Constructors for distributions
+evaluate_par <- function(par){
+  
+  if(is.symbol(par)) {
+    par <- as.character(par)
+  } else{
+    par <- as.numeric(eval(par))
+  }
+  
+  par
+}
+
 
 #' Discrete gamma distribution
 #' 
@@ -11,6 +22,14 @@
 #' transitions <- list("S -> I" = d_gamma(rate = 1, shape = 5))
 #' @export
 d_gamma <- function(rate, shape, dist_init = FALSE) {
+  # capture expression for evaluation
+  rate <- substitute(rate)
+  shape <- substitute(shape)
+  
+  # check whether it is a fixed value (numeric) or a model parameter (string or expression)
+  rate <- evaluate_par(rate)
+  shape <- evaluate_par(shape)
+  
   distr <- list(
     distribution = "gamma",
     rate = rate,
@@ -33,6 +52,14 @@ d_gamma <- function(rate, shape, dist_init = FALSE) {
 #' transitions <- list("I -> D" = d_weibull(0.6, 2))
 #' @export
 d_weibull <- function(scale, shape, dist_init = FALSE) {
+  # capture expression for evaluation
+  scale <- substitute(scale)
+  shape <- substitute(shape)
+  
+  # check whether it is a fixed value (numeric) or a model parameter (string or expression)
+  scale <- evaluate_par(scale)
+  shape <- evaluate_par(shape)
+  
   distr <- list(
     distribution = "weibull",
     scale = scale,
@@ -56,6 +83,11 @@ d_weibull <- function(scale, shape, dist_init = FALSE) {
 #'
 #' @export
 d_exponential <- function(rate, dist_init = FALSE) {
+  # capture expression for evaluation
+  rate <- substitute(rate)
+  # check whether it is a fixed value (numeric) or a model parameter (string or expression)
+  rate <- evaluate_par(rate)
+
   distr <- list(
     distribution = "exponential",
     rate = rate,
@@ -77,6 +109,14 @@ d_exponential <- function(rate, dist_init = FALSE) {
 #' transitions <- list("I -> D" = d_lognormal(3, 0.6))
 #' @export
 d_lognormal <- function(mu, sigma, dist_init = FALSE) {
+  # capture expression for evaluation
+  mu <- substitute(mu)
+  sigma <- substitute(sigma)
+  
+  # check whether it is a fixed value (numeric) or a model parameter (string or expression)
+  mu <- evaluate_par(mu)
+  sigma <- evaluate_par(sigma)
+  
   distr <- list(
     distribution = "lognormal",
     mu = mu,
@@ -113,6 +153,12 @@ mathexpr <- function(expr) {
 
 #Fixed transition
 constant <- function(x) {
+  # capture expression for evaluation
+  x <- substitute(x)
+
+  # check whether it is a fixed value (numeric) or a model parameter (string or expression)
+  x <- evaluate_par(x)
+
   distr <- list(
     distribution = "constant",
     constant = x)
@@ -144,9 +190,35 @@ constant <- function(x) {
 #' transitions <- list("S->I"=nonparametric(0.1, 0.2, 0.5, 0.2))
 #' @export
 nonparametric <- function(..., dist_init = FALSE) {
+  x <- substitute(c(...))
+
+  # remove "c" 
+  x <- as.character(x)[-1]
+  
+  # try parsing ... 
+  failed_parse <- FALSE
+  try_eval <- sapply(parse(text = x), \(expr){
+    tryCatch(
+      eval(expr),
+      error = \(e) {
+        failed_parse <<- TRUE
+      }
+    )
+  })
+  x <- if(!failed_parse) {
+    try_eval
+  } else{
+    x
+  }
+
+  # if ... is a parameter and more than 1 parameter is given -> throw error
+  if(all(is.character(x)) && length(x) > 1){
+    stop("nonparametric only takes 1 parameter as input")
+  }
+  
   distr <- list(
     distribution = "nonparametric",
-    waitingTime = c(...),
+    waitingTime = x,
     dist_init = as.numeric(dist_init))
   
   class(distr) <- c("Distribution", class(distr))

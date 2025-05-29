@@ -1,4 +1,5 @@
 # Constructor
+#' @import glue
 newModel <- function(simulationDuration, errorTolerance, initialValues, 
                      parameters=NULL, transitions, timeStep = 1) {
   
@@ -13,14 +14,40 @@ newModel <- function(simulationDuration, errorTolerance, initialValues,
       transitions[[i]] <- constant(transitions[[i]])
     }
     
-    # if transition -> get parameters from Distribution object
     if( (class(transitions[[i]])=="Distribution")[[1]] ){
       if((transitions[[i]]$distribution) == "nonparametric" | 
                (transitions[[i]]$distribution) == "constant"|
                (transitions[[i]]$distribution) == "multinomial"){
-        # dont do anything to non parametric model
-        next
+        # check whether the distribution 
+        # parameters are numeric or string, if it is a string (i.e. model input)
+        # make sure that value is provided as one of the parameters
+        sapply(names(transitions[[i]][-1]), \(par_name){
+          par_val <- transitions[[i]][[par_name]]
+          
+          if(is.character(par_val)){
+            if(!(par_val %in% names(parameters))){
+              stop(glue::glue("Value for {par_val} of transition {names(transitions)[i]} must provided as one of the model parameters"))
+            }
+            transitions[[i]][[par_name]] <<- parameters[[par_val]]
+          }
+        })
+        
       }else if((transitions[[i]]$distribution) != "mathExpression"){
+        # check whether the distribution 
+        # parameters are numeric or string, if it is a string (i.e. model input)
+        # make sure that value is provided as one of the parameters
+        sapply(names(transitions[[i]][-1]), \(par_name){
+          par_val <- transitions[[i]][[par_name]]
+          
+          if(is.character(par_val)){
+            if(!(par_val %in% names(parameters))){
+              stop(glue::glue("Value for {par_val} of transition {names(transitions)[i]} must provided as one of the model parameters"))
+            }
+            transitions[[i]][[par_name]] <<- parameters[[par_val]]
+          }
+        })
+        
+        # also get parameters from Distribution objects
         parameters <- c(parameters, transitions[[i]][-1])
       }else{
         has_math_dist <- TRUE
@@ -86,45 +113,3 @@ modelToJson <- function(mod) {
   
 }
 
-
-# experimental DSL
-# TODO: test across various test case
-# denim_transitions <- function(...) {
-#   exprs <- enexprs(...)
-#   transitions <- list()
-# 
-#   for (expr in exprs) {
-#     # Each DSL argument should be an assignment (i.e. a call to `=`)
-#     if (!is_call(expr, "=")) {
-#       stop("Each argument must be an assignment using '='.")
-#     }
-# 
-#     # Extract lhs and rhs of the assignment
-#     lhs_expr <- expr[[2]]
-#     rhs_expr <- expr[[3]]
-# 
-#     # Convert the LHS to a string (e.g., "S -> I" or "36 * I -> R")
-#     lhs_str <- paste(deparse(lhs_expr), collapse = " ")
-# 
-#     # Check whether rhs is mathematical formula or call to d_* function
-#     # If the rhs is a math formula, deparse it into a string.
-#     # Otherwise (e.g., a call to d_gamma or d_exponential) leave it as an expression.
-#     rhs_val <- if (is.call(rhs_expr)) {
-#       fn <- as.character(rhs_expr[[1]])
-#       if (grepl("^d_", fn) | grepl("^nonparametric", fn)) {
-#         # If the call is to a function starting with "d_", leave it as an expression.
-#         rhs_expr
-#       } else {
-#         # Otherwise, deparse the expression to convert it to a string.
-#         paste(deparse(rhs_expr), collapse = " ")
-#       }
-#     } else {
-#       # For non-call objects (names, numbers), deparse them to a string.
-#       paste(deparse(rhs_expr), collapse = " ")
-#     }
-# 
-#     transitions[[lhs_str]] <- rhs_val
-#   }
-# 
-#   class(transitions) <- "denim_transition"
-# }
