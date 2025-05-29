@@ -298,6 +298,16 @@ void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<
         }
     }
 
+    // try evaluation
+    try {
+        double computeValue = parser.Eval();
+    } catch (mu::Parser::exception_type &e) {
+        std::cerr << "Failed to evaluate expression: " 
+                << outDistributions[outIndex]->getDistName() << "\n"
+                << "Error message: " << e.GetMsg() << "\n";
+        throw std::runtime_error("muParser evaluation failed: " + std::string(e.GetMsg()));
+    }
+
     // The result of this math expression is the outTotals of this outIndex
     // double computeValue = outWeights[outIndex] * parser.Eval(); //deprecated code
     double computeValue = parser.Eval();
