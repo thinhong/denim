@@ -44,7 +44,7 @@ Model definition written in denim DSL must be parsed by the function `denim_dsl(
 
 For math expression, some basic supported operators include: `+` for addition, `-` for minus, `*` for multiplication, `/` for division, `^` for power. Users can also define additional model parameters in the math expression.
 
-Math expressions in denim are parsed using muparser. For a full list of operators, visit [muparser website](https://beltoforion.de/en/muparser/features.php)
+Math expressions in denim are parsed using muparser. For a full list of operators, visit the muparser website at https://beltoforion.de/en/muparser/features.php.
 
 ***Distribution functions***
 
