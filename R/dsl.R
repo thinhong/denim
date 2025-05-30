@@ -11,11 +11,11 @@
 #' @export
 #'
 #' @examples
-#' transitions <- denim_transitions({
+#' transitions <- denim_dsl({
 #'   S -> I = beta * (I/N) * S * timeStep
 #'   I -> R = d_gamma(rate = 1/4, shape = 3)
 #' })
-denim_transitions <- function(x) {
+denim_dsl <- function(x) {
   # Capture the expression as a quoted expression
   expr <- substitute(x)
   # Convert the expression into a list of individual expressions

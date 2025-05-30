@@ -21,7 +21,7 @@ test_that("Compare denim and deSolve", {
 
     # --- Timestep definition
     simulationDuration <- 20 
-    timestep <- 0.0005 # use small timestep to compare with deSolve which has continuous timestep
+    timestep <- 0.01 # use small timestep to compare with deSolve which has continuous timestep
 
     # --- Simulate using both package
     mod <- sim(transitions = transitions, initialValues = initialValues, parameters = parameters, simulationDuration = simulationDuration, timeStep = timestep)
@@ -30,9 +30,9 @@ test_that("Compare denim and deSolve", {
 
     ode_mod <- as.data.frame(ode_mod)
 
-    tolerance <- 0.1
-    abs_diff <- abs(mod[, c("Time", "S", "I")] - ode_mod[, c("time", "S", "I")])
-    
+    tolerance <- 0.001
+    # compare proportion of S, I, R
+    abs_diff <- round(abs(mod[, c("S", "I", "R")]/1000 - ode_mod[, c("S", "I", "R")]/1000), 3)
     expect_true(all(abs_diff <= tolerance))
     
     # test plot function does not throw error

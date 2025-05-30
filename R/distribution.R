@@ -1,7 +1,7 @@
 # Constructors for distributions
 evaluate_par <- function(par){
   
-  if(is.symbol(par)) {
+  if(is.symbol(par) | is.character(par)) {
     par <- as.character(par)
   } else{
     par <- as.numeric(eval(par))
@@ -20,6 +20,9 @@ evaluate_par <- function(par){
 #' 
 #' @examples
 #' transitions <- list("S -> I" = d_gamma(rate = 1, shape = 5))
+#' transitions_dsl <- denim_dsl({S -> I = d_gamma(rate = 1, shape = 5)})
+#' # define model parameters as distributional parameters
+#' transitions_dsl <- denim_dsl({S -> I = d_gamma(rate = i_rate, shape = i_shape)})
 #' @export
 d_gamma <- function(rate, shape, dist_init = FALSE) {
   # capture expression for evaluation
@@ -50,6 +53,7 @@ d_gamma <- function(rate, shape, dist_init = FALSE) {
 #' 
 #' @examples
 #' transitions <- list("I -> D" = d_weibull(0.6, 2))
+#' transitions <- denim_dsl({ I -> D = d_weibull(0.6, 2) })
 #' @export
 d_weibull <- function(scale, shape, dist_init = FALSE) {
   # capture expression for evaluation
@@ -79,8 +83,7 @@ d_weibull <- function(scale, shape, dist_init = FALSE) {
 #' 
 #' @examples
 #' transitions <- list("I -> D" = d_exponential(0.3))
-#' 
-#'
+#' transitions <- denim_dsl({I -> D = d_exponential(0.3)})
 #' @export
 d_exponential <- function(rate, dist_init = FALSE) {
   # capture expression for evaluation
@@ -107,6 +110,7 @@ d_exponential <- function(rate, dist_init = FALSE) {
 #' 
 #' @examples
 #' transitions <- list("I -> D" = d_lognormal(3, 0.6))
+#' transitions <- denim_dsl({I -> D = d_lognormal(3, 0.6)})
 #' @export
 d_lognormal <- function(mu, sigma, dist_init = FALSE) {
   # capture expression for evaluation
@@ -137,7 +141,8 @@ d_lognormal <- function(mu, sigma, dist_init = FALSE) {
 #' @return a Distribution object for simulator
 #' 
 #' @examples
-#' transitions <- list("S->I"=mathexpr("beta*S/N"))
+#' transitions <- list("S->I"="beta*S/N")
+#' transitions <- denim_dsl({S->I=beta*S/N})
 #' # definition for parameters in the expression required
 #' params <- c(N = 1000, beta = 0.3)
 #' @export
@@ -153,12 +158,6 @@ mathexpr <- function(expr) {
 
 #Fixed transition
 constant <- function(x) {
-  # capture expression for evaluation
-  x <- substitute(x)
-
-  # check whether it is a fixed value (numeric) or a model parameter (string or expression)
-  x <- evaluate_par(x)
-
   distr <- list(
     distribution = "constant",
     constant = x)
@@ -188,6 +187,7 @@ constant <- function(x) {
 #' 
 #' @examples
 #' transitions <- list("S->I"=nonparametric(0.1, 0.2, 0.5, 0.2))
+#' transitions <- denim_dsl({S->I=nonparametric(0.1, 0.2, 0.5, 0.2)})
 #' @export
 nonparametric <- function(..., dist_init = FALSE) {
   x <- substitute(c(...))
