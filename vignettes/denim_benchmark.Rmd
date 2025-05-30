@@ -318,11 +318,11 @@ timeStep <- 0.01
 
 library(denim)
 
-denim_model <- list(
-  "S -> E" = "(R0/tr) * timeStep * S * (I/N)", # formulate according that of uSEIR method
-  "E -> I" = d_gamma(rate = 1/4, shape = 2),
-  "I -> R" = d_gamma(rate = 1/3, shape = 2)
-)
+denim_model <- denim_dsl({
+  S -> E = (R0/tr) * timeStep * S * (I/N) # formulate according that of uSEIR method
+  E -> I = d_gamma(rate = 1/4, shape = 2)
+  I -> R = d_gamma(rate = 1/3, shape = 2)
+})
 
 initialValues <- c(S = 999999, E = 1, I= 0, R= 0)
 parameters <- c(R0 = 3.5, 
@@ -445,7 +445,7 @@ runtime_scaling <- lapply(timeStepDurations,
      }
    )
 ```
-```{r echo=FALSE}
+```{r echo=FALSE, warning=FALSE}
 plot(x = timeStepDurations, y = runtime_scaling, col = "cornflowerblue",
      xlab = "Time step duration",
      ylab = "Median run time (in seconds)")
