@@ -21,4 +21,5 @@ Discrete log-normal distribution
 }
 \examples{
 transitions <- list("I -> D" = d_lognormal(3, 0.6))
+transitions <- denim_dsl({I -> D = d_lognormal(3, 0.6)})
 }

@@ -15,23 +15,23 @@ newModel <- function(simulationDuration, errorTolerance, initialValues,
     }
     
     if( (class(transitions[[i]])=="Distribution")[[1]] ){
-      if((transitions[[i]]$distribution) == "nonparametric" | 
-               (transitions[[i]]$distribution) == "constant"|
+      if((transitions[[i]]$distribution) == "constant"|
                (transitions[[i]]$distribution) == "multinomial"){
+        next
+      }else if((transitions[[i]]$distribution) == "nonparametric"){
         # check whether the distribution 
         # parameters are numeric or string, if it is a string (i.e. model input)
         # make sure that value is provided as one of the parameters
-        sapply(names(transitions[[i]][-1]), \(par_name){
-          par_val <- transitions[[i]][[par_name]]
+        if(is.character(transitions[[i]]$waitingTime)){
+          par_val <- transitions[[i]]$waitingTime
           
-          if(is.character(par_val)){
-            if(!(par_val %in% names(parameters))){
-              stop(glue::glue("Value for {par_val} of transition {names(transitions)[i]} must provided as one of the model parameters"))
-            }
-            transitions[[i]][[par_name]] <<- parameters[[par_val]]
+          if(!(transitions[[i]]$waitingTime %in% names(parameters))){
+            stop(glue::glue("Value for {par_val} of transition {names(transitions)[i]} must provided as one of the model parameters"))
           }
-        })
-        
+          transitions[[i]]$waitingTime <- parameters[[par_val]]
+          # remove waiting dist from parameters list
+          parameters[[par_val]] <- NULL
+        }
       }else if((transitions[[i]]$distribution) != "mathExpression"){
         # check whether the distribution 
         # parameters are numeric or string, if it is a string (i.e. model input)

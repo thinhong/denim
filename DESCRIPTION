@@ -22,7 +22,9 @@ URL: https://drthinhong.com/denim/,
 BugReports: https://github.com/thinhong/denim/issues
 Imports:
     Rcpp (>= 1.0.6),
-    viridisLite
+    viridisLite,
+    rlang,
+    glue
 Suggests:
     covr,
     knitr,
@@ -31,6 +33,7 @@ Suggests:
     waldo,
     xml2,
     deSolve,
+    tidyverse,
     DiagrammeR
 LinkingTo: 
     Rcpp,

@@ -4,10 +4,10 @@
 \alias{nonparametric}
 \title{Nonparametric distribution}
 \usage{
-nonparametric(..., dist_init = FALSE)
+nonparametric(x, dist_init = FALSE)
 }
 \arguments{
-\item{...}{a vector of values}
+\item{x}{a vector of values}
 
 \item{dist_init}{whether to distribute initial value across subcompartments following this distribution. (default to FALSE, meaning init value is always in the first compartment))}
 }
@@ -18,5 +18,8 @@ a Distribution object for simulator
 Convert a vector of frequencies, percentages... into a distribution
 }
 \examples{
-transitions <- list("S->I"=nonparametric(0.1, 0.2, 0.5, 0.2))
+transitions <- list("S->I"=nonparametric( c(0.1, 0.2, 0.5, 0.2) ))
+transitions <- denim_dsl({S->I=nonparametric( c(0.1, 0.2, 0.5, 0.2) )})
+# you can also define a model parameter for the distribution
+transitions <- denim_dsl({S->I=nonparametric( dwelltime_dist )})
 }

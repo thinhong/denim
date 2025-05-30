@@ -181,41 +181,46 @@ constant <- function(x) {
 #' 
 #' Convert a vector of frequencies, percentages... into a distribution
 #' 
-#' @param ... a vector of values
+#' @param x a vector of values
 #' @return a Distribution object for simulator
 #' @param dist_init whether to distribute initial value across subcompartments following this distribution. (default to FALSE, meaning init value is always in the first compartment))
 #' 
 #' @examples
-#' transitions <- list("S->I"=nonparametric(0.1, 0.2, 0.5, 0.2))
-#' transitions <- denim_dsl({S->I=nonparametric(0.1, 0.2, 0.5, 0.2)})
+#' transitions <- list("S->I"=nonparametric( c(0.1, 0.2, 0.5, 0.2) ))
+#' transitions <- denim_dsl({S->I=nonparametric( c(0.1, 0.2, 0.5, 0.2) )})
+#' # you can also define a model parameter for the distribution
+#' transitions <- denim_dsl({S->I=nonparametric( dwelltime_dist )})
 #' @export
-nonparametric <- function(..., dist_init = FALSE) {
-  x <- substitute(c(...))
-
-  # remove "c" 
-  x <- as.character(x)[-1]
+nonparametric <- function(x, dist_init = FALSE) {
+  # x <- substitute(c(...))
+  # 
+  # # remove "c" 
+  # x <- as.character(x)[-1]
+  # 
+  # # try parsing ... 
+  # failed_parse <- FALSE
+  # try_eval <- sapply(parse(text = x), \(expr){
+  #   tryCatch(
+  #     eval(expr),
+  #     error = \(e) {
+  #       failed_parse <<- TRUE
+  #     }
+  #   )
+  # })
+  # x <- if(!failed_parse) {
+  #   try_eval
+  # } else{
+  #   x
+  # }
+  # 
+  # # if ... is a parameter and more than 1 parameter is given -> throw error
+  # if(all(is.character(x)) && length(x) > 1){
+  #   stop("nonparametric only takes 1 parameter as input")
+  # }
+  # 
   
-  # try parsing ... 
-  failed_parse <- FALSE
-  try_eval <- sapply(parse(text = x), \(expr){
-    tryCatch(
-      eval(expr),
-      error = \(e) {
-        failed_parse <<- TRUE
-      }
-    )
-  })
-  x <- if(!failed_parse) {
-    try_eval
-  } else{
-    x
-  }
-
-  # if ... is a parameter and more than 1 parameter is given -> throw error
-  if(all(is.character(x)) && length(x) > 1){
-    stop("nonparametric only takes 1 parameter as input")
-  }
-  
+  x <- substitute(x)
+  x <- evaluate_par(x)
   distr <- list(
     distribution = "nonparametric",
     waitingTime = x,
