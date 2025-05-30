@@ -285,8 +285,12 @@ void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<
     mu::Parser parser;
     parser.SetExpr(outDistributions[outIndex]->getDistName());
     // Add parameter values
+    double timeStep = 0;
     for (size_t i {0}; i < paramNames.size(); ++i) {
         parser.DefineConst(paramNames[i], paramValues[i]);
+        if(paramNames[i] == "timeStep"){
+            timeStep = paramValues[i];
+        }
     }
     // Add current population in each compartment 
     for (auto &comp: comps){
@@ -297,15 +301,22 @@ void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<
             parser.DefineConst(comp->getCompName(), comp->getCompTotal()[iter - 1]);
         }
     }
+    // Add current time as a constant
+    parser.DefineConst("time", timeStep * iter);
 
     // try evaluation
     try {
         double computeValue = parser.Eval();
     } catch (mu::Parser::exception_type &e) {
-        std::cerr << "Failed to evaluate expression: " 
-                << outDistributions[outIndex]->getDistName() << "\n"
-                << "Error message: " << e.GetMsg() << "\n";
-        throw std::runtime_error("muParser evaluation failed: " + std::string(e.GetMsg()));
+        // std::cerr << "Failed to evaluate expression: " 
+        //         << outDistributions[outIndex]->getDistName() << "\n"
+        //         << "Error message: " << e.GetMsg() << "\n";
+        // throw std::runtime_error("muParser evaluation failed: " + std::string(e.GetMsg()));
+        
+        std::string msg = 
+          "Failed to evaluate expression: " + outDistributions[outIndex]->getDistName() + "\n" +
+          "Error message: " + std::string(e.GetMsg());
+        Rcpp::stop(msg);
     }
 
     // The result of this math expression is the outTotals of this outIndex

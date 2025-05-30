@@ -8,6 +8,7 @@
 #include <algorithm>
 #include "Distribution.h"
 #include "muParser.h"
+#include <Rcpp.h>
 
 class Compartment {
 private:
