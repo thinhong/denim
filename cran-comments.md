@@ -1,8 +1,7 @@
 ## Resubmission
 This is a resubmission. In this version I have:
-* Change parameter scale of d_gamma to rate
-* Fix bug in multinomial and competing risks modeling
-* Add the functionality to distribute the initial values according to the specified distribution
+* Improve the run time for sim() function
+* Add option to select color palette for plot()
 
 
 ## R CMD check results
@@ -26,5 +25,3 @@ We checked 0 reverse dependencies, comparing R CMD check results across CRAN and
 
  * We saw 0 new problems
  * We failed to check 0 packages
-
-* This is a new release.

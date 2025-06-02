@@ -94,16 +94,24 @@ sim <- function(transitions, initialValues, parameters=NULL,
   df
 }
 
-# Overloaded plot function for denim object
+#' Overloaded plot function for denim object
+#' @param x - output of denim::sim function
+#'
+#' @param ... - additional parameter for `plot()` function
+#' @param color_palette - a palette name from the colorspace package. You can view available palettes with `colorspace::hcl_palettes("qualitative", plot = TRUE)`. 
+#'
+#' @import colorspace
+#' @method plot denim
 #' @export
-plot.denim <- function(x, ...) {
+plot.denim <- function(x, ..., color_palette=NULL) {
   
   # Set color codes and compartment names
-  col_codes <- viridisLite::viridis(ncol(x) - 1)
-  # Test different color scale to be discrete instead of continuous
-  # col_codes <- hue_pal(l = 65, c = 70)(ncol(x) - 1)
-  comp_names <- colnames(x)[-1]
+  # col_codes <- viridisLite::viridis(ncol(x) - 1)
+  col_codes <- colorspace::qualitative_hcl(ncol(x) - 1, palette = color_palette)
   
+  
+  comp_names <- colnames(x)[-1]
+
   # Plot the first compartment
   cmd1 <- paste0("with(x, {
   plot(Time, ", comp_names[1], ", type = \"l\", lwd = 3, col = \"", col_codes[1], 

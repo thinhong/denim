@@ -32,7 +32,7 @@ void Compartment::setLengthSubCompartment() {
     
     if(this->competingRisks){
         //  --- use same subcompartment chain for competing risks ---- 
-        // also uses outSubcompartments to keep track of changes before update the subCompartment
+        // also uses tmpSubComp to save subComps from last iteration
         this -> subCompartments.resize((size_t) 1);
         for (size_t pos = 0; pos < outDistributions.size(); pos++){
             size_t currLength = outDistributions[pos]->getMaxDay();
@@ -74,8 +74,8 @@ void Compartment::setLengthSubCompartment() {
         }
     }
 
-    // outSubCompartment is the maximum length of subCompartment
-    outSubCompartments.resize(maxLength);
+    // tmpSubComp is the maximum length of subCompartment
+    tmpSubComp.resize(maxLength);
 }
 
 /**
@@ -180,8 +180,11 @@ size_t Compartment::findOutCompPosition(std::string nameOutComp) {
 void Compartment::updateCompartment(size_t iter, std::vector<std::string>& paramNames, std::vector<double>& paramValues, std::vector<std::shared_ptr<Compartment>> &comps) {
     // reset out values 
     std::fill(outTotals.begin(), outTotals.end(), 0);
-    // reset outSubCompartment for each interation
-    std::fill(outSubCompartments.begin(), outSubCompartments.end(), 0);
+
+    // assign values of current subCompartment to tmpSubComp
+    // since tmpSubComp is only used for competingRisk scenario where there is only 1 subCompartment chain, simply get the 1st chain
+    tmpSubComp.assign(subCompartments[0].begin(), subCompartments[0].end());
+
 
     // Compute total in value of this compartment (later distributed to first subcompartment of each subcompartments chain)
     double inValue {0};
@@ -216,27 +219,19 @@ void Compartment::updateCompartment(size_t iter, std::vector<std::string>& param
  
             // only update chains of subCompartments in multinomial case
             if(!this->competingRisks){
+
                 // shift subCompartments for next iteration
-                for (size_t i_subComp {subCompartments[outIndex].size() - 1}; i_subComp > 0; --i_subComp) {
-                    subCompartments[outIndex][i_subComp] = subCompartments[outIndex][i_subComp - 1];
-                }
-                // update the initial subComp population to be incoming population
-                subCompartments[outIndex][0] = outWeights[outIndex]*inValue;
+                subCompartments[outIndex].pop_back();
+                subCompartments[outIndex].push_front(outWeights[outIndex]*inValue);
             }
         }
     }
 
-    // in competing risks case, update subChain compartments after finishing updating outSubCompartments
+    // in competing risks case, shift subCompartments for next iteration after looping through all outCompartments
     if(this->competingRisks){
-        if(subCompartments[0].size() == (size_t) 1){
-            subCompartments[0][0] -= outSubCompartments[0];
-        }
-        else{
-            // shift subCompartments for next iteration
-            for (size_t i_subComp {subCompartments[0].size() - 1}; i_subComp > 0; --i_subComp) {
-                subCompartments[0][i_subComp] = subCompartments[0][i_subComp - 1] - outSubCompartments[i_subComp-1];
-            }
-            subCompartments[0][0] = 0;
+        if(subCompartments[0].size() > (size_t) 1){
+            subCompartments[0].pop_back();
+            subCompartments[0].push_front(0);
         }
         // update the initial subComp population to be incoming population
         subCompartments[0][0] += inValue;
@@ -257,10 +252,11 @@ void Compartment::updateSubCompByDist(size_t iter, size_t outIndex) {
     if(this->competingRisks){
         startIndex = std::min(iter, subCompartments[0].size() - 1);
         for (size_t i {0}; i <= startIndex; ++i) { 
-            outTotals[outIndex] += subCompartments[0][startIndex - i] * outDistributions[outIndex]->getTransitionProb(startIndex - i);
-            // if competing risks, update outSubCompartment instead
-            outSubCompartments[startIndex - i] += subCompartments[0][startIndex - i] * outDistributions[outIndex]->getTransitionProb(startIndex - i);
+            // if competing risks, update using tmpSubComp instead
+            outTotals[outIndex] += tmpSubComp[startIndex - i]  * outDistributions[outIndex]->getTransitionProb(startIndex - i);
+            subCompartments[0][startIndex - i] -= tmpSubComp[startIndex - i] * outDistributions[outIndex]->getTransitionProb(startIndex - i);
         }
+
     }else{
         startIndex = std::min(iter, subCompartments[outIndex].size() - 1);
         for (size_t i {0}; i <= startIndex; ++i) { 
@@ -338,8 +334,11 @@ void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<
         double sumSubComp = std::accumulate(this -> subCompartments[0].begin(), this -> subCompartments[0].end(), (double) 0);
         if (sumSubComp > 0) {
             double remainPct = (sumSubComp - outTotals[outIndex]) / sumSubComp;
-            for (size_t i_subComp {0}; i_subComp < subCompartments[0].size(); ++i_subComp) {
-                outSubCompartments[i_subComp] += subCompartments[0][i_subComp] * (1-remainPct);
+
+            // TODO: alternate algorithm for improve runtime
+            for (size_t i_subComp {0}; i_subComp < subCompartments[0].size(); ++i_subComp) { 
+                // if competing risks, update using tmpSubComp instead
+                subCompartments[0][i_subComp] -= tmpSubComp[i_subComp] * (1-remainPct);
             }
         }
     }else{
@@ -376,8 +375,11 @@ void Compartment::updateSubCompByConst(size_t iter, size_t outIndex) {
         double sumSubComp = std::accumulate(this -> subCompartments[0].begin(), this -> subCompartments[0].end(), (double) 0);
         if (sumSubComp > 0) {
             double remainPct = (sumSubComp - outTotals[outIndex]) / sumSubComp;
-            for (size_t i_subComp {0}; i_subComp < subCompartments[0].size(); ++i_subComp) {
-                outSubCompartments[i_subComp] += subCompartments[0][i_subComp] * (1-remainPct);
+
+            // TODO: alternate algorithm for improve runtime
+            for (size_t i_subComp {0}; i_subComp < subCompartments[0].size(); ++i_subComp) { 
+                // if competing risks, update using tmpSubComp instead
+                subCompartments[0][i_subComp] -= tmpSubComp[i_subComp] * (1-remainPct);
             }
         }
     }else{
