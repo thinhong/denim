@@ -1,4 +1,8 @@
+# denim 1.2.1
+
 # denim 1.2.0
+* Add denim DSL support
+* Add error handlers 
 
 # denim 1.1.0
 * Fix multinomial vs competing risks transition
