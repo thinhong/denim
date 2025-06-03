@@ -21,4 +21,5 @@ Discrete Weibull distribution
 }
 \examples{
 transitions <- list("I -> D" = d_weibull(0.6, 2))
+transitions <- denim_dsl({ I -> D = d_weibull(0.6, 2) })
 }

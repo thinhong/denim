@@ -112,13 +112,24 @@ DiagrammeR::grViz("digraph {
 
 </center>
 
-We have two transitions `S -> I` and `I -> R` in this case. The transitions are specified in a list follow this format `"transition" = equation`, of which equation is defined with one of our functions for waiting time distribution.
+We have two transitions `S -> I` and `I -> R` in this case. The transitions are specified in a list follow this format `"transition" = equation"`, of which equation is defined with one of our functions for waiting time distribution.
 
 ```{r}
 transitions <- list(
-  "S -> I" = "beta * S * I / N",
+  "S -> I" = "beta * S * I / N * timeStep",
   "I -> R" = d_gamma(rate = 1/2, 3)
 )
+```
+
+Where `timeStep` is the duration of a time step used for simulation.
+
+Another option to define the transitions is by using denim's DSL. Refer to the [Model definition in denim](./denim_dsl.html) article for more information.
+
+```{r}
+transitions <- denim_dsl({
+  S -> I = beta * (I/N) * S * timeStep
+  I -> R = d_gamma(rate = 1/4, shape = 3)
+})
 ```
 
 *Initial state*
@@ -139,10 +150,12 @@ If we use a math expression, any symbols except the compartment names are parame
 
 ```{r}
 parameters <- c(
-  beta = 0.012,
+  beta = 1.2,
   N = 1000
 )
 ```
+
+Note that we do not need to specify variable `timeStep` since denim will automatically use the `timeStep` from the simulation settings in the next step.
 
 **Model application**
 
@@ -223,10 +236,10 @@ By default, the initial population is always assigned to the first sub-compartme
 User can also choose to distribute initial population across sub-compartments based on the specified distribution, i.e. with initial population `I = n`, then denim will initialize `I1 = n*p1`, `I2 = n*p2`, `I3 = n*p3`, `I4 = n*p4`. To set up the initial population in this way, simply specify the parameter `dist_init = TRUE` (only applicable for distribution transitions).
 
 ```{r eval=FALSE}
-transitions <- list(
-  "S -> I" = "beta * S * I / N",
-  "I -> R" = d_gamma(rate = 1/2, 3, dist_init=TRUE)
-)
+transitions <- denim_dsl({
+  S -> I = beta * S * I / N * timeStep
+  I -> R = d_gamma(rate = 1/2, 3, dist_init=TRUE)
+})
 ```
 
 ## 3. Waiting time distribution
@@ -243,9 +256,9 @@ Current available distributions in this package including:
 
 -   `d_lognormal(mu, sigma)`: Discrete **log-normal distribution** with parameters `mu` and `sigma`
 
--   `nonparametric(waitingTimes...)`: A **vector of values**, could be numbers, percentages, density of the length of stay based on real data, `denim` will convert it into a distribution
+-   `nonparametric(waitingTimes)`: A **vector of values**, could be numbers, percentages, density of the length of stay based on real data, `denim` will convert it into a distribution
 
-Mathematical expression: Transition defined with a string value such as `"beta * S * I / N"` will be converted to a mathematical expression. You will need to define parameters that are not compartment names in the `parameters` argument
+Mathematical expression: Transition can also be described using a math expression such as `beta * S * I / N`. You will need to define parameters that are not compartment names in the `parameters` argument
 
 ## 4. Multiple transitions from a compartment
 
@@ -280,12 +293,12 @@ There are two scenarios in this example:
 We can define the model for this example as follows:
 
 ```{r, fig.width = 5}
-transitions <- list(
-  "S -> I" = "beta * S * I / N",
-  "S -> V" = 5,
-  "0.9 * I -> R" = d_gamma(1/3, 2),
-  "0.1 * I -> D" = d_lognormal(2, 0.5)
-)
+transitions <- denim_dsl({
+  S -> I = beta * S * I / N 
+  S -> V = 5
+  0.9 * I -> R = d_gamma(1/3, 2)
+  0.1 * I -> D = d_lognormal(2, 0.5)
+})
 
 initialValues <- c(
   S = 999, 
@@ -310,7 +323,7 @@ mod <- sim(transitions = transitions,
            timeStep = timeStep)
 
 head(mod)
-plot(mod)
+plot(mod, ylim = c(0, 1000))
 ```
 
 For a more detailed explanation for transitions to multiple states, refer to [this article](./multinomial.html)
@@ -338,14 +351,14 @@ DiagrammeR::grViz("digraph {
 </center>
 
 ```{r, fig.width = 5}
-transitions <- list(
-  "S -> I" = "beta * S * (I + IV) / N",
-  "S -> V" = 2,
-  "0.1 * I -> D" = d_lognormal(2, 0.5),
-  "0.9 * I -> R" = d_gamma(rate = 1/3, shape = 2),
-  "V -> IV" = "0.1 * beta * V * (I + IV) / N",
-  "IV -> R" = d_exponential(2)
-)
+transitions <- denim_dsl({
+  S -> I = beta * S * (I + IV) / N 
+  S -> V = 2
+  0.1 * I -> D = d_lognormal(mu = d_mu, sigma = d_sigma)
+  0.9 * I -> R = d_gamma(rate = r_rate, shape = r_shape)
+  V -> IV = 0.1 * beta * V * (I + IV) / N
+  IV -> R = d_exponential(iv_r_rate)
+})
 
 initialValues <- c(
   S = 999, 
@@ -358,7 +371,12 @@ initialValues <- c(
 
 parameters <- c(
   beta = 0.12,
-  N = 1000
+  N = 1000,
+  d_mu = 2,
+  d_sigma = 1/2,
+  r_rate = 1/3,
+  r_shape = 2,
+  iv_r_rate = 2
 )
 
 simulationDuration <- 10

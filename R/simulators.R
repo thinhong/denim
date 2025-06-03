@@ -33,7 +33,7 @@
 #' 
 #' Simulation function that call the C++ simulator
 #'
-#' @param transitions a list of transitions follows this format `"transition" = distribution()`
+#' @param transitions output of function `denim_dsl()` or a list of transitions follows this format `"transition" = distribution()`
 #' @param initialValues a vector contains the initial values of all compartments defined 
 #' in the **transitions**, follows this format `compartment_name = initial_value`
 #' @param parameters a vector contains values of any parameters that are not compartments, 
@@ -49,6 +49,13 @@
 #' @export
 #'
 #' @examples 
+#' # model can be defined using denim DSL
+#' transitions <- denim_dsl({
+#'    S -> I = beta * S * I / N
+#'    I -> R = d_gamma(1/3, 2)
+#' })
+#' 
+#' # or as a list
 #' transitions <- list(
 #'    "S -> I" = "beta * S * I / N",
 #'    "I -> R" = d_gamma(1/3, 2)
@@ -94,16 +101,24 @@ sim <- function(transitions, initialValues, parameters=NULL,
   df
 }
 
-# Overloaded plot function for denim object
+#' Overloaded plot function for denim object
+#' @param x - output of denim::sim function
+#'
+#' @param ... - additional parameter for `plot()` function
+#' @param color_palette - a palette name from the colorspace package. You can view available palettes with `colorspace::hcl_palettes("qualitative", plot = TRUE)`. 
+#'
+#' @import colorspace
+#' @method plot denim
 #' @export
-plot.denim <- function(x, ...) {
+plot.denim <- function(x, ..., color_palette=NULL) {
   
   # Set color codes and compartment names
-  col_codes <- viridisLite::viridis(ncol(x) - 1)
-  # Test different color scale to be discrete instead of continuous
-  # col_codes <- hue_pal(l = 65, c = 70)(ncol(x) - 1)
-  comp_names <- colnames(x)[-1]
+  # col_codes <- viridisLite::viridis(ncol(x) - 1)
+  col_codes <- colorspace::qualitative_hcl(ncol(x) - 1, palette = color_palette)
   
+  
+  comp_names <- colnames(x)[-1]
+
   # Plot the first compartment
   cmd1 <- paste0("with(x, {
   plot(Time, ", comp_names[1], ", type = \"l\", lwd = 3, col = \"", col_codes[1], 

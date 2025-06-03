@@ -8,6 +8,7 @@
 #include <algorithm>
 #include "Distribution.h"
 #include "muParser.h"
+#include <Rcpp.h>
 
 class Compartment {
 private:
@@ -19,7 +20,7 @@ private:
     // TODO:
     // - make subcomartments a nested double array, with dim [nOutCompartments, nMaxDwelltime]
     // - instantiate population for subCompartments based on outDistribution
-    std::vector<std::vector<double>> subCompartments;
+    std::vector<std::deque<double>> subCompartments;
 
     // total: the sum of all subCompartments (i.e. population of this compartment) per iteration/timestep
     std::vector<double> compTotal;
@@ -27,7 +28,7 @@ private:
     // inCompartments: compartments that will move in to this state
     std::vector<std::weak_ptr<Compartment>> inCompartments;
 
-    // outCompartments: compartments that this state will move out, with pre-defined outDistributions and outWeights,
+    // outCompartments: compartments that this state will move out to, with pre-defined outDistributions and outWeights,
     // after calculation the final output will be sum into outTotals
     std::vector<std::weak_ptr<Compartment>> outCompartments;
     // out distribution corresponding to each outCompartment
@@ -37,10 +38,9 @@ private:
     // out weight corresponding to each outCompartment
     std::vector<double> outWeights;
     
-    // store population that move out of each sub compartment in the current iteration
-    // values will be reset to 0 then updated while iterating through each out compartment
-    // TODO: update length to be the max length of subCompartments (i.e, max of nMaxDwelltime)
-    std::vector<double> outSubCompartments;
+    // store population of subCompartment from last iteration for updating
+    std::vector<double> tmpSubComp;
+
     // out population corresponding to each outCompartment in current iteration (sum over all outSubCompartment of that out compartment)
     // values will be reset to 0 then updated while iterating through each timestep
     std::vector<double> outTotals;
@@ -65,9 +65,8 @@ public:
     std::vector<std::shared_ptr<Distribution>> getOutDistributions();
     std::vector<double> getOutWeights();
 
-    std::vector<std::vector<double>> getSubCompartmentValues() {return subCompartments;};
+    std::vector<std::deque<double>> getSubCompartmentValues() {return subCompartments;};
     std::vector<double> getOutValues() {return outTotals;};
-    std::vector<double> getOutSubCompartments() {return outSubCompartments;};
 
     // Setters
     void addOutDistribution(std::shared_ptr<Distribution>& dist, bool distInit = false);

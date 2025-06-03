@@ -19,7 +19,8 @@ a Distribution object for simulator
 Mathematical expression
 }
 \examples{
-transitions <- list("S->I"=mathexpr("beta*S/N"))
+transitions <- list("S->I"="beta*S/N")
+transitions <- denim_dsl({S->I=beta*S/N})
 # definition for parameters in the expression required
 params <- c(N = 1000, beta = 0.3)
 }

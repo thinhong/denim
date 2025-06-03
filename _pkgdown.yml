@@ -14,11 +14,12 @@ articles:
 - title: denim features
   navbar: ~
   contents:
+  - denim_dsl
   - multinomial
+  - nonparametric
 - title: denim comparison
   navbar: denim comparison
   contents:
-  - denim_vs_deSolve
   - denim_benchmark
 - title: migrate to denim
   navbar: migrate to denim
@@ -48,9 +49,13 @@ reference:
 #   desc: Define a set of probabilities of transition from one compartment to multiple compartments
 #   contents: 
 #   - multinomial
+- title: DSL parser
+  contents:
+  - denim_dsl
 - title: Simulator
   contents:
   - sim
+  - plot.denim
 - title: internal
   contents:
   - denim-package

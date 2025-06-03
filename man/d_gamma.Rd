@@ -21,4 +21,7 @@ Discrete gamma distribution
 }
 \examples{
 transitions <- list("S -> I" = d_gamma(rate = 1, shape = 5))
+transitions_dsl <- denim_dsl({S -> I = d_gamma(rate = 1, shape = 5)})
+# define model parameters as distributional parameters
+transitions_dsl <- denim_dsl({S -> I = d_gamma(rate = i_rate, shape = i_shape)})
 }

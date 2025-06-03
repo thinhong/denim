@@ -19,6 +19,5 @@ Discrete exponential distribution
 }
 \examples{
 transitions <- list("I -> D" = d_exponential(0.3))
-
-
+transitions <- denim_dsl({I -> D = d_exponential(0.3)})
 }
