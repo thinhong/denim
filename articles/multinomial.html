@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">denim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,10 +51,11 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/denim_dsl.html">denim DSL</a>
     <a class="dropdown-item" href="../articles/multinomial.html">transition to multiple states</a>
+    <a class="dropdown-item" href="../articles/nonparametric.html">nonparametric distribution</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>denim comparison</h6>
-    <a class="dropdown-item" href="../articles/denim_vs_deSolve.html">denim vs deSolve</a>
     <a class="dropdown-item" href="../articles/denim_benchmark.html">denim benchmark</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>migrate to denim</h6>
@@ -126,18 +127,18 @@ modeling.</p>
 <p>To specify the proportion that goes to each outgoing compartment,
 define the transition using the following syntax in model
 definition:</p>
-<p><code>"proportion * compartment -&gt;  out_compartment" = [transition]</code></p>
+<p><code>proportion * compartment -&gt;  out_compartment = [transition]</code></p>
 <p>Note that the <code>proportion</code> here is the proportion of
 <code>compartment</code> that will end up in
 <code>out_compartment</code> <u>at equilibrium</u>.</p>
 <p><strong><em>Example:</em></strong> An SIRD model where 90% of
 infected can recover while the remaining 10% will die.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * S * (I / N) * timeStep"</span>,</span>
-<span>  <span class="st">"0.9 * I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span>  <span class="st">"0.1 * I -&gt; D"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_exponential.html">d_exponential</a></span><span class="op">(</span><span class="fl">0.1</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/denim_dsl.html">denim_dsl</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="va">S</span> <span class="op">-&gt;</span> <span class="va">I</span> <span class="op">=</span> <span class="va">beta</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="op">(</span><span class="va">I</span> <span class="op">/</span> <span class="va">N</span><span class="op">)</span> <span class="op">*</span> <span class="va">timeStep</span></span>
+<span>  <span class="fl">0.9</span> <span class="op">*</span> <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">R</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="fl">0.1</span> <span class="op">*</span> <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">D</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_exponential.html">d_exponential</a></span><span class="op">(</span><span class="fl">0.1</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <details><summary>
     Mathematical formulation for the model
   </summary><p><span class="math display">\[
@@ -158,11 +159,11 @@ they don’t sum up to 1.</p>
 <p><strong><em>Example 2:</em></strong> The following model definition
 is equivalent to the one in <strong><em>Example 1</em></strong></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * S * (I / N) * timeStep"</span>,</span>
-<span>  <span class="st">"36 * I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span>  <span class="st">"4 * I -&gt; D"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_exponential.html">d_exponential</a></span><span class="op">(</span><span class="fl">0.1</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/denim_dsl.html">denim_dsl</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="va">S</span> <span class="op">-&gt;</span> <span class="va">I</span> <span class="op">=</span> <span class="va">beta</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="op">(</span><span class="va">I</span> <span class="op">/</span> <span class="va">N</span><span class="op">)</span> <span class="op">*</span> <span class="va">timeStep</span></span>
+<span>  <span class="fl">36</span> <span class="op">*</span> <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">R</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="fl">4</span> <span class="op">*</span> <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">D</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_exponential.html">d_exponential</a></span><span class="op">(</span><span class="fl">0.1</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -176,11 +177,11 @@ is equivalent to the one in <strong><em>Example 1</em></strong></p>
 </h4>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># model in denim</span></span>
-<span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * S * (I / N) * timeStep"</span>,</span>
-<span>  <span class="st">"0.9 * I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span>  <span class="st">"0.1 * I -&gt; D"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_exponential.html">d_exponential</a></span><span class="op">(</span><span class="fl">0.1</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
+<span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/denim_dsl.html">denim_dsl</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="va">S</span> <span class="op">-&gt;</span> <span class="va">I</span> <span class="op">=</span> <span class="va">beta</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="op">(</span><span class="va">I</span> <span class="op">/</span> <span class="va">N</span><span class="op">)</span> <span class="op">*</span> <span class="va">timeStep</span></span>
+<span>  <span class="fl">0.9</span> <span class="op">*</span> <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">R</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="fl">0.1</span> <span class="op">*</span> <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">D</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_exponential.html">d_exponential</a></span><span class="op">(</span><span class="fl">0.1</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">denimInitialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  S <span class="op">=</span> <span class="fl">999</span>, </span>
@@ -270,11 +271,11 @@ transitions as competing risks.</p>
 will treat <code>I-&gt;R</code> and <code>I-&gt;D</code> as competing
 risks.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * S * (I / N) * timeStep"</span>,</span>
-<span>  <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, shape <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
-<span>  <span class="st">"I -&gt; D"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span>, shape <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/denim_dsl.html">denim_dsl</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="va">S</span> <span class="op">-&gt;</span> <span class="va">I</span> <span class="op">=</span> <span class="va">beta</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="op">(</span><span class="va">I</span> <span class="op">/</span> <span class="va">N</span><span class="op">)</span> <span class="op">*</span> <span class="va">timeStep</span></span>
+<span>  <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">R</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, shape <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">D</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span>, shape <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-model-1">3.2. Example model<a class="anchor" aria-label="anchor" href="#example-model-1"></a>
@@ -286,11 +287,12 @@ risks.</p>
 <h4 id="model-definition-in-denim-1">Model definition in denim<a class="anchor" aria-label="anchor" href="#model-definition-in-denim-1"></a>
 </h4>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * S * (I / N) * timeStep"</span>,</span>
-<span>  <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, shape <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
-<span>  <span class="st">"I -&gt; D"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span>, shape <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/denim_dsl.html">denim_dsl</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="va">S</span> <span class="op">-&gt;</span> <span class="va">I</span> <span class="op">=</span> <span class="va">beta</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="op">(</span><span class="va">I</span> <span class="op">/</span> <span class="va">N</span><span class="op">)</span> <span class="op">*</span> <span class="va">timeStep</span></span>
+<span>  <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">R</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, shape <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">D</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span>, shape <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">denimInitialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  S <span class="op">=</span> <span class="fl">950</span>, </span>
 <span>  I <span class="op">=</span> <span class="fl">50</span>, </span>

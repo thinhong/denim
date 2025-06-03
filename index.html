@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="index.html">denim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,10 +51,11 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="articles/denim_dsl.html">denim DSL</a>
     <a class="dropdown-item" href="articles/multinomial.html">transition to multiple states</a>
+    <a class="dropdown-item" href="articles/nonparametric.html">nonparametric distribution</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>denim comparison</h6>
-    <a class="dropdown-item" href="articles/denim_vs_deSolve.html">denim vs deSolve</a>
     <a class="dropdown-item" href="articles/denim_benchmark.html">denim benchmark</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>migrate to denim</h6>
@@ -94,8 +95,11 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of denim from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>You can install denim from CRAN with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"denim"</span><span class="op">)</span></span></code></pre></div>
+<p>Or install the development version of denim from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"thinhong/denim"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -103,16 +107,16 @@
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
 <p>This is a basic example to illustrate the specification of a simple SIR model, which contains three compartments susceptible (S), infected (I) and recovered (R). The recovery probabilities of infected individuals are gamma distributed in this example:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://drthinhong.com/denim/" class="external-link">denim</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * S * I / N"</span>,</span>
-<span>  <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="reference/d_gamma.html">d_gamma</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, shape <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
+<span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/denim_dsl.html">denim_dsl</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="va">S</span> <span class="op">-&gt;</span> <span class="va">I</span> <span class="op">=</span> <span class="va">beta</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="va">I</span> <span class="op">/</span> <span class="va">N</span> <span class="op">*</span> <span class="va">timeStep</span></span>
+<span>  <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">R</span> <span class="op">=</span> <span class="fu"><a href="reference/d_gamma.html">d_gamma</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, shape <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>  beta <span class="op">=</span> <span class="fl">0.12</span>,</span>
+<span>  beta <span class="op">=</span> <span class="fl">1.2</span>,</span>
 <span>  N <span class="op">=</span> <span class="fl">1000</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -122,25 +126,25 @@
 <span>  R <span class="op">=</span> <span class="fl">0</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">simulationDuration</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span><span class="va">simulationDuration</span> <span class="op">&lt;-</span> <span class="fl">20</span></span>
 <span><span class="va">timeStep</span> <span class="op">&lt;-</span> <span class="fl">0.01</span></span>
 <span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sim.html">sim</a></span><span class="op">(</span>transitions <span class="op">=</span> <span class="va">transitions</span>, initialValues <span class="op">=</span> <span class="va">initialValues</span>, </span>
 <span>           parameters <span class="op">=</span> <span class="va">parameters</span>, simulationDuration <span class="op">=</span> <span class="va">simulationDuration</span>, </span>
 <span>           timeStep <span class="op">=</span> <span class="va">timeStep</span><span class="op">)</span></span></code></pre></div>
 <p>The output is a data frame with 4 columns: <code>Time</code>, <code>S</code>, <code>I</code> and <code>R</code></p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   Time        S        I            R</span></span>
 <span><span class="co">#&gt; 1 0.00 999.0000 1.000000 0.000000e+00</span></span>
-<span><span class="co">#&gt; 2 0.01 998.8801 1.119874 5.543225e-06</span></span>
-<span><span class="co">#&gt; 3 0.02 998.7459 1.254092 2.278823e-05</span></span>
-<span><span class="co">#&gt; 4 0.03 998.5956 1.404364 5.306419e-05</span></span>
-<span><span class="co">#&gt; 5 0.04 998.4273 1.572606 9.785981e-05</span></span>
-<span><span class="co">#&gt; 6 0.05 998.2389 1.760961 1.588423e-04</span></span></code></pre></div>
+<span><span class="co">#&gt; 2 0.01 998.9880 1.011982 5.543225e-06</span></span>
+<span><span class="co">#&gt; 3 0.02 998.9759 1.024097 2.219016e-05</span></span>
+<span><span class="co">#&gt; 4 0.03 998.9636 1.036346 5.000038e-05</span></span>
+<span><span class="co">#&gt; 5 0.04 998.9512 1.048730 8.903457e-05</span></span>
+<span><span class="co">#&gt; 6 0.05 998.9386 1.061252 1.393545e-04</span></span></code></pre></div>
 <p>We can plot the output with:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-example-plot-1.png"><!-- --></p>
 </div>
 </div>
