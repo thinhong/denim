@@ -14,7 +14,7 @@ sim(
 )
 }
 \arguments{
-\item{transitions}{a list of transitions follows this format \code{"transition" = distribution()}}
+\item{transitions}{output of function \code{denim_dsl()} or a list of transitions follows this format \code{"transition" = distribution()}}
 
 \item{initialValues}{a vector contains the initial values of all compartments defined
 in the \strong{transitions}, follows this format \code{compartment_name = initial_value}}
@@ -38,6 +38,13 @@ a data.frame with class \code{denim} that can be plotted with a \code{plot()} me
 Simulation function that call the C++ simulator
 }
 \examples{
+# model can be defined using denim DSL
+transitions <- denim_dsl({
+   S -> I = beta * S * I / N
+   I -> R = d_gamma(1/3, 2)
+})
+
+# or as a list
 transitions <- list(
    "S -> I" = "beta * S * I / N",
    "I -> R" = d_gamma(1/3, 2)

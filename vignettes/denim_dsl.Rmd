@@ -2,7 +2,7 @@
 title: "denim DSL"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{denim_dsl}
+  %\VignetteIndexEntry{denim DSL}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -44,7 +44,7 @@ Model definition written in denim DSL must be parsed by the function `denim_dsl(
 
 For math expression, some basic supported operators include: `+` for addition, `-` for minus, `*` for multiplication, `/` for division, `^` for power. Users can also define additional model parameters in the math expression.
 
-Math expressions in denim are parsed using muparser. For a full list of operators, visit the muparser website at https://beltoforion.de/en/muparser/features.php.
+Math expressions in denim are parsed using muparser. For a full list of operators, visit the muparser website at <https://beltoforion.de/en/muparser/features.php>.
 
 ***Distribution functions***
 
@@ -210,7 +210,7 @@ While denim DSL offers cleaner and more readable syntax to define model structur
 
 For example, consider a use case below, where we explore how model dynamics change under three different `I -> R` dwell time distributions (`d_gamma`, `d_weibull`, `d_lognormal`) using `map2`.
 
-```{r}
+```{r message=FALSE}
 library(tidyverse)
 # configurations for 3 different I->R transitions
 model_config <- tibble(

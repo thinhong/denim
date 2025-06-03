@@ -2,7 +2,7 @@
 title: "nonparametric distribution"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{nonparametric}
+  %\VignetteIndexEntry{nonparametric distribution}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

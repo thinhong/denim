@@ -19,6 +19,9 @@
     <loc>/articles/denim_benchmark.html</loc>
   </url>
   <url>
+    <loc>/articles/denim_dsl.html</loc>
+  </url>
+  <url>
     <loc>/articles/denim_vs_deSolve.html</loc>
   </url>
   <url>
@@ -29,6 +32,9 @@
   </url>
   <url>
     <loc>/articles/multinomial.html</loc>
+  </url>
+  <url>
+    <loc>/articles/nonparametric.html</loc>
   </url>
   <url>
     <loc>/articles/web_only/denim.html</loc>
@@ -64,6 +70,9 @@
     <loc>/reference/denim-package.html</loc>
   </url>
   <url>
+    <loc>/reference/denim_dsl.html</loc>
+  </url>
+  <url>
     <loc>/reference/index.html</loc>
   </url>
   <url>
@@ -74,6 +83,9 @@
   </url>
   <url>
     <loc>/reference/nonparametric.html</loc>
+  </url>
+  <url>
+    <loc>/reference/plot.denim.html</loc>
   </url>
   <url>
     <loc>/reference/sim.html</loc>

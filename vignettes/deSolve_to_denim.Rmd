@@ -80,7 +80,7 @@ With the transitions identified, user can then define the model in `denim`.
 
 When using `denim` DSL, the model structure is given as a set of *key*-*value* pairs where
 
--   *key* is a string showing the transition direction between compartments
+-   *key* shows the transition direction between compartments in the format of `compartment -> out_compartment`
 
 -   *value* is the built-in distribution function that describe the transition
 

@@ -218,11 +218,12 @@ void Compartment::updateCompartment(size_t iter, std::vector<std::string>& param
             }
  
             // only update chains of subCompartments in multinomial case
-            if(!this->competingRisks){
-
-                // shift subCompartments for next iteration
-                subCompartments[outIndex].pop_back();
-                subCompartments[outIndex].push_front(outWeights[outIndex]*inValue);
+            if(!this->competingRisks){                
+                if(subCompartments[outIndex].size() > (size_t) 1){
+                    // shift subCompartments for next iteration
+                    subCompartments[outIndex].pop_back();
+                    subCompartments[outIndex].push_front(outWeights[outIndex]*inValue);
+                }
             }
         }
     }

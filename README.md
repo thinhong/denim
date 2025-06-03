@@ -18,7 +18,13 @@ compartmental models with memory.
 
 ## Installation
 
-You can install the development version of denim from
+You can install denim from CRAN with:
+
+``` r
+install.packages("denim")
+```
+
+Or install the development version of denim from
 [GitHub](https://github.com/) with:
 
 ``` r
@@ -36,13 +42,13 @@ are gamma distributed in this example:
 ``` r
 library(denim)
 
-transitions <- list(
-  "S -> I" = "beta * S * I / N",
-  "I -> R" = d_gamma(rate = 1/3, shape = 2)
-)
+transitions <- denim_dsl({
+  S -> I = beta * S * I / N * timeStep
+  I -> R = d_gamma(rate = 1/3, shape = 2)
+})
 
 parameters <- c(
-  beta = 0.12,
+  beta = 1.2,
   N = 1000
 )
 
@@ -52,7 +58,7 @@ initialValues <- c(
   R = 0
 )
 
-simulationDuration <- 10
+simulationDuration <- 20
 timeStep <- 0.01
 
 mod <- sim(transitions = transitions, initialValues = initialValues, 
@@ -66,17 +72,17 @@ The output is a data frame with 4 columns: `Time`, `S`, `I` and `R`
 head(mod)
 #>   Time        S        I            R
 #> 1 0.00 999.0000 1.000000 0.000000e+00
-#> 2 0.01 998.8801 1.119874 5.543225e-06
-#> 3 0.02 998.7459 1.254092 2.278823e-05
-#> 4 0.03 998.5956 1.404364 5.306419e-05
-#> 5 0.04 998.4273 1.572606 9.785981e-05
-#> 6 0.05 998.2389 1.760961 1.588423e-04
+#> 2 0.01 998.9880 1.011982 5.543225e-06
+#> 3 0.02 998.9759 1.024097 2.219016e-05
+#> 4 0.03 998.9636 1.036346 5.000038e-05
+#> 5 0.04 998.9512 1.048730 8.903457e-05
+#> 6 0.05 998.9386 1.061252 1.393545e-04
 ```
 
 We can plot the output with:
 
 ``` r
-plot(mod)
+plot(mod, ylim = c(1, 1000))
 ```
 
 ![](man/figures/README-example-plot-1.png)<!-- -->

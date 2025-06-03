@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">denim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,10 +51,11 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/denim_dsl.html">denim DSL</a>
     <a class="dropdown-item" href="../articles/multinomial.html">transition to multiple states</a>
+    <a class="dropdown-item" href="../articles/nonparametric.html">nonparametric distribution</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>denim comparison</h6>
-    <a class="dropdown-item" href="../articles/denim_vs_deSolve.html">denim vs deSolve</a>
     <a class="dropdown-item" href="../articles/denim_benchmark.html">denim benchmark</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>migrate to denim</h6>
@@ -170,20 +171,21 @@ in their <code>deSolve</code> model.</p>
 <span><span class="op">}</span></span></code></pre></div>
 </details><p>With the transitions identified, user can then define the model in
 <code>denim</code>.</p>
-<p>When using <code>denim</code>, the model structure is given as a
-<code>list</code> of <em>key</em>-<em>value</em> pairs where</p>
+<p>When using <code>denim</code> DSL, the model structure is given as a
+set of <em>key</em>-<em>value</em> pairs where</p>
 <ul>
-<li><p><em>key</em> is a string showing the transition direction between
-compartments</p></li>
+<li><p><em>key</em> shows the transition direction between compartments
+in the format of <code>compartment -&gt; out_compartment</code></p></li>
 <li><p><em>value</em> is the built-in distribution function that
 describe the transition</p></li>
 </ul>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># --- Transition def for denim</span></span>
-<span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * S * I/N * timeStep"</span>,</span>
-<span>  <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, shape <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="co"># shape is 2 from number of I sub compartments</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># --- Model definition in denim</span></span>
+<span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/denim_dsl.html">denim_dsl</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="va">S</span> <span class="op">-&gt;</span> <span class="va">I</span> <span class="op">=</span> <span class="va">beta</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="va">I</span><span class="op">/</span><span class="va">N</span> <span class="op">*</span> <span class="va">timeStep</span></span>
+<span>  <span class="co"># shape is 2 from number of I sub compartments</span></span>
+<span>  <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">R</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, shape <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> </span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <p>Note that when converting an ODE to a math expression, we must
 multiply the original expression with time step duration (variable
 <code>timeStep</code> in the model definition code). This is because we
@@ -217,6 +219,17 @@ consist of <code>I1</code> and <code>I2</code> sub-compartments), the
 initial population is always assigned to the first sub-compartment. In
 our example, since <code>I = 1</code>, denim will assign
 <code>I1 = 1</code> and <code>I2 = 0</code>.</p>
+<p>There is also an option to distribute initial value across
+sub-compartments based on the specified distribution. To do this, simply
+set <code>dist_init</code> parameter of distribution function to
+<code>TRUE</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/denim_dsl.html">denim_dsl</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="va">S</span> <span class="op">-&gt;</span> <span class="va">I</span> <span class="op">=</span> <span class="va">beta</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="va">I</span><span class="op">/</span><span class="va">N</span> <span class="op">*</span> <span class="va">timeStep</span></span>
+<span>  <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">R</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, shape <span class="op">=</span> <span class="fl">2</span>, dist_init <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
+<p>However, for comparison purposes, we will keep this option
+<code>FALSE</code> for the remaining of this demonstration.</p>
 </div>
 <div class="section level3">
 <h3 id="simulation">Simulation<a class="anchor" aria-label="anchor" href="#simulation"></a>
@@ -231,7 +244,7 @@ set to a small value for the result to closely follow that of
 <p>Note that the value for parameter <code>timeStep</code> is also the
 value for variable <code>timeStep</code> in the mathematical
 equation.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim.html">sim</a></span><span class="op">(</span>transitions <span class="op">=</span> <span class="va">transitions</span>,</span>
 <span>             initialValues <span class="op">=</span> <span class="va">denim_initialValues</span>, </span>
 <span>             parameters <span class="op">=</span> <span class="va">denim_parameters</span>,</span>
@@ -253,7 +266,7 @@ equation.</p>
 </h2>
 <p>The following plots show output from <code>denim</code> and
 <code>deSolve</code></p>
-<p><img src="deSolve_to_denim_files/figure-html/unnamed-chunk-7-1.png" width="2400"><img src="deSolve_to_denim_files/figure-html/unnamed-chunk-7-2.png" width="2400"><img src="deSolve_to_denim_files/figure-html/unnamed-chunk-7-3.png" width="2400"></p>
+<p><img src="deSolve_to_denim_files/figure-html/unnamed-chunk-8-1.png" width="2400"><img src="deSolve_to_denim_files/figure-html/unnamed-chunk-8-2.png" width="2400"><img src="deSolve_to_denim_files/figure-html/unnamed-chunk-8-3.png" width="2400"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

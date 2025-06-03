@@ -256,7 +256,7 @@ Current available distributions in this package including:
 
 -   `d_lognormal(mu, sigma)`: Discrete **log-normal distribution** with parameters `mu` and `sigma`
 
--   `nonparametric(waitingTimes...)`: A **vector of values**, could be numbers, percentages, density of the length of stay based on real data, `denim` will convert it into a distribution
+-   `nonparametric(waitingTimes)`: A **vector of values**, could be numbers, percentages, density of the length of stay based on real data, `denim` will convert it into a distribution
 
 Mathematical expression: Transition can also be described using a math expression such as `beta * S * I / N`. You will need to define parameters that are not compartment names in the `parameters` argument
 

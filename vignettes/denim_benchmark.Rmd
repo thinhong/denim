@@ -97,9 +97,10 @@ else:
   # multithread instead for quicker result
   with concurrent.futures.ProcessPoolExecutor(max_workers=8) as executor:
     python_runs = list(executor.map(get_python_runtime, range(r.total_runs)))
-  
-# mean(python_runs)
-
+  # Save to cache
+  with open(cached_python_runs, 'wb') as f:
+      pickle.dump(python_runs, f)
+      
 # plot_useir((df,), ('G',), T = 'uSEIR', figsize=(14,8))
 # print(f'python solve_seir call: dr = {end-start}')
 ```
@@ -177,7 +178,6 @@ Median run time for uSEIR approach, Cython implementation: `r median(py$cython_r
 <details>
   <summary>Code for running SEIR in <code>deSolve</code></summary>
 ```
-
 ```{r}
 library(deSolve)
 parameters <- c(gamma_rate_I = 1/4, shape_I=2,
@@ -227,6 +227,7 @@ Run time for `deSolve` implementation
 ```{r}
 desolve_runs$time
 ```
+
 Median run time for deSolve, with model defined in R: `r desolve_runs$median` seconds
 
 ### Model in C
@@ -267,6 +268,7 @@ Run time for `deSolve` with model defined in C
 ```{r}
 deSolve_c_runs$time
 ```
+
 Median run time for deSolve, with model defined in C: `r deSolve_c_runs$median` seconds
 
 ### Model in Fortran
@@ -299,15 +301,193 @@ deSolve_fortran_runs <- bench::mark(
 dyn.unload("../supplements/desolve_mod/benchmark_mod_fortran.so")
 ```
 
-```{=html}
 </details>
-```
+
 ```{r}
 deSolve_fortran_runs$time
 ```
+
 Median run time for deSolve, with model defined in Fortran: `r deSolve_fortran_runs$median` seconds
 
+## odin {#sec-odin}
+
+We also implement uSEIR model with denim's algorithm using `odin` package for comparison
+
+<details>
+
+<summary>Code for running SEIR in `odin`</summary>
+
+```{r model definition and helper}
+# ---- Install packages -----
+# install.packages(
+#   "odin2",
+#   repos = c("https://mrc-ide.r-universe.dev", "https://cloud.r-project.org"))
+# install.packages(
+#   "dust2",
+#   repos = c("https://mrc-ide.r-universe.dev", "https://cloud.r-project.org"))
+library(odin2)
+
+odin_mod <- odin2::odin(
+  {
+    # ----- Define algo to update compartments here ---------
+    update(S) <- S - dt * (R0/tr) * S * sum(I)/N
+
+    # --- E compartment ------
+    update(E[1]) <- dt * (R0/tr) * S * sum(I)/N
+    # starting from 2: to simulate individuals staying in E for another timestep
+    update(E[2:e_maxtime]) <- E[i-1]*(1-e_transprob[i-1])
+    
+    # compute total population from E -> I
+    dim(E_to_I) <- e_maxtime
+    E_to_I[1:e_maxtime] <- e_transprob[i]*E[i]
+    sum_E_to_I <- sum(E_to_I)
+    
+    # --- I compartment ------
+    update(I[1]) <- sum_E_to_I
+    update(I[2:i_maxtime]) <- I[i-1]*(1-i_transprob[i-1])
+    
+    # compute total population from I -> R
+    dim(I_to_R) <- i_maxtime
+    I_to_R[1:i_maxtime] <- i_transprob[i]*I[i]
+    sum_I_to_R <- sum(I_to_R)
+
+    # --- R compartment ------
+    update(R) <- R + sum_I_to_R
+    
+    # initialize population from input
+    initial(S) <- S_init
+    initial(E[]) <- E_init[i]
+    dim(E) <- e_maxtime
+    initial(I[]) <- I_init[i]
+    dim(I) <- i_maxtime
+    initial(R) <- R_init
+
+    # ----- Inputs -------
+    R0 <- parameter()
+    tr <- parameter()
+    
+    # transition prob of E
+    e_transprob<- parameter()
+    e_maxtime <- parameter()
+    dim(e_transprob) <- e_maxtime
+    
+    # transition prob of I
+    i_transprob <- parameter()
+    i_maxtime <- parameter()
+    dim(i_transprob) <- i_maxtime
+    
+    
+    # initial populations
+    S_init <- user()
+    E_init <- user()
+    dim(E_init) <- e_maxtime
+    I_init <- user()
+    dim(I_init) <- i_maxtime
+    R_init <- user()
+    N <- parameter(1000)
+  }
+)
+
+compute_transprob <- function(dist_func,..., timestep=0.05, error_tolerance=0.001){
+  maxtime <- timestep
+  prev_prob <- 0
+  transprob <- numeric()
+  cumulative_dist <- numeric()
+  prob_dist <- numeric()
+  
+  while(TRUE){
+     # get current cumulative prob and check whether it is sufficiently close to 1
+     temp_prob <-  ifelse(
+       dist_func(maxtime, ...) < (1 - error_tolerance), 
+       dist_func(maxtime, ...), 
+       1);
+     cumulative_dist <- c(cumulative_dist, temp_prob)
+     
+     # get f(t)
+     curr_prob <- temp_prob - prev_prob
+     prob_dist <- c(prob_dist, curr_prob)
+     
+     # compute transprob
+     curr_transprob <- curr_prob/(1-prev_prob)
+     transprob <- c(transprob, curr_transprob)
+     
+     prev_prob <- temp_prob
+     maxtime <- maxtime + timestep
+     
+     if(temp_prob == 1){
+       break
+     }
+  }
+  
+  data.frame(
+    prob_dist = prob_dist,
+    cumulative_dist = cumulative_dist,
+    transprob = transprob
+  )
+}
+```
+
+Run model for bench mark. Note that the process of computing the transition probability is also included as part of the benchmark for a fair comparison with denim.
+
+```{r}
+timeStep <- 0.01
+errorTolerance <- 0.001
+
+# ---- Get runtimes ----
+odin_runs <- bench::mark(
+  {
+    # ---- Compute transprob ----- 
+    e_transprob <- compute_transprob(pgamma, rate=1/4, shape=2, 
+                                     timestep = timeStep, error_tolerance = errorTolerance)$transprob
+    i_transprob <- compute_transprob(pgamma, rate=1/3, shape=2, 
+                                     timestep = timeStep, error_tolerance = errorTolerance)$transprob
+    
+    # ---- Run model and plot ----- 
+    # initialize params
+    odin_pars <- list(
+      R0 = 3.5, 
+      tr = 3*2, # compute mean recovery time, for gamma it's scale*shape
+      N = 1e6,
+      e_transprob = e_transprob,
+      e_maxtime = length(e_transprob),
+      i_transprob = i_transprob,
+      i_maxtime = length(i_transprob),
+      S_init = 999999, 
+      E_init = array( c(1, rep(0, length(e_transprob) - 1) ) ),
+      I_init = array( rep(0, length(i_transprob)) ),
+      R_init = 0
+    )
+    
+    # run model
+    t_seq <- seq(0, sim_duration, 0.25)
+    odin_seir <- dust2::dust_system_create(odin_mod, odin_pars, dt = timeStep)
+    dust2::dust_system_set_state_initial(odin_seir)
+    out <- dust2::dust_system_simulate(odin_seir, t_seq)
+    out <- dust2::dust_unpack_state(odin_seir, out)
+  },
+  iterations = total_runs
+)
+
+odin_out <- data.frame(
+  t = t_seq,
+  S = out$S,
+  E = colSums(out$E),
+  I = colSums(out$I),
+  R = out$R
+)
+```
+
+</details>
+
+```{r}
+odin_runs$time
+```
+
+Median run time for odin: `r odin_runs$median` seconds
+
 ## denim
+
+### Parametric
 
 <details>
 
@@ -315,6 +495,7 @@ Median run time for deSolve, with model defined in Fortran: `r deSolve_fortran_r
 
 ```{r}
 timeStep <- 0.01
+errorTolerance <- 0.001
 
 library(denim)
 
@@ -331,10 +512,14 @@ parameters <- c(R0 = 3.5,
 
 # ---- Get runtimes ----
 denim_runs <- bench::mark(
-  sim(transitions = denim_model,
-                     initialValues = initialValues,
-                     parameters = parameters,
-                     simulationDuration = sim_duration, timeStep = timeStep),
+  sim(
+    transitions = denim_model,
+    initialValues = initialValues,
+    parameters = parameters,
+    simulationDuration = sim_duration,
+    timeStep = timeStep,
+    errorTolerance = errorTolerance
+  ), 
   iterations = total_runs
 )
 
@@ -356,6 +541,66 @@ denim_runs$time
 
 Median run time for denim: `r denim_runs$median` seconds
 
+### Nonparametric
+
+We can also define the SEIR model in denim using function `nonparametric()` where the dwell-time distribution will be pre-computed using the helper function from Section \@ref(sec-odin)
+
+<details>
+
+<summary>Code for running SEIR in `denim`</summary>
+
+```{r}
+timeStep <- 0.01
+errorTolerance <- 0.001
+
+denim_nonparametric_model <- denim_dsl({
+  S -> E = (R0/tr) * timeStep * S * (I/N) # formulate according that of uSEIR method
+  E -> I = nonparametric(ei_dist) #ei_dist is considered a model parameter
+  I -> R = nonparametric(ir_dist) #ir_dist is also a model parameter
+})
+
+initialValues2 <- c(S = 999999, E = 1, I= 0, R= 0)
+
+ei_dist <- compute_transprob(pgamma, rate = 1/4, shape = 2, 
+                             timestep = timeStep, error_tolerance = errorTolerance)$prob_dist
+ir_dist <- compute_transprob(pgamma, rate = 1/3, shape = 2, 
+                             timestep = timeStep, error_tolerance = errorTolerance)$prob_dist
+
+parameters2 <- list(R0 = 3.5, 
+                tr = 3*2, # compute mean recovery time, for gamma it's scale*shape
+                N = 1e6,
+                ei_dist = ei_dist, 
+                ir_dist = ir_dist)
+
+# ---- Get runtimes ----
+denim_nonparametric_runs <- bench::mark(
+  sim(transitions = denim_nonparametric_model,
+                     initialValues = initialValues2,
+                     parameters = parameters2,
+                     simulationDuration = sim_duration, timeStep = timeStep),
+  iterations = total_runs
+)
+
+
+# ---- Get output ----
+denim_nonparametric_out <- sim(transitions = denim_nonparametric_model, 
+                     initialValues = initialValues2,
+                     parameters = parameters2,
+                     simulationDuration = sim_duration, timeStep = timeStep)
+
+
+```
+</details>
+
+Run time for `denim`, using `nonparametric()` with pre-computed distribution
+
+```{r}
+denim_nonparametric_runs$time
+```
+
+Median run time for denim using `nonparametric()` with pre-computed distribution: `r denim_nonparametric_runs$median` seconds.
+This longer run time compared to parametric approach is due to the overhead of interfacing large vectors (`ei_dist` and `ir_dist` in this example) between R and C++. For this reason, it is recommended to only use `nonparametric()` when the observed distribution cannot be adequately represented by one of the available parametric transitions.
+
 ## Visualize output
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
@@ -366,7 +611,11 @@ df <- as.data.frame(py$to_r_df)
 
 # comput prop to compare with uSEIR
 rescaled_denim <- denim_out
-rescaled_denim[, c("S","E", "I", "R")] <- denim_out[, c("S","E", "I", "R")]/1e6
+rescaled_denim[, c("S","E", "I", "R")] <- rescaled_denim[, c("S","E", "I", "R")]/1e6
+
+# comput prop for odin output
+rescaled_odin <- odin_out
+rescaled_odin[, c("S","E", "I", "R")] <- rescaled_odin[, c("S","E", "I", "R")]/1e6
 
 # compute prop for deSolve output as well
 rescaled_desolve <- ode_mod
@@ -395,6 +644,9 @@ plot_seir_util(rescaled_denim)
 # --- deSolve output ----
 plot_seir_util(rescaled_desolve, time_col = "time", mod_name = "deSolve")
 
+# --- odin output ----
+plot_seir_util(rescaled_odin, time_col = "t", mod_name = "odin")
+
 # --- uSEIR output ---- 
 plot_seir_util(df, time_col = "t", mod_name = "uSEIR")
 ```
@@ -413,26 +665,28 @@ plot(x = 1:total_runs, y = py$cython_runs, type = "p", col = "blueviolet",
 lines(x = 1:total_runs, y = rep(median(py$cython_runs), total_runs), col = "blueviolet", lty = 2)
 points(x = 1:total_runs, y = as.numeric(denim_runs$time[[1]]), col = "red")
 lines(x = 1:total_runs, y = rep(median(denim_runs$time[[1]]), total_runs), col = "red", lty = 2)
+points(x = 1:total_runs, y = as.numeric(odin_runs$time[[1]]), col = "cornflowerblue")
+lines(x = 1:total_runs, y = rep(median(odin_runs$time[[1]]), total_runs), col = "cornflowerblue", lty = 2)
 points(x = 1:total_runs, y = as.numeric(desolve_runs$time[[1]]), col = "darkgreen")
 lines(x = 1:total_runs, y = rep(median(desolve_runs$time[[1]]), total_runs), col = "darkgreen", lty = 2)
 legend(x = 53, y = 0.9,
-       legend = c("uSEIR (Cython)", "denim", "deSolve (model in R)"), 
-       col = c("blueviolet", "red", "darkgreen"),
+       legend = c("uSEIR (Cython)", "denim", "odin", "deSolve (model in R)"), 
+       col = c("blueviolet", "red","cornflowerblue", "darkgreen"),
        lty = 1, cex = 0.7)
 
 # Restore default clipping rect
 par(mar=c(5, 4, 4, 2) + 0.1)
 ```
 
-
 ## Run time scaling in denim
-It is worth noting that runtime for denim is also dependent on duration of time step (`timeStep` parameter for `sim`). 
+
+It is worth noting that runtime for denim is also dependent on duration of time step (`timeStep` parameter for `sim`).
 
 The following plot demonstrates how run time changes as value for timeStep changes, using the same model for benchmarking. The values for timeStep being evaluated are `[0.01, 0.02, 0.05, 0.1, 0.25, 0.5, 1]`.
 
 ```{r echo=FALSE}
 timeStepDurations <- c(0.01, 0.02, 0.05, 0.1, 0.25, 0.5, 1)
-runtime_scaling <- lapply(timeStepDurations, 
+runtime_scaling <- sapply(timeStepDurations, 
      \(x){
        time <- bench::mark(
          sim(transitions = denim_model,
@@ -445,6 +699,7 @@ runtime_scaling <- lapply(timeStepDurations,
      }
    )
 ```
+
 ```{r echo=FALSE, warning=FALSE}
 plot(x = timeStepDurations, y = runtime_scaling, col = "cornflowerblue",
      xlab = "Time step duration",
@@ -457,4 +712,3 @@ abline(v = 1, col = "blueviolet", lty = 2, lwd = 2)
 text(x = timeStep, y = max(unlist(runtime_scaling)), labels = "timeStep for benchmarking", col = "red", pos = 4)
 text(x = 1, y = max(unlist(runtime_scaling)), labels = "default timeStep", col = "blueviolet", pos = 2)
 ```
-
