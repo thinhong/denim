@@ -147,6 +147,13 @@ d_lognormal <- function(mu, sigma, dist_init = FALSE) {
 #' params <- c(N = 1000, beta = 0.3)
 #' @export
 mathexpr <- function(expr) {
+  # change in API, timeStep is now automatically multiplied internally
+  pattern <- "\\* *timeStep($| )*"
+  if(grepl(pattern, expr)){
+    warning("denim now automatically multiply timeStep internally, `* timeStep` will be remove")
+    expr <- gsub(pattern, "", expr)
+  }
+  
   distr <- list(
     distribution = "mathExpression",
     expression = expr)

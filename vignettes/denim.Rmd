@@ -116,18 +116,16 @@ We have two transitions `S -> I` and `I -> R` in this case. The transitions are 
 
 ```{r}
 transitions <- list(
-  "S -> I" = "beta * S * I / N * timeStep",
+  "S -> I" = "beta * S * I / N",
   "I -> R" = d_gamma(rate = 1/2, 3)
 )
 ```
-
-Where `timeStep` is the duration of a time step used for simulation.
 
 Another option to define the transitions is by using denim's DSL. Refer to the [Model definition in denim](./denim_dsl.html) article for more information.
 
 ```{r}
 transitions <- denim_dsl({
-  S -> I = beta * (I/N) * S * timeStep
+  S -> I = beta * (I/N) * S
   I -> R = d_gamma(rate = 1/4, shape = 3)
 })
 ```
@@ -154,8 +152,6 @@ parameters <- c(
   N = 1000
 )
 ```
-
-Note that we do not need to specify variable `timeStep` since denim will automatically use the `timeStep` from the simulation settings in the next step.
 
 **Model application**
 
@@ -237,7 +233,7 @@ User can also choose to distribute initial population across sub-compartments ba
 
 ```{r eval=FALSE}
 transitions <- denim_dsl({
-  S -> I = beta * S * I / N * timeStep
+  S -> I = beta * S * I / N 
   I -> R = d_gamma(rate = 1/2, 3, dist_init=TRUE)
 })
 ```

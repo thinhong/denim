@@ -24,7 +24,7 @@ In denim, users have 2 options to define dwell-time distribution:
 
 -   As a parametric distribution: using `d_*()` functions.
 
--   As a non-parametric distribution: using `nonparametric()` function and user must provide the histogram of distribution where bin-width matches `timeStep`.
+-   As a non-parametric distribution: using `nonparametric()` function and user must provide the histogram of distribution where bin-width matches time step.
 
 ### Example 1
 
@@ -34,7 +34,7 @@ To demonstrate the difference between 2 approaches, we can try modeling an SIR m
 
 ```{r}
 sir_parametric <- denim_dsl({
-  S -> I = beta * (I/N) * S * timeStep
+  S -> I = beta * (I/N) * S
   I -> R = d_weibull(scale = r_scale, shape = r_shape)
 })
 ```
@@ -45,7 +45,7 @@ Model parameters that must be defined are: `beta`, `N`, `r_scale`, `r_shape`
 
 ```{r}
 sir_nonparametric <- denim_dsl({
-  S -> I = beta * (I/N) * S * timeStep
+  S -> I = beta * (I/N) * S
   I -> R = nonparametric(dwelltime_dist)
 })
 ```

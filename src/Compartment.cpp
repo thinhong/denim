@@ -303,7 +303,8 @@ void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<
 
     // try evaluation
     try {
-        double computeValue = parser.Eval();
+        // automatically multiply by timeStep internally
+        double computeValue = parser.Eval() * timeStep;
     } catch (mu::Parser::exception_type &e) {
         // std::cerr << "Failed to evaluate expression: " 
         //         << outDistributions[outIndex]->getDistName() << "\n"
@@ -317,8 +318,7 @@ void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<
     }
 
     // The result of this math expression is the outTotals of this outIndex
-    // double computeValue = outWeights[outIndex] * parser.Eval(); //deprecated code
-    double computeValue = parser.Eval();
+    double computeValue = parser.Eval() * timeStep;
 
     double sumOutTotal = std::accumulate(this -> outTotals.begin(), this -> outTotals.end(), (double) 0);
     

@@ -1,6 +1,7 @@
 ---
 title: "deSolve to denim"
-output: rmarkdown::html_vignette
+# output: rmarkdown::html_vignette
+output: word_document
 vignette: >
   %\VignetteIndexEntry{deSolve to denim}
   %\VignetteEngine{knitr::rmarkdown}
@@ -87,13 +88,11 @@ When using `denim` DSL, the model structure is given as a set of *key*-*value* p
 ```{r}
 # --- Model definition in denim
 transitions <- denim_dsl({
-  S -> I = beta * S * I/N * timeStep
+  S -> I = beta * S * I/N
   # shape is 2 from number of I sub compartments
   I -> R = d_gamma(rate = 1/3, shape = 2) 
 })
 ```
-
-Note that when converting an ODE to a math expression, we must multiply the original expression with time step duration (variable `timeStep` in the model definition code). This is because we are essentially using Euler's method to estimate the solution for the ODE.
 
 ### Model configurations
 
@@ -115,7 +114,7 @@ There is also an option to distribute initial value across sub-compartments base
 
 ```{r eval=FALSE}
 transitions <- denim_dsl({
-  S -> I = beta * S * I/N * timeStep
+  S -> I = beta * S * I/N 
   I -> R = d_gamma(rate = 1/3, shape = 2, dist_init = TRUE) 
 })
 ```
@@ -127,8 +126,6 @@ However, for comparison purposes, we will keep this option `FALSE` for the remai
 Lastly, users need to define the simulation duration and time step for `denim` to run. Unlike `deSolve` which takes a time sequence, `denim` only require the [simulation duration]{.underline} and [time step.]{.underline}
 
 Since `denim` is a discrete time model, time step must be set to a small value for the result to closely follow that of `deSolve` (in this example, 0.01).
-
-Note that the value for parameter `timeStep` is also the value for variable `timeStep` in the mathematical equation.
 
 ```{r}
 mod <- sim(transitions = transitions,

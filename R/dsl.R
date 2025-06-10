@@ -12,7 +12,7 @@
 #'
 #' @examples
 #' transitions <- denim_dsl({
-#'   S -> I = beta * (I/N) * S * timeStep
+#'   S -> I = beta * (I/N) * S 
 #'   I -> R = d_gamma(rate = 1/4, shape = 3)
 #' })
 denim_dsl <- function(x) {

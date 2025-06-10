@@ -43,7 +43,7 @@ are gamma distributed in this example:
 library(denim)
 
 transitions <- denim_dsl({
-  S -> I = beta * S * I / N * timeStep
+  S -> I = beta * S * I / N
   I -> R = d_gamma(rate = 1/3, shape = 2)
 })
 
