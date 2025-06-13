@@ -12,7 +12,7 @@ test_that("Compare result for model definition using DSL vs list", {
   # --- model as list
   model_list <- list(
     "S -> I" = "beta* S * (I + IV) / N",
-    "S -> V "= 2,
+    "S -> V "= "2",
     "0.1 * I -> D" = d_lognormal(mu = 2, sigma = 1/5),
     "0.9 * I -> R" = d_gamma(rate = 1/3, shape = 1.8),
     "V -> IV" = "0.1 * beta * V * (I + IV) / N",
@@ -29,7 +29,7 @@ test_that("Compare result for model definition using DSL vs list", {
   )
   
   parameters <- c(
-    beta = 0.12,
+    beta = 1.2,
     N = 1000
   )
   

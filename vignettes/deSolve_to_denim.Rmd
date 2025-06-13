@@ -1,7 +1,6 @@
 ---
 title: "deSolve to denim"
-# output: rmarkdown::html_vignette
-output: word_document
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{deSolve to denim}
   %\VignetteEngine{knitr::rmarkdown}
