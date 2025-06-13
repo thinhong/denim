@@ -146,55 +146,59 @@ on the distribution of dwell time:</p>
 <li><p>For non-parametric distributions:
 <code><a href="../reference/nonparametric.html">nonparametric()</a></code></p></li>
 </ul>
-<p>Each of these functions accepts either <u>fixed numeric values</u> or
-<u>model parameters</u> as inputs for their distributional parameters.
-Note that current version of denim <span style="color: red">does not
-accept mathematical expression as a distribution’s
-parameters.</span></p>
+<p>Each of these functions accepts either <u>fixed numerical values</u>
+or <u>model parameters</u> as inputs for their distributional
+parameters.</p>
 <div class="section level3">
 <h3 id="define-a-classic-sir-model">Define a classic SIR model<a class="anchor" aria-label="anchor" href="#define-a-classic-sir-model"></a>
 </h3>
 <p>A classic SIR model can be defined in denim as followed</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sir_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/denim_dsl.html">denim_dsl</a></span><span class="op">(</span><span class="op">{</span></span>
-<span>  <span class="va">S</span> <span class="op">-&gt;</span> <span class="va">I</span> <span class="op">=</span> <span class="va">beta</span> <span class="op">*</span> <span class="op">(</span><span class="va">I</span><span class="op">/</span><span class="va">N</span><span class="op">)</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="va">timeStep</span></span>
+<span>  <span class="va">S</span> <span class="op">-&gt;</span> <span class="va">I</span> <span class="op">=</span> <span class="va">beta</span> <span class="op">*</span> <span class="op">(</span><span class="va">I</span><span class="op">/</span><span class="va">N</span><span class="op">)</span> <span class="op">*</span> <span class="va">S</span></span>
 <span>  <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">R</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_exponential.html">d_exponential</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="va">gamma</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
-<p>Any variable on the right hand side (RHS) of the transitions
-definition (that are not compartments) will be considered model
-parameters and <u>their values must be provided later on</u>.</p>
-<p>In this example, model parameters are: <code>N</code>,
-<code>beta</code>, <code>S</code>, <code>gamma</code>.</p>
-<p><code>timeStep</code> is a special variable in denim that
-automatically uses the time step defined in simulation configuration as
-it’s value. Note that this special variable can ONLY be used within math
-expression.</p>
-<p>Users can also choose to provide fixed values as the distributional
-parameter as followed</p>
+<p><code><a href="../reference/denim_dsl.html">denim_dsl()</a></code> parses the given expression and return an R
+<code>list</code> as followed.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sir_model</span></span>
+<span><span class="co">#&gt; $`S -&gt; I`</span></span>
+<span><span class="co">#&gt; [1] "beta * (I/N) * S"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $`I -&gt; R`</span></span>
+<span><span class="co">#&gt; Discretized exponential distribution</span></span>
+<span><span class="co">#&gt; Rate = gamma</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attr(,"class")</span></span>
+<span><span class="co">#&gt; [1] "denim_transition"</span></span></code></pre></div>
+<p>In this example, model parameters are: <code>N</code>,
+<code>beta</code>, <code>gamma</code>.</p>
+<p>Users can also choose to provide fixed values as the distributional
+parameter as followed.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sir_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/denim_dsl.html">denim_dsl</a></span><span class="op">(</span><span class="op">{</span></span>
-<span>  <span class="va">S</span> <span class="op">-&gt;</span> <span class="va">I</span> <span class="op">=</span> <span class="va">beta</span><span class="op">*</span><span class="op">(</span><span class="va">I</span><span class="op">/</span><span class="va">N</span><span class="op">)</span><span class="op">*</span><span class="va">S</span><span class="op">*</span><span class="va">timeStep</span></span>
+<span>  <span class="va">S</span> <span class="op">-&gt;</span> <span class="va">I</span> <span class="op">=</span> <span class="va">beta</span><span class="op">*</span><span class="op">(</span><span class="va">I</span><span class="op">/</span><span class="va">N</span><span class="op">)</span><span class="op">*</span><span class="va">S</span></span>
 <span>  <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">R</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_exponential.html">d_exponential</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <p>Similar to R, users can also add comments in denim DSL by starting
 the comment with <code>#</code> sign.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sir_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/denim_dsl.html">denim_dsl</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="co"># this is a comment</span></span>
-<span>  <span class="va">S</span> <span class="op">-&gt;</span> <span class="va">I</span> <span class="op">=</span> <span class="va">beta</span><span class="op">*</span><span class="op">(</span><span class="va">I</span><span class="op">/</span><span class="va">N</span><span class="op">)</span><span class="op">*</span><span class="va">S</span><span class="op">*</span><span class="va">timeStep</span></span>
+<span>  <span class="va">S</span> <span class="op">-&gt;</span> <span class="va">I</span> <span class="op">=</span> <span class="va">beta</span><span class="op">*</span><span class="op">(</span><span class="va">I</span><span class="op">/</span><span class="va">N</span><span class="op">)</span><span class="op">*</span><span class="va">S</span></span>
 <span>  <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">R</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_exponential.html">d_exponential</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="co"># this is another comment</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <p><strong><em>Run model</em></strong></p>
 <p>To run the model, users must provide:</p>
 <ul>
 <li><p>Values for model parameters (in this example, <code>N</code>,
-<code>beta</code>, <code>S</code> and <code>gamma</code>).</p></li>
+<code>beta</code>, and <code>gamma</code>).</p></li>
 <li><p>Initial population for the compartments.</p></li>
 <li><p>Simulation configurations.</p></li>
 </ul>
 <p>Parameters and initial values can be defined as <u>named vectors</u>
 or <u>named lists</u> in R.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># parameters for the model</span></span>
 <span><span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  beta <span class="op">=</span> <span class="fl">0.4</span>,</span>
@@ -215,27 +219,26 @@ model.</p></li>
 <li><p><code>simulationDuration</code> is the duration to run the
 simulation.</p></li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim.html">sim</a></span><span class="op">(</span><span class="va">sir_model</span>, </span>
 <span>    parameters <span class="op">=</span> <span class="va">parameters</span>, </span>
 <span>    initialValues <span class="op">=</span> <span class="va">initValues</span>, </span>
 <span>    timeStep <span class="op">=</span> <span class="fl">0.01</span>,</span>
 <span>    simulationDuration <span class="op">=</span> <span class="fl">40</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="denim_dsl_files/figure-html/unnamed-chunk-7-1.png" width="2187.5"></p>
+<p><img src="denim_dsl_files/figure-html/unnamed-chunk-8-1.png" width="2187.5"></p>
 </div>
 <div class="section level3">
 <h3 id="time-varying-transition">Time varying transition<a class="anchor" aria-label="anchor" href="#time-varying-transition"></a>
 </h3>
-<p>Aside from <code>timeStep</code>, denim also have another special
-variable <code>time</code> for time varying transition (e.g. for
-modeling seasonality). Note that this variable can ONLY be used within
-math expression.</p>
+<p>variable <code>time</code> is a special variable in denim for time
+varying transition (e.g. for modeling seasonality). Note that this
+variable can ONLY be used within math expression.</p>
 <p>Example: time varying transition</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">time_varying_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/denim_dsl.html">denim_dsl</a></span><span class="op">(</span><span class="op">{</span></span>
-<span>  <span class="va">A</span> <span class="op">-&gt;</span> <span class="va">B</span> <span class="op">=</span> <span class="fl">20</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">cos</a></span><span class="op">(</span><span class="va">omega</span> <span class="op">*</span> <span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="va">timeStep</span></span>
+<span>  <span class="va">A</span> <span class="op">-&gt;</span> <span class="va">B</span> <span class="op">=</span> <span class="fl">20</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">cos</a></span><span class="op">(</span><span class="va">omega</span> <span class="op">*</span> <span class="va">time</span><span class="op">)</span><span class="op">)</span> </span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># parameters for the model</span></span>
@@ -252,35 +255,35 @@ math expression.</p>
 <span>    simulationDuration <span class="op">=</span> <span class="fl">40</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="denim_dsl_files/figure-html/unnamed-chunk-8-1.png" width="2187.5"></p>
+<p><img src="denim_dsl_files/figure-html/unnamed-chunk-9-1.png" width="2187.5"></p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="r-list">R list<a class="anchor" aria-label="anchor" href="#r-list"></a>
 </h2>
-<p>Users can also define the model structure as a list in R. For
+<p>Users can define the model structure directly as a list in R. For
 example, the SIR model from previous example can be represented as
 followed.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sir_model_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * (I/N) * S * timeStep"</span>,</span>
+<span>  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * (I/N) * S"</span>,</span>
 <span>  <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_exponential.html">d_exponential</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="st">"gamma"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">sir_model_list</span></span>
 <span><span class="co">#&gt; $`S -&gt; I`</span></span>
-<span><span class="co">#&gt; [1] "beta * (I/N) * S * timeStep"</span></span>
+<span><span class="co">#&gt; [1] "beta * (I/N) * S"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $`I -&gt; R`</span></span>
 <span><span class="co">#&gt; Discretized exponential distribution</span></span>
 <span><span class="co">#&gt; Rate = gamma</span></span></code></pre></div>
 <p>Note that the transitions (<code>S -&gt; I</code>,
 <code>I -&gt; R</code>), mathematical expression
-(<code>beta * (I/N) * S * timeStep</code>), and the model parameter
+(<code>beta * (I/N) * S</code>), and the model parameter
 (<code>gamma</code>) must now be provided as strings.</p>
 <p>We can then run the model in the same manner as previously
 demonstrated.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># parameters for the model</span></span>
 <span><span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  beta <span class="op">=</span> <span class="fl">0.4</span>,</span>
@@ -301,7 +304,7 @@ demonstrated.</p>
 <span>    simulationDuration <span class="op">=</span> <span class="fl">40</span><span class="op">)</span></span>
 <span><span class="co"># plot output</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="denim_dsl_files/figure-html/unnamed-chunk-10-1.png" width="2187.5"></p>
+<p><img src="denim_dsl_files/figure-html/unnamed-chunk-11-1.png" width="2187.5"></p>
 <p><strong><em>When should I define model as a list in
 R?</em></strong></p>
 <p>While denim DSL offers cleaner and more readable syntax to define
@@ -311,7 +314,7 @@ suited for integration to a more R-centric workflow.</p>
 dynamics change under three different <code>I -&gt; R</code> dwell time
 distributions (<code>d_gamma</code>, <code>d_weibull</code>,
 <code>d_lognormal</code>) using <code>map2</code>.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: package 'ggplot2' was built under R version 4.3.1</span></span>
 <span><span class="co">#&gt; Warning: package 'tidyr' was built under R version 4.3.1</span></span>
@@ -326,103 +329,31 @@ distributions (<code>d_gamma</code>, <code>d_weibull</code>,
 <span>  IR_pars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">0.1</span>, shape <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>scale <span class="op">=</span> <span class="fl">5</span>, shape <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>mu <span class="op">=</span> <span class="fl">0.3</span>, sigma <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">model_config</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    plots <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html" class="external-link">map2</a></span><span class="op">(</span><span class="va">IR_dists</span>, <span class="va">IR_pars</span>, \<span class="op">(</span><span class="va">dist</span>, <span class="va">par</span><span class="op">)</span><span class="op">{</span></span>
-<span>      <span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>        <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * S * (I / N) * timeStep"</span>,</span>
-<span>        <span class="co"># This is not applicable when using denim_dsl()</span></span>
-<span>        <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="va">par</span><span class="op">)</span><span class="op">)</span></span>
-<span>      <span class="op">)</span></span>
-<span>      </span>
-<span>      <span class="co"># model settings</span></span>
-<span>      <span class="va">denimInitialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>S <span class="op">=</span> <span class="fl">980</span>, I <span class="op">=</span> <span class="fl">20</span>, R <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
-<span>      <span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>        beta <span class="op">=</span> <span class="fl">0.4</span>,</span>
-<span>        N <span class="op">=</span> <span class="fl">1000</span></span>
-<span>      <span class="op">)</span></span>
-<span>      </span>
-<span>      <span class="co"># compare output </span></span>
-<span>      <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim.html">sim</a></span><span class="op">(</span>transitions <span class="op">=</span> <span class="va">transitions</span>, </span>
-<span>                 initialValues <span class="op">=</span> <span class="va">denimInitialValues</span>, </span>
-<span>                 parameters <span class="op">=</span> <span class="va">parameters</span>, </span>
-<span>                 simulationDuration <span class="op">=</span> <span class="fl">60</span>, </span>
-<span>                 timeStep <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
-<span>      </span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="op">}</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">plots</span><span class="op">)</span></span></code></pre></div>
-<p><img src="denim_dsl_files/figure-html/unnamed-chunk-11-1.png" width="2187.5"><img src="denim_dsl_files/figure-html/unnamed-chunk-11-2.png" width="2187.5"><img src="denim_dsl_files/figure-html/unnamed-chunk-11-3.png" width="2187.5"></p>
-<pre><code><span><span class="co">#&gt; [[1]]</span></span>
-<span><span class="co">#&gt; [[1]]$rect</span></span>
-<span><span class="co">#&gt; [[1]]$rect$w</span></span>
-<span><span class="co">#&gt; [1] 8.5166</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[1]]$rect$h</span></span>
-<span><span class="co">#&gt; [1] 324.2026</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[1]]$rect$left</span></span>
-<span><span class="co">#&gt; [1] 53.8834</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[1]]$rect$top</span></span>
-<span><span class="co">#&gt; [1] 662.1013</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[1]]$text</span></span>
-<span><span class="co">#&gt; [[1]]$text$x</span></span>
-<span><span class="co">#&gt; [1] 60.30808 60.30808 60.30808</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[1]]$text$y</span></span>
-<span><span class="co">#&gt; [1] 581.0507 500.0000 418.9493</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[2]]</span></span>
-<span><span class="co">#&gt; [[2]]$rect</span></span>
-<span><span class="co">#&gt; [[2]]$rect$w</span></span>
-<span><span class="co">#&gt; [1] 8.5166</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[2]]$rect$h</span></span>
-<span><span class="co">#&gt; [1] 324.2026</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[2]]$rect$left</span></span>
-<span><span class="co">#&gt; [1] 53.8834</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[2]]$rect$top</span></span>
-<span><span class="co">#&gt; [1] 662.1013</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[2]]$text</span></span>
-<span><span class="co">#&gt; [[2]]$text$x</span></span>
-<span><span class="co">#&gt; [1] 60.30808 60.30808 60.30808</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[2]]$text$y</span></span>
-<span><span class="co">#&gt; [1] 581.0507 500.0000 418.9493</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[3]]</span></span>
-<span><span class="co">#&gt; [[3]]$rect</span></span>
-<span><span class="co">#&gt; [[3]]$rect$w</span></span>
-<span><span class="co">#&gt; [1] 8.5166</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[3]]$rect$h</span></span>
-<span><span class="co">#&gt; [1] 324.2026</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[3]]$rect$left</span></span>
-<span><span class="co">#&gt; [1] 53.8834</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[3]]$rect$top</span></span>
-<span><span class="co">#&gt; [1] 662.1013</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[3]]$text</span></span>
-<span><span class="co">#&gt; [[3]]$text$x</span></span>
-<span><span class="co">#&gt; [1] 60.30808 60.30808 60.30808</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[3]]$text$y</span></span>
-<span><span class="co">#&gt; [1] 581.0507 500.0000 418.9493</span></span></code></pre>
+<span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html" class="external-link">walk2</a></span><span class="op">(</span></span>
+<span>  <span class="va">model_config</span><span class="op">$</span><span class="va">IR_dists</span>, <span class="va">model_config</span><span class="op">$</span><span class="va">IR_pars</span>, \<span class="op">(</span><span class="va">dist</span>, <span class="va">par</span><span class="op">)</span><span class="op">{</span></span>
+<span>    <span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>      <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * S * (I / N)"</span>,</span>
+<span>      <span class="co"># This is not applicable when using denim_dsl()</span></span>
+<span>      <span class="st">"I -&gt; R"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="va">par</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="co"># model settings</span></span>
+<span>    <span class="va">denimInitialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>S <span class="op">=</span> <span class="fl">980</span>, I <span class="op">=</span> <span class="fl">20</span>, R <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span>    <span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>      beta <span class="op">=</span> <span class="fl">0.4</span>,</span>
+<span>      N <span class="op">=</span> <span class="fl">1000</span></span>
+<span>    <span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="co"># compare output </span></span>
+<span>    <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim.html">sim</a></span><span class="op">(</span>transitions <span class="op">=</span> <span class="va">transitions</span>, </span>
+<span>               initialValues <span class="op">=</span> <span class="va">denimInitialValues</span>, </span>
+<span>               parameters <span class="op">=</span> <span class="va">parameters</span>, </span>
+<span>               simulationDuration <span class="op">=</span> <span class="fl">60</span>, </span>
+<span>               timeStep <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
+<p><img src="denim_dsl_files/figure-html/unnamed-chunk-12-1.png" width="2187.5"><img src="denim_dsl_files/figure-html/unnamed-chunk-12-2.png" width="2187.5"><img src="denim_dsl_files/figure-html/unnamed-chunk-12-3.png" width="2187.5"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
