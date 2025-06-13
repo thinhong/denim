@@ -18,5 +18,6 @@
 ^CRAN-SUBMISSION$
 ^supplements$
 ^extra_benchmark$
+^manuscript_plots$
 ^\.vscode$
 ^logo\.svg$

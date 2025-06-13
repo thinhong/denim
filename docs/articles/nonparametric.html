@@ -109,8 +109,7 @@
 functions.</p></li>
 <li><p>As a non-parametric distribution: using
 <code><a href="../reference/nonparametric.html">nonparametric()</a></code> function and user must provide the
-histogram of distribution where bin-width matches
-<code>timeStep</code>.</p></li>
+histogram of distribution where bin-width matches time step.</p></li>
 </ul>
 <div class="section level3">
 <h3 id="example-1">Example 1<a class="anchor" aria-label="anchor" href="#example-1"></a>
@@ -122,7 +121,7 @@ modeling an SIR model with Weibull distributed infectious period using
 <code><a href="../reference/d_weibull.html">d_weibull()</a></code></em></strong></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sir_parametric</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/denim_dsl.html">denim_dsl</a></span><span class="op">(</span><span class="op">{</span></span>
-<span>  <span class="va">S</span> <span class="op">-&gt;</span> <span class="va">I</span> <span class="op">=</span> <span class="va">beta</span> <span class="op">*</span> <span class="op">(</span><span class="va">I</span><span class="op">/</span><span class="va">N</span><span class="op">)</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="va">timeStep</span></span>
+<span>  <span class="va">S</span> <span class="op">-&gt;</span> <span class="va">I</span> <span class="op">=</span> <span class="va">beta</span> <span class="op">*</span> <span class="op">(</span><span class="va">I</span><span class="op">/</span><span class="va">N</span><span class="op">)</span> <span class="op">*</span> <span class="va">S</span></span>
 <span>  <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">R</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_weibull.html">d_weibull</a></span><span class="op">(</span>scale <span class="op">=</span> <span class="va">r_scale</span>, shape <span class="op">=</span> <span class="va">r_shape</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <p>Model parameters that must be defined are: <code>beta</code>,
@@ -131,7 +130,7 @@ modeling an SIR model with Weibull distributed infectious period using
 <strong><em><code><a href="../reference/nonparametric.html">nonparametric()</a></code></em></strong></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sir_nonparametric</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/denim_dsl.html">denim_dsl</a></span><span class="op">(</span><span class="op">{</span></span>
-<span>  <span class="va">S</span> <span class="op">-&gt;</span> <span class="va">I</span> <span class="op">=</span> <span class="va">beta</span> <span class="op">*</span> <span class="op">(</span><span class="va">I</span><span class="op">/</span><span class="va">N</span><span class="op">)</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="va">timeStep</span></span>
+<span>  <span class="va">S</span> <span class="op">-&gt;</span> <span class="va">I</span> <span class="op">=</span> <span class="va">beta</span> <span class="op">*</span> <span class="op">(</span><span class="va">I</span><span class="op">/</span><span class="va">N</span><span class="op">)</span> <span class="op">*</span> <span class="va">S</span></span>
 <span>  <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">R</span> <span class="op">=</span> <span class="fu"><a href="../reference/nonparametric.html">nonparametric</a></span><span class="op">(</span><span class="va">dwelltime_dist</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <p>Model parameters that must be defined are: <code>beta</code>,

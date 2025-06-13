@@ -10,9 +10,44 @@ python:
 bibliography: references.bib
 ---
 
-To assess denim's performance, we benchmark it against other approaches and packages.
+To assess denim's performance, we benchmark it against other available packages, listed in the table below.
+
++----------+------------+--------------------------------------------------------------------+
+| Package  | Model time | Note                                                               |
++==========+============+====================================================================+
+| uSEIR    | discrete   | 2 implementations for uSEIR that will be tested                    |
+|          |            |                                                                    |
+|          |            | -   Implementation in Python                                       |
+|          |            |                                                                    |
+|          |            | -   Implementation in Cython                                       |
++----------+------------+--------------------------------------------------------------------+
+| deSolve  | continuous | 3 ways to define model for deSolve that will be tested             |
+|          |            |                                                                    |
+|          |            | -   Model in R                                                     |
+|          |            |                                                                    |
+|          |            | -   Model in C                                                     |
+|          |            |                                                                    |
+|          |            | -   Model in Fortran                                               |
++----------+------------+--------------------------------------------------------------------+
+| odin     | discrete   | A manual implementation of denim's algorithm, using odin is tested |
++----------+------------+--------------------------------------------------------------------+
+| denim    | discrete   | Two methods for defining distributions are tested:                 |
+|          |            |                                                                    |
+|          |            | -   Built-in parametric functions                                  |
+|          |            |                                                                    |
+|          |            | -   Histograms using the `nonparametric()` function                |
++----------+------------+--------------------------------------------------------------------+
 
 The benchmarking process was conducted on a Macbook with M2 Pro chip, 16 GBs of RAM and 10 cores (6 performance and 4 efficiency). 
+
+```{r echo=FALSE}
+# loading cached run time if available
+cached_runtime <- if (file.exists("../supplements/cached_runtime.rds")) {
+  readRDS("../supplements/cached_runtime.rds")
+} else {
+  NULL
+}
+```
 
 ## Benchmark settings
 
@@ -24,12 +59,14 @@ DiagrammeR::grViz("digraph {
   
   node [shape = rectangle]
   
-  S -> E [label = '(R0/tr) * S * (I / N) * td']
+  S -> E [label = 'beta * S * (I / N)']
   E -> I [label = 'd_gamma(1/4,2)']
   I -> R [label = 'd_gamma(1/3,2)']
   }",
   width = 700, height = "100%")
 ```
+
+`beta` can also be computed as $beta = R_0/tr$ where $R_0$ is the basic reproduction number and $tr$ is the infectious period.
 
 Each approach will be run 50 times
 
@@ -40,7 +77,7 @@ sim_duration <- 180 # duration of simulation
 
 ## uSEIR
 
-Simulate model using uSEIR approach [@Hernndez2021]
+Simulate model using uSEIR approach [@Hernndez2021].
 
 Source code: <https://github.com/jjgomezcadenas/useirn/blob/master/nb/uSEIR.ipynb>
 
@@ -67,7 +104,6 @@ py_run_file("../supplements/useir_python.py")
 
 ```{python}
 #| output: false
-
 import time
 import concurrent.futures
 import pickle
@@ -87,7 +123,7 @@ def get_python_runtime(n):
   return end - start
   
 # load cached result if available instead of rerun due to long run time
-cached_python_runs = "../supplements/python_runs.pkl"
+cached_python_runs = "../supplements/cached_runs/python_runs.pkl"
 if os.path.exists(cached_python_runs):
   # If the file exists, load the Python list from the file
   with open(cached_python_runs, 'rb') as f:
@@ -109,8 +145,13 @@ else:
 
 Run time for uSEIR approach, Python implementation (in seconds)
 
-```{r}
-py$python_runs
+```{r echo = FALSE}
+python_runs <- if(is.null(cached_runtime)){
+  py$python_runs
+}else{
+  cached_runtime$python_runs
+}
+python_runs
 ```
 
 Median run time for uSEIR approach, Python implementation: `r median(py$python_runs)` seconds
@@ -123,7 +164,6 @@ Median run time for uSEIR approach, Python implementation: `r median(py$python_r
 
 ```{python}
 #| output: false
-
 # import precompiled cython module
 import sys
 sys.path.insert(0, "../supplements")
@@ -153,7 +193,8 @@ df = useir.csolve_uSeir(dist = "gamma",
                      ti_scale     = 4,
                      tr_shape     = 2,
                      tr_scale     = 3,
-                     R0           = 3.5
+                     R0           = 3.5,
+                     pde_sampling = ""
   )
   
 # convert to pyarrow table for easy conversion to R data.frames
@@ -164,11 +205,16 @@ to_r_df = pa.Table.from_pandas(df)
 
 Run time for uSEIR approach, Cython implementation (in seconds)
 
-```{r}
-py$cython_runs
+```{r echo=FALSE}
+cython_runs <- if(is.null(cached_runtime)){
+  py$cython_runs
+}else{
+  cached_runtime$cython_runs
+}
+cython_runs
 ```
 
-Median run time for uSEIR approach, Cython implementation: `r median(py$cython_runs)` seconds
+Median run time for uSEIR approach, Cython implementation: `r median(cython_runs)` seconds
 
 ## deSolve
 
@@ -210,13 +256,16 @@ transition_func <- function(t, state, param){
 times <- seq(0, sim_duration, 1)
 
 # ------ Compute run time ------
-desolve_runs <- bench::mark(
-  ode(y = initialValues, times = times, parms = parameters, func = transition_func),
-  iterations = total_runs
-)
+desolve_runs <- if(is.null(cached_runtime)){
+  bench::mark(
+    ode(y = initialValues, times = times, parms = parameters, func = transition_func),
+    iterations = total_runs
+  )$time[[1]]
+}else{
+  cached_runtime$desolve_runs
+}
 
 ode_mod <- ode(y = initialValues, times = times, parms = parameters, func = transition_func)
-
 ode_mod <- as.data.frame(ode_mod)
 ```
 
@@ -224,11 +273,11 @@ ode_mod <- as.data.frame(ode_mod)
 
 Run time for `deSolve` implementation
 
-```{r}
-desolve_runs$time
+```{r echo = FALSE}
+desolve_runs
 ```
 
-Median run time for deSolve, with model defined in R: `r desolve_runs$median` seconds
+Median run time for deSolve, with model defined in R: `r median(desolve_runs)` seconds
 
 ### Model in C
 
@@ -251,12 +300,16 @@ initialValues <- c(S = 999999, E1 = 1,
 parameters <- c(R0 = 3.5, scale_I = 4, shape_I=2,
                 scale_R = 3, shape_R = 2, N = 1e6) 
 
-deSolve_c_runs <- bench::mark(
-  # run model defined in C
-  ode(initialValues, times, func = "derivs", parms = parameters,
-  dllname = "benchmark_mod", initfunc = "initmod"),
-  iterations = total_runs
-)
+desolve_c_runs <- if(is.null(cached_runtime)){
+  bench::mark(
+    # run model defined in C
+    ode(initialValues, times, func = "derivs", parms = parameters,
+    dllname = "benchmark_mod", initfunc = "initmod"),
+    iterations = total_runs
+  )$time[[1]]
+}else{
+  cached_runtime$desolve_c_runs
+}
 
 dyn.unload("../supplements/desolve_mod/benchmark_mod.so")
 ```
@@ -266,10 +319,10 @@ dyn.unload("../supplements/desolve_mod/benchmark_mod.so")
 Run time for `deSolve` with model defined in C
 
 ```{r}
-deSolve_c_runs$time
+desolve_c_runs
 ```
 
-Median run time for deSolve, with model defined in C: `r deSolve_c_runs$median` seconds
+Median run time for deSolve, with model defined in C: `r median(desolve_c_runs)` seconds
 
 ### Model in Fortran
 
@@ -291,12 +344,16 @@ initialValues <- c(S = 999999, E1 = 1,
 parameters <- c(R0 = 3.5, scale_I = 4, shape_I=2,
                 scale_R = 3, shape_R = 2, N = 1e6) 
 
-deSolve_fortran_runs <- bench::mark(
-  # run model defined in C
-  ode(initialValues, times, func = "derivs", parms = parameters,
-  dllname = "benchmark_mod_fortran", initfunc = "initmod"),
-  iterations = total_runs
-)
+desolve_fortran_runs <- if(is.null(cached_runtime)){
+  bench::mark(
+    # run model defined in Fortran
+    ode(initialValues, times, func = "derivs", parms = parameters,
+    dllname = "benchmark_mod_fortran", initfunc = "initmod"),
+    iterations = total_runs
+  )$time[[1]]
+}else{
+  cached_runtime$desolve_fortran_runs
+}
 
 dyn.unload("../supplements/desolve_mod/benchmark_mod_fortran.so")
 ```
@@ -304,10 +361,10 @@ dyn.unload("../supplements/desolve_mod/benchmark_mod_fortran.so")
 </details>
 
 ```{r}
-deSolve_fortran_runs$time
+desolve_fortran_runs
 ```
 
-Median run time for deSolve, with model defined in Fortran: `r deSolve_fortran_runs$median` seconds
+Median run time for deSolve, with model defined in Fortran: `r median(desolve_fortran_runs)` seconds
 
 ## odin {#sec-odin}
 
@@ -317,7 +374,7 @@ We also implement uSEIR model with denim's algorithm using `odin` package for co
 
 <summary>Code for running SEIR in `odin`</summary>
 
-```{r model definition and helper}
+```{r message = FALSE, output = FALSE, warning=TRUE}
 # ---- Install packages -----
 # install.packages(
 #   "odin2",
@@ -433,57 +490,66 @@ Run model for bench mark. Note that the process of computing the transition prob
 timeStep <- 0.01
 errorTolerance <- 0.001
 
-# ---- Get runtimes ----
-odin_runs <- bench::mark(
-  {
-    # ---- Compute transprob ----- 
-    e_transprob <- compute_transprob(pgamma, rate=1/4, shape=2, 
-                                     timestep = timeStep, error_tolerance = errorTolerance)$transprob
-    i_transprob <- compute_transprob(pgamma, rate=1/3, shape=2, 
-                                     timestep = timeStep, error_tolerance = errorTolerance)$transprob
-    
-    # ---- Run model and plot ----- 
-    # initialize params
-    odin_pars <- list(
-      R0 = 3.5, 
-      tr = 3*2, # compute mean recovery time, for gamma it's scale*shape
-      N = 1e6,
-      e_transprob = e_transprob,
-      e_maxtime = length(e_transprob),
-      i_transprob = i_transprob,
-      i_maxtime = length(i_transprob),
-      S_init = 999999, 
-      E_init = array( c(1, rep(0, length(e_transprob) - 1) ) ),
-      I_init = array( rep(0, length(i_transprob)) ),
-      R_init = 0
-    )
-    
-    # run model
-    t_seq <- seq(0, sim_duration, 0.25)
-    odin_seir <- dust2::dust_system_create(odin_mod, odin_pars, dt = timeStep)
-    dust2::dust_system_set_state_initial(odin_seir)
-    out <- dust2::dust_system_simulate(odin_seir, t_seq)
-    out <- dust2::dust_unpack_state(odin_seir, out)
-  },
-  iterations = total_runs
-)
+run_useir_odin <- function(){
+  # ---- Compute transprob ----- 
+  e_transprob <- compute_transprob(pgamma, rate=1/4, shape=2, 
+                                   timestep = timeStep, error_tolerance = errorTolerance)$transprob
+  i_transprob <- compute_transprob(pgamma, rate=1/3, shape=2, 
+                                   timestep = timeStep, error_tolerance = errorTolerance)$transprob
+  
+  # ---- Run model and plot ----- 
+  # initialize params
+  odin_pars <- list(
+    R0 = 3.5, 
+    tr = 3*2, # compute mean recovery time, for gamma it's scale*shape
+    N = 1e6,
+    e_transprob = e_transprob,
+    e_maxtime = length(e_transprob),
+    i_transprob = i_transprob,
+    i_maxtime = length(i_transprob),
+    S_init = 999999, 
+    E_init = array( c(1, rep(0, length(e_transprob) - 1) ) ),
+    I_init = array( rep(0, length(i_transprob)) ),
+    R_init = 0
+  )
+  
+  # run model
+  t_seq <- seq(0, sim_duration, 0.25)
+  odin_seir <- dust2::dust_system_create(odin_mod, odin_pars, dt = timeStep)
+  dust2::dust_system_set_state_initial(odin_seir)
+  out <- dust2::dust_system_simulate(odin_seir, t_seq)
+  out <- dust2::dust_unpack_state(odin_seir, out)
+  
+  data.frame(
+    t = t_seq,
+    S = out$S,
+    E = colSums(out$E),
+    I = colSums(out$I),
+    R = out$R
+  )
+}
 
-odin_out <- data.frame(
-  t = t_seq,
-  S = out$S,
-  E = colSums(out$E),
-  I = colSums(out$I),
-  R = out$R
-)
+# ---- Get runtimes ----
+odin_runs <- if(is.null(cached_runtime)){
+  bench::mark({
+      run_useir_odin()
+    },
+    iterations = total_runs
+  )$time[[1]]
+}else{
+  cached_runtime$odin_runs
+}
+
+odin_out <- run_useir_odin()
 ```
 
 </details>
 
 ```{r}
-odin_runs$time
+odin_runs
 ```
 
-Median run time for odin: `r odin_runs$median` seconds
+Median run time for odin: `r median(odin_runs)` seconds
 
 ## denim
 
@@ -500,7 +566,7 @@ errorTolerance <- 0.001
 library(denim)
 
 denim_model <- denim_dsl({
-  S -> E = (R0/tr) * timeStep * S * (I/N) # formulate according that of uSEIR method
+  S -> E = (R0/tr) * S * (I/N) 
   E -> I = d_gamma(rate = 1/4, shape = 2)
   I -> R = d_gamma(rate = 1/3, shape = 2)
 })
@@ -511,17 +577,21 @@ parameters <- c(R0 = 3.5,
                 N = 1e6)
 
 # ---- Get runtimes ----
-denim_runs <- bench::mark(
-  sim(
-    transitions = denim_model,
-    initialValues = initialValues,
-    parameters = parameters,
-    simulationDuration = sim_duration,
-    timeStep = timeStep,
-    errorTolerance = errorTolerance
-  ), 
-  iterations = total_runs
-)
+denim_runs <- if(is.null(cached_runtime)){
+  bench::mark(
+    sim(
+      transitions = denim_model,
+      initialValues = initialValues,
+      parameters = parameters,
+      simulationDuration = sim_duration,
+      timeStep = timeStep,
+      errorTolerance = errorTolerance
+    ), 
+    iterations = total_runs
+  )$time[[1]]
+}else{
+  cached_runtime$denim_runs
+}
 
 
 # ---- Get output ----
@@ -536,10 +606,10 @@ denim_out <- sim(transitions = denim_model,
 Run time for `denim` implementation
 
 ```{r}
-denim_runs$time
+denim_runs
 ```
 
-Median run time for denim: `r denim_runs$median` seconds
+Median run time for denim: `r median(denim_runs)` seconds
 
 ### Nonparametric
 
@@ -554,7 +624,7 @@ timeStep <- 0.01
 errorTolerance <- 0.001
 
 denim_nonparametric_model <- denim_dsl({
-  S -> E = (R0/tr) * timeStep * S * (I/N) # formulate according that of uSEIR method
+  S -> E = (R0/tr) * S * (I/N) 
   E -> I = nonparametric(ei_dist) #ei_dist is considered a model parameter
   I -> R = nonparametric(ir_dist) #ir_dist is also a model parameter
 })
@@ -573,42 +643,49 @@ parameters2 <- list(R0 = 3.5,
                 ir_dist = ir_dist)
 
 # ---- Get runtimes ----
-denim_nonparametric_runs <- bench::mark(
-  sim(transitions = denim_nonparametric_model,
-                     initialValues = initialValues2,
-                     parameters = parameters2,
-                     simulationDuration = sim_duration, timeStep = timeStep),
-  iterations = total_runs
-)
-
+denim_nonparametric_runs <- if(is.null(cached_runtime)){
+  bench::mark(
+    sim(transitions = denim_nonparametric_model,
+                       initialValues = initialValues2,
+                       parameters = parameters2,
+                       simulationDuration = sim_duration, timeStep = timeStep),
+    iterations = total_runs
+  )$time[[1]]
+}else{
+  cached_runtime$denim_nonparametric_runs
+}
 
 # ---- Get output ----
 denim_nonparametric_out <- sim(transitions = denim_nonparametric_model, 
                      initialValues = initialValues2,
                      parameters = parameters2,
                      simulationDuration = sim_duration, timeStep = timeStep)
-
-
 ```
+
 </details>
 
 Run time for `denim`, using `nonparametric()` with pre-computed distribution
 
 ```{r}
-denim_nonparametric_runs$time
+denim_nonparametric_runs
 ```
 
-Median run time for denim using `nonparametric()` with pre-computed distribution: `r denim_nonparametric_runs$median` seconds.
+Median run time for denim using `nonparametric()` with pre-computed distribution: `r median(denim_nonparametric_runs)` seconds.
+
 This longer run time compared to parametric approach is due to the overhead of interfacing large vectors (`ei_dist` and `ir_dist` in this example) between R and C++. For this reason, it is recommended to only use `nonparametric()` when the observed distribution cannot be adequately represented by one of the available parametric transitions.
 
 ## Visualize output
 
+The plot below compare output of discrete time frameworks (`odin`, `denim`, `uSEIR`) with that of a continuous time solver `deSolve`.
+
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 library(arrow)
 library(reticulate)
+library(tidyverse)
 
 df <- as.data.frame(py$to_r_df)
 
+# ---- Preprocess data ---
 # comput prop to compare with uSEIR
 rescaled_denim <- denim_out
 rescaled_denim[, c("S","E", "I", "R")] <- rescaled_denim[, c("S","E", "I", "R")]/1e6
@@ -621,64 +698,200 @@ rescaled_odin[, c("S","E", "I", "R")] <- rescaled_odin[, c("S","E", "I", "R")]/1
 rescaled_desolve <- ode_mod
 rescaled_desolve[, c("S","E", "I", "R")] <- rescaled_desolve[, c("S","E", "I", "R")]/1e6
 
-useir_offset <- 6
-
-plot_seir_util <- function(df, mod_name="denim", time_col = "Time", 
-                           ylab = "Proportion",
-                           x_legend=150, y_legend=0.7){
-  plot(x = df[[time_col]], y = df[["S"]],
-       xlab = "time", ylab = "Prop", ylim = c(0, 1),
-       main=paste0(mod_name, " output"), col = "#4876ff", type="l", lwd=2)
-  lines(df[[time_col]], df[["E"]], lwd=2, col = "blueviolet")
-  lines(df[[time_col]], df[["I"]], lwd=2, col = "red")
-  lines(df[[time_col]], df[["R"]], lwd=2, col = "green")
-  legend(x = x_legend, y = y_legend,
-         legend=c("S", "E", "I", "R"),
-         col = c("#4876ff", "blueviolet", "red", "green"),
-         lty = 1)
+# ---- Helper function for plotting ---
+plot_output_compare <- function(df, baseline = rescaled_desolve, time_col = "Time", approach = "denim"){
+  comps <- c("S", "E", "I", "R")
+  
+  reshape_output <- function(data, label, 
+                           values_to = "pop",
+                           names_to = "compartment",
+                           comps = c("S", "E", "I", "R"),  
+                           time = "time") {
+    data %>% 
+      select(all_of(c(time, comps))) %>%
+      pivot_longer(
+        cols = comps,
+        values_to = "pop",
+        names_to = "compartment"
+      ) %>% 
+      mutate(
+        approach = label
+      ) %>% 
+      rename(time = {{time}})
+  }
+  
+  df <- reshape_output(df, approach, comps = comps, time = time_col)
+  baseline <- reshape_output(baseline, "deSolve", comps = comps, time = "time")
+  
+  bind_rows(df, baseline) %>% 
+    ggplot() +
+      geom_line(
+        aes(x = time, y = pop, color = approach, linetype = approach),
+        show.legend = c(color = TRUE, linetype = FALSE))+
+      facet_wrap(~ compartment, scales = "free") +
+      scale_color_manual(
+        labels = c("deSolve", approach),
+        values = c("black", "cornflowerblue")
+      ) + 
+      theme_bw() +
+      labs(
+        x = "Time",
+        y = "Prop",
+        title = paste0("Compare output between deSolve and ", approach)
+      )
 }
 
-# --- denim output -----
-plot_seir_util(rescaled_denim)
+# ---- Plot and save plot -----
+# plot_output_compare(rescaled_denim)
+# ggsave("../manuscript_plots/denim_desolve.png", width = 8, height = 5, dpi = 300)
 
-# --- deSolve output ----
-plot_seir_util(rescaled_desolve, time_col = "time", mod_name = "deSolve")
+# plot_output_compare(rescaled_odin, time_col = "t", approach = "odin")
+# ggsave("../manuscript_plots/odin_desolve.png", width = 8, height = 5, dpi = 300)
 
-# --- odin output ----
-plot_seir_util(rescaled_odin, time_col = "t", mod_name = "odin")
+# plot_output_compare(df, time_col = "t",  approach = "uSEIR")
+# ggsave("../manuscript_plots/useir_desolve.png", width = 8, height = 5, dpi = 300)
+```
 
-# --- uSEIR output ---- 
-plot_seir_util(df, time_col = "t", mod_name = "uSEIR")
+```{r echo=FALSE, warnings=FALSE}
+# plot pairwise comparison
+plot_pairwise <- function(df, baseline = rescaled_desolve, time_col = "Time", approach = "denim"){
+  comps <- c("S", "E", "I", "R")
+  
+  # create a long-data for plotting
+  df <- df %>%
+    select(all_of(c(time_col, comps))) %>%
+    pivot_longer(
+      cols = comps,
+      values_to = "output",
+      names_to = "comps"
+    )
+  
+  baseline <- baseline %>%
+    select(all_of(c("time", comps))) %>%
+    pivot_longer(
+      cols = comps,
+      values_to = "baseline",
+      names_to = "comps"
+    )
+  
+  baseline %>% 
+    left_join(
+      df, 
+      by = join_by(time == {{time_col}}, comps == comps)
+    ) %>% 
+    arrange(time) %>% 
+    ggplot() +
+      geom_point(
+        aes(x = baseline, y = output),
+        color = "cornflowerblue",
+        shape = 20,
+        show.legend = c(color = TRUE, linetype = FALSE)
+      ) +
+      # draw the target line
+      geom_line(
+        aes(x = baseline, y = baseline),
+        color = "red",
+        linetype = "dashed",
+        show.legend = c(color = TRUE, linetype = FALSE)
+      ) +
+      facet_wrap(~ comps, scales = "free") +
+      theme_bw() +
+      labs(
+        x = "deSolve (baseline)",
+        y = approach,
+        title = paste0("Compare output between deSolve and ", approach),
+        caption = glue::glue("*Data points closer to the dashed line indicate better alignment between the baseline's and {approach}'s outputs.")
+      )
+}
+
+plot_pairwise(df, time_col = "t",  approach = "uSEIR")
+# ggsave("../manuscript_plots/useir_desolve2.png", width = 8, height = 5, dpi = 300)
+plot_pairwise(rescaled_denim, time_col = "Time",  approach = "denim")
+# ggsave("../manuscript_plots/denim_desolve2.png", width = 8, height = 5, dpi = 300)
+plot_pairwise(rescaled_odin, time_col = "t",  approach = "odin")
+# ggsave("../manuscript_plots/odin_desolve2.png", width = 8, height = 5, dpi = 300)
 ```
 
 ## Compare run time
 
+```{r echo=FALSE}
+# first cache run time if not already available
+cached_runtime <- if(is.null(cached_runtime)){
+  list(
+    python_runs = python_runs,
+    cython_runs = cython_runs,
+    desolve_runs = desolve_runs,
+    desolve_c_runs = desolve_c_runs,
+    desolve_fortran_runs = desolve_fortran_runs,
+    odin_runs = odin_runs,
+    denim_runs = denim_runs,
+    denim_nonparametric_runs = denim_nonparametric_runs
+  )
+} else{
+  cached_runtime
+}
+
+if(!file.exists("../supplements/cached_runtime.rds")){
+  saveRDS(cached_runtime, "../supplements/cached_runtime.rds")
+}
+```
+
 The following plot shows run time for 50 runs (with horizontal line showing median run time) of each approach.
 
 ```{r echo=FALSE}
-par(xpd=T, mar=par()$mar+c(0,0,0,6.5))
+benchmark_runs <- list(
+    "uSEIR (Python)"    = cached_runtime$python_runs,
+    "uSEIR (Cython)"    = cached_runtime$cython_runs,
+    "deSolve (R)"       = cached_runtime$desolve_runs,
+    "deSolve (C)"       = cached_runtime$desolve_c_runs,
+    "deSolve (Fortran)" = cached_runtime$desolve_fortran_runs,
+    "odin"              = cached_runtime$odin_runs,
+    "denim"             = cached_runtime$denim_runs,
+    "denim (nonparametric)" = cached_runtime$denim_nonparametric_runs
+  )
 
-plot(x = 1:total_runs, y = py$cython_runs, type = "p", col = "blueviolet",
-     ylim = c(0,1.2),
-     main = paste0("Run time for ", total_runs, " runs"),
-     xlab = "Run", ylab = "Run time (in seconds)")
-lines(x = 1:total_runs, y = rep(median(py$cython_runs), total_runs), col = "blueviolet", lty = 2)
-points(x = 1:total_runs, y = as.numeric(denim_runs$time[[1]]), col = "red")
-lines(x = 1:total_runs, y = rep(median(denim_runs$time[[1]]), total_runs), col = "red", lty = 2)
-points(x = 1:total_runs, y = as.numeric(odin_runs$time[[1]]), col = "cornflowerblue")
-lines(x = 1:total_runs, y = rep(median(odin_runs$time[[1]]), total_runs), col = "cornflowerblue", lty = 2)
-points(x = 1:total_runs, y = as.numeric(desolve_runs$time[[1]]), col = "darkgreen")
-lines(x = 1:total_runs, y = rep(median(desolve_runs$time[[1]]), total_runs), col = "darkgreen", lty = 2)
-legend(x = 53, y = 0.9,
-       legend = c("uSEIR (Cython)", "denim", "odin", "deSolve (model in R)"), 
-       col = c("blueviolet", "red","cornflowerblue", "darkgreen"),
-       lty = 1, cex = 0.7)
+apply_log <- TRUE
 
-# Restore default clipping rect
-par(mar=c(5, 4, 4, 2) + 0.1)
+# Convert list to long format df
+plot_df <- imap_dfr(benchmark_runs, \(run_times, method) {
+  tibble(
+    method = method,
+    run = 1:total_runs,
+    time = as.numeric(run_times)
+  )
+})
+
+# Apply log transform if specified
+if (apply_log) {
+  plot_df$time <- log(plot_df$time)
+}
+
+# Compute medians for each method
+medians <- plot_df %>%
+  group_by(method) %>%
+  mutate(median_time = median(time), .groups = "drop")
+
+# Create the plot
+ggplot(plot_df, aes(x = run, y = time, color = method)) +
+  geom_point(alpha = 0.7) +
+  geom_hline(data = medians, aes(yintercept = median_time, color = method), linetype = "dashed") +
+  # scale_color_manual(values = colors) +
+  labs(
+    title = paste0("Run time for ", total_runs, " runs"),
+    x = "Run",
+    y = if (apply_log) "Log run time (seconds)" else "Run time (seconds)",
+    color = "Approach"
+  ) +
+  theme_bw() +
+  theme(legend.position = "right")
+
+# save plots
+# ggsave("../manuscript_plots/benchmark_all_log.png", width = 8, height = 5, dpi = 300)
 ```
 
-## Run time scaling in denim
+## Impact of timeStep in denim
+
+### Run time scaling
 
 It is worth noting that runtime for denim is also dependent on duration of time step (`timeStep` parameter for `sim`).
 
@@ -711,4 +924,126 @@ abline(v = timeStep, col = "red", lty = 2, lwd = 2)
 abline(v = 1, col = "blueviolet", lty = 2, lwd = 2)  
 text(x = timeStep, y = max(unlist(runtime_scaling)), labels = "timeStep for benchmarking", col = "red", pos = 4)
 text(x = 1, y = max(unlist(runtime_scaling)), labels = "default timeStep", col = "blueviolet", pos = 2)
+```
+
+### Impact on accuracy
+
+Aside from run time, duration of time step also impacts the accuracy of `denim`'s output.
+
+The following plots demonstrates how precision is compromised as we increase the duration for time step (with output from `deSolve` used as baseline). The values for timeStep being evaluated are `[0.01, 0.1, 0.5, 1]`.
+
+```{r echo = FALSE}
+timeStepDurations <- c(0.01, 0.1, 0.5, 1)
+
+# --- generate output at each time step -----
+out <- map_dfr(timeStepDurations, \(x){
+  data <- sim(
+     transitions = denim_model,
+     initialValues = initialValues,
+     parameters = parameters,
+     simulationDuration = sim_duration,
+     timeStep = x
+   ) %>% 
+    mutate(
+      S = S/1e6, E = E/1e6, I = I/1e6, R = R/1e6
+    )
+  
+  data %>% 
+    filter(Time %% 1 == 0) %>% 
+    mutate(
+      approach = paste0("denim dt=", x)
+    )
+})
+
+# --- Manually set color palettes -----
+set_linetype <- setNames(
+  rep("solid", length(timeStepDurations)),
+  unique(out$approach)
+)
+set_color <- setNames(
+  colorspace::qualitative_hcl(length(timeStepDurations)),
+  unique(out$approach)
+)
+
+# --- Merge with deSolve for plotting -----
+bind_rows(
+  rescaled_desolve %>% 
+    select(time, S, E, I, R) %>% 
+    rename(Time = time) %>% 
+    mutate(
+      approach = "deSolve (baseline)"
+    ),
+    out
+  ) %>% 
+  pivot_longer(cols = c("S", "E", "I", "R"), values_to = "prop", names_to = "comp") %>% 
+  # ----- Plot ------
+  ggplot() +
+    geom_line(
+      aes(x = Time, y = prop, color = approach, linetype = approach)
+    ) +
+    scale_color_manual(
+      values = c("deSolve (baseline)" = "black", set_color)
+    ) +
+    scale_linetype_manual(
+      values = c("deSolve (baseline)" = "dashed", set_linetype)
+    ) + 
+    theme_bw() +
+    theme(legend.title = element_blank()) +
+    facet_wrap(~ comp, scales = "free") +
+    labs(
+      title = "Denim output at different timeStep",
+      x = "Time",
+      y = "Prop"
+    )
+
+# ---- Uncomment to save plot -----
+# ggsave(
+#   glue::glue("../manuscript_plots/denim_dt.png"),
+#   width = 8, height = 5, dpi = 300)
+```
+
+```{r echo=FALSE}
+# ---- reshape output to create pair-wise comparison plot ---
+reshaped_baseline <- rescaled_desolve %>% 
+  select(time, S, E, I, R) %>% 
+  pivot_longer(
+    cols = c("S", "E", "I", "R"),
+    names_to = "comp",
+    values_to = "baseline"
+  )
+reshaped_out <- out %>% 
+  pivot_longer(
+    cols = c("S", "E", "I", "R"),
+    names_to = "comp",
+    values_to = "output"
+  )
+
+reshaped_baseline %>% 
+  left_join(
+    reshaped_out,
+    by = join_by(time == Time, comp == comp)
+  ) %>% 
+  # pivot_longer(cols = c("S", "E", "I", "R"), values_to = "prop", names_to = "comp") %>% 
+  ggplot() +
+    geom_point(
+      aes(x = baseline, y = output, color = approach),
+      shape = 20
+    ) +
+    geom_line(
+      aes(x = baseline, y = baseline),
+      color = "black", linetype = "dashed"
+    ) + 
+    theme_bw() +
+    theme(legend.title = element_blank()) +
+    facet_wrap(~ comp, scales = "free") +
+    labs(
+      title = "Denim output at different timeStep",
+      x = "deSolve (baseline)",
+      y = "denim",
+      caption = "*Data points closer to the dashed line indicate better alignment between the baseline and denim outputs."
+    )
+
+# ggsave(
+#   glue::glue("../manuscript_plots/denim_dt_pairwise.png"),
+#   width = 8, height = 5, dpi = 300)
 ```

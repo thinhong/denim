@@ -305,11 +305,11 @@ initialValues <- c(
 )
 
 parameters <- c(
-  beta = 0.12,
+  beta = 1.2,
   N = 1000
 )
 
-simulationDuration <- 10
+simulationDuration <- 20
 timeStep <- 0.01
 
 mod <- sim(transitions = transitions, 
@@ -366,7 +366,7 @@ initialValues <- c(
 )
 
 parameters <- c(
-  beta = 0.12,
+  beta = 1.2,
   N = 1000,
   d_mu = 2,
   d_sigma = 1/2,
@@ -375,7 +375,7 @@ parameters <- c(
   iv_r_rate = 2
 )
 
-simulationDuration <- 10
+simulationDuration <- 20
 timeStep <- 0.01
 
 mod <- sim(transitions = transitions, 
@@ -384,5 +384,5 @@ mod <- sim(transitions = transitions,
            simulationDuration = simulationDuration, 
            timeStep = timeStep)
 plot(mod)
-mod
+head(mod)
 ```

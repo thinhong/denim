@@ -75,7 +75,7 @@ sir_model
 
 In this example, model parameters are: `N`, `beta`, `gamma`.
 
-Users can also choose to provide fixed values as the distributional parameter as followed
+Users can also choose to provide fixed values as the distributional parameter as followed.
 
 ```{r eval=FALSE}
 sir_model <- denim_dsl({
