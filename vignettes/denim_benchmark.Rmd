@@ -29,6 +29,14 @@ To assess denim's performance, we benchmark it against other available packages,
 |          |            |                                                                    |
 |          |            | -   Model in Fortran                                               |
 +----------+------------+--------------------------------------------------------------------+
+| IONISE   | continuous |                                                                    |
++----------+------------+--------------------------------------------------------------------+
+| diffeqr  | continuous | 2 ways to run model in diffeqr will be tested                      |
+|          |            |                                                                    |
+|          |            | -   Define model in R                                              |
+|          |            |                                                                    |
+|          |            | -   Define model in Julia                                          |
++----------+------------+--------------------------------------------------------------------+
 | odin     | discrete   | A manual implementation of denim's algorithm, using odin is tested |
 +----------+------------+--------------------------------------------------------------------+
 | denim    | discrete   | Two methods for defining distributions are tested:                 |
@@ -38,9 +46,10 @@ To assess denim's performance, we benchmark it against other available packages,
 |          |            | -   Histograms using the `nonparametric()` function                |
 +----------+------------+--------------------------------------------------------------------+
 
-The benchmarking process was conducted on a Macbook with M2 Pro chip, 16 GBs of RAM and 10 cores (6 performance and 4 efficiency). 
+The benchmarking process was conducted on a Macbook Pro with M2 Pro chip, 16 GBs of RAM and 10 cores (6 performance and 4 efficiency). 
 
-```{r echo=FALSE}
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+library(tidyverse)
 # loading cached run time if available
 cached_runtime <- if (file.exists("../supplements/cached_runtime.rds")) {
   readRDS("../supplements/cached_runtime.rds")
@@ -75,7 +84,7 @@ total_runs <- 50L # number of runs
 sim_duration <- 180 # duration of simulation
 ```
 
-## uSEIR
+## 1. uSEIR
 
 Simulate model using uSEIR approach [@Hernndez2021].
 
@@ -96,7 +105,7 @@ py_run_file("../supplements/useir_python.py")
 
 </details>
 
-### Python implementation
+### 1.1. Python implementation
 
 <details>
 
@@ -156,7 +165,7 @@ python_runs
 
 Median run time for uSEIR approach, Python implementation: `r median(py$python_runs)` seconds
 
-### Cython implementation
+### 1.2. Cython implementation
 
 <details>
 
@@ -216,9 +225,11 @@ cython_runs
 
 Median run time for uSEIR approach, Cython implementation: `r median(cython_runs)` seconds
 
-## deSolve
+## 2. deSolve
 
-### Model in R
+Simulate model using deSolve package [@soetaert2008]
+
+### 2.1. Model in R
 
 ```{=html}
 <details>
@@ -279,7 +290,7 @@ desolve_runs
 
 Median run time for deSolve, with model defined in R: `r median(desolve_runs)` seconds
 
-### Model in C
+### 2.2. Model in C
 
 ```{=html}
 <details>
@@ -324,7 +335,7 @@ desolve_c_runs
 
 Median run time for deSolve, with model defined in C: `r median(desolve_c_runs)` seconds
 
-### Model in Fortran
+### 2.3. Model in Fortran
 
 ```{=html}
 <details>
@@ -366,9 +377,202 @@ desolve_fortran_runs
 
 Median run time for deSolve, with model defined in Fortran: `r median(desolve_fortran_runs)` seconds
 
-## odin {#sec-odin}
+## 3. IONISE
 
-We also implement uSEIR model with denim's algorithm using `odin` package for comparison
+Simulate model using IONISE approach [@hong2024].
+
+Source code: <https://github.com/Mathbiomed/IONISE>
+
+<details>
+
+<summary>Code for running SEIR using `IONISE`</summary>
+
+```{r}
+# load code for IONISE
+source("../supplements/ionise_mod/IONISE.R")
+
+# ------ Set up -------
+ionise_time <- seq(0, sim_duration, 1)
+ionise_params <- c(
+  3.5/6, # beta 
+  2, 4, # rate and shape E -> I transition
+  2, 3 # rate and shape I -> R transition
+)
+inonise_init <-  c(S_init = 999999, E_init = 1, I_init = 0, R_init = 0)
+
+# ------ Compute run time ------
+ionise_runs <- if(is.null(cached_runtime)){
+  bench::mark(
+    # run model defined using IONISE
+    mean_trajectory_SEIR_dist_input(
+      timespan = ionise_time,
+      theta = ionise_params,
+      y_init = inonise_init,
+      dist_type = "gamma"
+    ),
+    iterations = total_runs
+  )$time[[1]]
+}else{
+  cached_runtime$ionise_runs
+}
+
+# ----- Format output ------ 
+ionise_out <- mean_trajectory_SEIR_dist_input(
+  timespan = ionise_time,
+  theta = ionise_params,
+  y_init = inonise_init,
+  dist_type = "gamma"
+) %>% as.data.frame() %>% 
+  rename(
+    S = St,
+    E = Et,
+    I = It,
+    R = Rt
+  ) %>% 
+  mutate(
+    time = ionise_time
+  )
+```
+
+</details>
+
+```{r}
+ionise_runs
+```
+
+Median run time for IONISE: `r median(ionise_runs)` seconds
+
+## 4. diffeqr
+
+Simulate model using diffeqr package [@rackauckas]
+
+### 4.1. Model in R
+
+<details>
+
+<summary>Code for running SEIR using `diffeqr`</summary>
+
+Setup Julia for `diffeqr`
+
+```{r}
+# load library
+library(diffeqr)
+
+# uncomment to check Julia version
+# JuliaCall::julia_command("VERSION")
+# uncomment to resolve error: type RFunction has no field r
+# JuliaCall::julia_command('using Pkg; Pkg.add(PackageSpec(name = "ModelingToolkit", version = "8.76.0"))')
+# uncomment to check installed packages version
+# JuliaCall::julia_command('using Pkg; Pkg.installed()')
+```
+
+Set up SEIR model
+
+```{r}
+# --- Transition def for diffeqr ------ 
+diffeqr_transition <- function(u, p, t){
+  # p - gamma_rate_I, shape_I, gamma_rate_R, shape_R, R0, N
+  # u - S, E1, E2, E, I1, I2, I, R
+  tr = p[4]*(1/p[3])
+  
+  dS = - (p[5]/tr) * u[1] * u[7]/p[6]
+  # apply linear chain trick
+  dE1 = (p[5]/tr) * u[1] * u[7]/p[6] - p[1]*u[2]
+  dE2 = p[1]*u[2] - p[1]*u[3]
+  dE = dE1 + dE2
+  dI1 = p[1]*u[3] - p[3]*u[5]
+  dI2 = p[3]*u[5] - p[3]*u[6]
+  dI =  dI1 + dI2
+
+  dR = p[3]*u[6]
+  
+  return(c(dS, dE1, dE2, dE, dI1, dI2, dI, dR))
+}
+
+diffeqr_time <- c(0, sim_duration)
+
+# ---- Parameter setup -----
+parameters <- c(gamma_rate_I = 1/4, shape_I=2,
+                gamma_rate_R = 1/3, shape_R = 2,
+                R0 = 3.5, N = 1e6) 
+initialValues <- c(S = 999999, E1 = 1,
+                   E2 = 0, E = 0, I1=0, 
+                   I2=0, I=0, R=0
+                   )
+
+# set up diffeqr solverr
+setup <- diffeq_setup()
+# we can use initialValues and parameters set up for deSolve
+diffeqr_mod <- setup$ODEProblem(diffeqr_transition, 
+                                initialValues,
+                                diffeqr_time, 
+                                parameters)
+
+
+# ------ Compute run time ------
+diffeqr_base_runs <- if(is.null(cached_runtime)){
+  bench::mark(
+    setup$solve(diffeqr_mod),
+    iterations = total_runs
+  )$time[[1]]
+}else{
+  cached_runtime$diffeqr_base_runs
+}
+
+# ----- Format output ------ 
+sol <- setup$solve(diffeqr_mod)
+out_mat <- sapply(sol$u,identity)
+# convert to data.frame
+diffeqr_out <- as.data.frame(t(out_mat))
+# add names
+names(diffeqr_out) <- names(initialValues)
+# add time column
+diffeqr_out <- diffeqr_out %>% mutate(
+    time = identity(sol$t)
+  )
+```
+
+</details>
+
+```{r}
+diffeqr_base_runs
+```
+
+Median run time for `diffeqr` with base solver: `r median(diffeqr_base_runs)` seconds
+
+### 4.2. Define model in Julia
+
+<details>
+
+<summary>Code to set up model in Julia using `diffeqr` </summary>
+
+We can tell `diffeqr` to define model in Julia, so we can utilize Julia JIT compiler which can improve the runtime.
+
+```{r}
+# define model in Julia instead
+optimized_mod <- diffeqr::jitoptimize_ode(setup, diffeqr_mod)
+
+diffeqr_optimized_runs <- if(is.null(cached_runtime)){
+  bench::mark(
+    solve(optimized_mod, setup$Tsit5()),
+    iterations = total_runs
+  )$time[[1]]
+}else{
+  cached_runtime$diffeqr_optimized_runs
+}
+```
+
+</details>
+
+```{r}
+diffeqr_optimized_runs
+```
+
+Median run time for IONISE: `r median(diffeqr_optimized_runs)` seconds
+
+## 5. odin {#sec-odin}
+
+We also implement uSEIR model with denim's algorithm using `odin` package [@fitzjohn2024] for comparison
 
 <details>
 
@@ -551,9 +755,9 @@ odin_runs
 
 Median run time for odin: `r median(odin_runs)` seconds
 
-## denim
+## 6. denim
 
-### Parametric
+### 6.1. Parametric
 
 <details>
 
@@ -599,6 +803,7 @@ denim_out <- sim(transitions = denim_model,
                      initialValues = initialValues,
                      parameters = parameters,
                      simulationDuration = sim_duration, timeStep = timeStep)
+plot(denim_out)
 ```
 
 </details>
@@ -611,7 +816,7 @@ denim_runs
 
 Median run time for denim: `r median(denim_runs)` seconds
 
-### Nonparametric
+### 6.2. Nonparametric
 
 We can also define the SEIR model in denim using function `nonparametric()` where the dwell-time distribution will be pre-computed using the helper function from Section \@ref(sec-odin)
 
@@ -674,29 +879,36 @@ Median run time for denim using `nonparametric()` with pre-computed distribution
 
 This longer run time compared to parametric approach is due to the overhead of interfacing large vectors (`ei_dist` and `ir_dist` in this example) between R and C++. For this reason, it is recommended to only use `nonparametric()` when the observed distribution cannot be adequately represented by one of the available parametric transitions.
 
-## Visualize output
+## 7. Visualize output
 
 The plot below compare output of discrete time frameworks (`odin`, `denim`, `uSEIR`) with that of a continuous time solver `deSolve`.
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 library(arrow)
 library(reticulate)
-library(tidyverse)
-
 df <- as.data.frame(py$to_r_df)
 
 # ---- Preprocess data ---
-# comput prop to compare with uSEIR
+# compute prop to compare with uSEIR
 rescaled_denim <- denim_out
 rescaled_denim[, c("S","E", "I", "R")] <- rescaled_denim[, c("S","E", "I", "R")]/1e6
 
-# comput prop for odin output
+# compute prop for odin output
 rescaled_odin <- odin_out
 rescaled_odin[, c("S","E", "I", "R")] <- rescaled_odin[, c("S","E", "I", "R")]/1e6
+
+# compute prop for IONISE output
+rescaled_ionise <- ionise_out
+rescaled_ionise[, c("S","E", "I", "R")] <- rescaled_ionise[, c("S","E", "I", "R")]/1e6
+
+# compute prop for diffeqr output
+rescaled_diffeqr <- diffeqr_out
+rescaled_diffeqr[, c("S","E", "I", "R")] <- rescaled_diffeqr[, c("S","E", "I", "R")]/1e6
 
 # compute prop for deSolve output as well
 rescaled_desolve <- ode_mod
 rescaled_desolve[, c("S","E", "I", "R")] <- rescaled_desolve[, c("S","E", "I", "R")]/1e6
+
 
 # ---- Helper function for plotting ---
 plot_output_compare <- function(df, baseline = rescaled_desolve, time_col = "Time", approach = "denim"){
@@ -750,9 +962,13 @@ plot_output_compare <- function(df, baseline = rescaled_desolve, time_col = "Tim
 
 # plot_output_compare(df, time_col = "t",  approach = "uSEIR")
 # ggsave("../manuscript_plots/useir_desolve.png", width = 8, height = 5, dpi = 300)
+
+# plot_output_compare(rescaled_ionise, time_col = "time",  approach = "IONISE")
+
+# plot_output_compare(rescaled_diffeqr, time_col = "time",  approach = "diffeqr")
 ```
 
-```{r echo=FALSE, warnings=FALSE}
+```{r echo=FALSE, warning=FALSE}
 # plot pairwise comparison
 plot_pairwise <- function(df, baseline = rescaled_desolve, time_col = "Time", approach = "denim"){
   comps <- c("S", "E", "I", "R")
@@ -810,9 +1026,15 @@ plot_pairwise(rescaled_denim, time_col = "Time",  approach = "denim")
 # ggsave("../manuscript_plots/denim_desolve2.png", width = 8, height = 5, dpi = 300)
 plot_pairwise(rescaled_odin, time_col = "t",  approach = "odin")
 # ggsave("../manuscript_plots/odin_desolve2.png", width = 8, height = 5, dpi = 300)
+plot_pairwise(
+  rescaled_diffeqr %>% mutate(
+    join_time = round(time)
+    ), 
+  time_col = "join_time",  approach = "diffeqr")
+plot_pairwise(rescaled_ionise, time_col = "time",  approach = "IONISE")
 ```
 
-## Compare run time
+## 8. Compare run time
 
 ```{r echo=FALSE}
 # first cache run time if not already available
@@ -823,6 +1045,9 @@ cached_runtime <- if(is.null(cached_runtime)){
     desolve_runs = desolve_runs,
     desolve_c_runs = desolve_c_runs,
     desolve_fortran_runs = desolve_fortran_runs,
+    ionise_runs = ionise_runs,
+    diffeqr_base_runs = diffeqr_base_runs,
+    diffeqr_optimized_runs = diffeqr_optimized_runs,
     odin_runs = odin_runs,
     denim_runs = denim_runs,
     denim_nonparametric_runs = denim_nonparametric_runs
@@ -840,15 +1065,22 @@ The following plot shows run time for 50 runs (with horizontal line showing medi
 
 ```{r echo=FALSE}
 benchmark_runs <- list(
-    "uSEIR (Python)"    = cached_runtime$python_runs,
-    "uSEIR (Cython)"    = cached_runtime$cython_runs,
     "deSolve (R)"       = cached_runtime$desolve_runs,
     "deSolve (C)"       = cached_runtime$desolve_c_runs,
     "deSolve (Fortran)" = cached_runtime$desolve_fortran_runs,
+    "IONISE" = cached_runtime$ionise,
+    "diffeqr (R)" = cached_runtime$diffeqr_base_runs,
+    "diffeqr (Julia)" = cached_runtime$diffeqr_optimized_runs,
+    "uSEIR (Python)"    = cached_runtime$python_runs,
+    "uSEIR (Cython)"    = cached_runtime$cython_runs,
     "odin"              = cached_runtime$odin_runs,
     "denim"             = cached_runtime$denim_runs,
     "denim (nonparametric)" = cached_runtime$denim_nonparametric_runs
   )
+
+discrete_time <- c(
+  "odin", "denim", "denim (nonparametric)", "uSEIR (Python)", "uSEIR (Cython)"
+)
 
 apply_log <- TRUE
 
@@ -857,7 +1089,8 @@ plot_df <- imap_dfr(benchmark_runs, \(run_times, method) {
   tibble(
     method = method,
     run = 1:total_runs,
-    time = as.numeric(run_times)
+    time = as.numeric(run_times),
+    model_time = if_else(method %in% discrete_time, "discrete", "continuous")
   )
 })
 
@@ -868,11 +1101,12 @@ if (apply_log) {
 
 # Compute medians for each method
 medians <- plot_df %>%
-  group_by(method) %>%
-  mutate(median_time = median(time), .groups = "drop")
+  group_by(method, model_time) %>%
+  mutate(median_time = median(time)) %>% 
+  ungroup()
 
 # Create the plot
-ggplot(plot_df, aes(x = run, y = time, color = method)) +
+ggplot(plot_df, aes(x = run, y = time, color = method, shape = model_time)) +
   geom_point(alpha = 0.7) +
   geom_hline(data = medians, aes(yintercept = median_time, color = method), linetype = "dashed") +
   # scale_color_manual(values = colors) +
@@ -880,18 +1114,19 @@ ggplot(plot_df, aes(x = run, y = time, color = method)) +
     title = paste0("Run time for ", total_runs, " runs"),
     x = "Run",
     y = if (apply_log) "Log run time (seconds)" else "Run time (seconds)",
-    color = "Approach"
+    color = "Approach",
+    shape = "Model time"
   ) +
   theme_bw() +
   theme(legend.position = "right")
 
 # save plots
-# ggsave("../manuscript_plots/benchmark_all_log.png", width = 8, height = 5, dpi = 300)
+# ggsave("../manuscript_plots/benchmark_all_log_new.png", width = 8, height = 5, dpi = 300)
 ```
 
-## Impact of timeStep in denim
+## 9. Impact of timeStep in denim
 
-### Run time scaling
+### 9.1. Run time scaling
 
 It is worth noting that runtime for denim is also dependent on duration of time step (`timeStep` parameter for `sim`).
 
@@ -926,7 +1161,7 @@ text(x = timeStep, y = max(unlist(runtime_scaling)), labels = "timeStep for benc
 text(x = 1, y = max(unlist(runtime_scaling)), labels = "default timeStep", col = "blueviolet", pos = 2)
 ```
 
-### Impact on accuracy
+### 9.2. Impact on accuracy
 
 Aside from run time, duration of time step also impacts the accuracy of `denim`'s output.
 
