@@ -20,7 +20,7 @@ Modelers may encounter many situations where individuals can transition from one
 
 -   Model as multinomial transition (outgoing population is split by a fixed proportion to transition to new compartments).
 
-`denim` allows users to model both situations, while requiring minimal change to the code base to switch between 2 methods of modeling.
+`denim` allows the users to model both situations, while requiring minimal change to the code base to switch between 2 methods of modeling.
 
 ## 2. Multinomial in denim
 
@@ -28,7 +28,7 @@ Modelers may encounter many situations where individuals can transition from one
 
 To specify the proportion that goes to each outgoing compartment, define the transition using the following syntax in model definition:
 
-`proportion * compartment ->  out_compartment = [transition]`
+`proportion * from ->  to = [transition]`
 
 Note that the `proportion` here is the proportion of `compartment` that will end up in `out_compartment` [at equilibrium]{.underline}.
 
@@ -58,6 +58,12 @@ dR = \frac{1}{3}IR_2 \\
 dD = 0.1*ID 
 \end{cases}
 $$
+
+Where:
+
+-   $IR_1$ and $IR_2$ are the sub-compartments of $I$ that will transition to $R$. It is divided into 2 sub-compartments to model Erlang distributed time for $I \rightarrow R$ transition.
+
+-   $ID$ is the sub-compartment of $I$ that will transition to $R$.
 
 </details>
 
@@ -215,7 +221,7 @@ transitions <- denim_dsl({
 })
 ```
 
-### 3.2. Example model 
+### 3.2. Example model
 
 To further demonstrate the implementation of competing risks in `denim`, we provide the equivalent model implemented in `deSolve` and compare the output of 2 implementations.
 

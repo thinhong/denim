@@ -45,8 +45,6 @@ $$S_{t+1} - S_{t} = -\lambda S_{t} = -\frac{\beta I_{t}}{N}S_{t}$$ $$I_{t+1} - I
 -   $\beta$: the product of contact rates and transmission probability; usually we define $\lambda =\frac{\beta I_{t}}{N}$ as the force of infection
 -   $\gamma$: recovery rate
 
-Usually to solve the model easier we make an assumption that the recovery rate $\gamma$ is constant, this will leads to an exponentially distributed length of stay i.e most individuals recover after 1 day being infected.
-
 ```{r, echo=FALSE}
 rates <- c(0.5, 1, 1.5)
 x <- seq(0, 5, 0.001)
@@ -112,12 +110,12 @@ DiagrammeR::grViz("digraph {
 
 </center>
 
-We have two transitions `S -> I` and `I -> R` in this case. The transitions are specified in a list follow this format `"transition" = equation"`, of which equation is defined with one of our functions for waiting time distribution.
+We have two transitions `S -> I` and `I -> R` in this case. The transitions are specified in a list follow this format `"transition" = expression`, of which equation is defined with one of our functions for waiting time distribution.
 
 ```{r}
 transitions <- list(
   "S -> I" = "beta * S * I / N",
-  "I -> R" = d_gamma(rate = 1/2, 3)
+  "I -> R" = d_gamma(rate = 1/4, 3)
 )
 ```
 
@@ -219,7 +217,7 @@ DiagrammeR::grViz("digraph {
 
 </center>
 
-Let $R_1 + R_2 + R_3 + R_4 = \Sigma R$. We have $\frac{R_1}{\Sigma R} = p_1$, $\frac{R_2}{\Sigma R} = p_2$, $\frac{R_3}{\Sigma R} = p_3$, $\frac{R_4}{\Sigma R} = p_4$. Our mission is to estimate $\gamma_{1}$, $\gamma_{2}$, $\gamma_{3}$ to obtain $p_1$, $p_2$, $p_3$, $p_4$ that fit a pre-defined distribution at the equilibrium state. This can be obtained by setting:
+Let $R_1 + R_2 + R_3 + R_4 = \Sigma R$. We have $\frac{R_1}{\Sigma R} = p_1$, $\frac{R_2}{\Sigma R} = p_2$, $\frac{R_3}{\Sigma R} = p_3$, $\frac{R_4}{\Sigma R} = p_4$. Our goal is to estimate $\gamma_{1}$, $\gamma_{2}$, $\gamma_{3}$ to obtain $p_1$, $p_2$, $p_3$, $p_4$ that fit a pre-defined distribution at the equilibrium state. This can be obtained by setting:
 
 $$\gamma_{i} = \frac{p_i}{1 - \sum_{j=1}^{i-1}p_j}$$
 
@@ -240,7 +238,7 @@ transitions <- denim_dsl({
 
 ## 3. Waiting time distribution
 
-`denim` offers 2 main ways to define a transition: either by a waiting time distribution, or a mathematical expression.
+`denim` offers 2 ways to define a transition: either by a waiting time distribution in the origin compartment, or by a mathematical expression of the outgoing rate of the origin compartment.
 
 Current available distributions in this package including:
 
@@ -252,7 +250,7 @@ Current available distributions in this package including:
 
 -   `d_lognormal(mu, sigma)`: Discrete **log-normal distribution** with parameters `mu` and `sigma`
 
--   `nonparametric(waitingTimes)`: A **vector of values**, could be numbers, percentages, density of the length of stay based on real data, `denim` will convert it into a distribution
+-   `nonparametric(waitingTimes)`: A **vector of values**, could be numbers, percentages, density of the length of stay based on real data, `denim` will convert it into a distribution. These values should: (i) corresponding to 1 timestep, (ii) be chronologically ordered according to the dwell-time.
 
 Mathematical expression: Transition can also be described using a math expression such as `beta * S * I / N`. You will need to define parameters that are not compartment names in the `parameters` argument
 
@@ -324,7 +322,7 @@ plot(mod, ylim = c(0, 1000))
 
 For a more detailed explanation for transitions to multiple states, refer to [this article](./multinomial.html)
 
-## 5. Another example
+## 5. Additional example
 
 <center>
 
@@ -385,4 +383,8 @@ mod <- sim(transitions = transitions,
            timeStep = timeStep)
 plot(mod)
 head(mod)
+```
+
+```{r}
+#TODO: example with non-parametric distribution
 ```

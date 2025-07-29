@@ -36,12 +36,18 @@ Rcpp::DataFrame simcm(std::string inputPath) {
     // ================== End construct and run model ========================
 
     Rcpp::DataFrame df;
-    std::vector<int> timeStep(Compartment::timesFollowUp);
-    std::iota(std::begin(timeStep), std::end(timeStep), 0);
+    // std::vector<int> timeStep(Compartment::timesFollowUp);
+    // std::iota(std::begin(timeStep), std::end(timeStep), 0);
+    // std::vector<double> actualTime;
+    // actualTime.clear();
+    // for (auto& time: timeStep) {
+    //     actualTime.push_back(Distribution::timeStep * time);
+    // }
+    // TODO: test new code with removed redundant loop
     std::vector<double> actualTime;
-    actualTime.clear();
-    for (auto& time: timeStep) {
-        actualTime.push_back(Distribution::timeStep * time);
+    actualTime.reserve(Compartment::timesFollowUp);
+    for (int i = 0; i < Compartment::timesFollowUp; ++i) {
+        actualTime.push_back(Distribution::timeStep * i);
     }
     df.push_back(actualTime, "Time");
     for (auto& comp: myModel.getModel()->getComps()) {

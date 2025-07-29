@@ -76,7 +76,7 @@ transition_func <- function(t, state, param){
 
 </details>
 
-With the transitions identified, user can then define the model in `denim`.
+With the transitions identified, the user can then define the model in `denim`.
 
 When using `denim` DSL, the model structure is given as a set of *key*-*value* pairs where
 
@@ -95,11 +95,11 @@ transitions <- denim_dsl({
 
 ### Model configurations
 
-Similar to `deSolve`, `denim` also ask users to provide the [initial values]{.underline} and any [additional parameters]{.underline} in the form of named vectors.
+Similar to `deSolve`, `denim` also ask the users to provide the [initial values]{.underline} and any [additional parameters]{.underline} in the form of named vectors.
 
-For the example `deSolve` code, while users can use the `initalValues` from the `deSolve` code as is (`denim` will ignore unused `I1`, `I2` compartments as these sub-compartments will be automatically computed internally), it is recommended to remove redundant compartments (in this example, `I1` and `I2`).
+For the example `deSolve` code, while the users can use the `initalValues` from the `deSolve` code as is (`denim` will ignore unused `I1`, `I2` compartments as these sub-compartments will be automatically computed internally), it is recommended to remove redundant compartments (in this example, `I1` and `I2`).
 
-For parameters, since `rate` is already defined in the distribution functions, users only need to keep `beta` and `N` from the initial parameters vector. We do not need to specify the value for `timeStep` variable as this is a special variable in denim and will be defined later on.
+For parameters, since `rate` is already defined in the distribution functions, the users only need to keep `beta` and `N` from the initial parameters vector. We do not need to specify the value for `timeStep` variable as this is a special variable in denim and will be defined later on.
 
 ```{r}
 # remove I1, I2 compartments
@@ -122,7 +122,7 @@ However, for comparison purposes, we will keep this option `FALSE` for the remai
 
 ### Simulation
 
-Lastly, users need to define the simulation duration and time step for `denim` to run. Unlike `deSolve` which takes a time sequence, `denim` only require the [simulation duration]{.underline} and [time step.]{.underline}
+Lastly, the users need to define the simulation duration and time step for `denim` to run. Unlike `deSolve` which takes a time sequence, `denim` only require the [simulation duration]{.underline} and [time step.]{.underline}
 
 Since `denim` is a discrete time model, time step must be set to a small value for the result to closely follow that of `deSolve` (in this example, 0.01).
 

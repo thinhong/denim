@@ -20,11 +20,11 @@ library(denim)
 
 ## Non-parametric vs parametric
 
-In denim, users have 2 options to define dwell-time distribution:
+In denim, the users have 2 options to define dwell-time distribution:
 
 -   As a parametric distribution: using `d_*()` functions.
 
--   As a non-parametric distribution: using `nonparametric()` function and user must provide the histogram of distribution where bin-width matches time step.
+-   As a non-parametric distribution: using `nonparametric()` function and the user must provide the histogram of distribution where bin-width matches time step.
 
 ### Example 1
 

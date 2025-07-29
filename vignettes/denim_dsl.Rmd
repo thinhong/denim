@@ -24,7 +24,7 @@ In denim, model is defined by a set of transitions between compartments. Each tr
 
 -   *key* show the transition direction between 2 compartments.
 
--   *value* is an expression that describe the transition, it can be a ***math expression*** or a ***built-in dwell-time distribution function***.
+-   *value* is an expression that describe the transition, either as a rate given by a ***math expression*** or as a distribution of dwell-time in the origin compartment. This distribution can be specified parametrically using the ***built-in distribution function*** or through providing of ***histogram numeric values***.
 
 These *key-value* pairs can be provided in 2 ways
 
@@ -42,7 +42,7 @@ Model definition written in denim DSL must be parsed by the function `denim_dsl(
 
 ***Math expression***
 
-For math expression, some basic supported operators include: `+` for addition, `-` for minus, `*` for multiplication, `/` for division, `^` for power. Users can also define additional model parameters in the math expression.
+For math expression, some basic supported operators include: `+` for addition, `-` for minus, `*` for multiplication, `/` for division, `^` for power. The users can also define additional model parameters in the math expression.
 
 Math expressions in denim are parsed using muparser. For a full list of operators, visit the muparser website at <https://beltoforion.de/en/muparser/features.php>.
 
@@ -84,7 +84,7 @@ sir_model <- denim_dsl({
 })
 ```
 
-Similar to R, users can also add comments in denim DSL by starting the comment with `#` sign.
+Similar to R, the users can also add comments in denim DSL by starting the comment with `#` sign.
 
 ```{r eval=FALSE}
 sir_model <- denim_dsl({
@@ -96,7 +96,7 @@ sir_model <- denim_dsl({
 
 ***Run model***
 
-To run the model, users must provide:
+To run the model, the users must provide:
 
 -   Values for model parameters (in this example, `N`, `beta`, and `gamma`).
 

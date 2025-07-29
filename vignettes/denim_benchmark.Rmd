@@ -12,39 +12,39 @@ bibliography: references.bib
 
 To assess denim's performance, we benchmark it against other available packages, listed in the table below.
 
-+----------+------------+--------------------------------------------------------------------+
-| Package  | Model time | Note                                                               |
-+==========+============+====================================================================+
-| uSEIR    | discrete   | 2 implementations for uSEIR that will be tested                    |
-|          |            |                                                                    |
-|          |            | -   Implementation in Python                                       |
-|          |            |                                                                    |
-|          |            | -   Implementation in Cython                                       |
-+----------+------------+--------------------------------------------------------------------+
-| deSolve  | continuous | 3 ways to define model for deSolve that will be tested             |
-|          |            |                                                                    |
-|          |            | -   Model in R                                                     |
-|          |            |                                                                    |
-|          |            | -   Model in C                                                     |
-|          |            |                                                                    |
-|          |            | -   Model in Fortran                                               |
-+----------+------------+--------------------------------------------------------------------+
-| IONISE   | continuous |                                                                    |
-+----------+------------+--------------------------------------------------------------------+
-| diffeqr  | continuous | 2 ways to run model in diffeqr will be tested                      |
-|          |            |                                                                    |
-|          |            | -   Define model in R                                              |
-|          |            |                                                                    |
-|          |            | -   Define model in Julia                                          |
-+----------+------------+--------------------------------------------------------------------+
-| odin     | discrete   | A manual implementation of denim's algorithm, using odin is tested |
-+----------+------------+--------------------------------------------------------------------+
-| denim    | discrete   | Two methods for defining distributions are tested:                 |
-|          |            |                                                                    |
-|          |            | -   Built-in parametric functions                                  |
-|          |            |                                                                    |
-|          |            | -   Histograms using the `nonparametric()` function                |
-+----------+------------+--------------------------------------------------------------------+
++-----------+------------+--------------------------------------------------------------------+
+| Package   | Model time | Note                                                               |
++===========+============+====================================================================+
+| uSEIR     | discrete   | 2 implementations for uSEIR that will be tested                    |
+|           |            |                                                                    |
+|           |            | -   Implementation in Python                                       |
+|           |            |                                                                    |
+|           |            | -   Implementation in Cython                                       |
++-----------+------------+--------------------------------------------------------------------+
+| deSolve   | continuous | 3 ways to define model for deSolve that will be tested             |
+|           |            |                                                                    |
+|           |            | -   Model in R                                                     |
+|           |            |                                                                    |
+|           |            | -   Model in C                                                     |
+|           |            |                                                                    |
+|           |            | -   Model in Fortran                                               |
++-----------+------------+--------------------------------------------------------------------+
+| IONISE    | continuous |                                                                    |
++-----------+------------+--------------------------------------------------------------------+
+| diffeqr   | continuous | 2 ways to run model in diffeqr will be tested                      |
+|           |            |                                                                    |
+|           |            | -   Define model in R                                              |
+|           |            |                                                                    |
+|           |            | -   Define model in Julia                                          |
++-----------+------------+--------------------------------------------------------------------+
+| odin      | discrete   | A manual implementation of denim's algorithm, using odin is tested |
++-----------+------------+--------------------------------------------------------------------+
+| denim     | discrete   | Two methods for defining distributions are tested:                 |
+|           |            |                                                                    |
+|           |            | -   Built-in parametric functions                                  |
+|           |            |                                                                    |
+|           |            | -   Histograms using the `nonparametric()` function                |
++-----------+------------+--------------------------------------------------------------------+
 
 The benchmarking process was conducted on a Macbook Pro with M2 Pro chip, 16 GBs of RAM and 10 cores (6 performance and 4 efficiency). 
 
@@ -544,7 +544,7 @@ Median run time for `diffeqr` with base solver: `r median(diffeqr_base_runs)` se
 
 <details>
 
-<summary>Code to set up model in Julia using `diffeqr` </summary>
+<summary>Code to set up model in Julia using `diffeqr`</summary>
 
 We can tell `diffeqr` to define model in Julia, so we can utilize Julia JIT compiler which can improve the runtime.
 
@@ -1095,9 +1095,9 @@ plot_df <- imap_dfr(benchmark_runs, \(run_times, method) {
 })
 
 # Apply log transform if specified
-if (apply_log) {
-  plot_df$time <- log(plot_df$time)
-}
+# if (apply_log) {
+#   plot_df$time <- log(plot_df$time)
+# }
 
 # Compute medians for each method
 medians <- plot_df %>%
@@ -1106,20 +1106,40 @@ medians <- plot_df %>%
   ungroup()
 
 # Create the plot
-ggplot(plot_df, aes(x = run, y = time, color = method, shape = model_time)) +
-  geom_point(alpha = 0.7) +
-  geom_hline(data = medians, aes(yintercept = median_time, color = method), linetype = "dashed") +
-  # scale_color_manual(values = colors) +
+runtime_plot <- ggplot(plot_df, aes(x = run, y = time, color = method, shape = model_time)) +
+  geom_point(alpha = 0.7,
+             show.legend = c(color = FALSE, shape = TRUE)) +
+  geom_segment(
+    data = medians,
+    aes(x = -2, xend = total_runs + 2, y = median_time, color = method),
+    linetype = "dashed",
+    linewidth = 0.3,
+    show.legend = FALSE
+  ) +
+  geom_text(data = medians, 
+            aes(x = total_runs + 3, y = median_time, label = method, color = method),
+            hjust = 0, size = 2.5, show.legend = FALSE) +
   labs(
     title = paste0("Run time for ", total_runs, " runs"),
     x = "Run",
-    y = if (apply_log) "Log run time (seconds)" else "Run time (seconds)",
+    y = "Run time (seconds)",
     color = "Approach",
     shape = "Model time"
+  ) +
+  scale_x_continuous(
+    limits = c(-2,  total_runs + 15),
+    breaks = seq(0, 50, 10)
   ) +
   theme_bw() +
   theme(legend.position = "right")
 
+# Apply log scale to y-axis if requested
+if (apply_log) {
+  runtime_plot <- runtime_plot + scale_y_log10() +
+    labs(y = "Run time (seconds)")
+}
+
+runtime_plot
 # save plots
 # ggsave("../manuscript_plots/benchmark_all_log_new.png", width = 8, height = 5, dpi = 300)
 ```
