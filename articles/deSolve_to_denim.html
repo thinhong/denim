@@ -145,12 +145,13 @@
 <div class="section level3">
 <h3 id="model-definition">Model definition<a class="anchor" aria-label="anchor" href="#model-definition"></a>
 </h3>
-<p>Unlike <code>deSolve</code> where transitions between compartments
-are defined by a system of ODEs, transitions in <code>denim</code> must
-be defined by (i) a distribution of dwell-time (either parametric or
-non-parametric) or (ii) a mathematical expression.</p>
-<p>User must first identify the transitions that best describe the ones
-in their <code>deSolve</code> model.</p>
+<p>Similar to <code>deSolve</code>, transitions between compartments in
+<code>denim</code> can be defined using ordinary differential equations
+(ODEs). However, <code>denim</code> extends it by providing the option
+to directly express the dwell time distribution.</p>
+<p>To utilize this option from <code>denim</code>, the user must first
+identify which transitions can best describe the ones in their
+<code>deSolve</code> model.</p>
 <details><summary>Identify distribution</summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># --- Model definition in deSolve</span></span>
 <span><span class="va">transition_func</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">state</span>, <span class="va">param</span><span class="op">)</span><span class="op">{</span></span>
@@ -169,8 +170,8 @@ in their <code>deSolve</code> model.</p>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">dS</span>, <span class="va">dI</span>, <span class="va">dI1</span>, <span class="va">dI2</span>, <span class="va">dR</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-</details><p>With the transitions identified, user can then define the model in
-<code>denim</code>.</p>
+</details><p>With the transitions identified, the user can then define the model
+in <code>denim</code>.</p>
 <p>When using <code>denim</code> DSL, the model structure is given as a
 set of <em>key</em>-<em>value</em> pairs where</p>
 <ul>
@@ -190,18 +191,18 @@ describe the transition</p></li>
 <div class="section level3">
 <h3 id="model-configurations">Model configurations<a class="anchor" aria-label="anchor" href="#model-configurations"></a>
 </h3>
-<p>Similar to <code>deSolve</code>, <code>denim</code> also ask users to
-provide the <u>initial values</u> and any <u>additional parameters</u>
-in the form of named vectors.</p>
-<p>For the example <code>deSolve</code> code, while users can use the
-<code>initalValues</code> from the <code>deSolve</code> code as is
+<p>Similar to <code>deSolve</code>, <code>denim</code> also ask the
+users to provide the <u>initial values</u> and any <u>additional
+parameters</u> in the form of named vectors.</p>
+<p>For the example <code>deSolve</code> code, while the users can use
+the <code>initalValues</code> from the <code>deSolve</code> code as is
 (<code>denim</code> will ignore unused <code>I1</code>, <code>I2</code>
 compartments as these sub-compartments will be automatically computed
 internally), it is recommended to remove redundant compartments (in this
 example, <code>I1</code> and <code>I2</code>).</p>
 <p>For parameters, since <code>rate</code> is already defined in the
-distribution functions, users only need to keep <code>beta</code> and
-<code>N</code> from the initial parameters vector. We do not need to
+distribution functions, the users only need to keep <code>beta</code>
+and <code>N</code> from the initial parameters vector. We do not need to
 specify the value for <code>timeStep</code> variable as this is a
 special variable in denim and will be defined later on.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -229,9 +230,9 @@ set <code>dist_init</code> parameter of distribution function to
 <div class="section level3">
 <h3 id="simulation">Simulation<a class="anchor" aria-label="anchor" href="#simulation"></a>
 </h3>
-<p>Lastly, users need to define the simulation duration and time step
-for <code>denim</code> to run. Unlike <code>deSolve</code> which takes a
-time sequence, <code>denim</code> only require the <u>simulation
+<p>Lastly, the users need to define the simulation duration and time
+step for <code>denim</code> to run. Unlike <code>deSolve</code> which
+takes a time sequence, <code>denim</code> only require the <u>simulation
 duration</u> and <u>time step.</u></p>
 <p>Since <code>denim</code> is a discrete time model, time step must be
 set to a small value for the result to closely follow that of
@@ -246,11 +247,11 @@ set to a small value for the result to closely follow that of
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">[</span><span class="va">mod</span><span class="op">$</span><span class="va">Time</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%%</a></span> <span class="fl">1</span> <span class="op">==</span> <span class="fl">0</span>, <span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##     Time        S        I          R</span></span>
 <span><span class="co">## 1      0 999.0000 1.000000 0.00000000</span></span>
-<span><span class="co">## 101    1 998.6566 1.293759 0.04961535</span></span>
-<span><span class="co">## 201    2 998.2251 1.593725 0.18121212</span></span>
-<span><span class="co">## 301    3 997.7004 1.920189 0.37940195</span></span>
-<span><span class="co">## 401    4 997.0725 2.289061 0.63848007</span></span>
-<span><span class="co">## 501    5 996.3266 2.714365 0.95900520</span></span></code></pre>
+<span><span class="co">## 101    1 998.6566 1.293774 0.04960158</span></span>
+<span><span class="co">## 201    2 998.2250 1.593818 0.18113505</span></span>
+<span><span class="co">## 301    3 997.7003 1.920441 0.37921398</span></span>
+<span><span class="co">## 401    4 997.0723 2.289566 0.63814981</span></span>
+<span><span class="co">## 501    5 996.3263 2.715228 0.95851789</span></span></code></pre>
 </div>
 </div>
 <div class="section level2">

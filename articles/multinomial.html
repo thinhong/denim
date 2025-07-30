@@ -114,7 +114,7 @@ model. There are 2 main approaches to handle this:</p>
 <li><p>Model as multinomial transition (outgoing population is split by
 a fixed proportion to transition to new compartments).</p></li>
 </ul>
-<p><code>denim</code> allows users to model both situations, while
+<p><code>denim</code> allows the users to model both situations, while
 requiring minimal change to the code base to switch between 2 methods of
 modeling.</p>
 </div>
@@ -127,12 +127,13 @@ modeling.</p>
 <p>To specify the proportion that goes to each outgoing compartment,
 define the transition using the following syntax in model
 definition:</p>
-<p><code>proportion * compartment -&gt;  out_compartment = [transition]</code></p>
+<p><code>proportion * from -&gt;  to = [transition]</code></p>
 <p>Note that the <code>proportion</code> here is the proportion of
 <code>compartment</code> that will end up in
 <code>out_compartment</code> <u>at equilibrium</u>.</p>
 <p><strong><em>Example:</em></strong> An SIRD model where 90% of
 infected can recover while the remaining 10% will die.</p>
+<p><img src="images/denim_website-mult-trans-multinomial.png"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/denim_dsl.html">denim_dsl</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">S</span> <span class="op">-&gt;</span> <span class="va">I</span> <span class="op">=</span> <span class="va">beta</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="op">(</span><span class="va">I</span> <span class="op">/</span> <span class="va">N</span><span class="op">)</span> </span>
@@ -151,7 +152,14 @@ dR = \frac{1}{3}IR_2 \\
 dD = 0.1*ID
 \end{cases}
 \]</span></p>
-</details><div class="section level4">
+<p>Where:</p>
+<ul>
+<li><p><span class="math inline">\(IR_1\)</span> and <span class="math inline">\(IR_2\)</span> are the sub-compartments of <span class="math inline">\(I\)</span> that will transition to <span class="math inline">\(R\)</span>. It is divided into 2 sub-compartments
+to model Erlang distributed time for <span class="math inline">\(I
+\rightarrow R\)</span> transition.</p></li>
+<li><p><span class="math inline">\(ID\)</span> is the sub-compartment of
+<span class="math inline">\(I\)</span> that will transition to <span class="math inline">\(R\)</span>.</p></li>
+</ul></details><div class="section level4">
 <h4 id="proportion-normalization">Proportion normalization<a class="anchor" aria-label="anchor" href="#proportion-normalization"></a>
 </h4>
 <p><code>denim</code> will automatically normalize the proportions if
@@ -270,6 +278,7 @@ transitions as competing risks.</p>
 <p><strong><em>Example:</em></strong> the following model definition
 will treat <code>I-&gt;R</code> and <code>I-&gt;D</code> as competing
 risks.</p>
+<p><img src="images/denim_website-mult-trans-competing-risks.png"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/denim_dsl.html">denim_dsl</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">S</span> <span class="op">-&gt;</span> <span class="va">I</span> <span class="op">=</span> <span class="va">beta</span> <span class="op">*</span> <span class="va">S</span> <span class="op">*</span> <span class="op">(</span><span class="va">I</span> <span class="op">/</span> <span class="va">N</span><span class="op">)</span></span>
