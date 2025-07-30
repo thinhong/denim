@@ -15,6 +15,7 @@ private:
 public:
     explicit DistributionTransitionProb(double transitionProb);
     double getTransitionProb(size_t index) override;
+    std::vector<double>& getTransitionProbRef() override;
 };
 
 

@@ -13,3 +13,8 @@ DistributionTransitionProb::DistributionTransitionProb(double transitionProb) {
 double DistributionTransitionProb::getTransitionProb(size_t index) {
     return transitionProb;
 }
+
+std::vector<double>&  DistributionTransitionProb::getTransitionProbRef() {
+    static std::vector<double> returned_val{transitionProb};
+    return returned_val;
+}

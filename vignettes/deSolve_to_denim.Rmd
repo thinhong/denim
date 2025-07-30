@@ -46,9 +46,9 @@ head(ode_mod[-1, c("time", "S", "I", "R")])
 
 ### Model definition
 
-Unlike `deSolve` where transitions between compartments are defined by a system of ODEs, transitions in `denim` must be defined by (i) a distribution of dwell-time (either parametric or non-parametric) or (ii) a mathematical expression.
+Similar to `deSolve`, transitions between compartments in `denim` can be defined using ordinary differential equations (ODEs). However, `denim` extends it by providing the option to directly express the dwell time distribution.
 
-User must first identify the transitions that best describe the ones in their `deSolve` model.
+To utilize this option from `denim`, the user must first identify which transitions can best describe the ones in their `deSolve` model.
 
 ```{=html}
 <details>

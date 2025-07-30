@@ -15,3 +15,8 @@ DistributionConstant::DistributionConstant(double constValue) {
 double DistributionConstant::getTransitionProb(size_t index) {
     return constant;
 }
+
+std::vector<double>& DistributionConstant::getTransitionProbRef() {
+    static std::vector<double> returned_val{constant};
+    return returned_val;
+}

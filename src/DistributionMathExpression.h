@@ -12,6 +12,7 @@ private:
     std::string expression;
 public:
     explicit DistributionMathExpression(std::string& expression);
+    std::vector<double>& getTransitionProbRef() override;
     double getTransitionProb(size_t index) override;
 };
 

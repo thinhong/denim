@@ -1,8 +1,8 @@
 ---
-title: "denim: deterministic discrete-time model with memory"
+title: "denim: deterministic model with memory"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{denim: deterministic discrete-time model with memory}
+  %\VignetteIndexEntry{denim: deterministic model with memory}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -19,31 +19,19 @@ library(denim)
 
 ## 1. Simple SIR model with gamma distributed lengths of stay
 
-The SIR model uses 3 compartments: S (susceptible), I (infected), R (recovered) to describe clinical status of individuals. We use the most simple form of SIR model to demonstrate how to define the distribution of the lengths of stay distribution.
+The SIR model uses 3 compartments: S (susceptible), I (infected), R (recovered) to describe clinical status of individuals. We use the simplest form of SIR model to demonstrate how to define the distribution of the lengths of stay distribution.
 
-<center>
-
-```{r, echo=FALSE}
-DiagrammeR::grViz("digraph {
-  graph [layout = dot, rankdir = LR]
-  
-  node [shape = rectangle]
-  
-  S -> I [label = '&#946;SI/N']
-  I -> R [label = '&#947;I']
-  }",
-  width = 300, height = "100%")
-```
-
-</center>
+<center>![](./images/denim_website-getting-started-basic.png){width="400"}</center>
 
 The model equations are:
 
-$$S_{t+1} - S_{t} = -\lambda S_{t} = -\frac{\beta I_{t}}{N}S_{t}$$ $$I_{t+1} - I_{t} = \frac{\beta I_{t}}{N}S_{t} - \gamma I_{t}$$ $$R_{t+1} - R_{t} = \gamma I_{t}$$
+$$\frac{dS(t)}{dt} = -\lambda S(t) = -\frac{\beta I(t)}{N}S(t)$$ $$\frac{dI(t)}{dt} = \frac{\beta I(t)}{N}S - \gamma I(t)$$ $$\frac{dR(t)}{dt} = \gamma I(t)$$
 
 -   $N$: total population size, $N = S + I + R$
--   $\beta$: the product of contact rates and transmission probability; usually we define $\lambda =\frac{\beta I_{t}}{N}$ as the force of infection
+-   $\beta$: the product of contact rates and transmission probability; usually we define $\lambda =\frac{\beta I(t)}{N}$ as the force of infection
 -   $\gamma$: recovery rate
+
+For mathematical simplicity, modelers typically assume that the recovery rate $\gamma$ is constant, this will leads to an exponentially distributed length of stay i.e most individuals recover after 1 day being infected.
 
 ```{r, echo=FALSE}
 rates <- c(0.5, 1, 1.5)
@@ -72,50 +60,20 @@ plot(x, y, type = "l", col = col_codes[1], lty = 1, lwd = 3,
      xlab = "Length of stay (days)", ylab = "", yaxt = 'n')
 ```
 
-The model now look like this:
+The following diagram demonstrates the model with a more realistic dwell time. The dashed arrow indicates transition described by dwell time distribution, while the solid arrow indicates transition rate.
 
-<center>
-
-```{r, echo=FALSE}
-DiagrammeR::grViz("digraph {
-  graph [layout = dot, rankdir = LR]
-  
-  node [shape = rectangle]
-  
-  S -> I [label = '&#946;SI/N']
-  I -> R [label = 'd_gamma(1/2, 3)']
-  }",
-  width = 400, height = "100%")
-```
-
-</center>
+<center>![](./images/denim_website-getting-started-sir.png){width="400"}</center>
 
 **Model specification**
 
 *Model transition*
 
-<center>
-
-```{r, echo=FALSE}
-DiagrammeR::grViz("digraph {
-  graph [layout = dot, rankdir = LR]
-  
-  node [shape = rectangle]
-  
-  S -> I [label = '&#946;SI/N']
-  I -> R [label = 'd_gamma(1/2, 3)']
-  }",
-  width = 400, height = "100%")
-```
-
-</center>
-
-We have two transitions `S -> I` and `I -> R` in this case. The transitions are specified in a list follow this format `"transition" = expression`, of which equation is defined with one of our functions for waiting time distribution.
+We have two transitions `S -> I` and `I -> R` in this case. The transitions are specified in a list follow this format `"transition" = expression`, of which expression is defined with one of our functions for waiting time distribution [or]{.underline} a mathematical expression.
 
 ```{r}
 transitions <- list(
   "S -> I" = "beta * S * I / N",
-  "I -> R" = d_gamma(rate = 1/4, 3)
+  "I -> R" = d_gamma(rate = 1/2, 3)
 )
 ```
 
@@ -124,7 +82,7 @@ Another option to define the transitions is by using denim's DSL. Refer to the [
 ```{r}
 transitions <- denim_dsl({
   S -> I = beta * (I/N) * S
-  I -> R = d_gamma(rate = 1/4, shape = 3)
+  I -> R = d_gamma(rate = 1/2, shape = 3)
 })
 ```
 
@@ -174,54 +132,44 @@ plot(mod)
 
 ## 2. How the algorithm work?
 
-In the SIR model, all infected individuals are presented by a single compartment I and have the same recovery rate $\gamma$.
+The central idea of our algorithm is to split the compartment into a chain of sub-compartments, allowing more control over the dwell time distribution. The number of sub-compartments depends on the [maximum duration]{.underline} an individual can stay in the compartment and the [duration of time step]{.underline}.
+
+At each time step, we calculate the out-going population from each sub-compartment based on the provided dwell-time distribution.
+
+For example, if we expect a disease with a maximum 4 days of infection, and the duration of time step is 1 day, we will end up with 4 sub-compartments $I_1, I_2, I_3, I_4$. At each time step, a proportion $q_i$ of individuals in $I_i$, where $i<4$ will move to $R$ while the remaining $1-q_i$ will move to $I_{i+1}$.
+
+Assuming we want the infectious period to follow a discrete distribution $P_I = \{p_1, p_2, p_3, p_4\}$. Our goal is to estimate $q_{1}$, $q_{2}$, $q_{3}$ such that the resulting dwell time distribution matches $P_I$.
+
+This can be obtained by setting:
+
+$$q_{i} = \frac{p_i}{1 - \sum_{j=1}^{i-1}p_j}$$
+
+The following diagram illustrates the flow between sub-compartments. Note that all individuals in $I_4$ will transition to $R$ (i.e., $q_4 = 1$)
 
 <center>
 
 ```{r, echo=FALSE}
-DiagrammeR::grViz("digraph {
-  graph [layout = dot, rankdir = LR]
-  
-  node [shape = rectangle]
-  
-  S -> I [label = '&#946;SI/N']
-  I -> R [label = '&#947;I']
-  }",
-  width = 300, height = "100%")
+# DiagrammeR::grViz("digraph {
+#   graph [layout = dot, rankdir = LR]
+#   
+#   node [shape = rectangle]
+#   
+#   S -> I1 [label = '&#946;S(I@_{1} + I@_{2} + I@_{3} + I@_{4})/N']
+#   I1 -> R1 [label = '&#947;@_{1}I@_{1}']
+#   I2 -> R2 [label = '&#947;@_{2}I@_{2}']
+#   I3 -> R3 [label = '&#947;@_{3}I@_{3}']
+#   I4 -> R4 [label = 'I@_{4}']
+#   I1 -> I2 [label = '(1-&#947;@_{1})I@_{1}']
+#   I2 -> I3 [label = '(1-&#947;@_{2})I@_{2}']
+#   I3 -> I4 [label = '(1-&#947;@_{3})I@_{3}']
+#   }", height = "100%", width = "100%")
 ```
+
+![](./images/denim_website-getting-started-denim-sir.png){width="700"}
 
 </center>
 
-We want the recovery rate of individuals who had been infected for 1 day differ from the recovery rate of 2-day infected patients. So rather than using one compartment for infected (I), we define multiple infected sub-compartments. The number of sub-compartments depends on the maximum day we expect all infected individuals would be recovered.
-
-For example, if we expect a disease with a maximum 4 days of infection, we will end up with 4 sub-compartments. Each sub-compartment has its own recovery rate $\gamma_{1}$, $\gamma_{2}$, $\gamma_{3}$, $\gamma_{4}$. At day 4 it is certain that the patient will recover (because we assume that this disease has a maximum 4 days of infection), $\gamma_{4} = 1$.
-
-<center>
-
-```{r, echo=FALSE}
-DiagrammeR::grViz("digraph {
-  graph [layout = dot, rankdir = LR]
-  
-  node [shape = rectangle]
-  
-  S -> I1 [label = '&#946;S(I@_{1} + I@_{2} + I@_{3} + I@_{4})/N']
-  I1 -> R1 [label = '&#947;@_{1}I@_{1}']
-  I2 -> R2 [label = '&#947;@_{2}I@_{2}']
-  I3 -> R3 [label = '&#947;@_{3}I@_{3}']
-  I4 -> R4 [label = 'I@_{4}']
-  I1 -> I2 [label = '(1-&#947;@_{1})I@_{1}']
-  I2 -> I3 [label = '(1-&#947;@_{2})I@_{2}']
-  I3 -> I4 [label = '(1-&#947;@_{3})I@_{3}']
-  }", height = "100%", width = "100%")
-```
-
-</center>
-
-Let $R_1 + R_2 + R_3 + R_4 = \Sigma R$. We have $\frac{R_1}{\Sigma R} = p_1$, $\frac{R_2}{\Sigma R} = p_2$, $\frac{R_3}{\Sigma R} = p_3$, $\frac{R_4}{\Sigma R} = p_4$. Our goal is to estimate $\gamma_{1}$, $\gamma_{2}$, $\gamma_{3}$ to obtain $p_1$, $p_2$, $p_3$, $p_4$ that fit a pre-defined distribution at the equilibrium state. This can be obtained by setting:
-
-$$\gamma_{i} = \frac{p_i}{1 - \sum_{j=1}^{i-1}p_j}$$
-
-For a given length of stay distribution, we identify the maximum length of stay using its cumulative distribution function. Because cumulative distribution function is asymptotic to 1 and never equal to 1, we need to set a value that is acceptable to be rounded to 1. If we want a cumulative probability of 0.999 to be rounded as 1, we set the error tolerance threshold as `1 - 0.999 = 0.001` (specified by the argument `errorTolerance = 0.001`). The time when cumulative probability = 0.999 will be set as the maximum length of stay of the compartment. Default `errorTolerance` of `denim` is set at `0.001`.
+For a given dwell-time distribution, we identify the maximum length of stay using its cumulative distribution function. Because cumulative distribution function is asymptotic to 1, we need to set a value that is acceptable to be rounded to 1. If we want a cumulative probability of 0.999 to be rounded as 1, we set the error tolerance threshold as `1 - 0.999 = 0.001` (specified by the argument `errorTolerance = 0.001`). The time when cumulative probability = 0.999 will be set as the maximum length of stay of the compartment. Default `errorTolerance` of `denim` is set at `0.001`.
 
 *Initialize population in sub-compartments*
 
@@ -250,7 +198,7 @@ Current available distributions in this package including:
 
 -   `d_lognormal(mu, sigma)`: Discrete **log-normal distribution** with parameters `mu` and `sigma`
 
--   `nonparametric(waitingTimes)`: A **vector of values**, could be numbers, percentages, density of the length of stay based on real data, `denim` will convert it into a distribution. These values should: (i) corresponding to 1 timestep, (ii) be chronologically ordered according to the dwell-time.
+-   `nonparametric(waitingTimes)`: A **vector of values**, could be numbers, percentages, density of the length of stay based on real data, `denim` will convert it into a distribution. These values should: (i) corresponding to 1 time step, (ii) be chronologically ordered according to the dwell-time.
 
 Mathematical expression: Transition can also be described using a math expression such as `beta * S * I / N`. You will need to define parameters that are not compartment names in the `parameters` argument
 
@@ -260,29 +208,13 @@ In `denim`, transitions between one compartment to multiple compartments are mod
 
 Consider this example:
 
-<center>
-
-```{r, echo=FALSE}
-DiagrammeR::grViz("digraph {
-  graph [layout = dot, rankdir = LR]
-  
-  node [shape = rectangle]
-  
-  S -> I [label = '&#946;SI/N']
-  S -> V [label = '5']
-  I -> R [label = '0.9 -> d_gamma(1/3, 2)']
-  I -> D [label = '0.1 -> d_lognormal(2, 0.5)']
-  }",
-  width = 500, height = "100%")
-```
-
-</center>
+<center>![](./images/denim_website-getting-started-multiple-transitions.png){width="500"}</center>
 
 There are two scenarios in this example:
 
 -   Susceptible individuals can be infected or vaccinated. The assumption here is they will be infected first (`S -> I`), and then the rest of them who were not infected will get vaccinated (`S -> V`).
 
--   Infected individuals can recover or die. If the mortality probability is known, we can implement it into the model, for example by defining `0.9 * I -> R` (90% individuals will recover) and then `0.1 * I -> D` (10% of them die). By doing so, we ensure that the mortality probability is 10%, while also define the length of stay of individuals at the infected state before recover or die follows gamma or log-normal distribution, respectively.
+-   Infected individuals can recover or die. If the mortality probability is known, we can implement it into the model. For example, here, we specify that 90% of the infected individuals will recover (sub-population $I_R$) and 10% will die (sub-population $I_D$). By doing so, we ensure that the mortality probability is 10%, while also define the length of stay of individuals at the infected state before recover or die follows gamma or log-normal distribution, respectively.
 
 We can define the model for this example as follows:
 
@@ -322,27 +254,11 @@ plot(mod, ylim = c(0, 1000))
 
 For a more detailed explanation for transitions to multiple states, refer to [this article](./multinomial.html)
 
-## 5. Additional example
+## 5. Additional examples
 
-<center>
+### Example 1
 
-```{r, echo=FALSE}
-DiagrammeR::grViz("digraph {
-  graph [layout = dot, rankdir = LR]
-  
-  node [shape = rectangle]
-  
-  S -> I [label = '&#946;S(I + IV)/N']
-  S -> V [label = '2']
-  I -> D [label = '0.1 -> d_lognormal(2, 0.5)']
-  I -> R [label = '0.9 -> d_gamma(1/3, 2)']
-  V -> IV [label = '0.1 * &#946;V(I + IV)/N']
-  IV -> R [label = 'd_exponential(2)']
-  }",
-  width = 700, height = "100%")
-```
-
-</center>
+<center>![](./images/denim_website-getting-started-extra-1.png){width="700"}</center>
 
 ```{r, fig.width = 5}
 transitions <- denim_dsl({
@@ -385,6 +301,95 @@ plot(mod)
 head(mod)
 ```
 
+### Example 2
+
+![](./images/denim_website-getting-started-extra2.png){width="500"}
+
+```{r echo=FALSE}
+# ------ Code to generate the distribution to demonstrate nonparametric --------- 
+# Helper function
+compute_dist <- function(dist_func,..., timestep=0.05, error_tolerance=0.0001){
+  maxtime <- timestep
+  prev_prob <- 0
+  prob_dist <- numeric()
+  
+  while(TRUE){
+     # get current cumulative prob and check whether it is sufficiently close to 1
+     temp_prob <-  ifelse(
+       dist_func(maxtime, ...) < (1 - error_tolerance), 
+       dist_func(maxtime, ...), 
+       1);
+
+     # get f(t)
+     curr_prob <- temp_prob - prev_prob
+     prob_dist <- c(prob_dist, curr_prob)
+     
+     prev_prob <- temp_prob
+     maxtime <- maxtime + timestep
+     
+     if(temp_prob == 1){
+       break
+     }
+  }
+  
+  prob_dist
+}
+
+timestep <- 0.05
+# create a multimodal 
+first_dist <- compute_dist(pweibull, 
+                   scale = 5, shape = 5,
+                   timestep = timestep)
+second_dist <- compute_dist(pweibull, 
+                   scale = 2.5, shape = 4,
+                   timestep = timestep)
+second_dist <- c(second_dist, rep(0, length(first_dist) - length(second_dist)))
+ir_dist <- first_dist + second_dist
+```
+
+Assuming we have the distribution of time for the infected to recover ($P_{IR}$) as followed
+
 ```{r}
-#TODO: example with non-parametric distribution
+timestep <- 0.05
+plot(seq(0, by = 0.05, length.out = length(ir_dist)), 
+     ir_dist, 
+     type = "l", col = "#374F77", lty = 1, lwd = 3,
+     xlab = "Length of stay (days)", ylab = "", yaxt = 'n')
+```
+
+This distribution can be used directly for modeling with the `nonparametric()` function. Note that when using `nonparametric()`, we must define the simulation `timeStep` to match the time resolution of the distribution data.
+
+For example, the provided distribution is given with the interval of 0.05 day, we must set `timeStep = 0.05`.
+
+```{r}
+transitions <- denim_dsl({
+  S -> I = beta*I/N*S
+  I -> R = nonparametric(i_dist)
+  I -> D = d_exponential(d_rate)
+})
+
+parameters <- list(
+  beta = 0.7,
+  i_dist = ir_dist,
+  d_rate = 0.1,
+  N = 1000
+)
+
+initialValues <- c(
+  S = 999,
+  I = 1,
+  R = 0,
+  D = 0
+)
+
+simulationDuration <- 30
+timeStep <- 0.05
+
+mod <- sim(transitions = transitions, 
+           initialValues = initialValues, 
+           parameters = parameters, 
+           simulationDuration = simulationDuration, 
+           timeStep = timeStep)
+
+plot(mod, ylim = c(0, 1000))
 ```

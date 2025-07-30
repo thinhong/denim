@@ -62,7 +62,7 @@ void Compartment::setLengthSubCompartment() {
             this -> subCompartments[pos].resize(currLength, 0);
 
             if (!distSubCompInit[pos]){
-                // if user specify to not distribute initial value, simply initalize in firs subcompartment
+                // if the user specify to not distribute initial value, simply initalize in firs subcompartment
                 this -> subCompartments[pos][0] = compTotal[0]*outWeights[pos];
             }else{
                 // distribute based on specified outDistribution
@@ -183,8 +183,9 @@ void Compartment::updateCompartment(size_t iter, std::vector<std::string>& param
 
     // assign values of current subCompartment to tmpSubComp
     // since tmpSubComp is only used for competingRisk scenario where there is only 1 subCompartment chain, simply get the 1st chain
-    tmpSubComp.assign(subCompartments[0].begin(), subCompartments[0].end());
-
+    if(this->competingRisks){
+        tmpSubComp.assign(subCompartments[0].begin(), subCompartments[0].end());
+    }
 
     // Compute total in value of this compartment (later distributed to first subcompartment of each subcompartments chain)
     double inValue {0};
@@ -245,24 +246,32 @@ void Compartment::updateCompartment(size_t iter, std::vector<std::string>& param
 /// @param iter current iteration
 /// @param outIndex index of out compartment
 void Compartment::updateSubCompByDist(size_t iter, size_t outIndex) {
-    // Going backward from subCompartments[n] -> subCompartments[1]
-    // This startIndex is to reduce the number of calculations
+    // This endIndex is to reduce the number of calculations
 
-    size_t startIndex {0};
+    size_t endIndex {0};
 
     if(this->competingRisks){
-        startIndex = std::min(iter, subCompartments[0].size() - 1);
-        for (size_t i {0}; i <= startIndex; ++i) { 
-            // if competing risks, update using tmpSubComp instead
-            outTotals[outIndex] += tmpSubComp[startIndex - i]  * outDistributions[outIndex]->getTransitionProb(startIndex - i);
-            subCompartments[0][startIndex - i] -= tmpSubComp[startIndex - i] * outDistributions[outIndex]->getTransitionProb(startIndex - i);
-        }
-
+        endIndex = std::min(iter, subCompartments[0].size() - 1);
+        std::vector<double>& transProbRef = outDistributions[outIndex]->getTransitionProbRef();
+        
+        for (size_t i = 0; i <= endIndex; ++i) { 
+            // if competing risks, compute out population using tmpSubComp instead
+            // double out = tmpSubComp[i] * (i >= transProbRef.size() ? 0 : transProbRef[i]);
+            // TODO: check formulation with 1 - exp(-rate) instead 
+            double out = tmpSubComp[i] * (1 - exp(-(i >= transProbRef.size() ? 0 : transProbRef[i])));
+            outTotals[outIndex] += out;
+            subCompartments[0][i] -= out;
+        }   
     }else{
-        startIndex = std::min(iter, subCompartments[outIndex].size() - 1);
-        for (size_t i {0}; i <= startIndex; ++i) { 
-            outTotals[outIndex] += subCompartments[outIndex][startIndex - i] * outDistributions[outIndex]->getTransitionProb(startIndex - i);
-            subCompartments[outIndex][startIndex - i] *= (1 - outDistributions[outIndex] -> getTransitionProb(startIndex - i));
+        endIndex = std::min(iter, subCompartments[outIndex].size() - 1);
+        std::vector<double>& transProbRef = outDistributions[outIndex]->getTransitionProbRef();
+        
+        for (size_t i = 0; i <= endIndex; ++i) { 
+            // double out = subCompartments[outIndex][i] * (i >= transProbRef.size() ? 0 : transProbRef[i]);
+            // TODO: check formulation with 1 - exp(-rate) instead 
+            double out = subCompartments[outIndex][i] * (1 - exp(-(i >= transProbRef.size() ? 0 : transProbRef[i])));
+            outTotals[outIndex] += out;
+            subCompartments[outIndex][i] -= out;
         }
     }
 
@@ -306,11 +315,7 @@ void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<
         // automatically multiply by timeStep internally
         double computeValue = parser.Eval() * timeStep;
     } catch (mu::Parser::exception_type &e) {
-        // std::cerr << "Failed to evaluate expression: " 
-        //         << outDistributions[outIndex]->getDistName() << "\n"
-        //         << "Error message: " << e.GetMsg() << "\n";
-        // throw std::runtime_error("muParser evaluation failed: " + std::string(e.GetMsg()));
-        
+
         std::string msg = 
           "Failed to evaluate expression: " + outDistributions[outIndex]->getDistName() + "\n" +
           "Error message: " + std::string(e.GetMsg());
@@ -330,14 +335,16 @@ void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<
         outTotals[outIndex] = compTotal[iter - 1] - sumOutTotal;
     }
 
+    // for reducing number of iterations 
+    size_t endIndex {0};
     // Calculate how many people remain in each subCompartment
     if(this->competingRisks){
         double sumSubComp = std::accumulate(this -> subCompartments[0].begin(), this -> subCompartments[0].end(), (double) 0);
         if (sumSubComp > 0) {
             double remainPct = (sumSubComp - outTotals[outIndex]) / sumSubComp;
+            endIndex = std::min(iter, subCompartments[0].size() - 1);
 
-            // TODO: alternate algorithm for improve runtime
-            for (size_t i_subComp {0}; i_subComp < subCompartments[0].size(); ++i_subComp) { 
+            for (size_t i_subComp {0}; i_subComp < endIndex; ++i_subComp) { 
                 // if competing risks, update using tmpSubComp instead
                 subCompartments[0][i_subComp] -= tmpSubComp[i_subComp] * (1-remainPct);
             }
@@ -346,7 +353,8 @@ void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<
         double sumSubComp = std::accumulate(this -> subCompartments[outIndex].begin(), this -> subCompartments[outIndex].end(), (double) 0);
         if (sumSubComp > 0) {
             double remainPct = (sumSubComp - outTotals[outIndex]) / sumSubComp;
-            for (size_t i_subComp {0}; i_subComp < subCompartments[outIndex].size(); ++i_subComp) {
+            endIndex = std::min(iter, subCompartments[outIndex].size() - 1);
+            for (size_t i_subComp {0}; i_subComp < endIndex; ++i_subComp) {
                 subCompartments[outIndex][i_subComp] *= remainPct;
             }
         }

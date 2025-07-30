@@ -9,7 +9,7 @@ denim_dsl(x)
 \arguments{
 \item{x}{\itemize{
 \item an expression written in denim's DSL syntax. Each line should be a transition written in the
-format \code{compartment -> out_compartment = expression} where expression can be either a math expression
+format \code{from -> to = transition} where expression can be either a math expression
 or one of denim's built-in dwell time distribution function
 }}
 }

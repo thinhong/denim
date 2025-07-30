@@ -42,9 +42,9 @@ reference:
 # - subtitle: Fixed transition
 #   contents:
 #   - constant
-- subtitle: Math Expression
-  contents:
-  - mathexpr
+# - subtitle: Math Expression
+#   contents:
+#   - mathexpr
 # - title: Multinomial
 #   desc: Define a set of probabilities of transition from one compartment to multiple compartments
 #   contents: 

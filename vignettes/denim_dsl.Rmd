@@ -36,7 +36,7 @@ These *key-value* pairs can be provided in 2 ways
 
 In denim, each line of code must be a transition. The syntax for defining a transition in denim DSL is as followed:
 
-`compartment_A -> compartment_B = transition`
+`from -> to = [transition]`
 
 Model definition written in denim DSL must be parsed by the function `denim_dsl()`
 
@@ -212,7 +212,7 @@ While denim DSL offers cleaner and more readable syntax to define model structur
 
 For example, consider a use case below, where we explore how model dynamics change under three different `I -> R` dwell time distributions (`d_gamma`, `d_weibull`, `d_lognormal`) using `map2`.
 
-```{r message=FALSE}
+```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 # configurations for 3 different I->R transitions
 model_config <- tibble(

@@ -14,6 +14,10 @@ double DistributionParametric::getTransitionProb(size_t index) {
     }
 }
 
+std::vector<double>& DistributionParametric::getTransitionProbRef(){
+    return this -> transitionProb;
+}
+
 double DistributionParametric::getProbDist(size_t index) {
     if (index >= probDist.size()) {
         return 0;

@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 [![Codecov test coverage](https://codecov.io/gh/thinhong/denim/branch/master/graph/badge.svg)](https://app.codecov.io/gh/thinhong/denim?branch=master)
 <!-- badges: end -->
 
-An R package for building and simulating deterministic discrete-time compartmental models with memory.
+An R package for building and simulating deterministic compartmental models with memory.
 
 ## Installation
 

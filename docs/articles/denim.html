@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="denim">
-<title>denim: deterministic discrete-time model with memory • denim</title>
+<title>denim: deterministic model with memory • denim</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -17,7 +17,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="denim: deterministic discrete-time model with memory">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="denim: deterministic model with memory">
 <meta property="og:description" content="denim">
 <meta property="og:image" content="/logo.svg">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -86,10 +86,10 @@
 
 
 
-<script src="denim_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="denim_files/viz-1.8.2/viz.js"></script><link href="denim_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
-<script src="denim_files/grViz-binding-1.0.11/grViz.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.svg" class="logo" alt=""><h1>denim: deterministic discrete-time model with memory</h1>
+      <img src="../logo.svg" class="logo" alt=""><h1>denim: deterministic model with memory</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/thinhong/denim/blob/HEAD/vignettes/denim.Rmd" class="external-link"><code>vignettes/denim.Rmd</code></a></small>
@@ -102,54 +102,50 @@
 <h2 id="simple-sir-model-with-gamma-distributed-lengths-of-stay">1. Simple SIR model with gamma distributed lengths of stay<a class="anchor" aria-label="anchor" href="#simple-sir-model-with-gamma-distributed-lengths-of-stay"></a>
 </h2>
 <p>The SIR model uses 3 compartments: S (susceptible), I (infected), R
-(recovered) to describe clinical status of individuals. We use the most
-simple form of SIR model to demonstrate how to define the distribution
+(recovered) to describe clinical status of individuals. We use the
+simplest form of SIR model to demonstrate how to define the distribution
 of the lengths of stay distribution.</p>
 <center>
-<div id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:300px;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"&#947;I\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<img src="images/denim_website-getting-started-basic.png" width="400">
 </center>
 <p>The model equations are:</p>
-<p><span class="math display">\[S_{t+1} - S_{t} = -\lambda S_{t} =
--\frac{\beta I_{t}}{N}S_{t}\]</span> <span class="math display">\[I_{t+1} - I_{t} = \frac{\beta I_{t}}{N}S_{t} -
-\gamma I_{t}\]</span> <span class="math display">\[R_{t+1} - R_{t} =
-\gamma I_{t}\]</span></p>
+<p><span class="math display">\[\frac{dS(t)}{dt} = -\lambda S(t) =
+-\frac{\beta I(t)}{N}S(t)\]</span> <span class="math display">\[\frac{dI(t)}{dt} = \frac{\beta I(t)}{N}S - \gamma
+I(t)\]</span> <span class="math display">\[\frac{dR(t)}{dt} = \gamma
+I(t)\]</span></p>
 <ul>
 <li>
 <span class="math inline">\(N\)</span>: total population size, <span class="math inline">\(N = S + I + R\)</span>
 </li>
 <li>
 <span class="math inline">\(\beta\)</span>: the product of contact
-rates and transmission probability; usually we define <span class="math inline">\(\lambda =\frac{\beta I_{t}}{N}\)</span> as the
+rates and transmission probability; usually we define <span class="math inline">\(\lambda =\frac{\beta I(t)}{N}\)</span> as the
 force of infection</li>
 <li>
 <span class="math inline">\(\gamma\)</span>: recovery rate</li>
 </ul>
-<p>Usually to solve the model easier we make an assumption that the
+<p>For mathematical simplicity, modelers typically assume that the
 recovery rate <span class="math inline">\(\gamma\)</span> is constant,
 this will leads to an exponentially distributed length of stay i.e most
 individuals recover after 1 day being infected.</p>
-<p><img src="denim_files/figure-html/unnamed-chunk-2-1.png" width="2187.5" style="display: block; margin: auto;"></p>
+<p><img src="denim_files/figure-html/unnamed-chunk-1-1.png" width="2187.5" style="display: block; margin: auto;"></p>
 <p>A more realistic length of stay distribution can look like this, of
 which most patients recovered after 4 days. We defined this using a
 gamma distribution with shape = 3 and rate = 1/2.</p>
-<p><img src="denim_files/figure-html/unnamed-chunk-3-1.png" width="2187.5" style="display: block; margin: auto;"></p>
-<p>The model now look like this:</p>
+<p><img src="denim_files/figure-html/unnamed-chunk-2-1.png" width="2187.5" style="display: block; margin: auto;"></p>
+<p>The following diagram demonstrates the model with a more realistic
+dwell time. The dashed arrow indicates transition described by dwell
+time distribution, while the solid arrow indicates transition rate.</p>
 <center>
-<div id="htmlwidget-e5c8c404fe174e4c81bd" style="width:400px;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-e5c8c404fe174e4c81bd">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"d_gamma(1/2, 3)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<img src="images/denim_website-getting-started-sir.png" width="400">
 </center>
 <p><strong>Model specification</strong></p>
 <p><em>Model transition</em></p>
-<center>
-<div id="htmlwidget-36aa3d2a04d42bbc2145" style="width:400px;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-36aa3d2a04d42bbc2145">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"d_gamma(1/2, 3)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
-</center>
 <p>We have two transitions <code>S -&gt; I</code> and
 <code>I -&gt; R</code> in this case. The transitions are specified in a
-list follow this format <code>"transition" = equation"</code>, of which
-equation is defined with one of our functions for waiting time
-distribution.</p>
+list follow this format <code>"transition" = expression</code>, of which
+expression is defined with one of our functions for waiting time
+distribution <u>or</u> a mathematical expression.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="st">"S -&gt; I"</span> <span class="op">=</span> <span class="st">"beta * S * I / N"</span>,</span>
@@ -161,7 +157,7 @@ article for more information.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/denim_dsl.html">denim_dsl</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">S</span> <span class="op">-&gt;</span> <span class="va">I</span> <span class="op">=</span> <span class="va">beta</span> <span class="op">*</span> <span class="op">(</span><span class="va">I</span><span class="op">/</span><span class="va">N</span><span class="op">)</span> <span class="op">*</span> <span class="va">S</span></span>
-<span>  <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">R</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span>, shape <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span>  <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">R</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_gamma.html">d_gamma</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span>, shape <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <p><em>Initial state</em></p>
 <p>Use a vector to define the compartments with their assigned names and
@@ -199,57 +195,51 @@ The default interval (time step) is 1 if not declared explicitly.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   Time        S        I            R</span></span>
 <span><span class="co">#&gt; 1 0.00 999.0000 1.000000 0.000000e+00</span></span>
-<span><span class="co">#&gt; 2 0.01 998.9880 1.011988 2.599289e-09</span></span>
-<span><span class="co">#&gt; 3 0.02 998.9759 1.024120 2.078652e-08</span></span>
-<span><span class="co">#&gt; 4 0.03 998.9636 1.036396 7.019852e-08</span></span>
-<span><span class="co">#&gt; 5 0.04 998.9512 1.048820 1.665435e-07</span></span>
-<span><span class="co">#&gt; 6 0.05 998.9386 1.061393 3.256027e-07</span></span>
+<span><span class="co">#&gt; 2 0.01 998.9880 1.011988 2.075536e-08</span></span>
+<span><span class="co">#&gt; 3 0.02 998.9759 1.024119 1.656705e-07</span></span>
+<span><span class="co">#&gt; 4 0.03 998.9636 1.036396 5.584445e-07</span></span>
+<span><span class="co">#&gt; 5 0.04 998.9512 1.048819 1.322422e-06</span></span>
+<span><span class="co">#&gt; 6 0.05 998.9386 1.061390 2.580605e-06</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span></code></pre></div>
-<p><img src="denim_files/figure-html/unnamed-chunk-11-1.png" width="1800" style="display: block; margin: auto;"></p>
+<p><img src="denim_files/figure-html/unnamed-chunk-8-1.png" width="1800" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="how-the-algorithm-work">2. How the algorithm work?<a class="anchor" aria-label="anchor" href="#how-the-algorithm-work"></a>
 </h2>
-<p>In the SIR model, all infected individuals are presented by a single
-compartment I and have the same recovery rate <span class="math inline">\(\gamma\)</span>.</p>
-<center>
-<div id="htmlwidget-febe03efa1a2d8d52a86" style="width:300px;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-febe03efa1a2d8d52a86">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  I -> R [label = \"&#947;I\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
-</center>
-<p>We want the recovery rate of individuals who had been infected for 1
-day differ from the recovery rate of 2-day infected patients. So rather
-than using one compartment for infected (I), we define multiple infected
-sub-compartments. The number of sub-compartments depends on the maximum
-day we expect all infected individuals would be recovered.</p>
+<p>The central idea of our algorithm is to split the compartment into a
+chain of sub-compartments, allowing more control over the dwell time
+distribution. The number of sub-compartments depends on the <u>maximum
+duration</u> an individual can stay in the compartment and the
+<u>duration of time step</u>.</p>
+<p>At each time step, we calculate the out-going population from each
+sub-compartment based on the provided dwell-time distribution.</p>
 <p>For example, if we expect a disease with a maximum 4 days of
-infection, we will end up with 4 sub-compartments. Each sub-compartment
-has its own recovery rate <span class="math inline">\(\gamma_{1}\)</span>, <span class="math inline">\(\gamma_{2}\)</span>, <span class="math inline">\(\gamma_{3}\)</span>, <span class="math inline">\(\gamma_{4}\)</span>. At day 4 it is certain that
-the patient will recover (because we assume that this disease has a
-maximum 4 days of infection), <span class="math inline">\(\gamma_{4} =
-1\)</span>.</p>
-<center>
-<div id="htmlwidget-1fb4450895fe099f74a1" style="width:100%;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1fb4450895fe099f74a1">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I1 [label = <&#946;S(I<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT> + I<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT> + I<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT> + I<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>)/N>]\n  I1 -> R1 [label = <&#947;<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>I<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>]\n  I2 -> R2 [label = <&#947;<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>I<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>]\n  I3 -> R3 [label = <&#947;<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>I<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>]\n  I4 -> R4 [label = <I<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>>]\n  I1 -> I2 [label = <(1-&#947;<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>)I<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>]\n  I2 -> I3 [label = <(1-&#947;<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>)I<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>]\n  I3 -> I4 [label = <(1-&#947;<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>)I<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
-</center>
-<p>Let <span class="math inline">\(R_1 + R_2 + R_3 + R_4 = \Sigma
-R\)</span>. We have <span class="math inline">\(\frac{R_1}{\Sigma R} =
-p_1\)</span>, <span class="math inline">\(\frac{R_2}{\Sigma R} =
-p_2\)</span>, <span class="math inline">\(\frac{R_3}{\Sigma R} =
-p_3\)</span>, <span class="math inline">\(\frac{R_4}{\Sigma R} =
-p_4\)</span>. Our mission is to estimate <span class="math inline">\(\gamma_{1}\)</span>, <span class="math inline">\(\gamma_{2}\)</span>, <span class="math inline">\(\gamma_{3}\)</span> to obtain <span class="math inline">\(p_1\)</span>, <span class="math inline">\(p_2\)</span>, <span class="math inline">\(p_3\)</span>, <span class="math inline">\(p_4\)</span> that fit a pre-defined distribution
-at the equilibrium state. This can be obtained by setting:</p>
-<p><span class="math display">\[\gamma_{i} = \frac{p_i}{1 -
+infection, and the duration of time step is 1 day, we will end up with 4
+sub-compartments <span class="math inline">\(I_1, I_2, I_3,
+I_4\)</span>. At each time step, a proportion <span class="math inline">\(q_i\)</span> of individuals in <span class="math inline">\(I_i\)</span>, where <span class="math inline">\(i&lt;4\)</span> will move to <span class="math inline">\(R\)</span> while the remaining <span class="math inline">\(1-q_i\)</span> will move to <span class="math inline">\(I_{i+1}\)</span>.</p>
+<p>Assuming we want the infectious period to follow a discrete
+distribution <span class="math inline">\(P_I = \{p_1, p_2, p_3,
+p_4\}\)</span>. Our goal is to estimate <span class="math inline">\(q_{1}\)</span>, <span class="math inline">\(q_{2}\)</span>, <span class="math inline">\(q_{3}\)</span> such that the resulting dwell time
+distribution matches <span class="math inline">\(P_I\)</span>.</p>
+<p>This can be obtained by setting:</p>
+<p><span class="math display">\[q_{i} = \frac{p_i}{1 -
 \sum_{j=1}^{i-1}p_j}\]</span></p>
-<p>For a given length of stay distribution, we identify the maximum
-length of stay using its cumulative distribution function. Because
-cumulative distribution function is asymptotic to 1 and never equal to
-1, we need to set a value that is acceptable to be rounded to 1. If we
-want a cumulative probability of 0.999 to be rounded as 1, we set the
-error tolerance threshold as <code>1 - 0.999 = 0.001</code> (specified
-by the argument <code>errorTolerance = 0.001</code>). The time when
-cumulative probability = 0.999 will be set as the maximum length of stay
-of the compartment. Default <code>errorTolerance</code> of
-<code>denim</code> is set at <code>0.001</code>.</p>
+<p>The following diagram illustrates the flow between sub-compartments.
+Note that all individuals in <span class="math inline">\(I_4\)</span>
+will transition to <span class="math inline">\(R\)</span> (i.e., <span class="math inline">\(q_4 = 1\)</span>)</p>
+<center>
+<p><img src="images/denim_website-getting-started-denim-sir.png" width="700"></p>
+</center>
+<p>For a given dwell-time distribution, we identify the maximum length
+of stay using its cumulative distribution function. Because cumulative
+distribution function is asymptotic to 1, we need to set a value that is
+acceptable to be rounded to 1. If we want a cumulative probability of
+0.999 to be rounded as 1, we set the error tolerance threshold as
+<code>1 - 0.999 = 0.001</code> (specified by the argument
+<code>errorTolerance = 0.001</code>). The time when cumulative
+probability = 0.999 will be set as the maximum length of stay of the
+compartment. Default <code>errorTolerance</code> of <code>denim</code>
+is set at <code>0.001</code>.</p>
 <p><em>Initialize population in sub-compartments</em></p>
 <p>By default, the initial population is always assigned to the first
 sub-compartment (for example, if the initial value for I compartment is
@@ -271,8 +261,10 @@ applicable for distribution transitions).</p>
 <div class="section level2">
 <h2 id="waiting-time-distribution">3. Waiting time distribution<a class="anchor" aria-label="anchor" href="#waiting-time-distribution"></a>
 </h2>
-<p><code>denim</code> offers 2 main ways to define a transition: either
-by a waiting time distribution, or a mathematical expression.</p>
+<p><code>denim</code> offers 2 ways to define a transition: either by a
+waiting time distribution in the origin compartment, or by a
+mathematical expression of the outgoing rate of the origin
+compartment.</p>
 <p>Current available distributions in this package including:</p>
 <ul>
 <li><p><code>d_exponential(rate)</code>: Discrete <strong>exponential
@@ -289,7 +281,8 @@ distribution</strong> with parameters <code>mu</code> and
 <li><p><code>nonparametric(waitingTimes)</code>: A <strong>vector of
 values</strong>, could be numbers, percentages, density of the length of
 stay based on real data, <code>denim</code> will convert it into a
-distribution</p></li>
+distribution. These values should: (i) corresponding to 1 time step,
+(ii) be chronologically ordered according to the dwell-time.</p></li>
 </ul>
 <p>Mathematical expression: Transition can also be described using a
 math expression such as <code>beta * S * I / N</code>. You will need to
@@ -304,8 +297,7 @@ multiple compartments are modeled as either (i) multinomial transition
 or (ii) competing risks.</p>
 <p>Consider this example:</p>
 <center>
-<div id="htmlwidget-10b3b7155e8045a1b2ad" style="width:500px;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-10b3b7155e8045a1b2ad">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;SI/N\"]\n  S -> V [label = \"5\"]\n  I -> R [label = \"0.9 -> d_gamma(1/3, 2)\"]\n  I -> D [label = \"0.1 -> d_lognormal(2, 0.5)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<img src="images/denim_website-getting-started-multiple-transitions.png" width="500">
 </center>
 <p>There are two scenarios in this example:</p>
 <ul>
@@ -314,12 +306,13 @@ assumption here is they will be infected first (<code>S -&gt; I</code>),
 and then the rest of them who were not infected will get vaccinated
 (<code>S -&gt; V</code>).</p></li>
 <li><p>Infected individuals can recover or die. If the mortality
-probability is known, we can implement it into the model, for example by
-defining <code>0.9 * I -&gt; R</code> (90% individuals will recover) and
-then <code>0.1 * I -&gt; D</code> (10% of them die). By doing so, we
-ensure that the mortality probability is 10%, while also define the
-length of stay of individuals at the infected state before recover or
-die follows gamma or log-normal distribution, respectively.</p></li>
+probability is known, we can implement it into the model. For example,
+here, we specify that 90% of the infected individuals will recover
+(sub-population <span class="math inline">\(I_R\)</span>) and 10% will
+die (sub-population <span class="math inline">\(I_D\)</span>). By doing
+so, we ensure that the mortality probability is 10%, while also define
+the length of stay of individuals at the infected state before recover
+or die follows gamma or log-normal distribution, respectively.</p></li>
 </ul>
 <p>We can define the model for this example as follows:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -353,24 +346,26 @@ die follows gamma or log-normal distribution, respectively.</p></li>
 <span>           timeStep <span class="op">=</span> <span class="va">timeStep</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   Time        S        I    V            R            D</span></span>
-<span><span class="co">#&gt; 1 0.00 999.0000 1.000000 0.00 0.000000e+00 0.000000e+00</span></span>
-<span><span class="co">#&gt; 2 0.01 998.9380 1.011983 0.05 4.988903e-06 0.000000e+00</span></span>
-<span><span class="co">#&gt; 3 0.02 998.8759 1.024099 0.10 1.997114e-05 1.466074e-33</span></span>
-<span><span class="co">#&gt; 4 0.03 998.8136 1.036349 0.15 4.500034e-05 1.651885e-29</span></span>
-<span><span class="co">#&gt; 5 0.04 998.7512 1.048736 0.20 8.013109e-05 8.335817e-27</span></span>
-<span><span class="co">#&gt; 6 0.05 998.6886 1.061259 0.25 1.254190e-04 8.306459e-25</span></span>
+<span><span class="co">#&gt;   Time        S        I    V            R D</span></span>
+<span><span class="co">#&gt; 1 0.00 999.0000 1.000000 0.00 0.000000e+00 0</span></span>
+<span><span class="co">#&gt; 2 0.01 998.9380 1.011983 0.05 4.988889e-06 0</span></span>
+<span><span class="co">#&gt; 3 0.02 998.8759 1.024099 0.10 1.997100e-05 0</span></span>
+<span><span class="co">#&gt; 4 0.03 998.8136 1.036349 0.15 4.499986e-05 0</span></span>
+<span><span class="co">#&gt; 5 0.04 998.7512 1.048736 0.20 8.012994e-05 0</span></span>
+<span><span class="co">#&gt; 6 0.05 998.6886 1.061259 0.25 1.254167e-04 0</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="denim_files/figure-html/unnamed-chunk-16-1.png" width="1500" style="display: block; margin: auto;"></p>
+<p><img src="denim_files/figure-html/unnamed-chunk-11-1.png" width="1500" style="display: block; margin: auto;"></p>
 <p>For a more detailed explanation for transitions to multiple states,
 refer to <a href="./multinomial.html">this article</a></p>
 </div>
 <div class="section level2">
-<h2 id="another-example">5. Another example<a class="anchor" aria-label="anchor" href="#another-example"></a>
+<h2 id="additional-examples">5. Additional examples<a class="anchor" aria-label="anchor" href="#additional-examples"></a>
 </h2>
+<div class="section level3">
+<h3 id="example-1">Example 1<a class="anchor" aria-label="anchor" href="#example-1"></a>
+</h3>
 <center>
-<div id="htmlwidget-4018eef1a407a0df6b52" style="width:700px;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-4018eef1a407a0df6b52">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = LR]\n  \n  node [shape = rectangle]\n  \n  S -> I [label = \"&#946;S(I + IV)/N\"]\n  S -> V [label = \"2\"]\n  I -> D [label = \"0.1 -> d_lognormal(2, 0.5)\"]\n  I -> R [label = \"0.9 -> d_gamma(1/3, 2)\"]\n  V -> IV [label = \"0.1 * &#946;V(I + IV)/N\"]\n  IV -> R [label = \"d_exponential(2)\"]\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<img src="images/denim_website-getting-started-extra-1.png" width="700">
 </center>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/denim_dsl.html">denim_dsl</a></span><span class="op">(</span><span class="op">{</span></span>
@@ -410,16 +405,70 @@ refer to <a href="./multinomial.html">this article</a></p>
 <span>           simulationDuration <span class="op">=</span> <span class="va">simulationDuration</span>, </span>
 <span>           timeStep <span class="op">=</span> <span class="va">timeStep</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span></code></pre></div>
-<p><img src="denim_files/figure-html/unnamed-chunk-18-1.png" width="1500" style="display: block; margin: auto;"></p>
+<p><img src="denim_files/figure-html/unnamed-chunk-12-1.png" width="1500" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   Time        S        I          V           IV            D            R</span></span>
-<span><span class="co">#&gt; 1 0.00 999.0000 1.000000 0.00000000 0.000000e+00 0.000000e+00 0.000000e+00</span></span>
-<span><span class="co">#&gt; 2 0.01 998.9680 1.011983 0.02000000 0.000000e+00 0.000000e+00 4.988903e-06</span></span>
-<span><span class="co">#&gt; 3 0.02 998.9359 1.024099 0.03999998 2.428759e-08 1.466074e-33 1.997114e-05</span></span>
-<span><span class="co">#&gt; 4 0.03 998.9036 1.036350 0.05999993 7.296340e-08 1.651885e-29 4.500082e-05</span></span>
-<span><span class="co">#&gt; 5 0.04 998.8712 1.048738 0.07999985 1.461358e-07 8.335817e-27 8.013303e-05</span></span>
-<span><span class="co">#&gt; 6 0.05 998.8386 1.061263 0.09999975 2.439207e-07 8.306459e-25 1.254238e-04</span></span></code></pre></div>
+<span><span class="co">#&gt;   Time        S        I          V           IV D            R</span></span>
+<span><span class="co">#&gt; 1 0.00 999.0000 1.000000 0.00000000 0.000000e+00 0 0.000000e+00</span></span>
+<span><span class="co">#&gt; 2 0.01 998.9680 1.011983 0.02000000 0.000000e+00 0 4.988889e-06</span></span>
+<span><span class="co">#&gt; 3 0.02 998.9359 1.024099 0.03999998 2.428759e-08 0 1.997100e-05</span></span>
+<span><span class="co">#&gt; 4 0.03 998.9036 1.036350 0.05999993 7.296813e-08 0 4.500034e-05</span></span>
+<span><span class="co">#&gt; 5 0.04 998.8712 1.048738 0.07999985 1.461546e-07 0 8.013186e-05</span></span>
+<span><span class="co">#&gt; 6 0.05 998.8386 1.061263 0.09999975 2.439677e-07 0 1.254215e-04</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="example-2">Example 2<a class="anchor" aria-label="anchor" href="#example-2"></a>
+</h3>
+<p><img src="images/denim_website-getting-started-extra2.png" width="500"></p>
+<p>Assuming we have the distribution of time for the infected to recover
+(<span class="math inline">\(P_{IR}\)</span>) as followed</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">timestep</span> <span class="op">&lt;-</span> <span class="fl">0.05</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, by <span class="op">=</span> <span class="fl">0.05</span>, length.out <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">ir_dist</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>     <span class="va">ir_dist</span>, </span>
+<span>     type <span class="op">=</span> <span class="st">"l"</span>, col <span class="op">=</span> <span class="st">"#374F77"</span>, lty <span class="op">=</span> <span class="fl">1</span>, lwd <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>     xlab <span class="op">=</span> <span class="st">"Length of stay (days)"</span>, ylab <span class="op">=</span> <span class="st">""</span>, yaxt <span class="op">=</span> <span class="st">'n'</span><span class="op">)</span></span></code></pre></div>
+<p><img src="denim_files/figure-html/unnamed-chunk-14-1.png" width="2187.5" style="display: block; margin: auto;"></p>
+<p>This distribution can be used directly for modeling with the
+<code><a href="../reference/nonparametric.html">nonparametric()</a></code> function. Note that when using
+<code><a href="../reference/nonparametric.html">nonparametric()</a></code>, we must define the simulation
+<code>timeStep</code> to match the time resolution of the distribution
+data.</p>
+<p>For example, the provided distribution is given with the interval of
+0.05 day, we must set <code>timeStep = 0.05</code>.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/denim_dsl.html">denim_dsl</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="va">S</span> <span class="op">-&gt;</span> <span class="va">I</span> <span class="op">=</span> <span class="va">beta</span><span class="op">*</span><span class="va">I</span><span class="op">/</span><span class="va">N</span><span class="op">*</span><span class="va">S</span></span>
+<span>  <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">R</span> <span class="op">=</span> <span class="fu"><a href="../reference/nonparametric.html">nonparametric</a></span><span class="op">(</span><span class="va">i_dist</span><span class="op">)</span></span>
+<span>  <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">D</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_exponential.html">d_exponential</a></span><span class="op">(</span><span class="va">d_rate</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  beta <span class="op">=</span> <span class="fl">0.7</span>,</span>
+<span>  i_dist <span class="op">=</span> <span class="va">ir_dist</span>,</span>
+<span>  d_rate <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>  N <span class="op">=</span> <span class="fl">1000</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">initialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  S <span class="op">=</span> <span class="fl">999</span>,</span>
+<span>  I <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  R <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  D <span class="op">=</span> <span class="fl">0</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">simulationDuration</span> <span class="op">&lt;-</span> <span class="fl">30</span></span>
+<span><span class="va">timeStep</span> <span class="op">&lt;-</span> <span class="fl">0.05</span></span>
+<span></span>
+<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim.html">sim</a></span><span class="op">(</span>transitions <span class="op">=</span> <span class="va">transitions</span>, </span>
+<span>           initialValues <span class="op">=</span> <span class="va">initialValues</span>, </span>
+<span>           parameters <span class="op">=</span> <span class="va">parameters</span>, </span>
+<span>           simulationDuration <span class="op">=</span> <span class="va">simulationDuration</span>, </span>
+<span>           timeStep <span class="op">=</span> <span class="va">timeStep</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="denim_files/figure-html/unnamed-chunk-15-1.png" width="2187.5" style="display: block; margin: auto;"></p>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

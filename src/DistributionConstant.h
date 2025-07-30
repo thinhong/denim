@@ -13,6 +13,7 @@ private:
 public:
     explicit DistributionConstant(double constValue);
     double getTransitionProb(size_t index) override;
+    std::vector<double>& getTransitionProbRef() override;
 };
 
 

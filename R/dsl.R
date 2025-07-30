@@ -3,7 +3,7 @@
 #' This function parses model transitions defined in denim's DSL syntax
 #'
 #' @param x - an expression written in denim's DSL syntax. Each line should be a transition written in the 
-#' format `compartment -> out_compartment = expression` where expression can be either a math expression
+#' format `from -> to = transition` where expression can be either a math expression
 #' or one of denim's built-in dwell time distribution function
 #'
 #' @return denim_transition object

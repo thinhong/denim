@@ -13,3 +13,8 @@ DistributionMathExpression::DistributionMathExpression(std::string& expression) 
 double DistributionMathExpression::getTransitionProb(size_t index) {
     return 1;
 }
+
+std::vector<double>& DistributionMathExpression::getTransitionProbRef() {
+    static std::vector<double> returned_val{1};
+    return returned_val;
+}

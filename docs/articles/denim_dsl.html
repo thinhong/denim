@@ -109,10 +109,13 @@ compartments. Each transition is provided in the form of a
 <ul>
 <li><p><em>key</em> show the transition direction between 2
 compartments.</p></li>
-<li><p><em>value</em> is an expression that describe the transition, it
-can be a <strong><em>math expression</em></strong> or a
-<strong><em>built-in dwell-time distribution
-function</em></strong>.</p></li>
+<li><p><em>value</em> is an expression that describe the transition,
+either as a rate given by a <strong><em>math expression</em></strong> or
+as a distribution of dwell-time in the origin compartment. This
+distribution can be specified parametrically using the
+<strong><em>built-in distribution function</em></strong> or through
+providing of <strong><em>histogram numeric
+values</em></strong>.</p></li>
 </ul>
 <p>These <em>key-value</em> pairs can be provided in 2 ways</p>
 <ul>
@@ -125,14 +128,14 @@ function</em></strong>.</p></li>
 </h2>
 <p>In denim, each line of code must be a transition. The syntax for
 defining a transition in denim DSL is as followed:</p>
-<p><code>compartment_A -&gt; compartment_B = transition</code></p>
+<p><code>from -&gt; to = [transition]</code></p>
 <p>Model definition written in denim DSL must be parsed by the function
 <code><a href="../reference/denim_dsl.html">denim_dsl()</a></code></p>
 <p><strong><em>Math expression</em></strong></p>
 <p>For math expression, some basic supported operators include:
 <code>+</code> for addition, <code>-</code> for minus, <code>*</code>
 for multiplication, <code>/</code> for division, <code>^</code> for
-power. Users can also define additional model parameters in the math
+power. The users can also define additional model parameters in the math
 expression.</p>
 <p>Math expressions in denim are parsed using muparser. For a full list
 of operators, visit the muparser website at <a href="https://beltoforion.de/en/muparser/features.php" class="external-link uri">https://beltoforion.de/en/muparser/features.php</a>.</p>
@@ -180,8 +183,8 @@ parameter as followed.</p>
 <span>  <span class="va">S</span> <span class="op">-&gt;</span> <span class="va">I</span> <span class="op">=</span> <span class="va">beta</span><span class="op">*</span><span class="op">(</span><span class="va">I</span><span class="op">/</span><span class="va">N</span><span class="op">)</span><span class="op">*</span><span class="va">S</span></span>
 <span>  <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">R</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_exponential.html">d_exponential</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
-<p>Similar to R, users can also add comments in denim DSL by starting
-the comment with <code>#</code> sign.</p>
+<p>Similar to R, the users can also add comments in denim DSL by
+starting the comment with <code>#</code> sign.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sir_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/denim_dsl.html">denim_dsl</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="co"># this is a comment</span></span>
@@ -189,7 +192,7 @@ the comment with <code>#</code> sign.</p>
 <span>  <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">R</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_exponential.html">d_exponential</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="co"># this is another comment</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <p><strong><em>Run model</em></strong></p>
-<p>To run the model, users must provide:</p>
+<p>To run the model, the users must provide:</p>
 <ul>
 <li><p>Values for model parameters (in this example, <code>N</code>,
 <code>beta</code>, and <code>gamma</code>).</p></li>
@@ -316,13 +319,6 @@ distributions (<code>d_gamma</code>, <code>d_weibull</code>,
 <code>d_lognormal</code>) using <code>map2</code>.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: package 'ggplot2' was built under R version 4.3.1</span></span>
-<span><span class="co">#&gt; Warning: package 'tidyr' was built under R version 4.3.1</span></span>
-<span><span class="co">#&gt; Warning: package 'readr' was built under R version 4.3.1</span></span>
-<span><span class="co">#&gt; Warning: package 'purrr' was built under R version 4.3.3</span></span>
-<span><span class="co">#&gt; Warning: package 'dplyr' was built under R version 4.3.1</span></span>
-<span><span class="co">#&gt; Warning: package 'stringr' was built under R version 4.3.1</span></span>
-<span><span class="co">#&gt; Warning: package 'lubridate' was built under R version 4.3.3</span></span>
 <span><span class="co"># configurations for 3 different I-&gt;R transitions</span></span>
 <span><span class="va">model_config</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
 <span>  IR_dists <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">d_gamma</span>, <span class="va">d_weibull</span>, <span class="va">d_lognormal</span><span class="op">)</span>,</span>

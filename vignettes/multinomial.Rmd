@@ -34,6 +34,8 @@ Note that the `proportion` here is the proportion of `compartment` that will end
 
 ***Example:*** An SIRD model where 90% of infected can recover while the remaining 10% will die.
 
+![](./images/denim_website-mult-trans-multinomial.png)
+
 ```{r}
 transitions <- denim_dsl({
   S -> I = beta * S * (I / N) 
@@ -212,6 +214,8 @@ legend(x = 150, y = 25,legend=c("denim", "deSolve"), col = c("#4876ff", "black")
 When there are multiple transitions from one compartment and no proportions are specified, denim will automatically treat these transitions as competing risks.
 
 ***Example:*** the following model definition will treat `I->R` and `I->D` as competing risks.
+
+![](./images/denim_website-mult-trans-competing-risks.png)
 
 ```{r}
 transitions <- denim_dsl({

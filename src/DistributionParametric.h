@@ -13,6 +13,7 @@ protected:
 public:
     double getTransitionProb(size_t index) override;
     double getProbDist(size_t index) override;
+    std::vector<double>& getTransitionProbRef() override;
 };
 
 
