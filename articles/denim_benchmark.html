@@ -102,8 +102,8 @@
 available packages, listed in the table below.</p>
 <table class="table">
 <colgroup>
-<col width="15%">
-<col width="84%">
+<col width="17%">
+<col width="82%">
 </colgroup>
 <thead><tr class="header">
 <th>Package</th>
@@ -164,50 +164,81 @@ function</p></li>
 </tbody>
 </table>
 <p>The benchmarking process was conducted on a Macbook Pro with M2 Pro
-chip, 16 GBs of RAM and 10 cores (6 performance and 4 efficiency). </p>
-<pre><code><span><span class="co">## $python_runs</span></span>
-<span><span class="co">##       min       max       var </span></span>
-<span><span class="co">## 44.746612 54.793702  3.378508 </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $cython_runs</span></span>
-<span><span class="co">##          min          max          var </span></span>
-<span><span class="co">## 4.104204e-01 4.766951e-01 8.964077e-05 </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $desolve_runs</span></span>
-<span><span class="co">##          min          max          var </span></span>
-<span><span class="co">## 3.071433e-03 1.262935e-02 2.876994e-06 </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $desolve_c_runs</span></span>
-<span><span class="co">##          min          max          var </span></span>
-<span><span class="co">## 1.126680e-04 3.994220e-04 1.882966e-09 </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $desolve_fortran_runs</span></span>
-<span><span class="co">##          min          max          var </span></span>
-<span><span class="co">## 1.578910e-04 6.025360e-04 4.467746e-09 </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $odin_runs</span></span>
-<span><span class="co">##         min         max         var </span></span>
-<span><span class="co">## 0.314895170 0.507299560 0.001076533 </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $denim_runs</span></span>
-<span><span class="co">##          min          max          var </span></span>
-<span><span class="co">## 0.7430848200 0.7829652330 0.0001591041 </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $denim_nonparametric_runs</span></span>
-<span><span class="co">##         min         max         var </span></span>
-<span><span class="co">## 1.173920774 1.487638752 0.006702654 </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $ionise_runs</span></span>
-<span><span class="co">##          min          max          var </span></span>
-<span><span class="co">## 0.0496854810 0.1288101510 0.0001274859 </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $diffeqr_base_runs</span></span>
-<span><span class="co">##          min          max          var </span></span>
-<span><span class="co">## 1.925770e-03 4.588023e-03 1.697408e-07 </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $diffeqr_optimized_runs</span></span>
-<span><span class="co">##          min          max          var </span></span>
-<span><span class="co">## 8.269700e-05 2.068860e-04 4.750439e-10</span></span></code></pre>
+chip, 16 GBs of RAM and 10 cores (6 performance and 4 efficiency).</p>
+<details><summary>
+Version specifications
+</summary><table style="width:86%;" class="table">
+<colgroup>
+<col width="16%">
+<col width="16%">
+<col width="52%">
+</colgroup>
+<thead><tr class="header">
+<th>Name</th>
+<th>Version</th>
+<th>Note</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>R</td>
+<td>4.3.0</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Python</td>
+<td>3.9.20</td>
+<td>For <code>uSEIR</code> Python and Cython</td>
+</tr>
+<tr class="odd">
+<td>clang</td>
+<td>17.0.0</td>
+<td>
+<p>C/C++ compiler for:</p>
+<ul>
+<li><p><code>uSEIR</code> Cython</p></li>
+<li><p><code>odin</code></p></li>
+<li><p><code>denim</code></p></li>
+<li><p><code>deSolve</code> (model in C, Fortran)</p></li>
+</ul>
+</td>
+</tr>
+<tr class="even">
+<td>Julia</td>
+<td>1.9.4</td>
+<td>For <code>diffeqr</code> package</td>
+</tr>
+</tbody>
+</table>
+<p>R utility packages</p>
+<table style="width:99%;" class="table">
+<colgroup>
+<col width="14%">
+<col width="13%">
+<col width="70%">
+</colgroup>
+<thead><tr class="header">
+<th>Name</th>
+<th>Version</th>
+<th>Note</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>tidyverse</td>
+<td>2.0.0</td>
+<td>For plotting, data formatting</td>
+</tr>
+<tr class="even">
+<td>reticulate</td>
+<td>1.41.0</td>
+<td>For interfacting Python code (for uSEIR)</td>
+</tr>
+<tr class="odd">
+<td>arrow</td>
+<td>19.0.1</td>
+<td>For interfacing uSEIR output without messing up the datatype</td>
+</tr>
+</tbody>
+</table></details><p> </p>
 <div class="section level2">
 <h2 id="benchmark-settings">Benchmark settings<a class="anchor" aria-label="anchor" href="#benchmark-settings"></a>
 </h2>
@@ -219,7 +250,7 @@ transition rate.</p>
 <p><code>beta</code> can also be computed as <span class="math inline">\(beta = R_0/tr\)</span> where <span class="math inline">\(R_0\)</span> is the basic reproduction number and
 <span class="math inline">\(tr\)</span> is the infectious period.</p>
 <p>Each approach will be run 50 times</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">total_runs</span> <span class="op">&lt;-</span> <span class="fl">50L</span> <span class="co"># number of runs</span></span>
 <span><span class="va">sim_duration</span> <span class="op">&lt;-</span> <span class="fl">180</span> <span class="co"># duration of simulation</span></span></code></pre></div>
 </div>
@@ -230,56 +261,98 @@ transition rate.</p>
 et al. 2021)</span>.</p>
 <p>Source code: <a href="https://github.com/jjgomezcadenas/useirn/blob/master/nb/uSEIR.ipynb" class="external-link uri">https://github.com/jjgomezcadenas/useirn/blob/master/nb/uSEIR.ipynb</a></p>
 <details><summary>
+Dependency version specifications
+</summary><p>Python packages</p>
+<table style="width:99%;" class="table">
+<colgroup>
+<col width="18%">
+<col width="18%">
+<col width="61%">
+</colgroup>
+<thead><tr class="header">
+<th>Package</th>
+<th>Version</th>
+<th>Note</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>scipy</td>
+<td>1.31.1</td>
+<td>For handling dwell time distribution</td>
+</tr>
+<tr class="even">
+<td>cython</td>
+<td>3.0.11</td>
+<td>For Cython implementation</td>
+</tr>
+<tr class="odd">
+<td>numpy</td>
+<td>2.0.2</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>pandas</td>
+<td>2.2.3</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>pyarrow</td>
+<td>18.1.0</td>
+<td>For interfacing output to R without messing up the datatype</td>
+</tr>
+</tbody>
+</table></details><details><summary>
 load useir implementation in pure Python
-</summary><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a></span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning: package 'reticulate' was built under R version 4.3.3</span></span></code></pre>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># use_python("/opt/anaconda3/envs/bnn/bin/python", required = TRUE)</span></span>
 <span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/use_python.html" class="external-link">use_condaenv</a></span><span class="op">(</span>condaenv<span class="op">=</span><span class="st">'bnn'</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">matplotlib</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rstudio.github.io/reticulate/reference/import.html" class="external-link">import</a></span><span class="op">(</span><span class="st">"matplotlib"</span><span class="op">)</span></span>
-<span><span class="va">matplotlib</span><span class="op">$</span><span class="fu">use</span><span class="op">(</span><span class="st">"Agg"</span>, force <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/py_run.html" class="external-link">py_run_file</a></span><span class="op">(</span><span class="st">"../supplements/useir_python.py"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># matplotlib &lt;- import("matplotlib")</span></span>
+<span><span class="co"># matplotlib$use("Agg", force = TRUE)</span></span>
+<span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/py_run.html" class="external-link">py_run_file</a></span><span class="op">(</span><span class="st">"../supplements/useir_python.py"</span><span class="op">)</span></span>
+<span><span class="co"># py_config()</span></span></code></pre></div>
 </details><div class="section level3">
 <h3 id="python-implementation">1.1. Python implementation<a class="anchor" aria-label="anchor" href="#python-implementation"></a>
 </h3>
 <details><summary>
 Code for running uSEIR in pure Python
-</summary><div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="im">import</span> time</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="im">import</span> concurrent.futures</span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="im">import</span> pickle</span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="im">import</span> os</span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="im">from</span> statistics <span class="im">import</span> mean</span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>python_runs <span class="op">=</span> []</span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="kw">def</span> get_python_runtime(n):</span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  start <span class="op">=</span> time.time()</span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  df <span class="op">=</span> solve_uSeir(ti_shape     <span class="op">=</span> <span class="dv">2</span>,</span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>                     ti_scale     <span class="op">=</span> <span class="dv">4</span>,</span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>                     tr_shape     <span class="op">=</span> <span class="dv">2</span>,</span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>                     tr_scale     <span class="op">=</span> <span class="dv">3</span>,</span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>                     R0           <span class="op">=</span> <span class="fl">3.5</span>)</span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>  end <span class="op">=</span> time.time()</span>
-<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>  <span class="cf">return</span> end <span class="op">-</span> start</span>
-<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>  </span>
-<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co"># load cached result if available instead of rerun due to long run time</span></span>
-<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>cached_python_runs <span class="op">=</span> <span class="st">"../supplements/cached_runs/python_runs.pkl"</span></span>
-<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="cf">if</span> os.path.exists(cached_python_runs):</span>
-<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a>  <span class="co"># If the file exists, load the Python list from the file</span></span>
-<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a>  <span class="cf">with</span> <span class="bu">open</span>(cached_python_runs, <span class="st">'rb'</span>) <span class="im">as</span> f:</span>
-<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a>    python_runs <span class="op">=</span> pickle.load(f)</span>
-<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a><span class="cf">else</span>:</span>
-<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a>  <span class="bu">print</span>(<span class="st">"no cache found"</span>)</span>
-<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a>  <span class="co"># multithread instead for quicker result</span></span>
-<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a>  <span class="cf">with</span> concurrent.futures.ProcessPoolExecutor(max_workers<span class="op">=</span><span class="dv">8</span>) <span class="im">as</span> executor:</span>
-<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a>    python_runs <span class="op">=</span> <span class="bu">list</span>(executor.<span class="bu">map</span>(get_python_runtime, <span class="bu">range</span>(r.total_runs)))</span>
-<span id="cb6-30"><a href="#cb6-30" tabindex="-1"></a>  <span class="co"># Save to cache</span></span>
-<span id="cb6-31"><a href="#cb6-31" tabindex="-1"></a>  <span class="cf">with</span> <span class="bu">open</span>(cached_python_runs, <span class="st">'wb'</span>) <span class="im">as</span> f:</span>
-<span id="cb6-32"><a href="#cb6-32" tabindex="-1"></a>      pickle.dump(python_runs, f)</span>
-<span id="cb6-33"><a href="#cb6-33" tabindex="-1"></a>      </span>
-<span id="cb6-34"><a href="#cb6-34" tabindex="-1"></a><span class="co"># plot_useir((df,), ('G',), T = 'uSEIR', figsize=(14,8))</span></span>
-<span id="cb6-35"><a href="#cb6-35" tabindex="-1"></a><span class="co"># print(f'python solve_seir call: dr = {end-start}')</span></span></code></pre></div>
+</summary><div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="im">import</span> concurrent.futures</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="im">import</span> pickle</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="im">from</span> statistics <span class="im">import</span> mean</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="im">import</span> pyarrow <span class="im">as</span> pa</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>python_runs <span class="op">=</span> []</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="kw">def</span> get_python_runtime(n):</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>  start <span class="op">=</span> time.time()</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>  df <span class="op">=</span> solve_uSeir(ti_shape     <span class="op">=</span> <span class="dv">2</span>,</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>                     ti_scale     <span class="op">=</span> <span class="dv">4</span>,</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>                     tr_shape     <span class="op">=</span> <span class="dv">2</span>,</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>                     tr_scale     <span class="op">=</span> <span class="dv">3</span>,</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>                     R0           <span class="op">=</span> <span class="fl">3.5</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>  end <span class="op">=</span> time.time()</span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>  <span class="cf">return</span> end <span class="op">-</span> start</span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a>  </span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co"># load cached result if available instead of rerun due to long run time</span></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a>cached_python_runs <span class="op">=</span> <span class="st">"../supplements/cached_runs/python_runs.pkl"</span></span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="cf">if</span> os.path.exists(cached_python_runs):</span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a>  <span class="co"># If the file exists, load the Python list from the file</span></span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a>  <span class="cf">with</span> <span class="bu">open</span>(cached_python_runs, <span class="st">'rb'</span>) <span class="im">as</span> f:</span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a>    python_runs <span class="op">=</span> pickle.load(f)</span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a>  <span class="bu">print</span>(<span class="st">"no cache found"</span>)</span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a>  <span class="co"># multithread instead for quicker result</span></span>
+<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a>  <span class="cf">with</span> concurrent.futures.ProcessPoolExecutor(max_workers<span class="op">=</span><span class="dv">8</span>) <span class="im">as</span> executor:</span>
+<span id="cb5-30"><a href="#cb5-30" tabindex="-1"></a>    python_runs <span class="op">=</span> <span class="bu">list</span>(executor.<span class="bu">map</span>(get_python_runtime, <span class="bu">range</span>(r.total_runs)))</span>
+<span id="cb5-31"><a href="#cb5-31" tabindex="-1"></a>  <span class="co"># Save to cache</span></span>
+<span id="cb5-32"><a href="#cb5-32" tabindex="-1"></a>  <span class="cf">with</span> <span class="bu">open</span>(cached_python_runs, <span class="st">'wb'</span>) <span class="im">as</span> f:</span>
+<span id="cb5-33"><a href="#cb5-33" tabindex="-1"></a>      pickle.dump(python_runs, f)</span>
+<span id="cb5-34"><a href="#cb5-34" tabindex="-1"></a>      </span>
+<span id="cb5-35"><a href="#cb5-35" tabindex="-1"></a><span class="co"># print(f'python solve_seir call: dr = {end-start}')</span></span></code></pre></div>
 </details><p>Run time for uSEIR approach, Python implementation (in seconds)</p>
 <pre><code><span><span class="co">##  [1] 54.79370 54.23037 54.61863 54.13476 54.73439 54.35928 54.48391 54.56821</span></span>
 <span><span class="co">##  [9] 53.26567 53.35437 53.44551 53.31425 53.51092 53.19878 53.92493 53.84889</span></span>
@@ -296,28 +369,28 @@ seconds</p>
 </h3>
 <details><summary>
 Code for running uSEIR in Cython (C backend)
-</summary><div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># import precompiled cython module</span></span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="im">import</span> sys</span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>sys.path.insert(<span class="dv">0</span>, <span class="st">"../supplements"</span>)</span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="im">import</span> useir</span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="im">import</span> time</span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="im">import</span> pyarrow <span class="im">as</span> pa</span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a></span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>cython_runs <span class="op">=</span> []</span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a></span>
-<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co"># --- Get runtime ----</span></span>
-<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(r.total_runs):</span>
-<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>  start <span class="op">=</span> time.time()</span>
-<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>  df <span class="op">=</span> useir.csolve_uSeir(dist <span class="op">=</span> <span class="st">"gamma"</span>,</span>
-<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>                    ti_shape     <span class="op">=</span> <span class="dv">2</span>,</span>
-<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>                     ti_scale     <span class="op">=</span> <span class="dv">4</span>,</span>
-<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>                     tr_shape     <span class="op">=</span> <span class="dv">2</span>,</span>
-<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>                     tr_scale     <span class="op">=</span> <span class="dv">3</span>,</span>
-<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a>                     R0           <span class="op">=</span> <span class="fl">3.5</span></span>
-<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>  )</span>
-<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a>  end <span class="op">=</span> time.time()</span>
-<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a></span>
-<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a>  cython_runs <span class="op">=</span> cython_runs <span class="op">+</span> [end <span class="op">-</span> start]</span></code></pre></div>
+</summary><div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># import precompiled cython module</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>sys.path.insert(<span class="dv">0</span>, <span class="st">"../supplements"</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="im">import</span> useir</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="im">import</span> pyarrow <span class="im">as</span> pa</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>cython_runs <span class="op">=</span> []</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co"># --- Get runtime ----</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(r.total_runs):</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>  start <span class="op">=</span> time.time()</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>  df <span class="op">=</span> useir.csolve_uSeir(dist <span class="op">=</span> <span class="st">"gamma"</span>,</span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>                    ti_shape     <span class="op">=</span> <span class="dv">2</span>,</span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>                     ti_scale     <span class="op">=</span> <span class="dv">4</span>,</span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a>                     tr_shape     <span class="op">=</span> <span class="dv">2</span>,</span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a>                     tr_scale     <span class="op">=</span> <span class="dv">3</span>,</span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>                     R0           <span class="op">=</span> <span class="fl">3.5</span></span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>  )</span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a>  end <span class="op">=</span> time.time()</span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a></span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a>  cython_runs <span class="op">=</span> cython_runs <span class="op">+</span> [end <span class="op">-</span> start]</span></code></pre></div>
 <pre><code><span><span class="co">##  Function compute_pde with sampling = Fine, time epsilon = 0.01</span></span>
 <span><span class="co">##  statistical distribution = gamma, ti = 8.0, tr = 6.0</span></span>
 <span><span class="co">##  number of exposed compartments = 4702, infected compartments = 3526</span></span>
@@ -568,23 +641,23 @@ Code for running uSEIR in Cython (C backend)
 <span><span class="co">##  number of exposed compartments = 4702, infected compartments = 3526</span></span>
 <span><span class="co">## len pdE = 4702, max(pdE) =0.0009196976461058881 len pdi = 3526 max(pdI) =0.0012262625368251734</span></span>
 <span><span class="co">## prob = 0.5833333333333334, pn = 0.005833333333333334</span></span></code></pre>
-<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># ---- Get output for uSEIR -----</span></span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>df <span class="op">=</span> useir.csolve_uSeir(dist <span class="op">=</span> <span class="st">"gamma"</span>,</span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>                    ti_shape     <span class="op">=</span> <span class="dv">2</span>,</span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>                     ti_scale     <span class="op">=</span> <span class="dv">4</span>,</span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>                     tr_shape     <span class="op">=</span> <span class="dv">2</span>,</span>
-<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>                     tr_scale     <span class="op">=</span> <span class="dv">3</span>,</span>
-<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>                     R0           <span class="op">=</span> <span class="fl">3.5</span>,</span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>                     pde_sampling <span class="op">=</span> <span class="st">""</span></span>
-<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># ---- Get output for uSEIR -----</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>df <span class="op">=</span> useir.csolve_uSeir(dist <span class="op">=</span> <span class="st">"gamma"</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>                    ti_shape     <span class="op">=</span> <span class="dv">2</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>                     ti_scale     <span class="op">=</span> <span class="dv">4</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>                     tr_shape     <span class="op">=</span> <span class="dv">2</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>                     tr_scale     <span class="op">=</span> <span class="dv">3</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>                     R0           <span class="op">=</span> <span class="fl">3.5</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>                     pde_sampling <span class="op">=</span> <span class="st">""</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>  )</span></code></pre></div>
 <pre><code><span><span class="co">##  Function compute_pde with sampling = , time epsilon = 0.1</span></span>
 <span><span class="co">##  statistical distribution = gamma, ti = 8.0, tr = 6.0</span></span>
 <span><span class="co">##  number of exposed compartments = 470, infected compartments = 352</span></span>
 <span><span class="co">## len pdE = 470, max(pdE) =0.009196039895832842 len pdi = 352 max(pdI) =0.01226041465028943</span></span>
 <span><span class="co">## prob = 0.5833333333333334, pn = 0.05833333333333334</span></span></code></pre>
-<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>  </span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co"># convert to pyarrow table for easy conversion to R data.frames</span></span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>to_r_df <span class="op">=</span> pa.Table.from_pandas(df)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>  </span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="co"># convert to pyarrow table for easy conversion to R data.frames</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>to_r_df <span class="op">=</span> pa.Table.from_pandas(df)</span></code></pre></div>
 </details><p>Run time for uSEIR approach, Cython implementation (in seconds)</p>
 <pre><code><span><span class="co">##  [1] 0.4204161 0.4766951 0.4147639 0.4129088 0.4140410 0.4138477 0.4130261</span></span>
 <span><span class="co">##  [8] 0.4212909 0.4190290 0.4190660 0.4167402 0.4169221 0.4223282 0.4214261</span></span>
@@ -602,13 +675,32 @@ seconds</p>
 <h2 id="desolve">2. deSolve<a class="anchor" aria-label="anchor" href="#desolve"></a>
 </h2>
 <p>Simulate model using deSolve package <span class="citation">(Soetaert, Petzoldt, and Setzer 2008)</span></p>
-<div class="section level3">
+<details><summary>
+Dependency version specifications
+</summary><p>R packages</p>
+<table style="width:99%;" class="table">
+<colgroup>
+<col width="26%">
+<col width="27%">
+<col width="44%">
+</colgroup>
+<thead><tr class="header">
+<th>Package</th>
+<th>Version</th>
+<th>Note</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td>deSolve</td>
+<td>1.40</td>
+<td></td>
+</tr></tbody>
+</table></details><div class="section level3">
 <h3 id="model-in-r">2.1. Model in R<a class="anchor" aria-label="anchor" href="#model-in-r"></a>
 </h3>
-<details><summary>Code for running SEIR in <code>deSolve</code></summary><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<details><summary>Code for running SEIR in <code>deSolve</code></summary><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://desolve.r-forge.r-project.org/" class="external-link">deSolve</a></span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning: package 'deSolve' was built under R version 4.3.1</span></span></code></pre>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>gamma_rate_I <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span>, shape_I<span class="op">=</span><span class="fl">2</span>,</span>
 <span>                gamma_rate_R <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, shape_R <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>                R0 <span class="op">=</span> <span class="fl">3.5</span>, N <span class="op">=</span> <span class="fl">1e6</span><span class="op">)</span> </span>
@@ -668,7 +760,7 @@ seconds</p>
 <div class="section level3">
 <h3 id="model-in-c">2.2. Model in C<a class="anchor" aria-label="anchor" href="#model-in-c"></a>
 </h3>
-<details><summary>Code for running model defined in C</summary><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<details><summary>Code for running model defined in C</summary><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># compile model</span></span>
 <span><span class="co"># system("R CMD SHLIB supplements/desolve_mod/benchmark_mod.c")</span></span>
 <span></span>
@@ -696,7 +788,7 @@ seconds</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dynload.html" class="external-link">dyn.unload</a></span><span class="op">(</span><span class="st">"../supplements/desolve_mod/benchmark_mod.so"</span><span class="op">)</span></span></code></pre></div>
 </details><p>Run time for <code>deSolve</code> with model defined in C</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">desolve_c_runs</span></span></code></pre></div>
 <pre><code><span><span class="co">##  [1] 0.000195447 0.000139072 0.000399422 0.000122426 0.000197907 0.000121032</span></span>
 <span><span class="co">##  [7] 0.000118285 0.000171790 0.000116112 0.000162278 0.000117178 0.000122426</span></span>
@@ -715,7 +807,7 @@ seconds</p>
 <div class="section level3">
 <h3 id="model-in-fortran">2.3. Model in Fortran<a class="anchor" aria-label="anchor" href="#model-in-fortran"></a>
 </h3>
-<details><summary>Code for running model defined in C</summary><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<details><summary>Code for running model defined in C</summary><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># compile model in fortran</span></span>
 <span><span class="co"># system("R CMD SHLIB supplements/desolve_mod/benchmark_mod_fortran.f")</span></span>
 <span></span>
@@ -741,7 +833,7 @@ seconds</p>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dynload.html" class="external-link">dyn.unload</a></span><span class="op">(</span><span class="st">"../supplements/desolve_mod/benchmark_mod_fortran.so"</span><span class="op">)</span></span></code></pre></div>
-</details><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+</details><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">desolve_fortran_runs</span></span></code></pre></div>
 <pre><code><span><span class="co">##  [1] 0.000305942 0.000602536 0.000193807 0.000299710 0.000181056 0.000173061</span></span>
 <span><span class="co">##  [7] 0.000247599 0.000164656 0.000215742 0.000166747 0.000161868 0.000208321</span></span>
@@ -766,11 +858,11 @@ al. 2024)</span>.</p>
 <p>Source code: <a href="https://github.com/Mathbiomed/IONISE" class="external-link uri">https://github.com/Mathbiomed/IONISE</a></p>
 <details><summary>
 Code for running SEIR using <code>IONISE</code>
-</summary><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load code for IONISE</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"../supplements/ionise_mod/IONISE.R"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning: package 'invgamma' was built under R version 4.3.3</span></span></code></pre>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ------ Set up -------</span></span>
 <span><span class="va">ionise_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">sim_duration</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">ionise_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
@@ -812,7 +904,7 @@ Code for running SEIR using <code>IONISE</code>
 <span>  <span class="fu">mutate</span><span class="op">(</span></span>
 <span>    time <span class="op">=</span> <span class="va">ionise_time</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-</details><div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+</details><div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ionise_runs</span></span></code></pre></div>
 <pre><code><span><span class="co">##  [1] 0.06817070 0.05149485 0.05189616 0.05826383 0.05112364 0.05867895</span></span>
 <span><span class="co">##  [7] 0.05057096 0.05153241 0.12881015 0.05100023 0.05732948 0.05045144</span></span>
@@ -830,14 +922,73 @@ Code for running SEIR using <code>IONISE</code>
 <div class="section level2">
 <h2 id="diffeqr">4. diffeqr<a class="anchor" aria-label="anchor" href="#diffeqr"></a>
 </h2>
-<p>Simulate model using diffeqr package <span class="citation">(Rackauckas, n.d.)</span></p>
-<div class="section level3">
+<p>Simulate model using <code>diffeqr</code> package <span class="citation">(Rackauckas, n.d.)</span></p>
+<details><summary>
+Dependency version specifications
+</summary><p>R package</p>
+<table style="width:97%;" class="table">
+<colgroup>
+<col width="25%">
+<col width="27%">
+<col width="44%">
+</colgroup>
+<thead><tr class="header">
+<th>Package</th>
+<th>Version</th>
+<th>Note</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td>diffeqr</td>
+<td>2.0.0</td>
+<td></td>
+</tr></tbody>
+</table>
+<p>Julia packages</p>
+<table style="width:99%;" class="table">
+<colgroup>
+<col width="31%">
+<col width="25%">
+<col width="41%">
+</colgroup>
+<thead><tr class="header">
+<th>Package</th>
+<th>Version</th>
+<th>Note</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>DifferentialEquations</td>
+<td>7.13.0</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>ModelingToolkit</td>
+<td>8.76.0</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Suppressor</td>
+<td>0.2.8</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>SciMLBase</td>
+<td>2.15.2</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>RCall</td>
+<td>0.13.18</td>
+<td></td>
+</tr>
+</tbody>
+</table></details><div class="section level3">
 <h3 id="model-in-r-1">4.1. Model in R<a class="anchor" aria-label="anchor" href="#model-in-r-1"></a>
 </h3>
 <details><summary>
 Code for running SEIR using <code>diffeqr</code>
 </summary><p>Setup Julia for <code>diffeqr</code></p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load library</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/SciML/diffeqr" class="external-link">diffeqr</a></span><span class="op">)</span></span>
 <span></span>
@@ -848,7 +999,7 @@ Code for running SEIR using <code>diffeqr</code>
 <span><span class="co"># uncomment to check installed packages version</span></span>
 <span><span class="co"># JuliaCall::julia_command('using Pkg; Pkg.installed()')</span></span></code></pre></div>
 <p>Set up SEIR model</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># --- Transition def for diffeqr ------ </span></span>
 <span><span class="va">diffeqr_transition</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">u</span>, <span class="va">p</span>, <span class="va">t</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="co"># p - gamma_rate_I, shape_I, gamma_rate_R, shape_R, R0, N</span></span>
@@ -885,7 +1036,7 @@ Code for running SEIR using <code>diffeqr</code>
 <pre><code><span><span class="co">## Julia version 1.9.4 at location /Users/anhptq/Library/Application Support/org.R-project.R/R/JuliaCall/julia/1.9.4/julia-1.9.4/bin will be used.</span></span></code></pre>
 <pre><code><span><span class="co">## Loading setup script for JuliaCall...</span></span></code></pre>
 <pre><code><span><span class="co">## Finish loading setup script for JuliaCall.</span></span></code></pre>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># we can use initialValues and parameters set up for deSolve</span></span>
 <span><span class="va">diffeqr_mod</span> <span class="op">&lt;-</span> <span class="va">setup</span><span class="op">$</span><span class="fu">ODEProblem</span><span class="op">(</span><span class="va">diffeqr_transition</span>, </span>
 <span>                                <span class="va">initialValues</span>,</span>
@@ -914,7 +1065,7 @@ Code for running SEIR using <code>diffeqr</code>
 <span><span class="va">diffeqr_out</span> <span class="op">&lt;-</span> <span class="va">diffeqr_out</span> <span class="op">%&gt;%</span> <span class="fu">mutate</span><span class="op">(</span></span>
 <span>    time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/identity.html" class="external-link">identity</a></span><span class="op">(</span><span class="va">sol</span><span class="op">$</span><span class="va">t</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-</details><div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+</details><div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">diffeqr_base_runs</span></span></code></pre></div>
 <pre><code><span><span class="co">##  [1] 0.002693413 0.002484805 0.002288702 0.002978978 0.002667460 0.002320682</span></span>
 <span><span class="co">##  [7] 0.002303790 0.002602516 0.002445568 0.002196616 0.002118142 0.002151434</span></span>
@@ -937,7 +1088,7 @@ seconds</p>
 Code to set up model in Julia using <code>diffeqr</code>
 </summary><p>We can tell <code>diffeqr</code> to define model in Julia, so we can
 utilize Julia JIT compiler which can improve the runtime.</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># define model in Julia instead</span></span>
 <span><span class="va">optimized_mod</span> <span class="op">&lt;-</span> <span class="fu">diffeqr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/diffeqr/man/jitoptimize_ode.html" class="external-link">jitoptimize_ode</a></span><span class="op">(</span><span class="va">setup</span>, <span class="va">diffeqr_mod</span><span class="op">)</span></span>
 <span></span>
@@ -949,7 +1100,7 @@ utilize Julia JIT compiler which can improve the runtime.</p>
 <span><span class="op">}</span><span class="kw">else</span><span class="op">{</span></span>
 <span>  <span class="va">cached_runtime</span><span class="op">$</span><span class="va">diffeqr_optimized_runs</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-</details><div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+</details><div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">diffeqr_optimized_runs</span></span></code></pre></div>
 <pre><code><span><span class="co">##  [1] 0.000206886 0.000160638 0.000143377 0.000120294 0.000098236 0.000117506</span></span>
 <span><span class="co">##  [7] 0.000127264 0.000111438 0.000104878 0.000106682 0.000099917 0.000109019</span></span>
@@ -972,8 +1123,21 @@ utilize Julia JIT compiler which can improve the runtime.</p>
 <code>odin</code> package <span class="citation">(FitzJohn et al.
 2024)</span> for comparison</p>
 <details><summary>
+Dependency version specifications
+</summary><table class="table">
+<thead><tr class="header">
+<th>Name</th>
+<th>Version</th>
+<th>Note</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td>odin2</td>
+<td>0.3.26</td>
+<td></td>
+</tr></tbody>
+</table></details><details><summary>
 Code for running SEIR in <code>odin</code>
-</summary><div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---- Install packages -----</span></span>
 <span><span class="co"># install.packages(</span></span>
 <span><span class="co">#   "odin2",</span></span>
@@ -1064,10 +1228,10 @@ Code for running SEIR in <code>odin</code>
 <span><span class="co">## clang++ -arch arm64 -std=gnu++17 -dynamiclib -Wl,-headerpad_max_install_names -undefined dynamic_lookup -single_module -multiply_defined suppress -L/Library/Frameworks/R.framework/Resources/lib -L/Library/Developer/CommandLineTools/SDKs/MacOSX15.5.sdk/usr/lib -L/opt/homebrew/opt/libomp/lib -lomp -o odin.system79e020ca.so cpp11.o dust.o -F/Library/Frameworks/R.framework/.. -framework R -Wl,-framework -Wl,CoreFoundation</span></span>
 <span><span class="co">## ld: warning: -single_module is obsolete</span></span>
 <span><span class="co">## ld: warning: -multiply_defined is obsolete</span></span>
-<span><span class="co">## installing to /private/var/folders/rf/dwxhm19j1ws1mfmsvj9yfp140000gr/T/RtmpppYiE8/devtools_install_1767319ca7f15/00LOCK-dust_1767367f32d3f/00new/odin.system79e020ca/libs</span></span>
+<span><span class="co">## installing to /private/var/folders/rf/dwxhm19j1ws1mfmsvj9yfp140000gr/T/RtmpD4sqYR/devtools_install_215580b4b64/00LOCK-dust_215437aedc8/00new/odin.system79e020ca/libs</span></span>
 <span><span class="co">## ** checking absolute paths in shared objects and dynamic libraries</span></span>
 <span><span class="co">## * DONE (odin.system79e020ca)</span></span></code></pre>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">compute_transprob</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">dist_func</span>,<span class="va">...</span>, <span class="va">timestep</span><span class="op">=</span><span class="fl">0.05</span>, <span class="va">error_tolerance</span><span class="op">=</span><span class="fl">0.001</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="va">maxtime</span> <span class="op">&lt;-</span> <span class="va">timestep</span></span>
 <span>  <span class="va">prev_prob</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
@@ -1108,7 +1272,7 @@ Code for running SEIR in <code>odin</code>
 <p>Run model for bench mark. Note that the process of computing the
 transition probability is also included as part of the benchmark for a
 fair comparison with denim.</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">timeStep</span> <span class="op">&lt;-</span> <span class="fl">0.01</span></span>
 <span><span class="va">errorTolerance</span> <span class="op">&lt;-</span> <span class="fl">0.001</span></span>
 <span></span>
@@ -1163,7 +1327,7 @@ fair comparison with denim.</p>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="va">odin_out</span> <span class="op">&lt;-</span> <span class="fu">run_useir_odin</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-</details><div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+</details><div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">odin_runs</span></span></code></pre></div>
 <pre><code><span><span class="co">##  [1] 0.5072996 0.3424156 0.3366308 0.3406740 0.3330703 0.3335009 0.3217610</span></span>
 <span><span class="co">##  [8] 0.3240203 0.3427259 0.4706479 0.3299392 0.3304285 0.3329552 0.3304867</span></span>
@@ -1185,7 +1349,7 @@ fair comparison with denim.</p>
 </h3>
 <details><summary>
 Code for running SEIR in <code>denim</code>
-</summary><div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://drthinhong.com/denim/" class="external-link">denim</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">timeStep</span> <span class="op">&lt;-</span> <span class="fl">0.01</span></span>
@@ -1228,7 +1392,7 @@ Code for running SEIR in <code>denim</code>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">denim_out</span><span class="op">)</span></span></code></pre></div>
 <p><img src="denim_benchmark_files/figure-html/unnamed-chunk-23-1.png" width="2187.5"></p>
 </details><p>Run time for <code>denim</code> implementation</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">denim_runs</span></span></code></pre></div>
 <pre><code><span><span class="co">##  [1] 0.7775783 0.7658625 0.7658219 0.7527552 0.7504584 0.7459896 0.7538721</span></span>
 <span><span class="co">##  [8] 0.7526610 0.7520982 0.7547207 0.7684007 0.7547187 0.7472895 0.7434827</span></span>
@@ -1250,7 +1414,7 @@ Code for running SEIR in <code>denim</code>
 pre-computed using the helper function from Section @ref(sec-odin)</p>
 <details><summary>
 Code for running SEIR in <code>denim</code>
-</summary><div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">timeStep</span> <span class="op">&lt;-</span> <span class="fl">0.01</span></span>
 <span><span class="va">errorTolerance</span> <span class="op">&lt;-</span> <span class="fl">0.001</span></span>
 <span></span>
@@ -1293,7 +1457,7 @@ Code for running SEIR in <code>denim</code>
 <span>                     simulationDuration <span class="op">=</span> <span class="va">sim_duration</span>, timeStep <span class="op">=</span> <span class="va">timeStep</span><span class="op">)</span></span></code></pre></div>
 </details><p>Run time for <code>denim</code>, using <code><a href="../reference/nonparametric.html">nonparametric()</a></code>
 with pre-computed distribution</p>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">denim_nonparametric_runs</span></span></code></pre></div>
 <pre><code><span><span class="co">##  [1] 1.231386 1.364033 1.213625 1.203059 1.360039 1.190269 1.179894 1.335714</span></span>
 <span><span class="co">##  [9] 1.180204 1.173921 1.388920 1.196026 1.213411 1.355098 1.220042 1.209340</span></span>
