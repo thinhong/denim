@@ -4,9 +4,9 @@
 
 #include <algorithm>
 #include <stdexcept>
-#include "DistributionNonparametric.h"
+#include "TransitionNonparametricDist.h"
 
-DistributionNonparametric::DistributionNonparametric(std::vector<double> waitingTime) {
+TransitionNonparametricDist::TransitionNonparametricDist(std::vector<double> waitingTime) {
     // Make sure that waiting time distribution is a probability distribution (sum = 1)
     double sumWaitingTime {0};
     for (auto& wt: waitingTime) {
@@ -22,7 +22,7 @@ DistributionNonparametric::DistributionNonparametric(std::vector<double> waiting
     this->distName = "nonparametric";
 }
 
-void DistributionNonparametric::calcTransitionProb() { 
+void TransitionNonparametricDist::calcTransitionProb() { 
     // variable to keep track of cumulated prob
     // at iteration i, cumulatedProb = p1 + p2 + ... + p[i-1]
     double cumulatedProb {0};
@@ -38,7 +38,7 @@ void DistributionNonparametric::calcTransitionProb() {
     this -> maxDay = this -> transitionProb.size();
 }
 
-double DistributionNonparametric::getTransitionProb(size_t index) {
+double TransitionNonparametricDist::getTransitionProb(size_t index) {
     if (index >= transitionProb.size()) {
         return 1;
     } else {
@@ -46,11 +46,11 @@ double DistributionNonparametric::getTransitionProb(size_t index) {
     }
 }
 
-std::vector<double>& DistributionNonparametric::getTransitionProbRef(){
+std::vector<double>& TransitionNonparametricDist::getTransitionProbRef(){
     return this -> transitionProb;
 }
 
-double DistributionNonparametric::getProbDist(size_t index){
+double TransitionNonparametricDist::getProbDist(size_t index){
     if (index >= waitingTime.size()) {
         return 0;
     }else{
@@ -59,6 +59,6 @@ double DistributionNonparametric::getProbDist(size_t index){
 }
 
 
-std::vector<double> DistributionNonparametric::getWaitingTime() {
+std::vector<double> TransitionNonparametricDist::getWaitingTime() {
     return waitingTime;
 }

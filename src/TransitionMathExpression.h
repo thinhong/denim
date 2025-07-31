@@ -5,13 +5,13 @@
 #ifndef MAIN_CPP_MATHEXPRESSION_H
 #define MAIN_CPP_MATHEXPRESSION_H
 
-#include "Distribution.h"
+#include "Transition.h"
 
-class DistributionMathExpression: public Distribution {
+class TransitionMathExpression: public Transition {
 private:
     std::string expression;
 public:
-    explicit DistributionMathExpression(std::string& expression);
+    explicit TransitionMathExpression(std::string& expression);
     std::vector<double>& getTransitionProbRef() override;
     double getTransitionProb(size_t index) override;
 };

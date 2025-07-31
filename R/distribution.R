@@ -16,7 +16,7 @@ evaluate_par <- function(par){
 #' @param rate rate parameter of a gamma distribution
 #' @param shape shape parameter of a gamma distribution
 #' @param dist_init whether to distribute initial value across subcompartments following this distribution.
-#' @return a Distribution object for simulator
+#' @return a Transition object for simulator
 #' 
 #' @examples
 #' transitions <- list("S -> I" = d_gamma(rate = 1, shape = 5))
@@ -34,12 +34,12 @@ d_gamma <- function(rate, shape, dist_init = FALSE) {
   shape <- evaluate_par(shape)
   
   distr <- list(
-    distribution = "gamma",
+    transition = "gamma",
     rate = rate,
     shape = shape, 
     dist_init = as.numeric(dist_init)
     )
-  class(distr) <- c("Distribution", class(distr))
+  class(distr) <- c("Transition", class(distr))
   distr
 }
 
@@ -49,7 +49,7 @@ d_gamma <- function(rate, shape, dist_init = FALSE) {
 #' @param scale scale parameter of a Weibull distribution
 #' @param shape shape parameter of a Weibull distribution
 #' @param dist_init whether to distribute initial value across subcompartments following this distribution. (default to FALSE, meaning init value is always in the first compartment)
-#' @return a Distribution object for simulator
+#' @return a Transition object for simulator
 #' 
 #' @examples
 #' transitions <- list("I -> D" = d_weibull(0.6, 2))
@@ -65,13 +65,13 @@ d_weibull <- function(scale, shape, dist_init = FALSE) {
   shape <- evaluate_par(shape)
   
   distr <- list(
-    distribution = "weibull",
+    transition = "weibull",
     scale = scale,
     shape = shape,
     dist_init = as.numeric(dist_init)
     )
   
-  class(distr) <- c("Distribution", class(distr))
+  class(distr) <- c("Transition", class(distr))
   distr
 }
 
@@ -79,7 +79,7 @@ d_weibull <- function(scale, shape, dist_init = FALSE) {
 #' 
 #' @param rate rate parameter of an exponential distribution
 #' @param dist_init whether to distribute initial value across subcompartments following this distribution. (default to FALSE, meaning init value is always in the first compartment)
-#' @return a Distribution object for simulator
+#' @return a Transition object for simulator
 #' 
 #' @examples
 #' transitions <- list("I -> D" = d_exponential(0.3))
@@ -92,12 +92,12 @@ d_exponential <- function(rate, dist_init = FALSE) {
   rate <- evaluate_par(rate)
 
   distr <- list(
-    distribution = "exponential",
+    transition = "exponential",
     rate = rate,
     dist_init = as.numeric(dist_init)
   )
   
-  class(distr) <- c("Distribution", class(distr))
+  class(distr) <- c("Transition", class(distr))
   distr
 }
 
@@ -106,7 +106,7 @@ d_exponential <- function(rate, dist_init = FALSE) {
 #' @param mu location parameter or the ln mean
 #' @param sigma scale parameter or ln standard deviation
 #' @param dist_init whether to distribute initial value across subcompartments following this distribution. (default to FALSE, meaning init value is always in the first compartment)
-#' @return a Distribution object for simulator
+#' @return a Transition object for simulator
 #' 
 #' @examples
 #' transitions <- list("I -> D" = d_lognormal(3, 0.6))
@@ -122,13 +122,13 @@ d_lognormal <- function(mu, sigma, dist_init = FALSE) {
   sigma <- evaluate_par(sigma)
   
   distr <- list(
-    distribution = "lognormal",
+    transition = "lognormal",
     mu = mu,
     sigma = sigma,
     dist_init = as.numeric(dist_init)
     )
   
-  class(distr) <- c("Distribution", class(distr))
+  class(distr) <- c("Transition", class(distr))
   distr
 }
 
@@ -144,10 +144,10 @@ mathexpr <- function(expr) {
   }
   
   distr <- list(
-    distribution = "mathExpression",
+    transition = "mathExpression",
     expression = expr)
   
-  class(distr) <- c("Distribution", class(distr))
+  class(distr) <- c("Transition", class(distr))
   distr
 }
 
@@ -155,10 +155,10 @@ mathexpr <- function(expr) {
 #Fixed transition
 constant <- function(x) {
   distr <- list(
-    distribution = "constant",
+    transition = "constant",
     constant = x)
 
-  class(distr) <- c("Distribution", class(distr))
+  class(distr) <- c("Transition", class(distr))
   distr
 }
 
@@ -168,17 +168,17 @@ constant <- function(x) {
 #     distribution = "transitionProb",
 #     transitionProb = x)
 # 
-#   class(distr) <- c("Distribution", class(distr))
+#   class(distr) <- c("Transition", class(distr))
 #   distr
 # }
 
 
-#' Nonparametric distribution
+#' Nonparametric distribution transition
 #' 
 #' Convert a vector of frequencies, percentages... into a distribution
 #' 
 #' @param x a vector of values
-#' @return a Distribution object for simulator
+#' @return a Transition object for simulator
 #' @param dist_init whether to distribute initial value across subcompartments following this distribution. (default to FALSE, meaning init value is always in the first compartment))
 #' 
 #' @examples
@@ -218,11 +218,11 @@ nonparametric <- function(x, dist_init = FALSE) {
   x <- substitute(x)
   x <- evaluate_par(x)
   distr <- list(
-    distribution = "nonparametric",
+    transition = "nonparametric",
     waitingTime = x,
     dist_init = as.numeric(dist_init))
   
-  class(distr) <- c("Distribution", class(distr))
+  class(distr) <- c("Transition", class(distr))
   distr
 }
 
@@ -232,49 +232,49 @@ nonparametric <- function(x, dist_init = FALSE) {
 #     distribution = "multinomial",
 #     probabilities = c(...))
 #   
-#   class(distr) <- c("Distribution", class(distr))
+#   class(distr) <- c("Transition", class(distr))
 #   distr
 # }
 
 
 #' @export
-print.Distribution <- function(x, ...) {
+print.Transition <- function(x, ...) {
   # Print the name of this distribution
-  if (x$distribution %in% c("gamma", "weibull", "exponential")) {
-    cat("Discretized", x$distribution, "distribution\n")
-    if (x$distribution == "weibull") {
+  if (x$transition %in% c("gamma", "weibull", "exponential")) {
+    cat("Discretized", x$transition, "distribution\n")
+    if (x$transition == "weibull") {
       cat("Scale = ", x$scale, ", Shape = ", x$shape, sep = "")
     } 
-    else if (x$distribution == "gamma"){
+    else if (x$transition == "gamma"){
       cat("Rate = ", x$rate, ", Shape = ", x$shape, sep = "")
     }
-    else if (x$distribution == "exponential") {
+    else if (x$transition == "exponential") {
       cat("Rate = ", x$rate, sep = "")
     }
-    else if (x$distribution == "lognormal") {
+    else if (x$transition == "lognormal") {
       cat("Mu = ", x$mu, ", Sigma = ", x$sigma, sep = "")
     }
   } 
-  else if (x$distribution == "mathExpression") {
+  else if (x$transition == "mathExpression") {
     cat("Math expression: ")
     cat(x$expression, sep = "")
   } 
-  else if (x$distribution == "constant") {
+  else if (x$transition == "constant") {
     cat("Constant: ")
     cat(x$constant, sep = "")
   } 
-  else if (x$distribution == "transitionProb") {
+  else if (x$transition == "transitionProb") {
     cat("Transition probability: ")
     cat(x$transitionProb, sep = "")
   } 
-  else if (x$distribution == "nonparametric") {
+  else if (x$transition == "nonparametric") {
     cat("Waiting time values: ")
     wt <- utils::head(x$waitingTime, 5)
     wt <- paste0(wt, collapse = ", ")
     cat(wt, sep = "")
     if (length(x$waitingTime) > 5) cat("...")
   } 
-  else if (x$distribution == "multinomial") {
+  else if (x$transition == "multinomial") {
     cat("Probabilities: ")
     wt <- utils::head(x$probabilities, 5)
     wt <- paste0(wt, collapse = ", ")
@@ -285,29 +285,29 @@ print.Distribution <- function(x, ...) {
   invisible(x)
 }
 
-# Distribution object to json
+# Transition object to json
 #
-# Input is a distribution object of a compartment, not the full vector/list 
-# of distributions
-# distribution: a list with elements $name, $rate / $scale / $shape...
-# return a json object that match format {"distribution": "weibull", "scale": 2, "shape": 5}
-distributionToJson <- function(distribution) {
+# Input is a transition object of a compartment, not the full vector/list 
+# of transitions
+# transition: a list with elements $name, $rate / $scale / $shape...
+# return a json object that match format {"transition": "weibull", "scale": 2, "shape": 5}
+transitionToJson <- function(transition) {
   contents <- c()
-  if (distribution$distribution == "nonparametric") {
-    dn <- newJsonKeyPair(key = "distribution", value = "nonparametric")
-    wt <- newJsonKeyPair(key = "waitingTime", value = newJsonArray(distribution$waitingTime))
-    kp <- newJsonKeyPair(key = "dist_init", value = distribution$dist_init)
+  if (transition$transition == "nonparametric") {
+    dn <- newJsonKeyPair(key = "transition", value = "nonparametric")
+    wt <- newJsonKeyPair(key = "waitingTime", value = newJsonArray(transition$waitingTime))
+    kp <- newJsonKeyPair(key = "dist_init", value = transition$dist_init)
     contents <- c(dn, wt, kp)
   } 
-  else if (distribution$distribution == "multinomial") {
-    dn <- newJsonKeyPair(key = "distribution", value = "multinomial")
-    wt <- newJsonKeyPair(key = "probabilities", value = newJsonArray(distribution$probabilities))
+  else if (transition$transition == "multinomial") {
+    dn <- newJsonKeyPair(key = "transition", value = "multinomial")
+    wt <- newJsonKeyPair(key = "probabilities", value = newJsonArray(transition$probabilities))
     contents <- c(dn, wt)
   }
   else {
-    for (i in 1:length(distribution)) {
-      key <- names(distribution)[i]
-      val <- distribution[[i]]
+    for (i in 1:length(transition)) {
+      key <- names(transition)[i]
+      val <- transition[[i]]
       kp <- newJsonKeyPair(key = key, value = val)
       contents <- c(contents, kp)
     }

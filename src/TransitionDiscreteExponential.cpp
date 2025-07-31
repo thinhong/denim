@@ -3,13 +3,13 @@
 //
 
 #include <iostream>
-#include "DistributionDiscreteExponential.h"
+#include "TransitionDiscreteExponential.h"
 #include "myProb.h"
 
 
-DistributionDiscreteExponential::DistributionDiscreteExponential(double rate) {
+TransitionDiscreteExponential::TransitionDiscreteExponential(double rate) {
     this->rate = rate;
-    // call calcTransitionProb inherited from DistributionParametric 
+    // call calcTransitionProb inherited from TransitionParametricDist 
     // pass exponential_cdf function with its parameter
     // https://people.sc.fsu.edu/~jburkardt/cpp_src/prob/prob.cpp
     calcTransitionProb([rate](double timestep){return exponential_cdf(timestep, 0, 1/rate);});
@@ -17,6 +17,6 @@ DistributionDiscreteExponential::DistributionDiscreteExponential(double rate) {
 }
 
 
-double DistributionDiscreteExponential::getRate() {
+double TransitionDiscreteExponential::getRate() {
     return rate;
 }

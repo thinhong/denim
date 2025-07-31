@@ -5,14 +5,14 @@
 #ifndef MAIN_CPP_DISCRETEWEIBULLDISTRIBUTION_H
 #define MAIN_CPP_DISCRETEWEIBULLDISTRIBUTION_H
 
-#include "DistributionParametric.h"
+#include "TransitionParametricDist.h"
 
-class DistributionDiscreteWeibull: public DistributionParametric {
+class TransitionDiscreteWeibull: public TransitionParametricDist {
 private:
     double scale {0};
     double shape {0};
 public:
-    DistributionDiscreteWeibull(double scale, double shape);
+    TransitionDiscreteWeibull(double scale, double shape);
     double getScale();
     double getShape();
 };

@@ -4,9 +4,9 @@
 
 #include <iostream>
 #include "myProb.h"
-#include "DistributionDiscreteWeibull.h"
+#include "TransitionDiscreteWeibull.h"
 
-DistributionDiscreteWeibull::DistributionDiscreteWeibull(double scale, double shape) {
+TransitionDiscreteWeibull::TransitionDiscreteWeibull(double scale, double shape) {
     this->scale = scale;
     this->shape = shape;
     // https://people.sc.fsu.edu/~jburkardt/cpp_src/prob/prob.cpp
@@ -19,10 +19,10 @@ DistributionDiscreteWeibull::DistributionDiscreteWeibull(double scale, double sh
     this->distName = "weibull";
 }
 
-double DistributionDiscreteWeibull::getScale() {
+double TransitionDiscreteWeibull::getScale() {
     return scale;
 }
 
-double DistributionDiscreteWeibull::getShape() {
+double TransitionDiscreteWeibull::getShape() {
     return shape;
 }

@@ -5,7 +5,7 @@
 #include <chrono>
 #include "json.h"
 #include "Compartment.h"
-#include "Distribution.h"
+#include "Transition.h"
 #include "ModelJSON.h"
 #include "helpers.h"
 #include <Rcpp.h>

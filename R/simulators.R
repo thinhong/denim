@@ -33,7 +33,7 @@
 #' 
 #' Simulation function that call the C++ simulator
 #'
-#' @param transitions output of function `denim_dsl()` or a list of transitions follows this format `"transition" = distribution()`
+#' @param transitions output of function `denim_dsl()` or a list of transitions follows this format `"transition" = expression`
 #' @param initialValues a vector contains the initial values of all compartments defined 
 #' in the **transitions**, follows this format `compartment_name = initial_value`
 #' @param parameters a vector contains values of any parameters that are not compartments, 

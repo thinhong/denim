@@ -364,13 +364,13 @@ For example, the provided distribution is given with the interval of 0.05 day, w
 ```{r}
 transitions <- denim_dsl({
   S -> I = beta*I/N*S
-  I -> R = nonparametric(i_dist)
+  I -> R = nonparametric(ir_dist)
   I -> D = d_exponential(d_rate)
 })
 
 parameters <- list(
   beta = 0.7,
-  i_dist = ir_dist,
+  ir_dist = ir_dist,
   d_rate = 0.1,
   N = 1000
 )

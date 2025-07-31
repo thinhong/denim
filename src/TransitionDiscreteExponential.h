@@ -4,13 +4,13 @@
 
 #ifndef MAIN_CPP_DISCRETEEXPONENTIALDISTRIBUTION_H
 #define MAIN_CPP_DISCRETEEXPONENTIALDISTRIBUTION_H
-#include "DistributionParametric.h"
+#include "TransitionParametricDist.h"
 
-class DistributionDiscreteExponential: public DistributionParametric {
+class TransitionDiscreteExponential: public TransitionParametricDist {
 private:
     double rate {0};
 public:
-    explicit DistributionDiscreteExponential(double rate);
+    explicit TransitionDiscreteExponential(double rate);
     double getRate();
 };
 

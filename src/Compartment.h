@@ -6,7 +6,7 @@
 #include <memory>
 #include <string>
 #include <algorithm>
-#include "Distribution.h"
+#include "Transition.h"
 #include "muParser.h"
 #include <Rcpp.h>
 
@@ -15,11 +15,11 @@ private:
     std::string compName;
     bool competingRisks; // keep track whether current compartment handles outgoing transitions as competing risk
 
-    // The length of subCompartments is the maximum length of vector transitionProb in outDistributions
+    // The length of subCompartments is the maximum length of vector transitionProb in outTransitions
     // store population in each sub compartment
     // TODO:
     // - make subcomartments a nested double array, with dim [nOutCompartments, nMaxDwelltime]
-    // - instantiate population for subCompartments based on outDistribution
+    // - instantiate population for subCompartments based on outTransition
     std::vector<std::deque<double>> subCompartments;
 
     // total: the sum of all subCompartments (i.e. population of this compartment) per iteration/timestep
@@ -28,12 +28,12 @@ private:
     // inCompartments: compartments that will move in to this state
     std::vector<std::weak_ptr<Compartment>> inCompartments;
 
-    // outCompartments: compartments that this state will move out to, with pre-defined outDistributions and outWeights,
+    // outCompartments: compartments that this state will move out to, with pre-defined outTransitions and outWeights,
     // after calculation the final output will be sum into outTotals
     std::vector<std::weak_ptr<Compartment>> outCompartments;
-    // out distribution corresponding to each outCompartment
-    std::vector<std::shared_ptr<Distribution>> outDistributions; 
-    // whether to distribute initial value across subcompartment, same length as outDistributions
+    // out transition corresponding to each outCompartment
+    std::vector<std::shared_ptr<Transition>> outTransitions; 
+    // whether to distribute initial value across subcompartment, same length as outTransitions
     std::vector<bool> distSubCompInit;
     // out weight corresponding to each outCompartment
     std::vector<double> outWeights;
@@ -62,18 +62,18 @@ public:
     std::vector<std::weak_ptr<Compartment>> getInCompartments();
     std::vector<std::weak_ptr<Compartment>> getOutCompartments();
     std::vector<std::string> getOutCompartmentNames();
-    std::vector<std::shared_ptr<Distribution>> getOutDistributions();
+    std::vector<std::shared_ptr<Transition>> getOutTransitions();
     std::vector<double> getOutWeights();
 
     std::vector<std::deque<double>> getSubCompartmentValues() {return subCompartments;};
     std::vector<double> getOutValues() {return outTotals;};
 
     // Setters
-    void addOutDistribution(std::shared_ptr<Distribution>& dist, bool distInit = false);
+    void addOutTransition(std::shared_ptr<Transition>& dist, bool distInit = false);
     void addOutWeight(double weight);
     void addInCompartment(std::weak_ptr<Compartment>& linkedCompIn);
     void addOutCompartment(std::weak_ptr<Compartment>& linkedCompOut);
-    void editOutDistribution(std::string outName, std::shared_ptr<Distribution>& dist, bool distInit = false);
+    void editOutTransition(std::string outName, std::shared_ptr<Transition>& dist, bool distInit = false);
     /**
      * Update compTotal value for current iteration
     */

@@ -3,10 +3,10 @@
 //
 
 #include "myProb.h"
-#include "DistributionLogNormal.h"
+#include "TransitionLogNormal.h"
 #include <iostream>
 
-DistributionLogNormal::DistributionLogNormal(double mu, double sigma) {
+TransitionLogNormal::TransitionLogNormal(double mu, double sigma) {
     this->mu = mu;
     this->sigma = sigma;
     calcTransitionProb(

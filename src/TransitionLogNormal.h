@@ -5,15 +5,15 @@
 #ifndef COMPARTMENT_CPP_DISTRIBUTIONLOGNORMAL_H
 #define COMPARTMENT_CPP_DISTRIBUTIONLOGNORMAL_H
 
-#include "DistributionParametric.h"
+#include "TransitionParametricDist.h"
 
-class DistributionLogNormal: public DistributionParametric {
+class TransitionLogNormal: public TransitionParametricDist {
 private:
     double mu {0};
     double sigma {0};
 public:
-    DistributionLogNormal(double mu, double sigma);
-    DistributionLogNormal() = default;
+    TransitionLogNormal(double mu, double sigma);
+    TransitionLogNormal() = default;
 };
 
 

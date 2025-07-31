@@ -5,13 +5,13 @@
 #ifndef COMPARTMENT_CPP_DISTRIBUTIONCONSTANT_H
 #define COMPARTMENT_CPP_DISTRIBUTIONCONSTANT_H
 
-#include "Distribution.h"
+#include "Transition.h"
 
-class DistributionConstant: public Distribution {
+class TransitionConstant: public Transition {
 private:
     double constant;
 public:
-    explicit DistributionConstant(double constValue);
+    explicit TransitionConstant(double constValue);
     double getTransitionProb(size_t index) override;
     std::vector<double>& getTransitionProbRef() override;
 };

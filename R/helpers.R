@@ -1,4 +1,4 @@
-# A helper function to display initialValues and distributions for inputHelper
+# A helper function to display initialValues and transitions for inputHelper
 displayModelGroups <- function(modelGroups) {
   for (i in 1:length(modelGroups)) {
     modelName <- names(modelGroups)[i]
@@ -38,15 +38,15 @@ inputHelper <- function(transitions, contacts = NULL) {
   }
   
   # Display correct input format
-  ## Initial values and distributions are based on modelGroups
+  ## Initial values and transitions are based on modelGroups
   cat("# Place these codes under the transitions and contacts you have written\n")
   cat("# Set up the initial values for all compartments\n")
   cat("initialValues <- list(\n")
   displayModelGroups(modelGroups)
   cat(")\n\n")
   
-  cat("# Set up the distributions for all compartments, any compartment without distribution can be deleted\n")
-  cat("distributions <- list(\n")
+  cat("# Set up the transitions for all compartments, any compartment without transition can be deleted\n")
+  cat("transitions <- list(\n")
   displayModelGroups(modelGroups)
   cat(")\n\n")
   
@@ -54,5 +54,5 @@ inputHelper <- function(transitions, contacts = NULL) {
   cat("fmod <- runSim(daysFollowUp = , errorTolerance = , timeStep = , 
                transmissionRate = , infectiousComps = , 
                contacts = , transitions = ,
-               initialValues = initialValues, distributions = distributions)")
+               initialValues = initialValues, transitions = transitions)")
 }

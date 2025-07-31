@@ -56,6 +56,9 @@ cached_runtime <- if (file.exists("../supplements/cached_runtime.rds")) {
 } else {
   NULL
 }
+
+# compute min, max, variance
+lapply(cached_runtime, function(x) c(min = min(x), max = max(x), var = var(x)))
 ```
 
 ## Benchmark settings

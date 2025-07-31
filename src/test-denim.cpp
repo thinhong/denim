@@ -11,17 +11,17 @@
 #include <testthat.h>
 
 // denim headers
-#include "DistributionConstant.h"
-#include "DistributionLogNormal.h"
+#include "TransitionConstant.h"
+#include "TransitionLogNormal.h"
 #include "ModelJSON.h"
 
 
 // Initialize a unit test context. This is similar to how you
 // might begin an R test file with 'context()', expect the
 // associated context should be wrapped in braced.
-context("Distribution class") {
+context("Transition class") {
   std::vector<double> inputVect{0.3, 0.5, 0.1, 0.1};
-  DistributionNonparametric distribution(inputVect);
+  TransitionNonparametricDist distribution(inputVect);
   size_t idx = 2;
 
   test_that("getTransititionProb") {
@@ -39,9 +39,9 @@ context("Distribution class") {
 }
 
 context("Lognormal distribution") {
-  DistributionLogNormal distr(1, 0.25);
-  std::shared_ptr<Distribution> test_polymorphism; 
-  test_polymorphism = std::make_shared<DistributionLogNormal>(1, 0.25);
+  TransitionLogNormal distr(1, 0.25);
+  std::shared_ptr<Transition> test_polymorphism; 
+  test_polymorphism = std::make_shared<TransitionLogNormal>(1, 0.25);
   
   test_that("getTransitionProb") {
     expect_true(distr.getTransitionProb(2) == Approx(0.6106).margin(0.01));
@@ -57,7 +57,7 @@ context("Lognormal distribution") {
 }
 
 context("Gamma distribution") {
-  DistributionDiscreteGamma distr(1, 3);
+  TransitionDiscreteGamma distr(1, 3);
 
   test_that("getTransitionProb") {
     expect_true(distr.getTransitionProb(4) == Approx(0.4764).margin(0.01));
@@ -73,7 +73,7 @@ context("Gamma distribution") {
 }
 
 context("Exponential distribution") {
-  DistributionDiscreteExponential distr(0.5);
+  TransitionDiscreteExponential distr(0.5);
 
   test_that("getTransitionProb") {
     expect_true(distr.getTransitionProb(2) == Approx(0.3934).margin(0.01));
@@ -84,8 +84,8 @@ context("Exponential distribution") {
   }
 }
 
-context("Distribution Constant"){
-  DistributionConstant distr(10);
+context("Transition Constant"){
+  TransitionConstant distr(10);
   
   test_that("getTransitionProb"){
     expect_true(distr.getTransitionProb(3) == 10);
@@ -93,7 +93,7 @@ context("Distribution Constant"){
 }
 
 context("Weibull distribution") {
-  DistributionDiscreteWeibull distr(3, 5);
+  TransitionDiscreteWeibull distr(3, 5);
 
   test_that("getTransitionProb") {
     expect_true(distr.getTransitionProb(2) == Approx(0.5803).margin(0.01));
@@ -111,7 +111,7 @@ context("Weibull distribution") {
 context("Math Expression"){
   std::string expr = "beta * S * I / N";
   
-  DistributionMathExpression distr(expr);
+  TransitionMathExpression distr(expr);
   
   test_that("getTransitionProb"){
     expect_true(distr.getTransitionProb(1) == Approx(1.0).margin(0.0001));
@@ -121,7 +121,7 @@ context("Math Expression"){
 
 
 context("Transition prob") {
-  DistributionTransitionProb distr(0.6);
+  TransitionProb distr(0.6);
   
   test_that("getTransitionProb") {
     expect_true(distr.getTransitionProb(2) == Approx(0.6).margin(0.01));
@@ -130,7 +130,7 @@ context("Transition prob") {
 
 context("Testing multinomial transition"){
   
-  nlohmann::ordered_json j = nlohmann::ordered_json::parse("{\n  \"simulationDuration\": 10,\n  \"errorTolerance\": 0.001,\n  \"timeStep\": 1,\n  \"initialValues\": {\"S\": 1000, \"I\": 0, \"V\": 0},\n  \"parameters\": {\"transitionProb\": 0.2, \"mu\": 2, \"sigma\": 0.5},\n  \"transitions\": {\n  \"S -> I, V\": {\"distribution\": \"multinomial\", \"probabilities\": [0.9, 0.1]},\n  \"S -> I\": {\"distribution\": \"transitionProb\", \"transitionProb\": 0.2},\n  \"S -> V\": {\"distribution\": \"lognormal\", \"mu\": 2, \"sigma\": 0.5}\n}\n}");
+  nlohmann::ordered_json j = nlohmann::ordered_json::parse("{\n  \"simulationDuration\": 10,\n  \"errorTolerance\": 0.001,\n  \"timeStep\": 1,\n  \"initialValues\": {\"S\": 1000, \"I\": 0, \"V\": 0},\n  \"parameters\": {\"transitionProb\": 0.2, \"mu\": 2, \"sigma\": 0.5},\n  \"transitions\": {\n  \"S -> I, V\": {\"transition\": \"multinomial\", \"probabilities\": [0.9, 0.1]},\n  \"S -> I\": {\"transition\": \"transitionProb\", \"transitionProb\": 0.2},\n  \"S -> V\": {\"transition\": \"lognormal\", \"mu\": 2, \"sigma\": 0.5}\n}\n}");
   ModelJSON modeljson(j["initialValues"], j["parameters"], j["transitions"]);
   auto model = modeljson.getModel();
   
@@ -142,7 +142,7 @@ context("Testing multinomial transition"){
   };
   
   // Set timestep and test values for the first iteration
-  Distribution::timeStep = j["timeStep"];
+  Transition::timeStep = j["timeStep"];
   model->update(1);
   
   test_that("update()"){
@@ -168,7 +168,7 @@ context("Testing multinomial transition"){
 
 
 context("Testing distributions in model"){
-  nlohmann::ordered_json j = nlohmann::ordered_json::parse("{  \"simulationDuration\": 10,\"errorTolerance\": 0.001,  \"timeStep\": 1,  \"initialValues\": {\"S\": 999, \"I\": 1, \"R\": 0, \"V\": 0, \"D\": 0},  \"parameters\": {\"N\": 1000},  \"transitions\": {  \"S -> I\": {\"distribution\": \"nonparametric\", \"waitingTime\": [0.1, 0.2, 0.5, 0.2]},  \"S -> V\": {\"distribution\": \"constant\", \"constant\": 2},  \"0.1 * I -> D\": {\"distribution\": \"lognormal\", \"mu\": 2, \"sigma\": 0.5},  \"0.9 * I -> R\": {\"distribution\": \"gamma\", \"rate\": 1/3, \"shape\": 2}}}");
+  nlohmann::ordered_json j = nlohmann::ordered_json::parse("{  \"simulationDuration\": 10,\"errorTolerance\": 0.001,  \"timeStep\": 1,  \"initialValues\": {\"S\": 999, \"I\": 1, \"R\": 0, \"V\": 0, \"D\": 0},  \"parameters\": {\"N\": 1000},  \"transitions\": {  \"S -> I\": {\"transition\": \"nonparametric\", \"waitingTime\": [0.1, 0.2, 0.5, 0.2]},  \"S -> V\": {\"transition\": \"constant\", \"constant\": 2},  \"0.1 * I -> D\": {\"transition\": \"lognormal\", \"mu\": 2, \"sigma\": 0.5},  \"0.9 * I -> R\": {\"transition\": \"gamma\", \"rate\": 1/3, \"shape\": 2}}}");
 
 
   ModelJSON modeljson(j["initialValues"], j["parameters"], j["transitions"]);
@@ -190,7 +190,7 @@ context("Testing distributions in model"){
   };
   
   // Set timestep and test values for the first iteration
-  Distribution::timeStep = j["timeStep"];
+  Transition::timeStep = j["timeStep"];
   model->update(1);
   // making sure update is working
   test_that("update"){
@@ -225,7 +225,7 @@ context("Testing distributions in model"){
 
 
 context("Model JSON conversion") {
-    nlohmann::ordered_json j = nlohmann::ordered_json::parse("{  \"simulationDuration\": 10,\"errorTolerance\": 0.001,  \"timeStep\": 0.01,  \"initialValues\": {\"S\": 999, \"I\": 1, \"R\": 0},  \"parameters\": {\"beta\": 0.12, \"N\": 1000},  \"transitions\": {  \"S -> I\": {\"distribution\": \"mathExpression\", \"expression\": \"beta * S * I / N\"},  \"I -> R\": {\"distribution\": \"gamma\", \"rate\": 1/3, \"shape\": 2}}}");
+    nlohmann::ordered_json j = nlohmann::ordered_json::parse("{  \"simulationDuration\": 10,\"errorTolerance\": 0.001,  \"timeStep\": 0.01,  \"initialValues\": {\"S\": 999, \"I\": 1, \"R\": 0},  \"parameters\": {\"beta\": 0.12, \"N\": 1000},  \"transitions\": {  \"S -> I\": {\"transition\": \"mathExpression\", \"expression\": \"beta * S * I / N\"},  \"I -> R\": {\"transition\": \"gamma\", \"rate\": 1/3, \"shape\": 2}}}");
 
     ModelJSON modeljson(j["initialValues"], j["parameters"], j["transitions"]);
     auto model = modeljson.getModel();
@@ -241,7 +241,7 @@ context("Model JSON conversion") {
     }
 
     // Set timestep and test values for the first iteration
-    Distribution::timeStep = j["timeStep"];
+    Transition::timeStep = j["timeStep"];
     model->update(1);
     // map to convert compartment name to int per C++ requirement for switch case
     const static std::unordered_map<std::string,int> name_to_case{
@@ -281,9 +281,9 @@ context("Model JSON conversion") {
       }
     }
     
-    test_that("editOutDistribution()"){
-      std::shared_ptr<Distribution> distr = std::make_shared<DistributionDiscreteWeibull>(3, 5);
-      model -> getComps()[0] -> editOutDistribution("I", distr);
+    test_that("editOutTransition()"){
+      std::shared_ptr<Transition> distr = std::make_shared<TransitionDiscreteWeibull>(3, 5);
+      model -> getComps()[0] -> editOutTransition("I", distr);
     }
 
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/distribution.R
 \name{nonparametric}
 \alias{nonparametric}
-\title{Nonparametric distribution}
+\title{Nonparametric distribution transition}
 \usage{
 nonparametric(x, dist_init = FALSE)
 }
@@ -12,7 +12,7 @@ nonparametric(x, dist_init = FALSE)
 \item{dist_init}{whether to distribute initial value across subcompartments following this distribution. (default to FALSE, meaning init value is always in the first compartment))}
 }
 \value{
-a Distribution object for simulator
+a Transition object for simulator
 }
 \description{
 Convert a vector of frequencies, percentages... into a distribution

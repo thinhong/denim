@@ -40,8 +40,8 @@ void viewModelStructure(std::shared_ptr<Model> model) {
         }
         Rcpp::Rcout << "\n";
 
-        Rcpp::Rcout << "Out distribution: ";
-        for (auto& outDist: comp->getOutDistributions()) {
+        Rcpp::Rcout << "Out transition: ";
+        for (auto& outDist: comp->getOutTransitions()) {
             Rcpp::Rcout << outDist << " (" << outDist->getDistName() << "), ";
         }
         Rcpp::Rcout << "\n";

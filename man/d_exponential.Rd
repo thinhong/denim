@@ -12,7 +12,7 @@ d_exponential(rate, dist_init = FALSE)
 \item{dist_init}{whether to distribute initial value across subcompartments following this distribution. (default to FALSE, meaning init value is always in the first compartment)}
 }
 \value{
-a Distribution object for simulator
+a Transition object for simulator
 }
 \description{
 Discrete exponential distribution

@@ -14,11 +14,11 @@ newModel <- function(simulationDuration, errorTolerance, initialValues,
       transitions[[i]] <- constant(transitions[[i]])
     }
     
-    if( (class(transitions[[i]])=="Distribution")[[1]] ){
-      if((transitions[[i]]$distribution) == "constant"|
-               (transitions[[i]]$distribution) == "multinomial"){
+    if( (class(transitions[[i]])=="Transition")[[1]] ){
+      if((transitions[[i]]$transition) == "constant"|
+               (transitions[[i]]$transition) == "multinomial"){
         next
-      }else if((transitions[[i]]$distribution) == "nonparametric"){
+      }else if((transitions[[i]]$transition) == "nonparametric"){
         # check whether the distribution 
         # parameters are numeric or string, if it is a string (i.e. model input)
         # make sure that value is provided as one of the parameters
@@ -32,8 +32,8 @@ newModel <- function(simulationDuration, errorTolerance, initialValues,
           # remove waiting dist from parameters list
           parameters[[par_val]] <- NULL
         }
-      }else if((transitions[[i]]$distribution) != "mathExpression"){
-        # check whether the distribution 
+      }else if((transitions[[i]]$transition) != "mathExpression"){
+        # check whether the transition 
         # parameters are numeric or string, if it is a string (i.e. model input)
         # make sure that value is provided as one of the parameters
         sapply(names(transitions[[i]][-1]), \(par_name){
@@ -47,7 +47,7 @@ newModel <- function(simulationDuration, errorTolerance, initialValues,
           }
         })
         
-        # also get parameters from Distribution objects
+        # also get parameters from Transition objects
         parameters <- c(parameters, transitions[[i]][-1])
       }else{
         has_math_dist <- TRUE
@@ -58,7 +58,7 @@ newModel <- function(simulationDuration, errorTolerance, initialValues,
   # print(parameters) for debugging
   
   if(has_math_dist & is.null(parameters)){
-    stop("Parameters must be defined for Math Expression Distribution")
+    stop("Parameters must be defined for Math Expression Transition")
   }
   
   # remove dist_init due to down stream problem
@@ -90,7 +90,7 @@ modelToJson <- function(mod) {
   for (i in 1:nb) {
     distr[i] <- newJsonNestedObject(
       names(transitions)[i],
-      distributionToJson(transitions[[i]]), inline = TRUE)
+      transitionToJson(transitions[[i]]), inline = TRUE)
   }
   
   # add handlers when transitions doesn't involve any parameters

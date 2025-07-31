@@ -9,7 +9,7 @@
 /// @brief constructor for ModelJSON
 /// @param initialValues - initial population for each compartment
 /// @param parameters - model parameters. hashmap with [parameter name] as key and [parameter value] as value
-/// @param transitions - transitions. hashmap with [transtition direction] (e.g. S -> I) as key and [distribution] (e.g. d_gammma(3,2)) as value
+/// @param transitions - transitions. hashmap with [transtition direction] (e.g. S -> I) as key and [transition] (e.g. d_gammma(3,2)) as value
 ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_json &parameters, nlohmann::ordered_json &transitions) {
 
     // Set parameters with parameters json
@@ -36,7 +36,7 @@ ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_js
     // Then add other compartment attributes with the transitions json
     for (auto& transition: transitions.items()) {
         std::string flow = transition.key();
-        auto distributionConfig = transition.value();
+        auto transitionConfig = transition.value();
 
         // Remove whitespace
         flow.erase(remove(flow.begin(), flow.end(), ' '), flow.end());
@@ -94,7 +94,7 @@ ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_js
 
         //======================== Manage the outCompName part ========================//
         // Special scenario "multinomial": outCompName is a string of multiple names separated by [,], e.g. "I1, I2, I3"
-        if (distributionConfig["distribution"] == "multinomial") {
+        if (transitionConfig["transition"] == "multinomial") {
             // Make a vector outComps to store separated outCompName i.e. from "I1, I2, I3" to "I1", "I2", "I3"
             std::vector<std::string> outComps;
             std::stringstream outStrings(outCompName);
@@ -104,7 +104,7 @@ ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_js
             }
 
             std::weak_ptr<Compartment> inComp = model->getAddressFromName(inCompName);
-            std::vector<double> weights = distributionConfig["probabilities"];
+            std::vector<double> weights = transitionConfig["probabilities"];
             // Manage each out compartment in outComps
             for (size_t i {0}; i < outComps.size(); ++i) {
                 std::weak_ptr<Compartment> outComp = model->getAddressFromName(outComps[i]);
@@ -114,8 +114,8 @@ ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_js
                 // Here we add to weight not to probability because we need them to be calculated concurrently
                 inComp.lock()->addOutWeight(weights[i]);
 
-                std::shared_ptr<Distribution> transitionProb = std::make_shared<DistributionTransitionProb>(1);
-                inComp.lock()->addOutDistribution(transitionProb);
+                std::shared_ptr<Transition> transitionProb = std::make_shared<TransitionProb>(1);
+                inComp.lock()->addOutTransition(transitionProb);
 
                 // Add the outComp to compsOrder
                 allOutCompNames.push_back(outComps[i]);
@@ -130,77 +130,77 @@ ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_js
             std::weak_ptr<Compartment> inComp = model->getAddressFromName(inCompName);
             std::weak_ptr<Compartment> outComp = model->getAddressFromName(outCompName);
 
-            std::shared_ptr<Distribution> distribution;
+            std::shared_ptr<Transition> transition;
 
             bool dist_init = false;
 
-            // Set distribution for the inCompartment
-            // If outCompartment is not added, then add the distribution, if it has been added then edit the distribution
-            if (distributionConfig["distribution"] == "transitionProb") {
-                double prob = distributionConfig["transitionProb"];
-                prob *= Distribution::timeStep;
-                distribution = std::make_shared<DistributionTransitionProb>(prob);
+            // Set transition for the inCompartment
+            // If outCompartment is not added, then add the transition, if it has been added then edit the transition
+            if (transitionConfig["transition"] == "transitionProb") {
+                double prob = transitionConfig["transitionProb"];
+                prob *= Transition::timeStep;
+                transition = std::make_shared<TransitionProb>(prob);
             }
-                // Gamma distribution: parameters are "rate" and "shape"
-            else if (distributionConfig["distribution"] == "gamma") {
-                double rate = distributionConfig["rate"];
-                double shape = distributionConfig["shape"];
-                distribution = std::make_shared<DistributionDiscreteGamma>(rate, shape);
+                // Gamma transition: parameters are "rate" and "shape"
+            else if (transitionConfig["transition"] == "gamma") {
+                double rate = transitionConfig["rate"];
+                double shape = transitionConfig["shape"];
+                transition = std::make_shared<TransitionDiscreteGamma>(rate, shape);
                 // work around json type cast exception, don't remove
-                double tmp_init_config = distributionConfig["dist_init"];
+                double tmp_init_config = transitionConfig["dist_init"];
                 dist_init = (bool) tmp_init_config;
             }
                 // Weibull distribution: parameters are "scale" and "shape"
-            else if (distributionConfig["distribution"] == "weibull") {
-                double scale = distributionConfig["scale"];
-                double shape = distributionConfig["shape"];
-                distribution = std::make_shared<DistributionDiscreteWeibull>(scale, shape);
+            else if (transitionConfig["transition"] == "weibull") {
+                double scale = transitionConfig["scale"];
+                double shape = transitionConfig["shape"];
+                transition = std::make_shared<TransitionDiscreteWeibull>(scale, shape);
                 // work around json type cast exception, don't remove
-                double tmp_init_config = distributionConfig["dist_init"];
+                double tmp_init_config = transitionConfig["dist_init"];
                 dist_init = (bool) tmp_init_config;
             }
                 // Exponential distribution: parameter is "rate"
-            else if (distributionConfig["distribution"] == "exponential") {
-                double rate = distributionConfig["rate"];
-                distribution = std::make_shared<DistributionDiscreteExponential>(rate);
+            else if (transitionConfig["transition"] == "exponential") {
+                double rate = transitionConfig["rate"];
+                transition = std::make_shared<TransitionDiscreteExponential>(rate);
                 // work around json type cast exception, don't remove
-                double tmp_init_config = distributionConfig["dist_init"];
+                double tmp_init_config = transitionConfig["dist_init"];
                 dist_init = (bool) tmp_init_config;
             }
-            else if (distributionConfig["distribution"] == "lognormal") {
-                double mu = distributionConfig["mu"];
-                double sigma = distributionConfig["sigma"];
+            else if (transitionConfig["transition"] == "lognormal") {
+                double mu = transitionConfig["mu"];
+                double sigma = transitionConfig["sigma"];
             
-                distribution = std::make_shared<DistributionLogNormal>(mu, sigma);
+                transition = std::make_shared<TransitionLogNormal>(mu, sigma);
                 // work around json type cast exception, don't remove
-                double tmp_init_config = distributionConfig["dist_init"];
+                double tmp_init_config = transitionConfig["dist_init"];
                 dist_init = (bool) tmp_init_config;
             }
-                // Values distribution: parameter is a vector "waitingTime"
-            else if (distributionConfig["distribution"] == "nonparametric") {
-                std::vector<double> waitingTime = distributionConfig["waitingTime"];
-                distribution = std::make_shared<DistributionNonparametric>(waitingTime);
+                // Values transition: parameter is a vector "waitingTime"
+            else if (transitionConfig["transition"] == "nonparametric") {
+                std::vector<double> waitingTime = transitionConfig["waitingTime"];
+                transition = std::make_shared<TransitionNonparametricDist>(waitingTime);
                 // work around json type cast exception, don't remove
-                double tmp_init_config = distributionConfig["dist_init"];
+                double tmp_init_config = transitionConfig["dist_init"];
                 dist_init = (bool) tmp_init_config;
             }
-            else if (distributionConfig["distribution"] == "mathExpression") {
-                std::string expression = distributionConfig["expression"];
-                distribution = std::make_shared<DistributionMathExpression>(expression);
+            else if (transitionConfig["transition"] == "mathExpression") {
+                std::string expression = transitionConfig["expression"];
+                transition = std::make_shared<TransitionMathExpression>(expression);
             }
-            else if (distributionConfig["distribution"] == "constant") {
-                double constVal = distributionConfig["constant"];
-                distribution = std::make_shared<DistributionConstant>(constVal);
+            else if (transitionConfig["transition"] == "constant") {
+                double constVal = transitionConfig["constant"];
+                transition = std::make_shared<TransitionConstant>(constVal);
             }
 
-            // Set distribution for the inCompartment
-            // If outCompartment is not added, then add the distribution, if it has been added then edit the distribution
+            // Set transition for the inCompartment
+            // If outCompartment is not added, then add the transition, if it has been added then edit the transition
             if (inComp.lock()->isOutCompAdded(outCompName) == false) {
                 // TODO: adjust setting whether to distribute initial value here
-                inComp.lock()->addOutDistribution(distribution, dist_init);
+                inComp.lock()->addOutTransition(transition, dist_init);
             } else {
                 // TODO: also adjust setting whether to distribute initial value here
-                inComp.lock()->editOutDistribution(outCompName, distribution, dist_init);
+                inComp.lock()->editOutTransition(outCompName, transition, dist_init);
             }
 
             // If outCompartment has not been added: set linked compartment in, out, outName, weight
@@ -212,19 +212,19 @@ ModelJSON::ModelJSON(nlohmann::ordered_json &initialValues, nlohmann::ordered_js
         }
     }
 
-    // Finally, looking back all compartments to see any compartment does not have a distribution
+    // Finally, looking back all compartments to see any compartment does not have a transition
     // Impute it with transitionProb = 0
     for (auto& comp: model->getComps()) {
-        if (comp->getOutDistributions().empty()) {
-            std::shared_ptr<Distribution> transitionProb = std::make_shared<DistributionTransitionProb>(0);
-            comp->addOutDistribution(transitionProb);
+        if (comp->getOutTransitions().empty()) {
+            std::shared_ptr<Transition> transitionProb = std::make_shared<TransitionProb>(0);
+            comp->addOutTransition(transitionProb);
             comp->addOutWeight(1);
         }
 
         // normalize outWeight in case weights does not sum up to 1
         // also add outWeight in scenarios where outweight is not explicitly defined 
         comp->normalizeOutWeights();
-        // TODO: also distribute starting value based on specified distribution
+        // TODO: also distribute starting value based on specified transition
         // TODO: in case of multinomial, create separate chains of subcompartments
 
         comp->setLengthSubCompartment();

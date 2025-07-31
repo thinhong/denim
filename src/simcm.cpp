@@ -9,11 +9,11 @@ Rcpp::DataFrame simcm(std::string inputPath) {
     input = nlohmann::ordered_json::parse(inputPath);
 
     // Initialize parameters: errorTolerance, timeStep and daysFollowUp
-    Distribution::errorTolerance = input["errorTolerance"];
+    Transition::errorTolerance = input["errorTolerance"];
     if (!input["timeStep"].is_null()) {
-        Distribution::timeStep = input["timeStep"];
+        Transition::timeStep = input["timeStep"];
     }
-    Compartment::timesFollowUp = static_cast<size_t>(static_cast<double>(input["simulationDuration"]) / Distribution::timeStep + 1);
+    Compartment::timesFollowUp = static_cast<size_t>(static_cast<double>(input["simulationDuration"]) / Transition::timeStep + 1);
 
     ModelJSON myModel(input["initialValues"], input["parameters"], input["transitions"]);
 
@@ -41,13 +41,13 @@ Rcpp::DataFrame simcm(std::string inputPath) {
     // std::vector<double> actualTime;
     // actualTime.clear();
     // for (auto& time: timeStep) {
-    //     actualTime.push_back(Distribution::timeStep * time);
+    //     actualTime.push_back(Transition::timeStep * time);
     // }
     // TODO: test new code with removed redundant loop
     std::vector<double> actualTime;
     actualTime.reserve(Compartment::timesFollowUp);
     for (int i = 0; i < Compartment::timesFollowUp; ++i) {
-        actualTime.push_back(Distribution::timeStep * i);
+        actualTime.push_back(Transition::timeStep * i);
     }
     df.push_back(actualTime, "Time");
     for (auto& comp: myModel.getModel()->getComps()) {

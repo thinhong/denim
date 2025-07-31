@@ -5,18 +5,18 @@
 #ifndef MAIN_CPP_DISCRETEGAMMADISTRIBUTION_H
 #define MAIN_CPP_DISCRETEGAMMADISTRIBUTION_H
 
-#include "DistributionParametric.h"
+#include "TransitionParametricDist.h"
 
-class DistributionDiscreteGamma: public DistributionParametric {
+class TransitionDiscreteGamma: public TransitionParametricDist {
 private:
     // TODO: change scale to rate 
     double rate {0};
     double shape {0};
     std::vector<double> transitionProb;
 public:
-    DistributionDiscreteGamma(double rate, double shape);
-    // explicit DistributionDiscreteGamma(std::vector<double>& cumulativeProb);
-    DistributionDiscreteGamma() = default;
+    TransitionDiscreteGamma(double rate, double shape);
+    // explicit TransitionDiscreteGamma(std::vector<double>& cumulativeProb);
+    TransitionDiscreteGamma() = default;
     double getRate();
     double getShape();
 };

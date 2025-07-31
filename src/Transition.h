@@ -9,7 +9,7 @@
 #include <vector>
 
 
-class Distribution {
+class Transition {
 protected:
     size_t maxDay {1};
     std::string distName;
@@ -29,7 +29,7 @@ public:
      * @return
      */
     // double calcTransitionProbHelper(std::vector<double> waitingTime, size_t i);
-    virtual ~Distribution() = 0;
+    virtual ~Transition() = 0;
 };
 
 #endif //MAIN_CPP_DISTRIBUTION_H

@@ -7,15 +7,15 @@
 
 #include <string>
 #include <vector>
-#include "Distribution.h"
+#include "Transition.h"
 
-class DistributionNonparametric: public Distribution {
+class TransitionNonparametricDist: public Transition {
 private:
     std::vector<double> waitingTime;
     std::vector<double> transitionProb;
     void calcTransitionProb();
 public:
-    explicit DistributionNonparametric(std::vector<double> waitingTime);
+    explicit TransitionNonparametricDist(std::vector<double> waitingTime);
     double getTransitionProb(size_t index) override;
     std::vector<double>& getTransitionProbRef() override;
     double getProbDist(size_t index) override;

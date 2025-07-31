@@ -4,9 +4,9 @@
 
 #include <iostream>
 #include "myProb.h"
-#include "DistributionParametric.h"
+#include "TransitionParametricDist.h"
 
-double DistributionParametric::getTransitionProb(size_t index) {
+double TransitionParametricDist::getTransitionProb(size_t index) {
     if (index >= transitionProb.size()) {
         return 1;
     } else {
@@ -14,11 +14,11 @@ double DistributionParametric::getTransitionProb(size_t index) {
     }
 }
 
-std::vector<double>& DistributionParametric::getTransitionProbRef(){
+std::vector<double>& TransitionParametricDist::getTransitionProbRef(){
     return this -> transitionProb;
 }
 
-double DistributionParametric::getProbDist(size_t index) {
+double TransitionParametricDist::getProbDist(size_t index) {
     if (index >= probDist.size()) {
         return 0;
     }else{
@@ -26,7 +26,7 @@ double DistributionParametric::getProbDist(size_t index) {
     }
 }
 
-void DistributionParametric::calcTransitionProb(std::function<double(double)> cdf_func) {
+void TransitionParametricDist::calcTransitionProb(std::function<double(double)> cdf_func) {
     // current cumulative prob
     double tempProb {0};
     // previous cumulative prob
@@ -39,7 +39,7 @@ void DistributionParametric::calcTransitionProb(std::function<double(double)> cd
         // --- Calculate current cumulative prob 
         // current cumulative prob is value from cdf func if its less than (1 - errorTolerance)
         // otherwise, set it to 1
-        tempProb = cdf_func(i) < (1 - Distribution::errorTolerance) ? cdf_func(i) : 1;
+        tempProb = cdf_func(i) < (1 - Transition::errorTolerance) ? cdf_func(i) : 1;
 
         // --- Calculate the current transition prob
         if (i != 0){ // skip fist iteration (i.e. time = 0) 
@@ -51,7 +51,7 @@ void DistributionParametric::calcTransitionProb(std::function<double(double)> cd
         }
 
         // --- Update current time
-        i += Distribution::timeStep;
+        i += Transition::timeStep;
 
         // --- Stop when tempProb, i.e. cumulative probability at 1 
         if (tempProb == 1){

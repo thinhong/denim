@@ -2,9 +2,9 @@
 // Created by thinh on 22/09/2021.
 //
 
-#include "DistributionConstant.h"
+#include "TransitionConstant.h"
 
-DistributionConstant::DistributionConstant(double constValue) {
+TransitionConstant::TransitionConstant(double constValue) {
     this->constant = constValue;
 
     // update dist name and max date
@@ -12,11 +12,11 @@ DistributionConstant::DistributionConstant(double constValue) {
     this->maxDay = 1;
 }
 
-double DistributionConstant::getTransitionProb(size_t index) {
+double TransitionConstant::getTransitionProb(size_t index) {
     return constant;
 }
 
-std::vector<double>& DistributionConstant::getTransitionProbRef() {
+std::vector<double>& TransitionConstant::getTransitionProbRef() {
     static std::vector<double> returned_val{constant};
     return returned_val;
 }

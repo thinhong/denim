@@ -1,11 +1,11 @@
 #ifndef MAIN_CPP_DISTRIBUTIONPARAMETRIC_H
 #define MAIN_CPP_DISTRIBUTIONPARAMETRIC_H
 
-#include "Distribution.h"
+#include "Transition.h"
 #include <functional>
 
 // Parent class for defined cdf distribution 
-class DistributionParametric: public Distribution {    
+class TransitionParametricDist: public Transition {    
 protected:
     std::vector<double> transitionProb;
     std::vector<double> probDist;

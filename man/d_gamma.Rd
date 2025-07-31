@@ -14,7 +14,7 @@ d_gamma(rate, shape, dist_init = FALSE)
 \item{dist_init}{whether to distribute initial value across subcompartments following this distribution.}
 }
 \value{
-a Distribution object for simulator
+a Transition object for simulator
 }
 \description{
 Discrete gamma distribution

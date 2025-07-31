@@ -3,10 +3,10 @@
 //
 
 #include "myProb.h"
-#include "DistributionDiscreteGamma.h"
+#include "TransitionDiscreteGamma.h"
 #include <iostream>
 
-DistributionDiscreteGamma::DistributionDiscreteGamma(double rate, double shape) {
+TransitionDiscreteGamma::TransitionDiscreteGamma(double rate, double shape) {
     // TODO: change scale to rate 
     this->rate = rate;
     this->shape = shape;
@@ -21,16 +21,16 @@ DistributionDiscreteGamma::DistributionDiscreteGamma(double rate, double shape) 
     this->distName = "gamma";
 }
 
-// DistributionDiscreteGamma::DistributionDiscreteGamma(std::vector<double> &cumulativeProb) {
+// TransitionDiscreteGamma::TransitionDiscreteGamma(std::vector<double> &cumulativeProb) {
 //     this->transitionProb = cumulativeProb;
 //     this->maxDay = cumulativeProb.size();
 //     this->distName = "gamma";
 // }
 
-double DistributionDiscreteGamma::getRate() {
+double TransitionDiscreteGamma::getRate() {
     return rate;
 }
 
-double DistributionDiscreteGamma::getShape() {
+double TransitionDiscreteGamma::getShape() {
     return shape;
 }

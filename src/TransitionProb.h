@@ -6,14 +6,14 @@
 #define MAIN_CPP_TRANSITIONPROB_H
 
 #include <memory>
-#include "Distribution.h"
+#include "Transition.h"
 
 // Transition probability is used to directly add transitionProb instead of define the distribution of waiting time
-class DistributionTransitionProb: public Distribution {
+class TransitionProb: public Transition {
 private:
     double transitionProb;
 public:
-    explicit DistributionTransitionProb(double transitionProb);
+    explicit TransitionProb(double transitionProb);
     double getTransitionProb(size_t index) override;
     std::vector<double>& getTransitionProbRef() override;
 };

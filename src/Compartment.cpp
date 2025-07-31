@@ -8,19 +8,19 @@ Compartment::Compartment(std::string compName, double initVal) {
     this->competingRisks = true;
 }
 
-void Compartment::addOutDistribution(std::shared_ptr<Distribution>& dist, bool distInit) {
-    this->outDistributions.push_back(dist);
+void Compartment::addOutTransition(std::shared_ptr<Transition>& dist, bool distInit) {
+    this->outTransitions.push_back(dist);
     this->distSubCompInit.push_back(distInit);
 }
 
-void Compartment::editOutDistribution(std::string outName, std::shared_ptr<Distribution> &dist, bool distInit) {
+void Compartment::editOutTransition(std::string outName, std::shared_ptr<Transition> &dist, bool distInit) {
     size_t pos = findOutCompPosition(outName);
-    outDistributions[pos] = dist;
+    outTransitions[pos] = dist;
     this->distSubCompInit[pos] = distInit;
 }
 
 void Compartment::setOutValues() {
-    outTotals.resize(outDistributions.size(), 0);
+    outTotals.resize(outTransitions.size(), 0);
 }
 
 // TODO: set length for nested subCompartment
@@ -34,8 +34,8 @@ void Compartment::setLengthSubCompartment() {
         //  --- use same subcompartment chain for competing risks ---- 
         // also uses tmpSubComp to save subComps from last iteration
         this -> subCompartments.resize((size_t) 1);
-        for (size_t pos = 0; pos < outDistributions.size(); pos++){
-            size_t currLength = outDistributions[pos]->getMaxDay();
+        for (size_t pos = 0; pos < outTransitions.size(); pos++){
+            size_t currLength = outTransitions[pos]->getMaxDay();
 
             // update maxLength, which is used as length for outSubcompartment
             if (currLength > maxLength) {
@@ -49,9 +49,9 @@ void Compartment::setLengthSubCompartment() {
     }else{
         //  --- Initialize subCompartment chains for multinomial case ---
         // set first dim for subCompartments
-        this -> subCompartments.resize(outDistributions.size());
-        for (size_t pos = 0; pos < outDistributions.size(); pos++){
-            size_t currLength = outDistributions[pos]->getMaxDay();
+        this -> subCompartments.resize(outTransitions.size());
+        for (size_t pos = 0; pos < outTransitions.size(); pos++){
+            size_t currLength = outTransitions[pos]->getMaxDay();
 
             // update maxLength, which is used as length for outSubcompartment
             if (currLength > maxLength) {
@@ -65,9 +65,9 @@ void Compartment::setLengthSubCompartment() {
                 // if the user specify to not distribute initial value, simply initalize in firs subcompartment
                 this -> subCompartments[pos][0] = compTotal[0]*outWeights[pos];
             }else{
-                // distribute based on specified outDistribution
+                // distribute based on specified outTransition
                 for(size_t i {0}; i<currLength; ++i){
-                    this-> subCompartments[pos][i] = compTotal[0]*outWeights[pos]*outDistributions[pos]->getProbDist(i);
+                    this-> subCompartments[pos][i] = compTotal[0]*outWeights[pos]*outTransitions[pos]->getProbDist(i);
                 }
             }
             
@@ -128,8 +128,8 @@ std::vector<std::string> Compartment::getOutCompartmentNames() {
     return names;
 }
 
-std::vector<std::shared_ptr<Distribution>> Compartment::getOutDistributions() {
-    return outDistributions;
+std::vector<std::shared_ptr<Transition>> Compartment::getOutTransitions() {
+    return outTransitions;
 }
 
 std::vector<double> Compartment::getOutWeights() {
@@ -205,14 +205,14 @@ void Compartment::updateCompartment(size_t iter, std::vector<std::string>& param
         // update out values and compTotal
         for (size_t outIndex {0}; outIndex < outCompartments.size(); ++outIndex) {
             
-            if (outDistributions[outIndex]->getDistName() == "gamma" ||
-                outDistributions[outIndex]->getDistName() == "weibull" ||
-                outDistributions[outIndex]->getDistName() == "exponential" ||
-                outDistributions[outIndex]->getDistName() == "lognormal" ||
-                outDistributions[outIndex]->getDistName() == "transitionProb" ||
-                outDistributions[outIndex]->getDistName() == "nonparametric") {
+            if (outTransitions[outIndex]->getDistName() == "gamma" ||
+                outTransitions[outIndex]->getDistName() == "weibull" ||
+                outTransitions[outIndex]->getDistName() == "exponential" ||
+                outTransitions[outIndex]->getDistName() == "lognormal" ||
+                outTransitions[outIndex]->getDistName() == "transitionProb" ||
+                outTransitions[outIndex]->getDistName() == "nonparametric") {
                 updateSubCompByDist(iter, outIndex);
-            } else if (outDistributions[outIndex]->getDistName() == "constant") {
+            } else if (outTransitions[outIndex]->getDistName() == "constant") {
                 updateSubCompByConst(iter, outIndex);
             } else {
                 updateSubCompByMath(iter, outIndex, paramNames, paramValues, comps);
@@ -252,7 +252,7 @@ void Compartment::updateSubCompByDist(size_t iter, size_t outIndex) {
 
     if(this->competingRisks){
         endIndex = std::min(iter, subCompartments[0].size() - 1);
-        std::vector<double>& transProbRef = outDistributions[outIndex]->getTransitionProbRef();
+        std::vector<double>& transProbRef = outTransitions[outIndex]->getTransitionProbRef();
         
         for (size_t i = 0; i <= endIndex; ++i) { 
             // if competing risks, compute out population using tmpSubComp instead
@@ -264,7 +264,7 @@ void Compartment::updateSubCompByDist(size_t iter, size_t outIndex) {
         }   
     }else{
         endIndex = std::min(iter, subCompartments[outIndex].size() - 1);
-        std::vector<double>& transProbRef = outDistributions[outIndex]->getTransitionProbRef();
+        std::vector<double>& transProbRef = outTransitions[outIndex]->getTransitionProbRef();
         
         for (size_t i = 0; i <= endIndex; ++i) { 
             // double out = subCompartments[outIndex][i] * (i >= transProbRef.size() ? 0 : transProbRef[i]);
@@ -280,7 +280,7 @@ void Compartment::updateSubCompByDist(size_t iter, size_t outIndex) {
 }
 
 
-/// @brief Update sub compartment with math expression as distribution
+/// @brief Update sub compartment with math expression as transition
 /// @param iter current iteration
 /// @param outIndex index of out compartment
 /// @param paramNames model parameteres
@@ -289,7 +289,7 @@ void Compartment::updateSubCompByDist(size_t iter, size_t outIndex) {
 void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<std::string>& paramNames, std::vector<double>& paramValues,
                 std::vector<std::shared_ptr<Compartment>> &comps) {
     mu::Parser parser;
-    parser.SetExpr(outDistributions[outIndex]->getDistName());
+    parser.SetExpr(outTransitions[outIndex]->getDistName());
     // Add parameter values
     double timeStep = 0;
     for (size_t i {0}; i < paramNames.size(); ++i) {
@@ -317,7 +317,7 @@ void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<
     } catch (mu::Parser::exception_type &e) {
 
         std::string msg = 
-          "Failed to evaluate expression: " + outDistributions[outIndex]->getDistName() + "\n" +
+          "Failed to evaluate expression: " + outTransitions[outIndex]->getDistName() + "\n" +
           "Error message: " + std::string(e.GetMsg());
         Rcpp::stop(msg);
     }
@@ -368,7 +368,7 @@ void Compartment::updateSubCompByMath(size_t iter, size_t outIndex, std::vector<
 /// @param outIndex index of out compartment
 void Compartment::updateSubCompByConst(size_t iter, size_t outIndex) {
 
-    double computeValue = outDistributions[outIndex]->getTransitionProb(iter);
+    double computeValue = outTransitions[outIndex]->getTransitionProb(iter);
     double sumOutTotal = std::accumulate(this -> outTotals.begin(), this -> outTotals.end(), (double) 0);
     // To prevent a compartment being negative, only use this value if it + sum of
     // previous out total <= the compTotal of previous iteration
