@@ -1,3 +1,5 @@
+# denim (development version)
+
 # denim 1.2.1
 * Minor runtime improvement
 * Add option to select color palette for plot
