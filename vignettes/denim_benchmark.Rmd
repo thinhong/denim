@@ -12,41 +12,79 @@ bibliography: references.bib
 
 To assess denim's performance, we benchmark it against other available packages, listed in the table below.
 
-+------------+--------------------------------------------------------------------+
-| Package    | Note                                                               |
-+============+====================================================================+
-| uSEIR      | 2 implementations for uSEIR that will be tested                    |
-|            |                                                                    |
-|            | -   Implementation in Python                                       |
-|            |                                                                    |
-|            | -   Implementation in Cython                                       |
-+------------+--------------------------------------------------------------------+
-| deSolve    | 3 ways to define model for deSolve that will be tested             |
-|            |                                                                    |
-|            | -   Model in R                                                     |
-|            |                                                                    |
-|            | -   Model in C                                                     |
-|            |                                                                    |
-|            | -   Model in Fortran                                               |
-+------------+--------------------------------------------------------------------+
-| IONISE     |                                                                    |
-+------------+--------------------------------------------------------------------+
-| diffeqr    | 2 ways to run model in diffeqr will be tested                      |
-|            |                                                                    |
-|            | -   Define model in R                                              |
-|            |                                                                    |
-|            | -   Define model in Julia                                          |
-+------------+--------------------------------------------------------------------+
-| odin       | A manual implementation of denim's algorithm, using odin is tested |
-+------------+--------------------------------------------------------------------+
-| denim      | Two methods for defining distributions are tested:                 |
-|            |                                                                    |
-|            | -   Built-in parametric functions                                  |
-|            |                                                                    |
-|            | -   Histograms using the `nonparametric()` function                |
-+------------+--------------------------------------------------------------------+
++--------------+--------------------------------------------------------------------+
+| Package      | Note                                                               |
++==============+====================================================================+
+| uSEIR        | 2 implementations for uSEIR that will be tested                    |
+|              |                                                                    |
+|              | -   Implementation in Python                                       |
+|              |                                                                    |
+|              | -   Implementation in Cython                                       |
++--------------+--------------------------------------------------------------------+
+| deSolve      | 3 ways to define model for deSolve that will be tested             |
+|              |                                                                    |
+|              | -   Model in R                                                     |
+|              |                                                                    |
+|              | -   Model in C                                                     |
+|              |                                                                    |
+|              | -   Model in Fortran                                               |
++--------------+--------------------------------------------------------------------+
+| IONISE       |                                                                    |
++--------------+--------------------------------------------------------------------+
+| diffeqr      | 2 ways to run model in diffeqr will be tested                      |
+|              |                                                                    |
+|              | -   Define model in R                                              |
+|              |                                                                    |
+|              | -   Define model in Julia                                          |
++--------------+--------------------------------------------------------------------+
+| odin         | A manual implementation of denim's algorithm, using odin is tested |
++--------------+--------------------------------------------------------------------+
+| denim        | Two methods for defining distributions are tested:                 |
+|              |                                                                    |
+|              | -   Built-in parametric functions                                  |
+|              |                                                                    |
+|              | -   Histograms using the `nonparametric()` function                |
++--------------+--------------------------------------------------------------------+
 
-The benchmarking process was conducted on a Macbook Pro with M2 Pro chip, 16 GBs of RAM and 10 cores (6 performance and 4 efficiency). 
+The benchmarking process was conducted on a Macbook Pro with M2 Pro chip, 16 GBs of RAM and 10 cores (6 performance and 4 efficiency).
+
+<details>
+
+<summary>Version specifications</summary>
+
++-----------+-----------+-------------------------------------+
+| Name      | Version   | Note                                |
++===========+===========+=====================================+
+| R         | 4.3.0     |                                     |
++-----------+-----------+-------------------------------------+
+| Python    | 3.9.20    | For `uSEIR` Python and Cython       |
++-----------+-----------+-------------------------------------+
+| clang     | 17.0.0    | C/C++ compiler for:                 |
+|           |           |                                     |
+|           |           | -   `uSEIR` Cython                  |
+|           |           |                                     |
+|           |           | -   `odin`                          |
+|           |           |                                     |
+|           |           | -   `denim`                         |
+|           |           |                                     |
+|           |           | -   `deSolve` (model in C, Fortran) |
++-----------+-----------+-------------------------------------+
+| Julia     | 1.9.4     | For `diffeqr` package               |
++-----------+-----------+-------------------------------------+
+
+R utility packages
+
++------------+-----------+--------------------------------------------------------------+
+| Name       | Version   | Note                                                         |
++============+===========+==============================================================+
+| tidyverse  | 2.0.0     | For plotting, data formatting                                |
++------------+-----------+--------------------------------------------------------------+
+| reticulate | 1.41.0    | For interfacting Python code (for uSEIR)                     |
++------------+-----------+--------------------------------------------------------------+
+| arrow      | 19.0.1    | For interfacing uSEIR output without messing up the datatype |
++------------+-----------+--------------------------------------------------------------+
+
+</details> 
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 library(tidyverse)
@@ -56,14 +94,13 @@ cached_runtime <- if (file.exists("../supplements/cached_runtime.rds")) {
 } else {
   NULL
 }
-
 # compute min, max, variance
-lapply(cached_runtime, function(x) c(min = min(x), max = max(x), var = var(x)))
+# lapply(cached_runtime, function(x) c(min = min(x), max = max(x), var = var(x)))
 ```
 
 ## Benchmark settings
 
-All approaches will simulate the following SEIR model, with the same simulation duration of 180. The dashed arrows indicate transitions described using dwell time distributions while the solid arrow indicates transition rate. 
+All approaches will simulate the following SEIR model, with the same simulation duration of 180. The dashed arrows indicate transitions described using dwell time distributions while the solid arrow indicates transition rate.
 
 ![](./images/denim_website-benchmark-mod.png){width="700"}
 
@@ -84,15 +121,38 @@ Source code: <https://github.com/jjgomezcadenas/useirn/blob/master/nb/uSEIR.ipyn
 
 <details>
 
+<summary>Dependency version specifications</summary>
+
+Python packages
+
++------------------+------------------+-------------------------------------------------------------+
+| Package          | Version          | Note                                                        |
++==================+==================+=============================================================+
+| scipy            | 1.31.1           | For handling dwell time distribution                        |
++------------------+------------------+-------------------------------------------------------------+
+| cython           | 3.0.11           | For Cython implementation                                   |
++------------------+------------------+-------------------------------------------------------------+
+| numpy            | 2.0.2            |                                                             |
++------------------+------------------+-------------------------------------------------------------+
+| pandas           | 2.2.3            |                                                             |
++------------------+------------------+-------------------------------------------------------------+
+| pyarrow          | 18.1.0           | For interfacing output to R without messing up the datatype |
++------------------+------------------+-------------------------------------------------------------+
+
+</details>
+
+<details>
+
 <summary>load useir implementation in pure Python</summary>
 
 ```{r}
 library(reticulate)
 # use_python("/opt/anaconda3/envs/bnn/bin/python", required = TRUE)
 use_condaenv(condaenv='bnn', required = TRUE)
-matplotlib <- import("matplotlib")
-matplotlib$use("Agg", force = TRUE)
+# matplotlib <- import("matplotlib")
+# matplotlib$use("Agg", force = TRUE)
 py_run_file("../supplements/useir_python.py")
+# py_config()
 ```
 
 </details>
@@ -110,6 +170,7 @@ import concurrent.futures
 import pickle
 import os
 from statistics import mean
+import pyarrow as pa
 
 python_runs = []
 
@@ -138,7 +199,6 @@ else:
   with open(cached_python_runs, 'wb') as f:
       pickle.dump(python_runs, f)
       
-# plot_useir((df,), ('G',), T = 'uSEIR', figsize=(14,8))
 # print(f'python solve_seir call: dr = {end-start}')
 ```
 
@@ -220,6 +280,20 @@ Median run time for uSEIR approach, Cython implementation: `r median(cython_runs
 ## 2. deSolve
 
 Simulate model using deSolve package [@soetaert2008]
+
+<details>
+
+<summary>Dependency version specifications</summary>
+
+R packages
+
++------------------+-------------------+-------------------------------+
+| Package          | Version           | Note                          |
++==================+===================+===============================+
+| deSolve          | 1.40              |                               |
++------------------+-------------------+-------------------------------+
+
+</details>
 
 ### 2.1. Model in R
 
@@ -436,7 +510,37 @@ Median run time for IONISE: `r median(ionise_runs)` seconds
 
 ## 4. diffeqr
 
-Simulate model using diffeqr package [@rackauckas]
+Simulate model using `diffeqr` package [@rackauckas]
+
+<details>
+
+<summary>Dependency version specifications</summary>
+
+R package
+
++-----------------+-------------------+-------------------------------+
+| Package         | Version           | Note                          |
++=================+===================+===============================+
+| diffeqr         | 2.0.0             |                               |
++-----------------+-------------------+-------------------------------+
+
+Julia packages
+
++-----------------------+-------------------+-------------------------------+
+| Package               | Version           | Note                          |
++=======================+===================+===============================+
+| DifferentialEquations | 7.13.0            |                               |
++-----------------------+-------------------+-------------------------------+
+| ModelingToolkit       | 8.76.0            |                               |
++-----------------------+-------------------+-------------------------------+
+| Suppressor            | 0.2.8             |                               |
++-----------------------+-------------------+-------------------------------+
+| SciMLBase             | 2.15.2            |                               |
++-----------------------+-------------------+-------------------------------+
+| RCall                 | 0.13.18           |                               |
++-----------------------+-------------------+-------------------------------+
+
+</details>
 
 ### 4.1. Model in R
 
@@ -565,6 +669,16 @@ Median run time for IONISE: `r median(diffeqr_optimized_runs)` seconds
 ## 5. odin {#sec-odin}
 
 We also implement uSEIR model with denim's algorithm using `odin` package [@fitzjohn2024] for comparison
+
+<details>
+
+<summary>Dependency version specifications</summary>
+
+| Name  | Version | Note |
+|-------|---------|------|
+| odin2 | 0.3.26  |      |
+
+</details>
 
 <details>
 

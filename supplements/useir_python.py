@@ -1,47 +1,47 @@
 from scipy.stats import gamma
-import matplotlib
-import matplotlib.pyplot as plt
-matplotlib.use('Agg')
-from matplotlib.pyplot import imshow
-plt.rcParams["figure.figsize"] = 10, 8
-plt.rcParams["font.size"     ] = 14
-plt.rcParams['savefig.format'] = 'png'
+# import matplotlib
+# import matplotlib.pyplot as plt
+# matplotlib.use('Agg')
+# from matplotlib.pyplot import imshow
+# plt.rcParams["figure.figsize"] = 10, 8
+# plt.rcParams["font.size"     ] = 14
+# plt.rcParams['savefig.format'] = 'png'
 import numpy as np
 import pandas as pd
-import pyarrow as pa
-
-def plot_useir(dfs, lbls, T = 'uSEIR', figsize=(10,10)):
-    
-    fig = plt.figure(figsize=figsize)
-    
-    ax=plt.subplot(1,2,1)
-    for i, df in enumerate(dfs):
-        df.head()
-        ls = f'S-{lbls[i]}'
-        lr = f'R-{lbls[i]}'
-        plt.plot(df.t, df.S, lw=2, label=ls)
-        plt.plot(df.t, df.R, lw=2, label=lr)
 
 
-    plt.xlabel('time (days)')
-    plt.ylabel('Fraction of population')
-    plt.legend()
-    plt.title(T)
-    
-    ax=plt.subplot(1,2,2)
-    for i, df in enumerate(dfs):
-        le = f'E-{lbls[i]}'
-        li = f'I-{lbls[i]}'
-        plt.plot(df.t, df.E, lw=2, label=le)
-        plt.plot(df.t, df.I, lw=2, label=li)
-
-    plt.xlabel('time (days)')
-    plt.ylabel('Fraction of population')
-    plt.legend()
-    
-    plt.title(T)
-    plt.tight_layout()
-    plt.show()
+# def plot_useir(dfs, lbls, T = 'uSEIR', figsize=(10,10)):
+#     
+#     fig = plt.figure(figsize=figsize)
+#     
+#     ax=plt.subplot(1,2,1)
+#     for i, df in enumerate(dfs):
+#         df.head()
+#         ls = f'S-{lbls[i]}'
+#         lr = f'R-{lbls[i]}'
+#         plt.plot(df.t, df.S, lw=2, label=ls)
+#         plt.plot(df.t, df.R, lw=2, label=lr)
+# 
+# 
+#     plt.xlabel('time (days)')
+#     plt.ylabel('Fraction of population')
+#     plt.legend()
+#     plt.title(T)
+#     
+#     ax=plt.subplot(1,2,2)
+#     for i, df in enumerate(dfs):
+#         le = f'E-{lbls[i]}'
+#         li = f'I-{lbls[i]}'
+#         plt.plot(df.t, df.E, lw=2, label=le)
+#         plt.plot(df.t, df.I, lw=2, label=li)
+# 
+#     plt.xlabel('time (days)')
+#     plt.ylabel('Fraction of population')
+#     plt.legend()
+#     
+#     plt.title(T)
+#     plt.tight_layout()
+#     plt.show()
 
 def solve_uSeir(ti_shape     = 5.5,  
                    ti_scale     = 1, 
@@ -152,5 +152,3 @@ def solve_uSeir(ti_shape     = 5.5,
                columns =['t', 'S', 'E', 'I', 'R']) 
     
     return df
-
-# print(plt.gcf().canvas.get_supported_filetypes())
