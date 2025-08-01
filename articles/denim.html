@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">denim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -197,9 +197,9 @@ The default interval (time step) is 1 if not declared explicitly.</p>
 <span><span class="co">#&gt; 1 0.00 999.0000 1.000000 0.000000e+00</span></span>
 <span><span class="co">#&gt; 2 0.01 998.9880 1.011988 2.075536e-08</span></span>
 <span><span class="co">#&gt; 3 0.02 998.9759 1.024119 1.656705e-07</span></span>
-<span><span class="co">#&gt; 4 0.03 998.9636 1.036396 5.584445e-07</span></span>
+<span><span class="co">#&gt; 4 0.03 998.9636 1.036396 5.584446e-07</span></span>
 <span><span class="co">#&gt; 5 0.04 998.9512 1.048819 1.322422e-06</span></span>
-<span><span class="co">#&gt; 6 0.05 998.9386 1.061390 2.580605e-06</span></span>
+<span><span class="co">#&gt; 6 0.05 998.9386 1.061390 2.580606e-06</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span></code></pre></div>
 <p><img src="denim_files/figure-html/unnamed-chunk-8-1.png" width="1800" style="display: block; margin: auto;"></p>
 </div>
@@ -346,13 +346,13 @@ or die follows gamma or log-normal distribution, respectively.</p></li>
 <span>           timeStep <span class="op">=</span> <span class="va">timeStep</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   Time        S        I    V            R D</span></span>
-<span><span class="co">#&gt; 1 0.00 999.0000 1.000000 0.00 0.000000e+00 0</span></span>
-<span><span class="co">#&gt; 2 0.01 998.9380 1.011983 0.05 4.988889e-06 0</span></span>
-<span><span class="co">#&gt; 3 0.02 998.8759 1.024099 0.10 1.997100e-05 0</span></span>
-<span><span class="co">#&gt; 4 0.03 998.8136 1.036349 0.15 4.499986e-05 0</span></span>
-<span><span class="co">#&gt; 5 0.04 998.7512 1.048736 0.20 8.012994e-05 0</span></span>
-<span><span class="co">#&gt; 6 0.05 998.6886 1.061259 0.25 1.254167e-04 0</span></span>
+<span><span class="co">#&gt;   Time        S        I    V            R            D</span></span>
+<span><span class="co">#&gt; 1 0.00 999.0000 1.000000 0.00 0.000000e+00 0.000000e+00</span></span>
+<span><span class="co">#&gt; 2 0.01 998.9380 1.011983 0.05 4.988903e-06 0.000000e+00</span></span>
+<span><span class="co">#&gt; 3 0.02 998.8759 1.024099 0.10 1.997114e-05 1.466074e-33</span></span>
+<span><span class="co">#&gt; 4 0.03 998.8136 1.036349 0.15 4.500034e-05 1.651885e-29</span></span>
+<span><span class="co">#&gt; 5 0.04 998.7512 1.048736 0.20 8.013109e-05 8.335817e-27</span></span>
+<span><span class="co">#&gt; 6 0.05 998.6886 1.061259 0.25 1.254190e-04 8.306459e-25</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="denim_files/figure-html/unnamed-chunk-11-1.png" width="1500" style="display: block; margin: auto;"></p>
 <p>For a more detailed explanation for transitions to multiple states,
@@ -408,13 +408,13 @@ refer to <a href="./multinomial.html">this article</a></p>
 <p><img src="denim_files/figure-html/unnamed-chunk-12-1.png" width="1500" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   Time        S        I          V           IV D            R</span></span>
-<span><span class="co">#&gt; 1 0.00 999.0000 1.000000 0.00000000 0.000000e+00 0 0.000000e+00</span></span>
-<span><span class="co">#&gt; 2 0.01 998.9680 1.011983 0.02000000 0.000000e+00 0 4.988889e-06</span></span>
-<span><span class="co">#&gt; 3 0.02 998.9359 1.024099 0.03999998 2.428759e-08 0 1.997100e-05</span></span>
-<span><span class="co">#&gt; 4 0.03 998.9036 1.036350 0.05999993 7.296813e-08 0 4.500034e-05</span></span>
-<span><span class="co">#&gt; 5 0.04 998.8712 1.048738 0.07999985 1.461546e-07 0 8.013186e-05</span></span>
-<span><span class="co">#&gt; 6 0.05 998.8386 1.061263 0.09999975 2.439677e-07 0 1.254215e-04</span></span></code></pre></div>
+<span><span class="co">#&gt;   Time        S        I          V           IV            D            R</span></span>
+<span><span class="co">#&gt; 1 0.00 999.0000 1.000000 0.00000000 0.000000e+00 0.000000e+00 0.000000e+00</span></span>
+<span><span class="co">#&gt; 2 0.01 998.9680 1.011983 0.02000000 0.000000e+00 0.000000e+00 4.988903e-06</span></span>
+<span><span class="co">#&gt; 3 0.02 998.9359 1.024099 0.03999998 2.428759e-08 1.466074e-33 1.997114e-05</span></span>
+<span><span class="co">#&gt; 4 0.03 998.9036 1.036350 0.05999993 7.296340e-08 1.651885e-29 4.500082e-05</span></span>
+<span><span class="co">#&gt; 5 0.04 998.8712 1.048738 0.07999985 1.461358e-07 8.335817e-27 8.013303e-05</span></span>
+<span><span class="co">#&gt; 6 0.05 998.8386 1.061263 0.09999975 2.439207e-07 8.306459e-25 1.254238e-04</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-2">Example 2<a class="anchor" aria-label="anchor" href="#example-2"></a>
