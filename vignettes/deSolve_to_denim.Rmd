@@ -80,9 +80,9 @@ With the transitions identified, the user can then define the model in `denim`.
 
 When using `denim` DSL, the model structure is given as a set of *key*-*value* pairs where
 
--   *key* shows the transition direction between compartments in the format of `compartment -> out_compartment`
+-   *key* shows the transition direction between compartments in the format of `compartment -> out_compartment`.
 
--   *value* is the built-in distribution function that describe the transition
+-   *value* is either a built-in distribution function that describe the transition or a mathematical expression.
 
 ```{r}
 # --- Model definition in denim
@@ -95,7 +95,7 @@ transitions <- denim_dsl({
 
 ### Model configurations
 
-Similar to `deSolve`, `denim` also ask the users to provide the [initial values]{.underline} and any [additional parameters]{.underline} in the form of named vectors.
+Similar to `deSolve`, `denim` also ask the users to provide the [initial values]{.underline} and any [additional parameters]{.underline} in the form of named vectors or named list.
 
 For the example `deSolve` code, while the users can use the `initalValues` from the `deSolve` code as is (`denim` will ignore unused `I1`, `I2` compartments as these sub-compartments will be automatically computed internally), it is recommended to remove redundant compartments (in this example, `I1` and `I2`).
 
@@ -124,7 +124,7 @@ However, for comparison purposes, we will keep this option `FALSE` for the remai
 
 Lastly, the users need to define the simulation duration and time step for `denim` to run. Unlike `deSolve` which takes a time sequence, `denim` only require the [simulation duration]{.underline} and [time step.]{.underline}
 
-Since `denim` is a discrete time model, time step must be set to a small value for the result to closely follow that of `deSolve` (in this example, 0.01).
+Since `denim` uses a discrete time approach, time step must be set to a small value for the result to closely follow that of `deSolve` (in this example, 0.01).
 
 ```{r}
 mod <- sim(transitions = transitions,

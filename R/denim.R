@@ -1,6 +1,6 @@
 #' denim
 #'
-#' Simulate deterministic discrete time model
+#' Simulate deterministic model
 #'
 #' Imports
 #' @useDynLib denim, .registration = TRUE

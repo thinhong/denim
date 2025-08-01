@@ -256,9 +256,9 @@ void Compartment::updateSubCompByDist(size_t iter, size_t outIndex) {
         
         for (size_t i = 0; i <= endIndex; ++i) { 
             // if competing risks, compute out population using tmpSubComp instead
-            // double out = tmpSubComp[i] * (i >= transProbRef.size() ? 0 : transProbRef[i]);
+            double out = tmpSubComp[i] * (i >= transProbRef.size() ? 0 : transProbRef[i]);
             // TODO: check formulation with 1 - exp(-rate) instead 
-            double out = tmpSubComp[i] * (1 - exp(-(i >= transProbRef.size() ? 0 : transProbRef[i])));
+            // double out = tmpSubComp[i] * (i >= transProbRef.size() ? 0 : transProbRef[i]);
             outTotals[outIndex] += out;
             subCompartments[0][i] -= out;
         }   
@@ -267,9 +267,9 @@ void Compartment::updateSubCompByDist(size_t iter, size_t outIndex) {
         std::vector<double>& transProbRef = outTransitions[outIndex]->getTransitionProbRef();
         
         for (size_t i = 0; i <= endIndex; ++i) { 
-            // double out = subCompartments[outIndex][i] * (i >= transProbRef.size() ? 0 : transProbRef[i]);
+            double out = subCompartments[outIndex][i] * (i >= transProbRef.size() ? 0 : transProbRef[i]);
             // TODO: check formulation with 1 - exp(-rate) instead 
-            double out = subCompartments[outIndex][i] * (1 - exp(-(i >= transProbRef.size() ? 0 : transProbRef[i])));
+            // double out = subCompartments[outIndex][i] * (1 - exp(-(i >= transProbRef.size() ? 0 : transProbRef[i])));
             outTotals[outIndex] += out;
             subCompartments[outIndex][i] -= out;
         }

@@ -14,7 +14,7 @@ sim(
 )
 }
 \arguments{
-\item{transitions}{output of function \code{denim_dsl()} or a list of transitions follows this format \code{"transition" = expession}}
+\item{transitions}{output of function \code{denim_dsl()} or a list of transitions follows this format \code{"transition" = expression}}
 
 \item{initialValues}{a vector contains the initial values of all compartments defined
 in the \strong{transitions}, follows this format \code{compartment_name = initial_value}}
