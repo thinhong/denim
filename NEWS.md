@@ -1,4 +1,4 @@
-# denim (development version)
+# denim 1.2.2
 
 # denim 1.2.1
 * Minor runtime improvement
