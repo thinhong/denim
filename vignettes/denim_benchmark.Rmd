@@ -12,39 +12,39 @@ bibliography: references.bib
 
 To assess denim's performance, we benchmark it against other available packages, listed in the table below.
 
-+---------+--------------------------------------------------------------------+
-| Package | Note                                                               |
-+=========+====================================================================+
-| uSEIR   | 2 implementations for uSEIR that will be tested                    |
-|         |                                                                    |
-|         | -   Implementation in Python                                       |
-|         |                                                                    |
-|         | -   Implementation in Cython                                       |
-+---------+--------------------------------------------------------------------+
-| deSolve | 3 ways to define model for deSolve that will be tested             |
-|         |                                                                    |
-|         | -   Model in R                                                     |
-|         |                                                                    |
-|         | -   Model in C                                                     |
-|         |                                                                    |
-|         | -   Model in Fortran                                               |
-+---------+--------------------------------------------------------------------+
-| IONISE  |                                                                    |
-+---------+--------------------------------------------------------------------+
-| diffeqr | 2 ways to run model in diffeqr will be tested                      |
-|         |                                                                    |
-|         | -   Define model in R                                              |
-|         |                                                                    |
-|         | -   Define model in Julia                                          |
-+---------+--------------------------------------------------------------------+
-| odin    | A manual implementation of denim's algorithm, using odin is tested |
-+---------+--------------------------------------------------------------------+
-| denim   | Two methods for defining distributions are tested:                 |
-|         |                                                                    |
-|         | -   Built-in parametric functions                                  |
-|         |                                                                    |
-|         | -   Histograms using the `nonparametric()` function                |
-+---------+--------------------------------------------------------------------+
++------------+--------------------------------------------------------------------+
+| Package    | Note                                                               |
++============+====================================================================+
+| uSEIR      | 2 implementations for uSEIR that will be tested                    |
+|            |                                                                    |
+|            | -   Implementation in Python                                       |
+|            |                                                                    |
+|            | -   Implementation in Cython                                       |
++------------+--------------------------------------------------------------------+
+| deSolve    | 3 ways to define model for deSolve that will be tested             |
+|            |                                                                    |
+|            | -   Model in R                                                     |
+|            |                                                                    |
+|            | -   Model in C                                                     |
+|            |                                                                    |
+|            | -   Model in Fortran                                               |
++------------+--------------------------------------------------------------------+
+| IONISE     |                                                                    |
++------------+--------------------------------------------------------------------+
+| diffeqr    | 2 ways to run model in diffeqr will be tested                      |
+|            |                                                                    |
+|            | -   Define model in R                                              |
+|            |                                                                    |
+|            | -   Define model in Julia                                          |
++------------+--------------------------------------------------------------------+
+| odin       | A manual implementation of denim's algorithm, using odin is tested |
++------------+--------------------------------------------------------------------+
+| denim      | Two methods for defining distributions are tested:                 |
+|            |                                                                    |
+|            | -   Built-in parametric functions                                  |
+|            |                                                                    |
+|            | -   Histograms using the `nonparametric()` function                |
++------------+--------------------------------------------------------------------+
 
 The benchmarking process was conducted on a Macbook Pro with M2 Pro chip, 16 GBs of RAM and 10 cores (6 performance and 4 efficiency).
 
@@ -52,33 +52,37 @@ The benchmarking process was conducted on a Macbook Pro with M2 Pro chip, 16 GBs
 
 <summary>Version specifications</summary>
 
-+--------+---------+-------------------------------------+
-| Name   | Version | Note                                |
-+========+=========+=====================================+
-| R      | 4.3.0   |                                     |
-+--------+---------+-------------------------------------+
-| Python | 3.9.20  | For `uSEIR` Python and Cython       |
-+--------+---------+-------------------------------------+
-| clang  | 17.0.0  | C/C++ compiler for:                 |
-|        |         |                                     |
-|        |         | -   `uSEIR` Cython                  |
-|        |         |                                     |
-|        |         | -   `odin`                          |
-|        |         |                                     |
-|        |         | -   `denim`                         |
-|        |         |                                     |
-|        |         | -   `deSolve` (model in C, Fortran) |
-+--------+---------+-------------------------------------+
-| Julia  | 1.9.4   | For `diffeqr` package               |
-+--------+---------+-------------------------------------+
++-----------+-----------+-------------------------------------+
+| Name      | Version   | Note                                |
++===========+===========+=====================================+
+| R         | 4.3.0     |                                     |
++-----------+-----------+-------------------------------------+
+| Python    | 3.9.20    | For `uSEIR` Python and Cython       |
++-----------+-----------+-------------------------------------+
+| clang     | 17.0.0    | C/C++ compiler for:                 |
+|           |           |                                     |
+|           |           | -   `uSEIR` Cython                  |
+|           |           |                                     |
+|           |           | -   `odin`                          |
+|           |           |                                     |
+|           |           | -   `denim`                         |
+|           |           |                                     |
+|           |           | -   `deSolve` (model in C, Fortran) |
++-----------+-----------+-------------------------------------+
+| Julia     | 1.9.4     | For `diffeqr` package               |
++-----------+-----------+-------------------------------------+
 
 R utility packages
 
-| Name       | Version | Note                                                         |
-|------------|---------|--------------------------------------------------------------|
-| tidyverse  | 2.0.0   | For plotting, data formatting                                |
-| reticulate | 1.41.0  | For interfacting Python code (for uSEIR)                     |
-| arrow      | 19.0.1  | For interfacing uSEIR output without messing up the datatype |
++------------+-----------+--------------------------------------------------------------+
+| Name       | Version   | Note                                                         |
++============+===========+==============================================================+
+| tidyverse  | 2.0.0     | For plotting, data formatting                                |
++------------+-----------+--------------------------------------------------------------+
+| reticulate | 1.41.0    | For interfacting Python code (for uSEIR)                     |
++------------+-----------+--------------------------------------------------------------+
+| arrow      | 19.0.1    | For interfacing uSEIR output without messing up the datatype |
++------------+-----------+--------------------------------------------------------------+
 
 </details>
 
@@ -123,13 +127,19 @@ Source code: <https://github.com/jjgomezcadenas/useirn/blob/master/nb/uSEIR.ipyn
 
 Python packages
 
-| Package | Version | Note                                                        |
-|---------|---------|-------------------------------------------------------------|
-| scipy   | 1.31.1  | For handling dwell time distribution                        |
-| cython  | 3.0.11  | For Cython implementation                                   |
-| numpy   | 2.0.2   |                                                             |
-| pandas  | 2.2.3   |                                                             |
-| pyarrow | 18.1.0  | For interfacing output to R without messing up the datatype |
++----------+----------+-------------------------------------------------------------+
+| Package  | Version  | Note                                                        |
++==========+==========+=============================================================+
+| scipy    | 1.31.1   | For handling dwell time distribution                        |
++----------+----------+-------------------------------------------------------------+
+| cython   | 3.0.11   | For Cython implementation                                   |
++----------+----------+-------------------------------------------------------------+
+| numpy    | 2.0.2    |                                                             |
++----------+----------+-------------------------------------------------------------+
+| pandas   | 2.2.3    |                                                             |
++----------+----------+-------------------------------------------------------------+
+| pyarrow  | 18.1.0   | For interfacing output to R without messing up the datatype |
++----------+----------+-------------------------------------------------------------+
 
 </details>
 
