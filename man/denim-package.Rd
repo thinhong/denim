@@ -6,7 +6,7 @@
 \alias{denim-package}
 \title{denim}
 \description{
-Simulate deterministic discrete time model
+Simulate deterministic model
 }
 \details{
 Imports

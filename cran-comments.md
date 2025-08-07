@@ -1,7 +1,8 @@
 ## Resubmission
 This is a resubmission. In this version I have:
-* Improve the run time for sim() function
-* Add option to select color palette for plot()
+* Make multiply by timeStep in math expression internal
+* Rename Distribution to Transition
+* Update vignette
 
 
 ## R CMD check results
