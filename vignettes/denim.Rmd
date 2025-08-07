@@ -261,44 +261,33 @@ For a more detailed explanation for transitions to multiple states, refer to [th
 <center>![](./images/denim_website-getting-started-extra-1.png){width="700"}</center>
 
 ```{r, fig.width = 5}
-transitions <- denim_dsl({
-  S -> I = beta * S * (I + IV) / N 
-  S -> V = 2
-  0.1 * I -> D = d_lognormal(mu = d_mu, sigma = d_sigma)
-  0.9 * I -> R = d_gamma(rate = r_rate, shape = r_shape)
-  V -> IV = 0.1 * beta * V * (I + IV) / N
-  IV -> R = d_exponential(iv_r_rate)
-})
+initialValues <- c(S = 999, I = 1, R = 0, V = 0, IV = 0, D = 0) 
+ 
+modelStructure <- denim_dsl({ 
+    S -> I = beta * S * (I + IV) / N 
+    S -> V = d_exponential(0.01) 
+    0.1 * I -> D = d_lognormal(2, 0.5) 
+    0.9 * I -> R = d_gamma(1/3, 2) 
+    V -> IV = 0.2 * beta * V * (I + IV) / N 
+    IV -> R = nonparametric(iv_r_dist) 
+    IV -> D = d_weibull(scale = 2, shape = 1.5) 
+}) 
 
-initialValues <- c(
-  S = 999, 
-  I = 1, 
-  R = 0,
-  V = 0,
-  IV = 0,
-  D = 0
-)
-
-parameters <- c(
-  beta = 1.2,
+parameters <- list( 
+  beta = 0.9,  
   N = 1000,
-  d_mu = 2,
-  d_sigma = 1/2,
-  r_rate = 1/3,
-  r_shape = 2,
-  iv_r_rate = 2
+  iv_r_dist = c(0, 0.15, 0.15,  0.05, 0.2, 0.2, 0.25)
 )
 
-simulationDuration <- 20
-timeStep <- 0.01
 
-mod <- sim(transitions = transitions, 
-           initialValues = initialValues, 
-           parameters = parameters, 
-           simulationDuration = simulationDuration, 
-           timeStep = timeStep)
-plot(mod)
-head(mod)
+simulation <- sim(transitions = modelStructure,  
+           initialValues = initialValues,  
+           parameters = parameters,  
+           simulationDuration = 30,  
+           timeStep = 0.5) 
+
+plot(simulation)
+head(simulation)
 ```
 
 ### Example 2

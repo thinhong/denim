@@ -132,9 +132,21 @@ d_lognormal <- function(mu, sigma, dist_init = FALSE) {
   distr
 }
 
-# Mathematical expression
-# Visit muparser website (https://beltoforion.de/en/muparser/features.php) 
-# to see full list of available operators.
+#' Mathematical expression
+#'
+#' @param expr User defined mathematial expression. he expression will be processed by 
+#' muparser library which offers a wide variety of operators. Visit 
+#' muparser website (https://beltoforion.de/en/muparser/features.php) 
+#' to see full list of available operators.
+#' @return a Distribution object for simulator
+#' 
+#' @examples
+#' transitions <- list("S->I"="beta*S/N")
+#' transitions <- denim_dsl({S->I=beta*S/N})
+#' # definition for parameters in the expression required
+#' params <- c(N = 1000, beta = 0.3)
+#' @export
+#' @keyword internal
 mathexpr <- function(expr) {
   # change in API, timeStep is now automatically multiplied internally
   pattern <- "\\* *timeStep($| )*"
