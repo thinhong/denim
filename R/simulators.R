@@ -121,7 +121,7 @@ plot.denim <- function(x, ..., color_palette=NULL) {
 
   # Plot the first compartment
   cmd1 <- paste0("with(x, {
-  plot(Time, ", comp_names[1], ", type = \"l\", lwd = 3, col = \"", col_codes[1], 
+  plot(Time, ", comp_names[1], ", type = \"l\", lwd = 2, col = \"", col_codes[1], 
   "\", xlab = \"Time\", ylab = \"Number of people\", ... )\n")
   
   # Add lines of the other compartments

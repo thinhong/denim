@@ -138,15 +138,16 @@ d_lognormal <- function(mu, sigma, dist_init = FALSE) {
 #' muparser library which offers a wide variety of operators. Visit 
 #' muparser website (https://beltoforion.de/en/muparser/features.php) 
 #' to see full list of available operators.
-#' @return a Distribution object for simulator
+#' @return a Transition object for simulator
 #' 
 #' @examples
 #' transitions <- list("S->I"="beta*S/N")
 #' transitions <- denim_dsl({S->I=beta*S/N})
 #' # definition for parameters in the expression required
 #' params <- c(N = 1000, beta = 0.3)
+#' 
+#' @keywords internal
 #' @export
-#' @keyword internal
 mathexpr <- function(expr) {
   # change in API, timeStep is now automatically multiplied internally
   pattern <- "\\* *timeStep($| )*"

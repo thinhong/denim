@@ -13,7 +13,7 @@ muparser website (https://beltoforion.de/en/muparser/features.php)
 to see full list of available operators.}
 }
 \value{
-a Distribution object for simulator
+a Transition object for simulator
 }
 \description{
 Mathematical expression
@@ -23,5 +23,6 @@ transitions <- list("S->I"="beta*S/N")
 transitions <- denim_dsl({S->I=beta*S/N})
 # definition for parameters in the expression required
 params <- c(N = 1000, beta = 0.3)
+
 }
 \keyword{internal}
