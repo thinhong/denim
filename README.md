@@ -13,7 +13,8 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 coverage](https://codecov.io/gh/thinhong/denim/branch/master/graph/badge.svg)](https://app.codecov.io/gh/thinhong/denim?branch=master)
 <!-- badges: end -->
 
-An R package for building and simulating deterministic compartmental models with memory.
+An R package for building and simulating deterministic compartmental
+models with memory.
 
 ## Installation
 
