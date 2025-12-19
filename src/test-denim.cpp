@@ -210,11 +210,11 @@ context("Testing distributions in model"){
         expect_true(comp->getCompTotal()[1] == Approx(2).margin(0.001e-03));
         break;
       case 4:
-        // check value for compartment V
+        // check value for compartment D
         expect_true(comp->getCompTotal()[1] == Approx(3.167e-06).margin(0.001e-06));
         break;
       case 5:
-        // check value for compartment V
+        // check value for compartment R
         expect_true(comp->getCompTotal()[1] == Approx(0.04016).margin(0.001e-03));
         break;
       }

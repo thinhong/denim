@@ -23,10 +23,9 @@ void Compartment::setOutValues() {
     outTotals.resize(outTransitions.size(), 0);
 }
 
-// TODO: set length for nested subCompartment
 void Compartment::setLengthSubCompartment() {
     size_t maxLength {0};
-    // TODO: if competitive risk -> same subCompartment chain
+    // if competitive risk -> same subCompartment chain
     // ignore option to distribute initial values 
 
     
@@ -257,8 +256,6 @@ void Compartment::updateSubCompByDist(size_t iter, size_t outIndex) {
         for (size_t i = 0; i <= endIndex; ++i) { 
             // if competing risks, compute out population using tmpSubComp instead
             double out = tmpSubComp[i] * (i >= transProbRef.size() ? 0 : transProbRef[i]);
-            // TODO: check formulation with 1 - exp(-rate) instead 
-            // double out = tmpSubComp[i] * (i >= transProbRef.size() ? 0 : transProbRef[i]);
             outTotals[outIndex] += out;
             subCompartments[0][i] -= out;
         }   
@@ -268,8 +265,6 @@ void Compartment::updateSubCompByDist(size_t iter, size_t outIndex) {
         
         for (size_t i = 0; i <= endIndex; ++i) { 
             double out = subCompartments[outIndex][i] * (i >= transProbRef.size() ? 0 : transProbRef[i]);
-            // TODO: check formulation with 1 - exp(-rate) instead 
-            // double out = subCompartments[outIndex][i] * (1 - exp(-(i >= transProbRef.size() ? 0 : transProbRef[i])));
             outTotals[outIndex] += out;
             subCompartments[outIndex][i] -= out;
         }
