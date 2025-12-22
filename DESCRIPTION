@@ -10,10 +10,14 @@ Authors@R: c(
            comment = c(ORCID = "0009-0000-2129-435X")),
     person("Marc", "Choisy", , "mchoisy@oucru.org", role = "aut",
            comment = c(ORCID = "0000-0002-5187-6390")),
-    person("Niels", "Lohman", ,role = "ctb"),
-    person("Bjoern", "Hoehrmann", ,email = "bjoern@hoehrmann.de", role = "ctb"),
-    person("Florian", "Loitsch", ,role = "ctb"),
-    person("Ingo", "Berg", ,role = "ctb")
+    person("Niels", "Lohman", ,role = c("ctb", "cph"), 
+          comment="Author for the bundled JSON C++ library"),
+    person("Bjoern", "Hoehrmann", ,email = "bjoern@hoehrmann.de", role = c("ctb", "cph"),
+          comment="Contributor for the bundled JSON C++ library"),
+    person("Florian", "Loitsch", ,role = c("ctb", "cph"),
+          comment="Contributor for the bundled JSON C++ library"),
+    person("Ingo", "Berg", ,role = c("ctb", "cph"),
+          comment="Author for the bundled MuParser C++ library")
   )
 Description: R package to build and simulate deterministic compartmental models that can be non-Markovian. Length of stay in each compartment can be defined to follow a parametric distribution (d_exponential(), d_gamma(), d_weibull(), d_lognormal()) or a non-parametric distribution (nonparametric()). Other supported types of transition from one compartment to another includes fixed transition (constant()), multinomial (multinomial()), fixed transition probability (transprob()).
 License: MIT + file LICENSE

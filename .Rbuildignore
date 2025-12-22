@@ -7,6 +7,7 @@
 ^pkgdown$
 ^README\.Rmd$
 ^LICENSE\.md$
+^LICENSE\.note$
 ^vignettes/web_only
 ^vignettes/denim_benchmark.Rmd
 ^vignettes/denim_vs_deSolve.Rmd
