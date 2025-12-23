@@ -44,7 +44,11 @@ context("Lognormal distribution") {
   test_polymorphism = std::make_shared<TransitionLogNormal>(1, 0.25);
   
   test_that("getTransitionProb") {
+    // Check the resulting transition prob
+    expect_true(distr.getTransitionProb(0) == Approx(3.167e-05).margin(1e-06));
+    expect_true(distr.getTransitionProb(1) == Approx(0.1098).margin(0.01));
     expect_true(distr.getTransitionProb(2) == Approx(0.6106).margin(0.01));
+    expect_true(distr.getTransitionProb(3) == Approx(0.8236).margin(0.01));
   }
 
   test_that("maxDay") {
@@ -60,7 +64,11 @@ context("Gamma distribution") {
   TransitionDiscreteGamma distr(1, 3);
 
   test_that("getTransitionProb") {
-    expect_true(distr.getTransitionProb(4) == Approx(0.4764).margin(0.01));
+    expect_true(distr.getTransitionProb(0) == Approx(0.0803).margin(0.001));
+    expect_true(distr.getTransitionProb(1) == Approx(0.2642).margin(0.001));
+    expect_true(distr.getTransitionProb(2) == Approx(0.3746).margin(0.001));
+    expect_true(distr.getTransitionProb(3) == Approx(0.4373).margin(0.001));
+    expect_true(distr.getTransitionProb(4) == Approx(0.4764).margin(0.001));
   }
   
   test_that("getRate") {
@@ -76,7 +84,11 @@ context("Exponential distribution") {
   TransitionDiscreteExponential distr(0.5);
 
   test_that("getTransitionProb") {
+    // expect the same transprob for exponential distribution (i.e. constant hazard rate)
+    expect_true(distr.getTransitionProb(0) == Approx(0.3934).margin(0.01));
+    expect_true(distr.getTransitionProb(1) == Approx(0.3934).margin(0.01));
     expect_true(distr.getTransitionProb(2) == Approx(0.3934).margin(0.01));
+    expect_true(distr.getTransitionProb(3) == Approx(0.3934).margin(0.01));
   }
   
   test_that("getRate") {
@@ -96,7 +108,10 @@ context("Weibull distribution") {
   TransitionDiscreteWeibull distr(3, 5);
 
   test_that("getTransitionProb") {
-    expect_true(distr.getTransitionProb(2) == Approx(0.5803).margin(0.01));
+    expect_true(distr.getTransitionProb(0) == Approx(0.0041).margin(0.001));
+    expect_true(distr.getTransitionProb(1) == Approx(0.1197).margin(0.001));
+    expect_true(distr.getTransitionProb(2) == Approx(0.5803).margin(0.001));
+    expect_true(distr.getTransitionProb(3) == Approx(0.9598).margin(0.001));
   }
   
   test_that("getScale") {
@@ -210,11 +225,11 @@ context("Testing distributions in model"){
         expect_true(comp->getCompTotal()[1] == Approx(2).margin(0.001e-03));
         break;
       case 4:
-        // check value for compartment V
+        // check value for compartment D
         expect_true(comp->getCompTotal()[1] == Approx(3.167e-06).margin(0.001e-06));
         break;
       case 5:
-        // check value for compartment V
+        // check value for compartment R
         expect_true(comp->getCompTotal()[1] == Approx(0.04016).margin(0.001e-03));
         break;
       }

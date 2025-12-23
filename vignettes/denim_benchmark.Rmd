@@ -1,8 +1,8 @@
 ---
-title: "denim benchmark"
+title: "denim performance"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{denim benchmark}
+  %\VignetteIndexEntry{denim performance}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 python:
@@ -10,41 +10,43 @@ python:
 bibliography: references.bib
 ---
 
+# Benchmark
+
 To assess denim's performance, we benchmark it against other available packages, listed in the table below.
 
-+------------+--------------------------------------------------------------------+
-| Package    | Note                                                               |
-+============+====================================================================+
-| uSEIR      | 2 implementations for uSEIR that will be tested                    |
-|            |                                                                    |
-|            | -   Implementation in Python                                       |
-|            |                                                                    |
-|            | -   Implementation in Cython                                       |
-+------------+--------------------------------------------------------------------+
-| deSolve    | 3 ways to define model for deSolve that will be tested             |
-|            |                                                                    |
-|            | -   Model in R                                                     |
-|            |                                                                    |
-|            | -   Model in C                                                     |
-|            |                                                                    |
-|            | -   Model in Fortran                                               |
-+------------+--------------------------------------------------------------------+
-| IONISE     |                                                                    |
-+------------+--------------------------------------------------------------------+
-| diffeqr    | 2 ways to run model in diffeqr will be tested                      |
-|            |                                                                    |
-|            | -   Define model in R                                              |
-|            |                                                                    |
-|            | -   Define model in Julia                                          |
-+------------+--------------------------------------------------------------------+
-| odin       | A manual implementation of denim's algorithm, using odin is tested |
-+------------+--------------------------------------------------------------------+
-| denim      | Two methods for defining distributions are tested:                 |
-|            |                                                                    |
-|            | -   Built-in parametric functions                                  |
-|            |                                                                    |
-|            | -   Histograms using the `nonparametric()` function                |
-+------------+--------------------------------------------------------------------+
++--------------+--------------------------------------------------------------------+
+| Package      | Note                                                               |
++==============+====================================================================+
+| uSEIR        | 2 implementations for uSEIR that will be tested                    |
+|              |                                                                    |
+|              | -   Implementation in Python                                       |
+|              |                                                                    |
+|              | -   Implementation in Cython                                       |
++--------------+--------------------------------------------------------------------+
+| deSolve      | 3 ways to define model for deSolve that will be tested             |
+|              |                                                                    |
+|              | -   Model in R                                                     |
+|              |                                                                    |
+|              | -   Model in C                                                     |
+|              |                                                                    |
+|              | -   Model in Fortran                                               |
++--------------+--------------------------------------------------------------------+
+| IONISE       |                                                                    |
++--------------+--------------------------------------------------------------------+
+| diffeqr      | 2 ways to run model in diffeqr will be tested                      |
+|              |                                                                    |
+|              | -   Define model in R                                              |
+|              |                                                                    |
+|              | -   Define model in Julia                                          |
++--------------+--------------------------------------------------------------------+
+| odin         | A manual implementation of denim's algorithm, using odin is tested |
++--------------+--------------------------------------------------------------------+
+| denim        | Two methods for defining distributions are tested:                 |
+|              |                                                                    |
+|              | -   Built-in parametric functions                                  |
+|              |                                                                    |
+|              | -   Histograms using the `nonparametric()` function                |
++--------------+--------------------------------------------------------------------+
 
 The benchmarking process was conducted on a Macbook Pro with M2 Pro chip, 16 GBs of RAM and 10 cores (6 performance and 4 efficiency).
 
@@ -52,25 +54,25 @@ The benchmarking process was conducted on a Macbook Pro with M2 Pro chip, 16 GBs
 
 <summary>Version specifications</summary>
 
-+-----------+-----------+-------------------------------------+
-| Name      | Version   | Note                                |
-+===========+===========+=====================================+
-| R         | 4.3.0     |                                     |
-+-----------+-----------+-------------------------------------+
-| Python    | 3.9.20    | For `uSEIR` Python and Cython       |
-+-----------+-----------+-------------------------------------+
-| clang     | 17.0.0    | C/C++ compiler for:                 |
-|           |           |                                     |
-|           |           | -   `uSEIR` Cython                  |
-|           |           |                                     |
-|           |           | -   `odin`                          |
-|           |           |                                     |
-|           |           | -   `denim`                         |
-|           |           |                                     |
-|           |           | -   `deSolve` (model in C, Fortran) |
-+-----------+-----------+-------------------------------------+
-| Julia     | 1.9.4     | For `diffeqr` package               |
-+-----------+-----------+-------------------------------------+
++--------------+--------------+-------------------------------------+
+| Name         | Version      | Note                                |
++==============+==============+=====================================+
+| R            | 4.3.0        |                                     |
++--------------+--------------+-------------------------------------+
+| Python       | 3.9.20       | For `uSEIR` Python and Cython       |
++--------------+--------------+-------------------------------------+
+| clang        | 17.0.0       | C/C++ compiler for:                 |
+|              |              |                                     |
+|              |              | -   `uSEIR` Cython                  |
+|              |              |                                     |
+|              |              | -   `odin`                          |
+|              |              |                                     |
+|              |              | -   `denim`                         |
+|              |              |                                     |
+|              |              | -   `deSolve` (model in C, Fortran) |
++--------------+--------------+-------------------------------------+
+| Julia        | 1.9.4        | For `diffeqr` package               |
++--------------+--------------+-------------------------------------+
 
 R utility packages
 
@@ -127,19 +129,19 @@ Source code: <https://github.com/jjgomezcadenas/useirn/blob/master/nb/uSEIR.ipyn
 
 Python packages
 
-+----------+----------+-------------------------------------------------------------+
-| Package  | Version  | Note                                                        |
-+==========+==========+=============================================================+
-| scipy    | 1.31.1   | For handling dwell time distribution                        |
-+----------+----------+-------------------------------------------------------------+
-| cython   | 3.0.11   | For Cython implementation                                   |
-+----------+----------+-------------------------------------------------------------+
-| numpy    | 2.0.2    |                                                             |
-+----------+----------+-------------------------------------------------------------+
-| pandas   | 2.2.3    |                                                             |
-+----------+----------+-------------------------------------------------------------+
-| pyarrow  | 18.1.0   | For interfacing output to R without messing up the datatype |
-+----------+----------+-------------------------------------------------------------+
++-----------+-----------+-------------------------------------------------------------+
+| Package   | Version   | Note                                                        |
++===========+===========+=============================================================+
+| scipy     | 1.31.1    | For handling dwell time distribution                        |
++-----------+-----------+-------------------------------------------------------------+
+| cython    | 3.0.11    | For Cython implementation                                   |
++-----------+-----------+-------------------------------------------------------------+
+| numpy     | 2.0.2     |                                                             |
++-----------+-----------+-------------------------------------------------------------+
+| pandas    | 2.2.3     |                                                             |
++-----------+-----------+-------------------------------------------------------------+
+| pyarrow   | 18.1.0    | For interfacing output to R without messing up the datatype |
++-----------+-----------+-------------------------------------------------------------+
 
 </details>
 
@@ -1237,28 +1239,53 @@ runtime_plot
 # ggsave("../manuscript_plots/benchmark_all_log_new.png", width = 8, height = 5, dpi = 300)
 ```
 
-## 9. Impact of timeStep in denim
+It is worth noting that runtime for denim is also dependent on duration of time step (`timeStep` parameter for `sim`). This is discussed in details in the next section.
 
-### 9.1. Run time scaling
+------------------------------------------------------------------------
 
-It is worth noting that runtime for denim is also dependent on duration of time step (`timeStep` parameter for `sim`).
+# Denim performance details
 
-The following plot demonstrates how run time changes as value for timeStep changes, using the same model for benchmarking. The values for timeStep being evaluated are `[0.01, 0.02, 0.05, 0.1, 0.25, 0.5, 1]`.
+## 1. Time - space complexity
+
+In terms of big-O notation, denim has a time complexity of $O(T S^2 n)$ and space complexity of $O(T S + S^2n)$. Where:
+
+-   $T$ is the total simulated time steps
+
+-   $S$ is the number of states/compartments
+
+-   $n$ is the maximum length of the sub-compartment chain
+
+Under the assumption that individuals in a compartment can transition to every other compartment.
+
+However, under most realistic use cases, individuals can only transfer to a limited number of states in which case the number of transitions denoted $m$ is $m < S^2$. The time complexity would then be $O (T m n)$ and space complexity is $O(T S + mn)$.
+
+## 2. Impact of timeStep in denim
+
+### 2.1. Run time scaling
+
+A change in values for `timeStep` can directly change the value for $T$ and $n$ in the big-O notation, which directly impact the run time of the algorithm.
+
+The following plot demonstrates how run time changes as value for `timeStep` changes, using the same model for benchmarking. The values for timeStep being evaluated are `[0.01, 0.02, 0.05, 0.1, 0.25, 0.5, 1]`.
 
 ```{r echo=FALSE}
 timeStepDurations <- c(0.01, 0.02, 0.05, 0.1, 0.25, 0.5, 1)
-runtime_scaling <- sapply(timeStepDurations, 
+benchmark_out <- lapply(timeStepDurations, 
      \(x){
-       time <- bench::mark(
+       bench_out <- bench::mark(
          sim(transitions = denim_model,
                    initialValues = initialValues,
                    parameters = parameters,
                    simulationDuration = sim_duration, timeStep = x)
        )
-       
-       time$median
+       bench_out
      }
    )
+
+runtime_scaling <- sapply(benchmark_out, \(bm){
+  bm$median
+})
+
+runtime_scaling
 ```
 
 ```{r echo=FALSE, warning=FALSE}
@@ -1274,11 +1301,11 @@ text(x = timeStep, y = max(unlist(runtime_scaling)), labels = "timeStep for benc
 text(x = 1, y = max(unlist(runtime_scaling)), labels = "default timeStep", col = "blueviolet", pos = 2)
 ```
 
-### 9.2. Impact on accuracy
+### 2.2. Impact on accuracy
 
 Aside from run time, duration of time step also impacts the accuracy of `denim`'s output.
 
-The following plots demonstrates how precision is compromised as we increase the duration for time step (with output from `deSolve` used as baseline). The values for timeStep being evaluated are `[0.01, 0.1, 0.5, 1]`.
+The following plots demonstrates how precision is compromised as we increase the duration for time step (with output from `deSolve` used as baseline). The values for `timeStep` being evaluated are `[0.01, 0.1, 0.5, 1]`.
 
 ```{r echo = FALSE}
 timeStepDurations <- c(0.01, 0.1, 0.5, 1)
@@ -1394,4 +1421,89 @@ reshaped_baseline %>%
 # ggsave(
 #   glue::glue("../manuscript_plots/denim_dt_pairwise.png"),
 #   width = 8, height = 5, dpi = 300)
+```
+
+## 3. Run time scaling with more transitions
+
+To assess the performance of `denim` as the model grows more complex, we measure the run-time as more transitions are added to the model.
+
+To do that, we consider the following sequential compartmental model where $S$ indicates the number of compartments
+
+$$
+X_1 \rightarrow X_2 \rightarrow X_3 .... \rightarrow X_S
+$$
+
+General settings:
+
+-   `simulationDuration=2000`
+
+-   `timeStep=0.01` (i.e., simulate the model for 200000 time steps)
+
+-   The duration for any transition $X_i \rightarrow X_{i+1}$ is set to follow a log-normal distribution with $\mu = 2.2$ and $\sigma = 0.4$
+
+    -   Maximal dwell time is \~13 time units (length of each sub-compartment chain is 1300)
+
+Under the given setup, the number of transitions $m$ is simply $S-1$
+
+We will test the run time for model with `[3, 5, 25, 50, 100]` compartments (i.e., `[2, 4, 24, 49, 99]` transitions under this settings).
+
+```{r echo=FALSE}
+cached_time_scaling <- if (file.exists("../supplements/cached_time_scaling.rds")) {
+  readRDS("../supplements/cached_time_scaling.rds")
+} else {
+  NULL
+}
+
+compartment_no <- c(3, 5, 25, 50, 100)
+parameters <- c(mu = 2.2, sigma = 0.4)
+timeStep <- 0.01
+simulationDuration <- 2000
+
+runtime_scaling_out <- if(is.null(cached_time_scaling)){
+  map_dfr(compartment_no, \(no){
+    # build model with given number of compartments
+    mod <- lapply(1:(no-1), \(curr_comp){
+      d_lognormal(mu = "mu", sigma = "sigma")
+    })
+    names(mod) <- paste0("X", 1:(no-1) , "->X", 1:(no-1) + 1)
+    
+    # set the initial values
+    init_vals <- rep(0, no)
+    names(init_vals) <- paste0("X", 1:no)
+    init_vals[1] <- 1e6
+    
+    # simulate the model
+    bench_out <- bench::mark(
+      sim(
+       transitions = mod,
+       initialValues = init_vals,
+       parameters = parameters,
+       simulationDuration = simulationDuration,
+       timeStep = timeStep,
+       errorTolerance = 0.01
+     )
+    )
+    
+    bench_out %>% 
+      mutate(
+        no_comp = no
+      )
+  })
+  
+}else{
+  cached_time_scaling
+}
+```
+
+```{r echo=FALSE}
+runtime_scaling_out %>% 
+  ggplot(aes(x = no_comp, y = median)) +
+    geom_line(color = "cornflowerblue") +
+    geom_point(color = "cornflowerblue", shape = 1) +
+    labs(
+      title = "Run time scaling by compartments",
+      x = "Number of compartments",
+      y = "Run time (in seconds)"
+    ) +
+    theme_bw()
 ```

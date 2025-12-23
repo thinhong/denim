@@ -294,7 +294,13 @@ head(simulation)
 
 ![](./images/denim_website-getting-started-extra2.png){width="500"}
 
-```{r echo=FALSE}
+```{=html}
+<details>
+  <summary>
+    Code for generating the distribution of <code>I->R</code> transition
+  </summary>
+```
+```{r}
 # ------ Code to generate the distribution to demonstrate nonparametric --------- 
 # Helper function
 compute_dist <- function(dist_func,..., timestep=0.05, error_tolerance=0.0001){
@@ -325,7 +331,7 @@ compute_dist <- function(dist_func,..., timestep=0.05, error_tolerance=0.0001){
 }
 
 timestep <- 0.05
-# create a multimodal 
+# create a multimodal distribution
 first_dist <- compute_dist(pweibull, 
                    scale = 5, shape = 5,
                    timestep = timestep)
@@ -336,6 +342,9 @@ second_dist <- c(second_dist, rep(0, length(first_dist) - length(second_dist)))
 ir_dist <- first_dist + second_dist
 ```
 
+```{=html}
+</details>
+```
 Assuming we have the distribution of time for the infected to recover ($P_{IR}$) as followed
 
 ```{r}
