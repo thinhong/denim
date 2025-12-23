@@ -98,12 +98,15 @@
 
     
     
+<div class="section level2">
+<h2 id="benchmark">Benchmark<a class="anchor" aria-label="anchor" href="#benchmark"></a>
+</h2>
 <p>To assess denim’s performance, we benchmark it against other
 available packages, listed in the table below.</p>
 <table class="table">
 <colgroup>
-<col width="15%">
-<col width="84%">
+<col width="17%">
+<col width="82%">
 </colgroup>
 <thead><tr class="header">
 <th>Package</th>
@@ -167,10 +170,10 @@ function</p></li>
 chip, 16 GBs of RAM and 10 cores (6 performance and 4 efficiency).</p>
 <details><summary>
 Version specifications
-</summary><table style="width:86%;" class="table">
+</summary><table style="width:94%;" class="table">
 <colgroup>
-<col width="16%">
-<col width="16%">
+<col width="20%">
+<col width="20%">
 <col width="52%">
 </colgroup>
 <thead><tr class="header">
@@ -239,9 +242,9 @@ Version specifications
 </tr>
 </tbody>
 </table></details><p> </p>
-<div class="section level2">
-<h2 id="benchmark-settings">Benchmark settings<a class="anchor" aria-label="anchor" href="#benchmark-settings"></a>
-</h2>
+<div class="section level3">
+<h3 id="benchmark-settings">Benchmark settings<a class="anchor" aria-label="anchor" href="#benchmark-settings"></a>
+</h3>
 <p>All approaches will simulate the following SEIR model, with the same
 simulation duration of 180. The dashed arrows indicate transitions
 described using dwell time distributions while the solid arrow indicates
@@ -254,9 +257,9 @@ transition rate.</p>
 <code class="sourceCode R"><span><span class="va">total_runs</span> <span class="op">&lt;-</span> <span class="fl">50L</span> <span class="co"># number of runs</span></span>
 <span><span class="va">sim_duration</span> <span class="op">&lt;-</span> <span class="fl">180</span> <span class="co"># duration of simulation</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="useir">1. uSEIR<a class="anchor" aria-label="anchor" href="#useir"></a>
-</h2>
+<div class="section level3">
+<h3 id="useir">1. uSEIR<a class="anchor" aria-label="anchor" href="#useir"></a>
+</h3>
 <p>Simulate model using uSEIR approach <span class="citation">(Hernández
 et al. 2021)</span>.</p>
 <p>Source code: <a href="https://github.com/jjgomezcadenas/useirn/blob/master/nb/uSEIR.ipynb" class="external-link uri">https://github.com/jjgomezcadenas/useirn/blob/master/nb/uSEIR.ipynb</a></p>
@@ -265,9 +268,9 @@ Dependency version specifications
 </summary><p>Python packages</p>
 <table style="width:99%;" class="table">
 <colgroup>
-<col width="12%">
-<col width="12%">
-<col width="72%">
+<col width="13%">
+<col width="13%">
+<col width="71%">
 </colgroup>
 <thead><tr class="header">
 <th>Package</th>
@@ -313,9 +316,9 @@ load useir implementation in pure Python
 <span><span class="co"># matplotlib$use("Agg", force = TRUE)</span></span>
 <span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/py_run.html" class="external-link">py_run_file</a></span><span class="op">(</span><span class="st">"../supplements/useir_python.py"</span><span class="op">)</span></span>
 <span><span class="co"># py_config()</span></span></code></pre></div>
-</details><div class="section level3">
-<h3 id="python-implementation">1.1. Python implementation<a class="anchor" aria-label="anchor" href="#python-implementation"></a>
-</h3>
+</details><div class="section level4">
+<h4 id="python-implementation">1.1. Python implementation<a class="anchor" aria-label="anchor" href="#python-implementation"></a>
+</h4>
 <details><summary>
 Code for running uSEIR in pure Python
 </summary><div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="im">import</span> time</span>
@@ -364,9 +367,9 @@ Code for running uSEIR in pure Python
 <p>Median run time for uSEIR approach, Python implementation: 53.7090955
 seconds</p>
 </div>
-<div class="section level3">
-<h3 id="cython-implementation">1.2. Cython implementation<a class="anchor" aria-label="anchor" href="#cython-implementation"></a>
-</h3>
+<div class="section level4">
+<h4 id="cython-implementation">1.2. Cython implementation<a class="anchor" aria-label="anchor" href="#cython-implementation"></a>
+</h4>
 <details><summary>
 Code for running uSEIR in Cython (C backend)
 </summary><div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># import precompiled cython module</span></span>
@@ -671,9 +674,9 @@ Code for running uSEIR in Cython (C backend)
 seconds</p>
 </div>
 </div>
-<div class="section level2">
-<h2 id="desolve">2. deSolve<a class="anchor" aria-label="anchor" href="#desolve"></a>
-</h2>
+<div class="section level3">
+<h3 id="desolve">2. deSolve<a class="anchor" aria-label="anchor" href="#desolve"></a>
+</h3>
 <p>Simulate model using deSolve package <span class="citation">(Soetaert, Petzoldt, and Setzer 2008)</span></p>
 <details><summary>
 Dependency version specifications
@@ -689,9 +692,9 @@ Dependency version specifications
 <td>1.40</td>
 <td></td>
 </tr></tbody>
-</table></details><div class="section level3">
-<h3 id="model-in-r">2.1. Model in R<a class="anchor" aria-label="anchor" href="#model-in-r"></a>
-</h3>
+</table></details><div class="section level4">
+<h4 id="model-in-r">2.1. Model in R<a class="anchor" aria-label="anchor" href="#model-in-r"></a>
+</h4>
 <details><summary>Code for running SEIR in <code>deSolve</code></summary><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://desolve.r-forge.r-project.org/" class="external-link">deSolve</a></span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning: package 'deSolve' was built under R version 4.3.1</span></span></code></pre>
@@ -752,9 +755,9 @@ Dependency version specifications
 <p>Median run time for deSolve, with model defined in R: 0.0034217
 seconds</p>
 </div>
-<div class="section level3">
-<h3 id="model-in-c">2.2. Model in C<a class="anchor" aria-label="anchor" href="#model-in-c"></a>
-</h3>
+<div class="section level4">
+<h4 id="model-in-c">2.2. Model in C<a class="anchor" aria-label="anchor" href="#model-in-c"></a>
+</h4>
 <details><summary>Code for running model defined in C</summary><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># compile model</span></span>
 <span><span class="co"># system("R CMD SHLIB supplements/desolve_mod/benchmark_mod.c")</span></span>
@@ -799,9 +802,9 @@ seconds</p>
 <p>Median run time for deSolve, with model defined in C: 1.267105^{-4}
 seconds</p>
 </div>
-<div class="section level3">
-<h3 id="model-in-fortran">2.3. Model in Fortran<a class="anchor" aria-label="anchor" href="#model-in-fortran"></a>
-</h3>
+<div class="section level4">
+<h4 id="model-in-fortran">2.3. Model in Fortran<a class="anchor" aria-label="anchor" href="#model-in-fortran"></a>
+</h4>
 <details><summary>Code for running model defined in C</summary><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># compile model in fortran</span></span>
 <span><span class="co"># system("R CMD SHLIB supplements/desolve_mod/benchmark_mod_fortran.f")</span></span>
@@ -845,9 +848,9 @@ seconds</p>
 1.789855^{-4} seconds</p>
 </div>
 </div>
-<div class="section level2">
-<h2 id="ionise">3. IONISE<a class="anchor" aria-label="anchor" href="#ionise"></a>
-</h2>
+<div class="section level3">
+<h3 id="ionise">3. IONISE<a class="anchor" aria-label="anchor" href="#ionise"></a>
+</h3>
 <p>Simulate model using IONISE approach <span class="citation">(Hong et
 al. 2024)</span>.</p>
 <p>Source code: <a href="https://github.com/Mathbiomed/IONISE" class="external-link uri">https://github.com/Mathbiomed/IONISE</a></p>
@@ -914,9 +917,9 @@ Code for running SEIR using <code>IONISE</code>
 <span><span class="co">## [1] "bench_time" "numeric"</span></span></code></pre>
 <p>Median run time for IONISE: 0.0515998 seconds</p>
 </div>
-<div class="section level2">
-<h2 id="diffeqr">4. diffeqr<a class="anchor" aria-label="anchor" href="#diffeqr"></a>
-</h2>
+<div class="section level3">
+<h3 id="diffeqr">4. diffeqr<a class="anchor" aria-label="anchor" href="#diffeqr"></a>
+</h3>
 <p>Simulate model using <code>diffeqr</code> package <span class="citation">(Rackauckas, n.d.)</span></p>
 <details><summary>
 Dependency version specifications
@@ -967,9 +970,9 @@ Dependency version specifications
 <td></td>
 </tr>
 </tbody>
-</table></details><div class="section level3">
-<h3 id="model-in-r-1">4.1. Model in R<a class="anchor" aria-label="anchor" href="#model-in-r-1"></a>
-</h3>
+</table></details><div class="section level4">
+<h4 id="model-in-r-1">4.1. Model in R<a class="anchor" aria-label="anchor" href="#model-in-r-1"></a>
+</h4>
 <details><summary>
 Code for running SEIR using <code>diffeqr</code>
 </summary><p>Setup Julia for <code>diffeqr</code></p>
@@ -1066,9 +1069,9 @@ Code for running SEIR using <code>diffeqr</code>
 <p>Median run time for <code>diffeqr</code> with base solver: 0.0020887
 seconds</p>
 </div>
-<div class="section level3">
-<h3 id="define-model-in-julia">4.2. Define model in Julia<a class="anchor" aria-label="anchor" href="#define-model-in-julia"></a>
-</h3>
+<div class="section level4">
+<h4 id="define-model-in-julia">4.2. Define model in Julia<a class="anchor" aria-label="anchor" href="#define-model-in-julia"></a>
+</h4>
 <details><summary>
 Code to set up model in Julia using <code>diffeqr</code>
 </summary><p>We can tell <code>diffeqr</code> to define model in Julia, so we can
@@ -1101,9 +1104,9 @@ utilize Julia JIT compiler which can improve the runtime.</p>
 <p>Median run time for IONISE: 1.025205^{-4} seconds</p>
 </div>
 </div>
-<div class="section level2">
-<h2 id="sec-odin">5. odin<a class="anchor" aria-label="anchor" href="#sec-odin"></a>
-</h2>
+<div class="section level3">
+<h3 id="sec-odin">5. odin<a class="anchor" aria-label="anchor" href="#sec-odin"></a>
+</h3>
 <p>We also implement uSEIR model with denim’s algorithm using
 <code>odin</code> package <span class="citation">(FitzJohn et al.
 2024)</span> for comparison</p>
@@ -1213,7 +1216,7 @@ Code for running SEIR in <code>odin</code>
 <span><span class="co">## clang++ -arch arm64 -std=gnu++17 -dynamiclib -Wl,-headerpad_max_install_names -undefined dynamic_lookup -single_module -multiply_defined suppress -L/Library/Frameworks/R.framework/Resources/lib -L/Library/Developer/CommandLineTools/SDKs/MacOSX15.5.sdk/usr/lib -L/opt/homebrew/opt/libomp/lib -lomp -o odin.system79e020ca.so cpp11.o dust.o -F/Library/Frameworks/R.framework/.. -framework R -Wl,-framework -Wl,CoreFoundation</span></span>
 <span><span class="co">## ld: warning: -single_module is obsolete</span></span>
 <span><span class="co">## ld: warning: -multiply_defined is obsolete</span></span>
-<span><span class="co">## installing to /private/var/folders/rf/dwxhm19j1ws1mfmsvj9yfp140000gr/T/RtmpZJzMKB/devtools_install_cea67347ee6/00LOCK-dust_cea4a09b4e4/00new/odin.system79e020ca/libs</span></span>
+<span><span class="co">## installing to /private/var/folders/rf/dwxhm19j1ws1mfmsvj9yfp140000gr/T/Rtmp8vvvcU/devtools_install_54a562cb7b15/00LOCK-dust_54a5167099b0/00new/odin.system79e020ca/libs</span></span>
 <span><span class="co">## ** checking absolute paths in shared objects and dynamic libraries</span></span>
 <span><span class="co">## * DONE (odin.system79e020ca)</span></span></code></pre>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
@@ -1326,12 +1329,12 @@ fair comparison with denim.</p>
 <span><span class="co">## [1] "bench_time" "numeric"</span></span></code></pre>
 <p>Median run time for odin: 0.3263736 seconds</p>
 </div>
-<div class="section level2">
-<h2 id="denim">6. denim<a class="anchor" aria-label="anchor" href="#denim"></a>
-</h2>
 <div class="section level3">
-<h3 id="parametric">6.1. Parametric<a class="anchor" aria-label="anchor" href="#parametric"></a>
+<h3 id="denim">6. denim<a class="anchor" aria-label="anchor" href="#denim"></a>
 </h3>
+<div class="section level4">
+<h4 id="parametric">6.1. Parametric<a class="anchor" aria-label="anchor" href="#parametric"></a>
+</h4>
 <details><summary>
 Code for running SEIR in <code>denim</code>
 </summary><div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
@@ -1391,9 +1394,9 @@ Code for running SEIR in <code>denim</code>
 <span><span class="co">## [1] "bench_time" "numeric"</span></span></code></pre>
 <p>Median run time for denim: 0.7617914 seconds</p>
 </div>
-<div class="section level3">
-<h3 id="nonparametric">6.2. Nonparametric<a class="anchor" aria-label="anchor" href="#nonparametric"></a>
-</h3>
+<div class="section level4">
+<h4 id="nonparametric">6.2. Nonparametric<a class="anchor" aria-label="anchor" href="#nonparametric"></a>
+</h4>
 <p>We can also define the SEIR model in denim using function
 <code><a href="../reference/nonparametric.html">nonparametric()</a></code> where the dwell-time distribution will be
 pre-computed using the helper function from Section @ref(sec-odin)</p>
@@ -1463,47 +1466,119 @@ the observed distribution cannot be adequately represented by one of the
 available parametric transitions.</p>
 </div>
 </div>
-<div class="section level2">
-<h2 id="visualize-output">7. Visualize output<a class="anchor" aria-label="anchor" href="#visualize-output"></a>
-</h2>
+<div class="section level3">
+<h3 id="visualize-output">7. Visualize output<a class="anchor" aria-label="anchor" href="#visualize-output"></a>
+</h3>
 <p>The plot below compare output of discrete time frameworks
 (<code>odin</code>, <code>denim</code>, <code>uSEIR</code>) with that of
 a continuous time solver <code>deSolve</code>.</p>
 <p><img src="denim_benchmark_files/figure-html/unnamed-chunk-28-1.png" width="2187.5"><img src="denim_benchmark_files/figure-html/unnamed-chunk-28-2.png" width="2187.5"><img src="denim_benchmark_files/figure-html/unnamed-chunk-28-3.png" width="2187.5"><img src="denim_benchmark_files/figure-html/unnamed-chunk-28-4.png" width="2187.5"><img src="denim_benchmark_files/figure-html/unnamed-chunk-28-5.png" width="2187.5"></p>
 </div>
-<div class="section level2">
-<h2 id="compare-run-time">8. Compare run time<a class="anchor" aria-label="anchor" href="#compare-run-time"></a>
-</h2>
+<div class="section level3">
+<h3 id="compare-run-time">8. Compare run time<a class="anchor" aria-label="anchor" href="#compare-run-time"></a>
+</h3>
 <p>The following plot shows run time for 50 runs (with horizontal line
 showing median run time) of each approach.</p>
 <p><img src="denim_benchmark_files/figure-html/unnamed-chunk-30-1.png" width="2187.5"></p>
-</div>
-<div class="section level2">
-<h2 id="impact-of-timestep-in-denim">9. Impact of timeStep in denim<a class="anchor" aria-label="anchor" href="#impact-of-timestep-in-denim"></a>
-</h2>
-<div class="section level3">
-<h3 id="run-time-scaling">9.1. Run time scaling<a class="anchor" aria-label="anchor" href="#run-time-scaling"></a>
-</h3>
 <p>It is worth noting that runtime for denim is also dependent on
 duration of time step (<code>timeStep</code> parameter for
-<code>sim</code>).</p>
-<p>The following plot demonstrates how run time changes as value for
-timeStep changes, using the same model for benchmarking. The values for
-timeStep being evaluated are
-<code>[0.01, 0.02, 0.05, 0.1, 0.25, 0.5, 1]</code>.</p>
-<p><img src="denim_benchmark_files/figure-html/unnamed-chunk-32-1.png" width="2187.5"></p>
+<code>sim</code>). This is discussed in details in the next section.</p>
+<hr>
+</div>
+</div>
+<div class="section level2">
+<h2 id="denim-performance-details">Denim performance details<a class="anchor" aria-label="anchor" href="#denim-performance-details"></a>
+</h2>
+<div class="section level3">
+<h3 id="time-and-space-complexity">1. Time and space complexity<a class="anchor" aria-label="anchor" href="#time-and-space-complexity"></a>
+</h3>
+<p>In terms of big-O notation, denim has a time complexity of <span class="math inline">\(O(T S^2 n)\)</span> and space complexity of <span class="math inline">\(O(T S + S^2n)\)</span>. Where:</p>
+<ul>
+<li><p><span class="math inline">\(T\)</span> is the total simulated
+time steps</p></li>
+<li><p><span class="math inline">\(S\)</span> is the number of
+states/compartments</p></li>
+<li><p><span class="math inline">\(n\)</span> is the maximum length of
+the sub-compartment chain</p></li>
+</ul>
+<p>Under the assumption that individuals in a compartment can transition
+to every other compartment.</p>
+<p>However, under most realistic use cases, individuals can only
+transfer to a limited number of states in which case the number of
+transitions denoted <span class="math inline">\(m\)</span> is <span class="math inline">\(m &lt; S^2\)</span>. The time complexity would
+then be <span class="math inline">\(O (T m n)\)</span> and space
+complexity is <span class="math inline">\(O(T S + mn)\)</span>.</p>
 </div>
 <div class="section level3">
-<h3 id="impact-on-accuracy">9.2. Impact on accuracy<a class="anchor" aria-label="anchor" href="#impact-on-accuracy"></a>
+<h3 id="impact-of-timestep-in-denim">2. Impact of timeStep in denim<a class="anchor" aria-label="anchor" href="#impact-of-timestep-in-denim"></a>
 </h3>
+<div class="section level4">
+<h4 id="run-time-and-memory-scaling">2.1. Run time and memory scaling<a class="anchor" aria-label="anchor" href="#run-time-and-memory-scaling"></a>
+</h4>
+<p>A change in values for <code>timeStep</code> can directly change the
+value for <span class="math inline">\(T\)</span> and <span class="math inline">\(n\)</span> in the big-O notation, which directly
+impact the run time and memory allocation of the algorithm.</p>
+<p>The following plot demonstrates how run time and memory changes as
+value for <code>timeStep</code> changes, using the same model for
+benchmarking. The values for timeStep being evaluated are
+<code>[0.01, 0.02, 0.05, 0.1, 0.25, 0.5, 1]</code>.</p>
+<p><strong>Run time scaling</strong></p>
+<p><img src="denim_benchmark_files/figure-html/unnamed-chunk-32-1.png" width="2187.5"></p>
+<p><strong>Memory allocated</strong></p>
+<p><img src="denim_benchmark_files/figure-html/unnamed-chunk-33-1.png" width="2187.5"></p>
+</div>
+<div class="section level4">
+<h4 id="impact-on-accuracy">2.2. Impact on accuracy<a class="anchor" aria-label="anchor" href="#impact-on-accuracy"></a>
+</h4>
 <p>Aside from run time, duration of time step also impacts the accuracy
 of <code>denim</code>’s output.</p>
 <p>The following plots demonstrates how precision is compromised as we
 increase the duration for time step (with output from
-<code>deSolve</code> used as baseline). The values for timeStep being
-evaluated are <code>[0.01, 0.1, 0.5, 1]</code>.</p>
-<p><img src="denim_benchmark_files/figure-html/unnamed-chunk-33-1.png" width="2187.5"></p>
+<code>deSolve</code> used as baseline). The values for
+<code>timeStep</code> being evaluated are
+<code>[0.01, 0.1, 0.5, 1]</code>.</p>
 <p><img src="denim_benchmark_files/figure-html/unnamed-chunk-34-1.png" width="2187.5"></p>
+<p><img src="denim_benchmark_files/figure-html/unnamed-chunk-35-1.png" width="2187.5"></p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="performance-with-more-complex-model">3. Performance with more complex model<a class="anchor" aria-label="anchor" href="#performance-with-more-complex-model"></a>
+</h3>
+<p>To assess the performance of <code>denim</code> as the model grows
+more complex, we measure the run-time and memory allocation as more
+transitions are added to the model.</p>
+<p>To do that, we consider the following sequential compartmental model
+where <span class="math inline">\(S\)</span> indicates the number of
+compartments</p>
+<p><img src="images/denim_website-runtime-scaling-mod.png" width="654"></p>
+<p>General settings:</p>
+<ul>
+<li><p><code>simulationDuration=2000</code></p></li>
+<li><p><code>timeStep=0.01</code> (i.e., simulate the model for 200000
+time steps)</p></li>
+<li>
+<p>The duration for any transition <span class="math inline">\(X_i
+\rightarrow X_{i+1}\)</span> is set to follow a log-normal distribution
+with <span class="math inline">\(\mu = 2.2\)</span> and <span class="math inline">\(\sigma = 0.4\)</span></p>
+<ul>
+<li>Maximal dwell time is ~13 time units (length of each sub-compartment
+chain is 1300)</li>
+</ul>
+</li>
+</ul>
+<p>Under the given setup, the number of transitions <span class="math inline">\(m\)</span> is simply <span class="math inline">\(S-1\)</span></p>
+<p>We will test the run time and memory allocation for model with
+<code>[3, 5, 25, 50, 100]</code> compartments (i.e.,
+<code>[2, 4, 24, 49, 99]</code> transitions under this settings).</p>
+<p><strong><em>Run time</em></strong></p>
+<p><img src="denim_benchmark_files/figure-html/unnamed-chunk-37-1.png" width="2187.5"></p>
+<p><strong><em>Memory allocated</em></strong></p>
+<p><img src="denim_benchmark_files/figure-html/unnamed-chunk-38-1.png" width="2187.5"></p>
+</div>
+</div>
+<div class="section level2">
+<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-fitzjohn2024" class="csl-entry">
 FitzJohn, Rich, Thibaut Jombart, Imperial College of Science, and
@@ -1533,7 +1608,6 @@ Soetaert, Karline, Thomas Petzoldt, and R. Woodrow Setzer. 2008.
 Equations (<span>“</span>ODE<span>”</span>,
 <span>“</span>DAE<span>”</span>,
 <span>’</span>DDE<span>’</span>),”</span> June. <a href="http://dx.doi.org/10.32614/CRAN.package.deSolve" class="external-link">http://dx.doi.org/10.32614/CRAN.package.deSolve</a>.
-</div>
 </div>
 </div>
 </div>

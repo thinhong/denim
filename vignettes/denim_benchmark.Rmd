@@ -1,8 +1,8 @@
 ---
-title: "denim performance"
+title: "denim benchmark"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{denim performance}
+  %\VignetteIndexEntry{denim benchmark}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 python:
@@ -1245,7 +1245,7 @@ It is worth noting that runtime for denim is also dependent on duration of time 
 
 # Denim performance details
 
-## 1. Time - space complexity
+## 1. Time and space complexity
 
 In terms of big-O notation, denim has a time complexity of $O(T S^2 n)$ and space complexity of $O(T S + S^2n)$. Where:
 
@@ -1261,11 +1261,11 @@ However, under most realistic use cases, individuals can only transfer to a limi
 
 ## 2. Impact of timeStep in denim
 
-### 2.1. Run time scaling
+### 2.1. Run time and memory scaling
 
-A change in values for `timeStep` can directly change the value for $T$ and $n$ in the big-O notation, which directly impact the run time of the algorithm.
+A change in values for `timeStep` can directly change the value for $T$ and $n$ in the big-O notation, which directly impact the run time and memory allocation of the algorithm.
 
-The following plot demonstrates how run time changes as value for `timeStep` changes, using the same model for benchmarking. The values for timeStep being evaluated are `[0.01, 0.02, 0.05, 0.1, 0.25, 0.5, 1]`.
+The following plot demonstrates how run time and memory changes as value for `timeStep` changes, using the same model for benchmarking. The values for timeStep being evaluated are `[0.01, 0.02, 0.05, 0.1, 0.25, 0.5, 1]`.
 
 ```{r echo=FALSE}
 timeStepDurations <- c(0.01, 0.02, 0.05, 0.1, 0.25, 0.5, 1)
@@ -1285,20 +1285,82 @@ runtime_scaling <- sapply(benchmark_out, \(bm){
   bm$median
 })
 
-runtime_scaling
+memory_scaling <- sapply(benchmark_out, \(bm){
+  as.numeric(bm$mem_alloc)/(1024)
+})
 ```
 
+**Run time scaling**
+
 ```{r echo=FALSE, warning=FALSE}
-plot(x = timeStepDurations, y = runtime_scaling, col = "cornflowerblue",
-     xlab = "Time step duration",
-     ylab = "Median run time (in seconds)")
-lines(x = timeStepDurations, y = runtime_scaling, col = "cornflowerblue",
-     xlab = "Time step duration",
-     ylab = "Median run time (in seconds)")
-abline(v = timeStep, col = "red", lty = 2, lwd = 2)  
-abline(v = 1, col = "blueviolet", lty = 2, lwd = 2)  
-text(x = timeStep, y = max(unlist(runtime_scaling)), labels = "timeStep for benchmarking", col = "red", pos = 4)
-text(x = 1, y = max(unlist(runtime_scaling)), labels = "default timeStep", col = "blueviolet", pos = 2)
+data.frame(
+  timeStepDur = timeStepDurations,
+  runtime_scaling = runtime_scaling
+) %>% 
+  ggplot(aes(x = timeStepDurations, y = runtime_scaling)) +
+    geom_point(color = "cornflowerblue", shape = 1, size=2) +
+    geom_line(color = "cornflowerblue") +
+    geom_vline(xintercept = timeStep,
+               color = "red", linetype = "dashed", linewidth = 0.5) +
+    geom_vline(xintercept = 1,
+               color = "blueviolet", linetype = "dashed", linewidth = 0.5) +
+    annotate("text",
+             x = timeStep + 0.01,
+             y = max(runtime_scaling),
+             label = "timeStep for benchmarking",
+             color = "red",
+             hjust = 0) +
+    annotate("text",
+             x = 1 - 0.01,
+             y = max(runtime_scaling), 
+             label = "default timeStep",
+             color = "blueviolet",
+           hjust = 1) +
+    labs(
+      x = "Time step duration",
+      y = "Median run time (in seconds)"
+    ) +
+    theme_bw()
+
+# ggsave("../manuscript_plots/denim_runtime_scale_timeStep.png",
+#        width = 8, height = 5, dpi = 300)
+```
+
+**Memory allocated**
+
+```{r echo=FALSE}
+data.frame(
+  timeStepDur = timeStepDurations,
+  memory_scaling = memory_scaling
+) %>% 
+  ggplot(aes(x = timeStepDurations, y = memory_scaling)) +
+    geom_point(color = "cornflowerblue", shape = 1, size=2) +
+    geom_line(color = "cornflowerblue") +
+    geom_vline(xintercept = timeStep,
+               color = "red", linetype = "dashed", linewidth = 0.5) +
+    geom_vline(xintercept = 1,
+               color = "blueviolet", linetype = "dashed", linewidth = 0.5) +
+    annotate("text",
+             x = timeStep + 0.01,
+             y = max(memory_scaling),
+             label = "timeStep for benchmarking",
+             color = "red",
+             hjust = 0) +
+    annotate("text",
+             x = 1 - 0.01,
+             y = max(memory_scaling), 
+             label = "default timeStep",
+             color = "blueviolet",
+           hjust = 1) +
+    labs(
+      x = "Time step duration",
+      y = "Memory allocated (in KBs)",
+      caption = "*Memory allocations are tracked by Rprofmem, which records only allocations made through R’s memory allocator"
+    ) +
+    theme_bw()
+
+# ggsave("../manuscript_plots/denim_memory_scale_timeStep.png",
+#         width = 8, height = 5, dpi = 300)
 ```
 
 ### 2.2. Impact on accuracy
@@ -1423,15 +1485,13 @@ reshaped_baseline %>%
 #   width = 8, height = 5, dpi = 300)
 ```
 
-## 3. Run time scaling with more transitions
+## 3. Performance with more complex model
 
-To assess the performance of `denim` as the model grows more complex, we measure the run-time as more transitions are added to the model.
+To assess the performance of `denim` as the model grows more complex, we measure the run-time and memory allocation as more transitions are added to the model.
 
 To do that, we consider the following sequential compartmental model where $S$ indicates the number of compartments
 
-$$
-X_1 \rightarrow X_2 \rightarrow X_3 .... \rightarrow X_S
-$$
+![](images/denim_website-runtime-scaling-mod.png){width="654"}
 
 General settings:
 
@@ -1445,7 +1505,9 @@ General settings:
 
 Under the given setup, the number of transitions $m$ is simply $S-1$
 
-We will test the run time for model with `[3, 5, 25, 50, 100]` compartments (i.e., `[2, 4, 24, 49, 99]` transitions under this settings).
+We will test the run time and memory allocation for model with `[3, 5, 25, 50, 100]` compartments (i.e., `[2, 4, 24, 49, 99]` transitions under this settings).
+
+***Run time***
 
 ```{r echo=FALSE}
 cached_time_scaling <- if (file.exists("../supplements/cached_time_scaling.rds")) {
@@ -1499,11 +1561,38 @@ runtime_scaling_out <- if(is.null(cached_time_scaling)){
 runtime_scaling_out %>% 
   ggplot(aes(x = no_comp, y = median)) +
     geom_line(color = "cornflowerblue") +
-    geom_point(color = "cornflowerblue", shape = 1) +
+    geom_point(color = "cornflowerblue", shape = 1, size=2) +
     labs(
-      title = "Run time scaling by compartments",
-      x = "Number of compartments",
+      title = "Run time at different number of compartments",
+      x = "Number of compartments (S)",
       y = "Run time (in seconds)"
     ) +
     theme_bw()
+
+# ggsave("../manuscript_plots/denim_runtime_scale_comp.png",
+#        width = 8, height = 5, dpi = 300)
 ```
+
+***Memory allocated***
+
+```{r echo=FALSE}
+runtime_scaling_out %>% 
+  mutate(
+    mem_alloc_mb = as.numeric(mem_alloc)/(1000**2) 
+  ) %>% 
+  ggplot(aes(x = no_comp, y = mem_alloc_mb)) +
+    geom_line(color = "cornflowerblue") +
+    geom_point(color = "cornflowerblue", shape = 1, size=2) +
+    labs(
+      title = "Memory allocated at different number of compartments",
+      x = "Number of compartments (S)",
+      y = "Memory allocated by R & RCpp (MBs)",
+      caption = "*Memory allocations are tracked by Rprofmem, which records only allocations made through R’s memory allocator"
+    ) +
+    theme_bw()
+
+# ggsave("../manuscript_plots/denim_memory_scale_comp.png",
+#        width = 8, height = 5, dpi = 300)
+```
+
+# References
