@@ -1216,7 +1216,7 @@ Code for running SEIR in <code>odin</code>
 <span><span class="co">## clang++ -arch arm64 -std=gnu++17 -dynamiclib -Wl,-headerpad_max_install_names -undefined dynamic_lookup -single_module -multiply_defined suppress -L/Library/Frameworks/R.framework/Resources/lib -L/Library/Developer/CommandLineTools/SDKs/MacOSX15.5.sdk/usr/lib -L/opt/homebrew/opt/libomp/lib -lomp -o odin.system79e020ca.so cpp11.o dust.o -F/Library/Frameworks/R.framework/.. -framework R -Wl,-framework -Wl,CoreFoundation</span></span>
 <span><span class="co">## ld: warning: -single_module is obsolete</span></span>
 <span><span class="co">## ld: warning: -multiply_defined is obsolete</span></span>
-<span><span class="co">## installing to /private/var/folders/rf/dwxhm19j1ws1mfmsvj9yfp140000gr/T/Rtmp8vvvcU/devtools_install_54a562cb7b15/00LOCK-dust_54a5167099b0/00new/odin.system79e020ca/libs</span></span>
+<span><span class="co">## installing to /private/var/folders/rf/dwxhm19j1ws1mfmsvj9yfp140000gr/T/RtmpKvMszH/devtools_install_2a0426b54f20/00LOCK-dust_2a04358ee56d/00new/odin.system79e020ca/libs</span></span>
 <span><span class="co">## ** checking absolute paths in shared objects and dynamic libraries</span></span>
 <span><span class="co">## * DONE (odin.system79e020ca)</span></span></code></pre>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
@@ -1520,7 +1520,7 @@ value for <span class="math inline">\(T\)</span> and <span class="math inline">\
 impact the run time and memory allocation of the algorithm.</p>
 <p>The following plot demonstrates how run time and memory changes as
 value for <code>timeStep</code> changes, using the same model for
-benchmarking. The values for timeStep being evaluated are
+benchmarking. The values for <code>timeStep</code> being evaluated are
 <code>[0.01, 0.02, 0.05, 0.1, 0.25, 0.5, 1]</code>.</p>
 <p><strong>Run time scaling</strong></p>
 <p><img src="denim_benchmark_files/figure-html/unnamed-chunk-32-1.png" width="2187.5"></p>

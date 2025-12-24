@@ -1,4 +1,7 @@
 # denim 1.2.2
+* Make multiply by timeStep in math expression internal
+* Rename Distribution to Transition
+* Update vignette
 
 # denim 1.2.1
 * Minor runtime improvement

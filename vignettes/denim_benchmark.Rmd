@@ -1265,7 +1265,7 @@ However, under most realistic use cases, individuals can only transfer to a limi
 
 A change in values for `timeStep` can directly change the value for $T$ and $n$ in the big-O notation, which directly impact the run time and memory allocation of the algorithm.
 
-The following plot demonstrates how run time and memory changes as value for `timeStep` changes, using the same model for benchmarking. The values for timeStep being evaluated are `[0.01, 0.02, 0.05, 0.1, 0.25, 0.5, 1]`.
+The following plot demonstrates how run time and memory changes as value for `timeStep` changes, using the same model for benchmarking. The values for `timeStep` being evaluated are `[0.01, 0.02, 0.05, 0.1, 0.25, 0.5, 1]`.
 
 ```{r echo=FALSE}
 timeStepDurations <- c(0.01, 0.02, 0.05, 0.1, 0.25, 0.5, 1)
