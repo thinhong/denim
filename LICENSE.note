@@ -1,5 +1,5 @@
 The denim package as a whole is distributed under MIT. The denim package includes other open source software components. The following is a list of these components:
 
-* muParser: BSD
+* muParser: BSD-2-Clause 
 * JSON: MIT
-* diffviewer: written by package authors
+* denim: written by package authors
