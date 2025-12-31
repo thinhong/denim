@@ -1,7 +1,7 @@
 ## Resubmission
 This is a resubmission. In this version I have:
-* Make multiply by timeStep in math expression internal
-* Rename Distribution to Transition
+* Clarify the ownership for the bundled code by adding the authors as copyright holders
+* Add new test cases
 * Update vignette
 
 

@@ -31,10 +31,10 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item Niels Lohman (Author for the bundled JSON C++ library) [contributor, copyright holder]
-  \item Bjoern Hoehrmann \email{bjoern@hoehrmann.de} (Contributor for the bundled JSON C++ library) [contributor, copyright holder]
-  \item Florian Loitsch (Contributor for the bundled JSON C++ library) [contributor, copyright holder]
-  \item Ingo Berg (Author for the bundled MuParser C++ library) [contributor, copyright holder]
+  \item Niels Lohman (Author of the bundled JSON C++ library) [contributor, copyright holder]
+  \item Bjoern Hoehrmann \email{bjoern@hoehrmann.de} (Author of UTF-8 validation code in the bundled JSON C++ library) [contributor, copyright holder]
+  \item Florian Loitsch (Author of the binary to decimal floating-point conversion code in the bundled JSON C++ library) [contributor, copyright holder]
+  \item Ingo Berg (Author of the bundled MuParser C++ library) [contributor, copyright holder]
 }
 
 }

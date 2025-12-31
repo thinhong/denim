@@ -1,3 +1,5 @@
+# denim 1.2.3
+
 # denim 1.2.2
 * Make multiply by timeStep in math expression internal
 * Rename Distribution to Transition

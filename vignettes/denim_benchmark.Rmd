@@ -1367,7 +1367,7 @@ data.frame(
 
 Aside from run time, duration of time step also impacts the accuracy of `denim`'s output.
 
-The following plots demonstrates how precision is compromised as we increase the duration for time step (with output from `deSolve` used as baseline). The values for `timeStep` being evaluated are `[0.01, 0.1, 0.5, 1]`.
+The following plots demonstrate how precision is compromised as we increase the duration for time step (with output from `deSolve` used as baseline). The values for `timeStep` being evaluated are `[0.01, 0.1, 0.5, 1]`.
 
 ```{r echo = FALSE}
 timeStepDurations <- c(0.01, 0.1, 0.5, 1)
@@ -1485,7 +1485,281 @@ reshaped_baseline %>%
 #   width = 8, height = 5, dpi = 300)
 ```
 
-## 3. Performance with more complex model
+
+## 3. Math expression vs `d_*()` function
+
+In scenarios where a compartmental model can be formulated using ODEs, `denim` provides 2 ways for users to define transitions between compartments:
+
+-   Either using `d_*()` functions (`d_exponential()` or `d_gamma()`)
+
+-   Or using the math expression
+
+This section demonstrates the run time and numerical accuracy of these 2 approaches as `timeStep` varies, using results from `deSolve` as the baseline. For this demonstration, we use the basic SIR model.
+
+```{r echo=FALSE}
+# ---- Helper functions -----
+# Function to filter the result at the time step of interest
+# The input desolve_bm, and denim_bms are tibble of benchmark results returned by bench::mark
+generate_plot_data <- function(desolve_bm, denim_bms, plot_timeStep = 0.01){
+  denim_bms <- denim_bms %>% 
+      filter(timeStep == plot_timeStep)
+  
+  # print(dim(denim_bms))
+  # ---- reshape output to create pair-wise comparison plot ---
+  bind_rows(
+      map2_dfr(denim_bms$approach, denim_bms$result, \(approach, df){
+        df %>% mutate(
+          approach = approach
+        ) %>% 
+          as.data.frame()
+      }),
+      desolve_bm$result[[1]] %>% 
+        as.data.frame() %>%  
+        mutate(approach = "deSolve") %>% 
+        rename(
+          Time=time
+        )
+    ) %>% 
+    select(Time, S, I, R, approach) %>% 
+    pivot_longer(cols = c("S", "I", "R"), values_to = "pop", names_to = "comp") %>% 
+    mutate(prop = pop / 1e3)
+}
+
+# Function to plot the result at the time step of interest
+plot_pairwise2 <- function(df, plot_timeStep=0.01){
+  reshaped_baseline <- df %>% 
+    filter(approach == "deSolve") %>% 
+    select(-approach) %>% 
+    mutate(baseline = prop)
+    
+  reshaped_out <- df %>% 
+    filter(approach != "deSolve") %>% 
+    rename(output = prop) 
+  
+  reshaped_baseline %>% 
+    left_join(
+      reshaped_out,
+      by = join_by(Time == Time, comp == comp)
+    ) %>% ggplot() +
+    geom_point(
+      aes(x = baseline, y = output, color = approach),
+      shape = 20
+    ) +
+    geom_line(
+      aes(x = baseline, y = baseline),
+      color = "black", linetype = "dashed"
+    ) + 
+    theme_bw() +
+    scale_color_manual(
+      values = c(
+        "denim mathExpression" = "cornflowerblue",
+        "denim d_* func" = "red"
+      )
+    ) +
+    theme(legend.title = element_blank()) +
+    facet_wrap(~ comp, scales = "free", ncol=2) +
+    labs(
+      title = paste0("Pairwise plot at dt=", plot_timeStep),
+      x = "deSolve (baseline)",
+      y = "denim"
+      # caption = "*Data points closer to the dashed line indicate better alignment between the baseline and denim outputs."
+    )
+}
+```
+
+```{=html}
+<details>
+  <summary>Model definition and configuration</summary>
+```
+The basic SIR model can be formulated using the following system of ODEs.
+
+$$
+\begin{cases}
+\frac{dS(t)}{dt} = - \beta \frac{I(t)}{N} S(t) \\
+\frac{dI(t)}{dt} = \beta \frac{I(t)}{N} S(t) - \gamma I(t) \\
+\frac{dR(t)}{dt} = \gamma I(t) 
+\end{cases}
+$$\
+The code to define this model is presented below.
+
+```{r}
+# ----- deSolve -----
+desolve_sir <- function(t, state, param){
+  with(as.list( c(state, param) ), {
+      dS = -beta*S*I/N
+      dI = beta*S*I/N  - gamma*I
+      dR = gamma*I
+      list(c(dS, dI, dR))
+  })
+}
+
+# ----- denim: math expression -----
+denim_ode <- denim_dsl({
+  S -> I = beta*S*I/N
+  I -> R = gamma*I
+})
+
+# ----- denim: d_* function -----
+denim_dfunc <- denim_dsl({
+  S -> I = beta*S*I/N
+  I -> R = d_exponential(gamma)
+})
+
+# ---- Model configuration ----
+parameters <- c(beta = 0.4, gamma = 1/7, N = 1000) 
+initialValues <- c(S = 999, I = 1, R=0)
+sim_duration <- 100
+times <- seq(0, sim_duration)
+```
+
+</details>
+
+```{r echo=FALSE}
+# ---- First, get the benchmark for deSolve (the baseline) ----
+deSolve_bm <- bench::mark({
+  ode(y = initialValues, times = times, parms = parameters, func = desolve_sir)
+})
+
+# ---- Then generate benchmark denim at different timesteps -----
+timeStepDurations2 <- c(0.01, 0.02, 0.05, 0.1, 0.25, 0.5, 1)
+
+# --- Benchmark the model using d_exponential() function ----
+denim_dfunc_scaling <- map_dfr(timeStepDurations2, 
+     \(x){
+       bench_out <- bench::mark(
+         sim(transitions = denim_dfunc,
+                   initialValues = initialValues,
+                   parameters = parameters,
+                   simulationDuration = sim_duration, timeStep = x)
+       )
+       bench_out %>% 
+         mutate(
+           timeStep = x,
+           approach = "denim d_* func",
+           .before = 1
+         )
+     }
+   )
+
+# --- Benchmark the model using the math expression ----
+denim_ode_scaling <- map_dfr(timeStepDurations2, 
+     \(x){
+       bench_out <- bench::mark(
+         sim(transitions = denim_ode,
+                   initialValues = initialValues,
+                   parameters = parameters,
+                   simulationDuration = sim_duration, timeStep = x)
+       )
+       bench_out %>% 
+         mutate(
+           timeStep = x,
+           approach = "denim mathExpression",
+           .before = 1
+         )
+     }
+   )
+```
+
+The plot below summarizes the run time and accuracy at different `timeStep` (denoted dt), comparing the use of `d_exponential()` vs math expression for `I->R` transition.
+
+```{r echo=FALSE, fig.width=11.5, fig.height=6, fig.dpi=300}
+# ---- Generate the individual plots ---- 
+# First generate the plot for run time scaling using the 2 approaches
+runtime_scaling_plot <- bind_rows(
+  denim_dfunc_scaling,
+  denim_ode_scaling
+) %>% 
+  mutate(
+    median_time = as.numeric(median)
+  ) %>% 
+  ggplot() +
+    geom_point(
+      aes(x = timeStep, y = median_time, color = approach), 
+      shape = 1, size=2) +
+    geom_line(
+      aes(x = timeStep, y = median_time, color = approach)) +
+    geom_hline(yintercept = deSolve_bm$median %>% as.numeric(),
+               color = "black", linetype = "dashed", linewidth = 0.5) +
+    annotate("text",
+             x = 0.1,
+             y = deSolve_bm$median %>% as.numeric() + 0.0005, 
+             label = "deSolve runtime",
+             color = "black",
+           vjust = 0) +
+    scale_color_manual(
+      values = c(
+        "denim mathExpression" = "cornflowerblue",
+        "denim d_* func" = "red"
+      )
+    ) +
+    labs(
+      x = "Time step duration",
+      y = "Median run time (in seconds)"
+    ) +
+    scale_y_log10()+
+    theme_bw()
+
+# then generate the plots at the representitive time steps: 0.01, 0.5 and 1
+pair_001 <- generate_plot_data(
+  desolve_bm = deSolve_bm,
+  denim_bms = bind_rows(
+    denim_dfunc_scaling,
+    denim_ode_scaling
+  ),
+  plot_timeStep = 0.01
+  ) %>% 
+  plot_pairwise2(plot_timeStep = 0.01)
+
+pair_05 <- generate_plot_data(
+  desolve_bm = deSolve_bm,
+  denim_bms = bind_rows(
+    denim_dfunc_scaling,
+    denim_ode_scaling
+  ),
+  plot_timeStep = 0.5
+  ) %>% 
+  plot_pairwise2(plot_timeStep = 0.5)
+
+pair_1 <- generate_plot_data(
+  desolve_bm = deSolve_bm,
+  denim_bms = bind_rows(
+    denim_dfunc_scaling,
+    denim_ode_scaling
+  ),
+  plot_timeStep = 1
+  ) %>% 
+  plot_pairwise2(plot_timeStep = 1)
+
+# --- Finally, combine all the plots ------ 
+library(patchwork)
+(
+  runtime_scaling_plot + 
+    geom_vline(
+      data = tibble::tibble(
+      x = c(0.01, 0.5, 1)
+    ),
+    aes(xintercept = x),
+    linetype = "dashed",
+    color = "blueviolet"
+    )
+) / 
+  (pair_001 + pair_05 + pair_1 + 
+     plot_layout(guides = "collect") +
+     labs(
+       caption = "*Data points closer to the dashed line indicate better alignment between the baseline and denim outputs."
+     ))
+
+# Save figure
+# ggsave(
+#    "../manuscript_plots/dfunc_vs_math.png",
+#    width = 11.5, height = 6, dpi = 300)
+```
+
+The plot for run time scaling (upper figure) indicates that using `d_exponential()` results in slightly faster run times as `timeStep` increases. This suggests that, for the current model, the overhead from parsing math expressions exceeds the time for iterating over sub-compartments.
+
+As we\'ve known, run time decreases as dt increases, and at dt = 1 `denim` approaches the performance of `deSolve`. However, this also reduces accuracy, as suggested by the pairwise plot.
+
+## 4. Performance in more complex model
 
 To assess the performance of `denim` as the model grows more complex, we measure the run-time and memory allocation as more transitions are added to the model.
 

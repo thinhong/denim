@@ -342,9 +342,8 @@ second_dist <- c(second_dist, rep(0, length(first_dist) - length(second_dist)))
 ir_dist <- first_dist + second_dist
 ```
 
-```{=html}
 </details>
-```
+
 Assuming we have the distribution of time for the infected to recover ($P_{IR}$) as followed
 
 ```{r}

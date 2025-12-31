@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">denim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -1216,7 +1216,7 @@ Code for running SEIR in <code>odin</code>
 <span><span class="co">## clang++ -arch arm64 -std=gnu++17 -dynamiclib -Wl,-headerpad_max_install_names -undefined dynamic_lookup -single_module -multiply_defined suppress -L/Library/Frameworks/R.framework/Resources/lib -L/Library/Developer/CommandLineTools/SDKs/MacOSX15.5.sdk/usr/lib -L/opt/homebrew/opt/libomp/lib -lomp -o odin.system79e020ca.so cpp11.o dust.o -F/Library/Frameworks/R.framework/.. -framework R -Wl,-framework -Wl,CoreFoundation</span></span>
 <span><span class="co">## ld: warning: -single_module is obsolete</span></span>
 <span><span class="co">## ld: warning: -multiply_defined is obsolete</span></span>
-<span><span class="co">## installing to /private/var/folders/rf/dwxhm19j1ws1mfmsvj9yfp140000gr/T/RtmpKvMszH/devtools_install_2a0426b54f20/00LOCK-dust_2a04358ee56d/00new/odin.system79e020ca/libs</span></span>
+<span><span class="co">## installing to /private/var/folders/rf/dwxhm19j1ws1mfmsvj9yfp140000gr/T/RtmpbKsPGi/devtools_install_cb427986896e/00LOCK-dust_cb422fd17337/00new/odin.system79e020ca/libs</span></span>
 <span><span class="co">## ** checking absolute paths in shared objects and dynamic libraries</span></span>
 <span><span class="co">## * DONE (odin.system79e020ca)</span></span></code></pre>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
@@ -1532,7 +1532,7 @@ benchmarking. The values for <code>timeStep</code> being evaluated are
 </h4>
 <p>Aside from run time, duration of time step also impacts the accuracy
 of <code>denim</code>’s output.</p>
-<p>The following plots demonstrates how precision is compromised as we
+<p>The following plots demonstrate how precision is compromised as we
 increase the duration for time step (with output from
 <code>deSolve</code> used as baseline). The values for
 <code>timeStep</code> being evaluated are
@@ -1542,7 +1542,76 @@ increase the duration for time step (with output from
 </div>
 </div>
 <div class="section level3">
-<h3 id="performance-with-more-complex-model">3. Performance with more complex model<a class="anchor" aria-label="anchor" href="#performance-with-more-complex-model"></a>
+<h3 id="math-expression-vs-d_-function">3. Math expression vs <code>d_*()</code> function<a class="anchor" aria-label="anchor" href="#math-expression-vs-d_-function"></a>
+</h3>
+<p>In scenarios where a compartmental model can be formulated using
+ODEs, <code>denim</code> provides 2 ways for users to define transitions
+between compartments:</p>
+<ul>
+<li><p>Either using <code>d_*()</code> functions
+(<code><a href="../reference/d_exponential.html">d_exponential()</a></code> or <code><a href="../reference/d_gamma.html">d_gamma()</a></code>)</p></li>
+<li><p>Or using the math expression</p></li>
+</ul>
+<p>This section demonstrates the run time and numerical accuracy of
+these 2 approaches as <code>timeStep</code> varies, using results from
+<code>deSolve</code> as the baseline. For this demonstration, we use the
+basic SIR model.</p>
+<details><summary>Model definition and configuration</summary><p>The basic SIR model can be formulated using the following system of
+ODEs.</p>
+<p><span class="math display">\[
+\begin{cases}
+\frac{dS(t)}{dt} = - \beta \frac{I(t)}{N} S(t) \\
+\frac{dI(t)}{dt} = \beta \frac{I(t)}{N} S(t) - \gamma I(t) \\
+\frac{dR(t)}{dt} = \gamma I(t)
+\end{cases}
+\]</span><br>
+The code to define this model is presented below.</p>
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ----- deSolve -----</span></span>
+<span><span class="va">desolve_sir</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">state</span>, <span class="va">param</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">state</span>, <span class="va">param</span><span class="op">)</span> <span class="op">)</span>, <span class="op">{</span></span>
+<span>      <span class="va">dS</span> <span class="op">=</span> <span class="op">-</span><span class="va">beta</span><span class="op">*</span><span class="va">S</span><span class="op">*</span><span class="va">I</span><span class="op">/</span><span class="va">N</span></span>
+<span>      <span class="va">dI</span> <span class="op">=</span> <span class="va">beta</span><span class="op">*</span><span class="va">S</span><span class="op">*</span><span class="va">I</span><span class="op">/</span><span class="va">N</span>  <span class="op">-</span> <span class="va">gamma</span><span class="op">*</span><span class="va">I</span></span>
+<span>      <span class="va">dR</span> <span class="op">=</span> <span class="va">gamma</span><span class="op">*</span><span class="va">I</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">dS</span>, <span class="va">dI</span>, <span class="va">dR</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># ----- denim: math expression -----</span></span>
+<span><span class="va">denim_ode</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/denim_dsl.html">denim_dsl</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="va">S</span> <span class="op">-&gt;</span> <span class="va">I</span> <span class="op">=</span> <span class="va">beta</span><span class="op">*</span><span class="va">S</span><span class="op">*</span><span class="va">I</span><span class="op">/</span><span class="va">N</span></span>
+<span>  <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">R</span> <span class="op">=</span> <span class="va">gamma</span><span class="op">*</span><span class="va">I</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># ----- denim: d_* function -----</span></span>
+<span><span class="va">denim_dfunc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/denim_dsl.html">denim_dsl</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="va">S</span> <span class="op">-&gt;</span> <span class="va">I</span> <span class="op">=</span> <span class="va">beta</span><span class="op">*</span><span class="va">S</span><span class="op">*</span><span class="va">I</span><span class="op">/</span><span class="va">N</span></span>
+<span>  <span class="va">I</span> <span class="op">-&gt;</span> <span class="va">R</span> <span class="op">=</span> <span class="fu"><a href="../reference/d_exponential.html">d_exponential</a></span><span class="op">(</span><span class="va">gamma</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># ---- Model configuration ----</span></span>
+<span><span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>beta <span class="op">=</span> <span class="fl">0.4</span>, gamma <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">7</span>, N <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span> </span>
+<span><span class="va">initialValues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>S <span class="op">=</span> <span class="fl">999</span>, I <span class="op">=</span> <span class="fl">1</span>, R<span class="op">=</span><span class="fl">0</span><span class="op">)</span></span>
+<span><span class="va">sim_duration</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
+<span><span class="va">times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">sim_duration</span><span class="op">)</span></span></code></pre></div>
+</details><p>The plot below summarizes the run time and accuracy at different
+<code>timeStep</code> (denoted dt), comparing the use of
+<code><a href="../reference/d_exponential.html">d_exponential()</a></code> vs math expression for <code>I-&gt;R</code>
+transition.</p>
+<pre><code><span><span class="co">## Warning: package 'patchwork' was built under R version 4.3.3</span></span></code></pre>
+<p><img src="denim_benchmark_files/figure-html/unnamed-chunk-39-1.png" width="3450"></p>
+<p>The plot for run time scaling (upper figure) indicates that using
+<code><a href="../reference/d_exponential.html">d_exponential()</a></code> results in slightly faster run times as
+<code>timeStep</code> increases. This suggests that, for the current
+model, the overhead from parsing math expressions exceeds the time for
+iterating over sub-compartments.</p>
+<p>As we've known, run time decreases as dt increases, and at dt = 1
+<code>denim</code> approaches the performance of <code>deSolve</code>.
+However, this also reduces accuracy, as suggested by the pairwise
+plot.</p>
+</div>
+<div class="section level3">
+<h3 id="performance-in-more-complex-model">4. Performance in more complex model<a class="anchor" aria-label="anchor" href="#performance-in-more-complex-model"></a>
 </h3>
 <p>To assess the performance of <code>denim</code> as the model grows
 more complex, we measure the run-time and memory allocation as more
@@ -1571,9 +1640,9 @@ chain is 1300)</li>
 <code>[3, 5, 25, 50, 100]</code> compartments (i.e.,
 <code>[2, 4, 24, 49, 99]</code> transitions under this settings).</p>
 <p><strong><em>Run time</em></strong></p>
-<p><img src="denim_benchmark_files/figure-html/unnamed-chunk-37-1.png" width="2187.5"></p>
+<p><img src="denim_benchmark_files/figure-html/unnamed-chunk-41-1.png" width="2187.5"></p>
 <p><strong><em>Memory allocated</em></strong></p>
-<p><img src="denim_benchmark_files/figure-html/unnamed-chunk-38-1.png" width="2187.5"></p>
+<p><img src="denim_benchmark_files/figure-html/unnamed-chunk-42-1.png" width="2187.5"></p>
 </div>
 </div>
 <div class="section level2">
