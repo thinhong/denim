@@ -50,7 +50,7 @@ legend("right", legend = c(0.5, 1.0, 1.5),
        col = col_codes, lty = 1, lwd = 3, bty = "\n")
 ```
 
-A more realistic length of stay distribution can look like this, of which most patients recovered after 4 days. We defined this using a gamma distribution with shape = 3 and rate = 1/2.
+A more realistic length of stay distribution can look like this, of which most patients recovered after 4 days. We defined this using a gamma distribution with `shape = 3` and `rate = 1/2`.
 
 ```{r, echo=FALSE}
 x <- seq(0, 20, 0.001)

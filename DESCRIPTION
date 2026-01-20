@@ -2,7 +2,7 @@ Package: denim
 Type: Package
 Title: Generate and Simulate Deterministic Compartmental Models
 Version: 1.2.3
-Date: 2025-12-26
+Date: 2026-01-14
 Authors@R: c(
     person("Thinh", "Ong", , "thinhop@oucru.org", role = c("aut", "cph"),
            comment = c(ORCID = "0000-0001-6772-9291")),
@@ -19,7 +19,7 @@ Authors@R: c(
     person("Ingo", "Berg", ,role = c("ctb", "cph"),
           comment="Author of the bundled MuParser C++ library")
   )
-Description: R package to build and simulate deterministic compartmental models that can be non-Markovian. Length of stay in each compartment can be defined to follow a parametric distribution (d_exponential(), d_gamma(), d_weibull(), d_lognormal()) or a non-parametric distribution (nonparametric()). Other supported types of transition from one compartment to another includes fixed transition (constant()), multinomial (multinomial()), fixed transition probability (transprob()).
+Description: R package to build and simulate deterministic compartmental models that can be semi-Markovian. Length of stay in each compartment can be defined to follow a parametric distribution (d_exponential(), d_gamma(), d_weibull(), d_lognormal()) or a non-parametric distribution (nonparametric()). 
 License: MIT + file LICENSE
 URL: https://drthinhong.com/denim/,
     https://github.com/thinhong/denim
