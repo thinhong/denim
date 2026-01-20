@@ -2,7 +2,7 @@
 This is a resubmission. In this version I have:
 * Clarify the ownership for the bundled code by adding the authors as copyright holders
 * Add new test cases
-* Update vignette
+* Update vignettes
 
 
 ## R CMD check results
